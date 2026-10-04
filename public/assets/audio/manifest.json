@@ -1,0 +1,28 @@
+{
+  "exploration": {
+    "src": "assets/audio/exploration.ogg",
+    "fallback": "assets/audio/exploration.mp3",
+    "bpm": 96,
+    "duration": 80,
+    "loopStart": 0,
+    "loopEnd": 80,
+    "volume": 0.72,
+    "title": "Lanterns in the Pines",
+    "key": "D major",
+    "bars": 32,
+    "timeSignature": [4, 4]
+  },
+  "combat": {
+    "src": "assets/audio/combat.ogg",
+    "fallback": "assets/audio/combat.mp3",
+    "bpm": 96,
+    "duration": 80,
+    "loopStart": 0,
+    "loopEnd": 80,
+    "volume": 0.68,
+    "title": "Clockwork Brigade",
+    "key": "B minor",
+    "bars": 32,
+    "timeSignature": [4, 4]
+  }
+}

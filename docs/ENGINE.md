@@ -79,3 +79,15 @@ Campaign content never executes arbitrary JavaScript. Story missions in `src/ui/
 Run `npm test -- tests/sim`. Tests cover command timing, deterministic stepping, pause, economy/depletion, capture/contestation, queues/population, technology, counters, abilities, fog, JSON round trips, scripts, content references, generation, and navigation. AI simulation tests exercise actual headless matches and assert terminal winners and useful combat/economy activity.
 
 Known vertical-slice tradeoffs: damage resolves immediately while the renderer animates a visual projectile; no naval transport; no simultaneous-team alliances; no arbitrary campaign scripts; no network layer; simple unit separation instead of flow fields. Command history is intentionally preserved and can grow during a very long match; a future replay checkpoint/compaction policy should bound it when supporting multi-hour sessions. These should be expanded deliberately without moving rules into UI code.
+
+## Rush Arena
+
+`createGame({mode:'rush'})` creates a separate four-minute survival ruleset: commander plus four autonomous squad members, no settlement buildings or resource-point economy, and a fully revealed 42×42 arena. Fourteen escalating attack waves approach from the frontier ring. The safe radius closes from 18 to 5.8 tiles; standing outside damages either side. Marked runic hazards show a 2.8-second warning before exploding. The commander can keep moving while automatically attacking nearby targets, and companions regroup around their leader.
+
+Supply pickups restore squad health, add soldiers, or reset ability cooldowns. A field upgrade becomes available every 45 seconds. `state.rush.offeredUpgrades` supplies three deterministic choices from six definitions in `RUSH_UPGRADES`; submit `{type:'upgrade',team:0,upgrade:id}` to choose. Upgrades, wave state, supplies, hazards, PRNG, zone, and timers are all serialized. Picking an upgrade does not pause the run; tactical pause remains subject to the selected difficulty.
+
+A commander death ends the run immediately. Surviving to simulation second 240 wins. Automated active-play bots can survive with all three archetypes; inactive normal runs typically fail before the third minute. These are feasibility checks, not a substitute for human touch-control testing or a balance guarantee.
+
+## Verified limitations from AI stress tests
+
+Conquest has a deterministic terminal storm rule, and some AI-versus-AI matchups still reach that fallback rather than completing a clean siege. Objective modes terminate sooner through controlled territory. Continuing high-value work is army staging, coordinated siege escorts, richer economic build-site selection, and human-versus-AI tuning. The engine now rejects construction that newly cuts off connected terrain and leaves troop-clear build footprints; this prevents the spawn-exit enclosure discovered by stress tests. The AI reserves funds for chosen troop types and technologies instead of spending every available coin on the cheapest infantry.

@@ -3,3 +3,6 @@ dist/
 playwright-report/
 test-results/
 .DS_Store
+
+# Private design inputs are retained locally only
+docs/reference/

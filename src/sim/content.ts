@@ -54,3 +54,12 @@ export function validateContent():string[]{
  for(const building of Object.values(BUILDINGS)){for(const id of building.recruits)if(!UNITS[id])errors.push(`${building.id}: unknown unit ${id}`);for(const id of building.prerequisites)if(!BUILDINGS[id])errors.push(`${building.id}: unknown prerequisite ${id}`);}
  return errors;
 }
+
+export const RUSH_UPGRADES = {
+ blade:{id:'blade',name:'Keen Steel',description:'Your commander and current squad gain 25% damage.'},
+ bulwark:{id:'bulwark',name:'Iron Resolve',description:'Restore all health and gain 35% maximum health.'},
+ fleet:{id:'fleet',name:'Windrunner',description:'Your squad gains 20% movement speed and 1 scouting range.'},
+ reinforcements:{id:'reinforcements',name:'Fresh Banners',description:'Three veteran soldiers join your squad immediately.'},
+ renewal:{id:'renewal',name:'Second Wind',description:'Your commander recovers 3 health each second, even in combat.'},
+ focus:{id:'focus',name:'Runic Focus',description:'Abilities recharge 25% faster. Reset their cooldowns now.'}
+} as const;

@@ -10,7 +10,7 @@ export type BuildingId = 'keep'|'house'|'barracks'|'range'|'stable'|'workshop'|'
 export type TechId = 'steel'|'armor'|'fletching'|'economy'|'logistics'|'veterancy';
 export type Difficulty = 'easy'|'normal'|'hard'|'brutal';
 export type AIPersonality = 'aggressive'|'defensive'|'economic'|'raider'|'expansionist'|'adaptive';
-export type GameMode = 'domination'|'conquest'|'relic';
+export type GameMode = 'domination'|'conquest'|'relic'|'rush';
 export type MapSize = 'tiny'|'small'|'medium'|'large'|'huge';
 export type MapPreset = 'competitive'|'balanced'|'wild'|'chaotic';
 export interface GameSettings {
@@ -26,7 +26,7 @@ export interface ResourceNode extends Point {
  id:string; kind:'gold'|'wood'|'relic'; owner:TeamId|null; captureTeam:TeamId|null; captureProgress:number;
  radius:number; income:number;amount:number;maxAmount:number;
 }
-export interface GameMap { version:number; seed:string; biome:BiomeId; width:number;height:number; tiles:TerrainType[]; spawns:Point[];nodes:ResourceNode[]; validation:MapValidation; }
+export interface GameMap { purpose?:'arena';version:number; seed:string; biome:BiomeId; width:number;height:number; tiles:TerrainType[]; spawns:Point[];nodes:ResourceNode[]; validation:MapValidation; }
 export interface MapValidation { valid:boolean;errors:string[];warnings:string[];reachablePercent:number;fairness:number; }
 export interface Cost {gold:number;wood:number}
 export interface UnitDefinition { id:UnitId;name:string;description:string;cost:Cost;hp:number;damage:number;armor:number;range:number;speed:number;cooldown:number;vision:number;population:number;trainTime:number;building:BuildingId;counter:Partial<Record<UnitId|'building',number>>; }
@@ -46,18 +46,23 @@ export interface Entity extends Point {
  buffUntil:number;slowUntil:number;invulnerableUntil:number;respawnAt:number|null;lifetime:number|null; lastHitAt:number;
 }
 export interface PlayerStats {unitsCreated:number;unitsLost:number;kills:number;buildingsCreated:number;buildingsDestroyed:number;goldCollected:number;woodCollected:number;captures:number;commanderDeaths:number;damageDealt:number;pauses:number;}
-export interface Player {team:TeamId;name:string;faction:FactionId;commander:CommanderId;color:string;symbol:string;gold:number;wood:number;population:number;populationCap:number;maxPopulation:number;research:Partial<Record<TechId,number>>;score:number;defeated:boolean;ai:boolean;personality:AIPersonality;stats:PlayerStats;aiNextThink:number;aiPhase:string;lastKnownEnemies:Point[];}
+export interface Player {team:TeamId;name:string;faction:FactionId;commander:CommanderId;color:string;symbol:string;gold:number;wood:number;population:number;populationCap:number;maxPopulation:number;research:Partial<Record<TechId,number>>;score:number;defeated:boolean;ai:boolean;personality:AIPersonality;stats:PlayerStats;aiNextThink:number;aiPhase:string;aiRecruitPlan?:UnitId;lastKnownEnemies:Point[];}
 export interface GameEvent extends Point {id:number;type:'attack'|'projectile'|'hit'|'death'|'spawn'|'build'|'capture'|'ability'|'heal'|'victory'|'alert'|'dialogue'|'research';time:number;team:number;targetX?:number;targetY?:number;entityId?:string;value?:number;text?:string;subtype?:string;}
 export interface FogState {visible:number[][];explored:number[][];}
 export interface ScriptTrigger {id:string;when:{type:'time';seconds:number}|{type:'captured';nodeId:string;team:number}|{type:'resource';team:number;resource:'gold'|'wood';amount:number}|{type:'destroyed';entityId:string}|{type:'region';team:number;x:number;y:number;radius:number};actions:ScriptAction[];fired?:boolean;}
 export type ScriptAction = {type:'dialogue';text:string;team?:number}|{type:'resources';team:number;gold:number;wood:number}|{type:'spawn';team:number;unit:UnitId;count:number;x:number;y:number}|{type:'victory';team:number}|{type:'reveal';team:number}|{type:'objective';text:string};
 export interface GameState {
- version:number;settings:GameSettings;map:GameMap;entities:Entity[];players:Player[];time:number;tick:number;accumulator:number;
+ version:number;settings:GameSettings;map:GameMap;rush?:RushState;entities:Entity[];players:Player[];time:number;tick:number;accumulator:number;
  winner:number|null;victoryReason:string;paused:boolean;pendingCommands:GameCommand[];events:GameEvent[];fog:FogState;
  nextId:number;nextEventId:number;rng:number;scoreTarget:number;escalation:number;objectiveText:string;triggers:ScriptTrigger[];
  commandLog:{tick:number;command:GameCommand}[];lastFogTick:number;navigationVersion:number;
 }
+export type RushUpgradeId = 'blade'|'bulwark'|'fleet'|'reinforcements'|'renewal'|'focus';
+export interface RushSupply extends Point {id:string;kind:'heal'|'reinforcements'|'charge';expiresAt:number;}
+export interface RushHazard extends Point {id:string;radius:number;detonateAt:number;}
+export interface RushState {center:Point;radius:number;initialRadius:number;surviveUntil:number;wave:number;nextWaveAt:number;nextUpgradeAt:number;upgradeAvailable:number;offeredUpgrades:RushUpgradeId[];upgrades:RushUpgradeId[];supplies:RushSupply[];hazards:RushHazard[];kills:number;nextSupplyAt:number;nextHazardAt:number;}
 export type GameCommand =
+ | {type:'upgrade';team:number;upgrade:RushUpgradeId}
  | {type:'move'|'attackMove';team:number;entityIds?:string[];x:number;y:number}
  | {type:'attack';team:number;entityIds?:string[];targetId:string}
  | {type:'hold';team:number;entityIds?:string[]}

@@ -71,15 +71,15 @@ export function validateMap(map:GameMap,competitive=false):MapValidation{
  for(let i=0;i<map.spawns.length;i++){
   const p=map.spawns[i];if(!isBuildable(map,p.x,p.y))errors.push(`Player ${i+1} has an invalid spawn terrain.`);
   if(!reach.has(tileIndex(map,p.x,p.y)))errors.push(`Player ${i+1} cannot reach the other players.`);
-  for(const kind of ['gold','wood'])if(!map.nodes.some(n=>n.kind===kind&&distance(n,p)<13&&reach.has(tileIndex(map,n.x,n.y))))errors.push(`Player ${i+1} lacks reachable nearby ${kind}.`);
+  for(const kind of map.purpose==='arena'?[]:['gold','wood'])if(!map.nodes.some(n=>n.kind===kind&&distance(n,p)<13&&reach.has(tileIndex(map,n.x,n.y))))errors.push(`Player ${i+1} lacks reachable nearby ${kind}.`);
  }
  for(const n of map.nodes){if(!isWalkable(map,n.x,n.y)||!reach.has(tileIndex(map,n.x,n.y)))errors.push(`${n.kind} deposit ${n.id} is unreachable.`);if(n.owner!==null&&(n.owner<0||n.owner>=map.spawns.length))errors.push(`${n.id} has an invalid owner.`);}
- if(!map.nodes.some(n=>n.kind==='relic'))errors.push('Map needs a relic objective.');
- if(!map.nodes.some(n=>n.kind!=='relic'&&n.owner===null))warnings.push('There are no neutral economic expansion locations.');
+ if(map.purpose!=='arena'&&!map.nodes.some(n=>n.kind==='relic'))errors.push('Map needs a relic objective.');
+ if(map.purpose!=='arena'&&!map.nodes.some(n=>n.kind!=='relic'&&n.owner===null))warnings.push('There are no neutral economic expansion locations.');
  const available=map.tiles.filter(t=>t!=='water'&&t!=='rock').length;
  const distances=map.spawns.map(s=>Math.min(...map.nodes.filter(n=>n.kind==='relic').map(n=>distance(n,s))));
  const fairness=Math.min(...distances)/Math.max(...distances);
- if(competitive&&fairness<.75)errors.push('Competitive objective distances are too uneven.');
+ if(map.purpose!=='arena'&&competitive&&fairness<.75)errors.push('Competitive objective distances are too uneven.');
  return{valid:errors.length===0,errors,warnings,reachablePercent:reach.size/Math.max(1,available),fairness:Number.isFinite(fairness)?fairness:0};
 }
 /** Cached by caller; A* runs only when an order changes or an obstruction is met. */
