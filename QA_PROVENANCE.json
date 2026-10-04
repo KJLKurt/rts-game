@@ -1,0 +1,7 @@
+{
+  "sourceCommit": "3e060a3d8b4e2997d169ea5da2b405af191b83fa",
+  "sourceRepository": "KJLKurt/rts-game",
+  "purpose": "Production build for browser QA; not the final release",
+  "basePath": "/rts-game/",
+  "builtAt": "2026-10-04T03:17:07.795Z"
+}

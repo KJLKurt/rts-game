@@ -1,0 +1,235 @@
+{
+  "sourceCommit": "3e060a3d8b4e2997d169ea5da2b405af191b83fa",
+  "encoding": "base64 chunk concatenation",
+  "files": [
+    {
+      "path": "assets/audio/combat.mp3",
+      "size": 1120957,
+      "sha256": "1ab45433aa75c9515cf3761629158475b8f62e6e6fd825b6f0733fcff9878161",
+      "parts": [
+        {
+          "path": "transport/assets_audio_combat.mp3.000.b64",
+          "gitBlob": "953bc4f1b3773b3c48675b6a5aaef2cafe7e14f6",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_audio_combat.mp3.001.b64",
+          "gitBlob": "74255346c8ef6eef6f59a5c044c0d82553308c6b",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_audio_combat.mp3.002.b64",
+          "gitBlob": "1b853f1884c2eaad080802b8dbee6581c452e190",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_audio_combat.mp3.003.b64",
+          "gitBlob": "f6d116d7f8ed0a22f738ddf156553a0313c66d8a",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_audio_combat.mp3.004.b64",
+          "gitBlob": "dd92d2d228d23f80d2abdfd911f79b150a9b024a",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_audio_combat.mp3.005.b64",
+          "gitBlob": "d48d2f01d76ea32e7dea793001380cf590e44f63",
+          "chars": 183892
+        }
+      ]
+    },
+    {
+      "path": "assets/audio/combat.ogg",
+      "size": 848631,
+      "sha256": "b8d6e56287eaf00d73382de666a9a527cd4af43303cd7169d87ff2a887a2fb73",
+      "parts": [
+        {
+          "path": "transport/assets_audio_combat.ogg.000.b64",
+          "gitBlob": "d139786022c366d0de05b2fb892c48b39af2fd3a",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_audio_combat.ogg.001.b64",
+          "gitBlob": "6f8465458ab6b33aff6812172f2afdea9a0cf34c",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_audio_combat.ogg.002.b64",
+          "gitBlob": "3be1489f51276b5d42ec2dbae72b66fe5a5f24bf",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_audio_combat.ogg.003.b64",
+          "gitBlob": "bd08224b086a79c3e1a7d0fc83284af6ad5a24b3",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_audio_combat.ogg.004.b64",
+          "gitBlob": "52e759550713c6ee29b544baf5dc5f1a44fc05af",
+          "chars": 82932
+        }
+      ]
+    },
+    {
+      "path": "assets/audio/exploration.mp3",
+      "size": 1120957,
+      "sha256": "0b713e32e6bc6807091c9c19c2ab359b8cc93494bc0445d7f7bffe3fb921b3b0",
+      "parts": [
+        {
+          "path": "transport/assets_audio_exploration.mp3.000.b64",
+          "gitBlob": "4741ec10707d44d0edac4dcecddc1511bf053fee",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_audio_exploration.mp3.001.b64",
+          "gitBlob": "937fb590c90dbfaac271fa530f327cacbd5a39b0",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_audio_exploration.mp3.002.b64",
+          "gitBlob": "545221b254eaeee23891316ed0f02d6a96cb7aa2",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_audio_exploration.mp3.003.b64",
+          "gitBlob": "519235c6acb28608f0765ed33f5597115fb0b247",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_audio_exploration.mp3.004.b64",
+          "gitBlob": "8b066edf5aa2b388fcec35d0cb825a4e072c5e58",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_audio_exploration.mp3.005.b64",
+          "gitBlob": "78e9124dd6eb3cf1921a9a4b5881df39612134be",
+          "chars": 183892
+        }
+      ]
+    },
+    {
+      "path": "assets/audio/exploration.ogg",
+      "size": 709558,
+      "sha256": "33c7b6aea2699abb489fb888c95bc41b74f60dd57fc31864f40bee7e00ce7f5b",
+      "parts": [
+        {
+          "path": "transport/assets_audio_exploration.ogg.000.b64",
+          "gitBlob": "7f7cab750a0a7cab55ea2ce2628f3ed54a64ef84",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_audio_exploration.ogg.001.b64",
+          "gitBlob": "5a9c204adb5f54cf4ab9bf45444ad84b9d7d5925",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_audio_exploration.ogg.002.b64",
+          "gitBlob": "ae162461567174875dc358d6addcfc7ca1f8c1f5",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_audio_exploration.ogg.003.b64",
+          "gitBlob": "9160f2cd5affea8bd49267c3e87c9f44a09cdeb0",
+          "chars": 159648
+        }
+      ]
+    },
+    {
+      "path": "assets/render/frontier-atlas.png",
+      "size": 2411714,
+      "sha256": "7a6c1f79fece96ce65464831cb161b6a4fb60c098afaf3717b271812b20f87ed",
+      "parts": [
+        {
+          "path": "transport/assets_render_frontier-atlas.png.000.b64",
+          "gitBlob": "4222a721e301e9a63d6ff2ccc318df51b6d2b262",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_render_frontier-atlas.png.001.b64",
+          "gitBlob": "a9a1795797baee57244523d79653ac7665812f8c",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_render_frontier-atlas.png.002.b64",
+          "gitBlob": "497f0d47aecc617fbd6bff00ca10bba3d7d936ee",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_render_frontier-atlas.png.003.b64",
+          "gitBlob": "ac49a44e6f640662e6491877f0ead54fc7b5b0e0",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_render_frontier-atlas.png.004.b64",
+          "gitBlob": "34391258b89b0e019a8f890b98abfeb2524adea1",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_render_frontier-atlas.png.005.b64",
+          "gitBlob": "8682bdd32949d29b1e6af8bef336d2a86bafe1e3",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_render_frontier-atlas.png.006.b64",
+          "gitBlob": "b2fec15efc760913228dc5ecc97e6842b4d9851a",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_render_frontier-atlas.png.007.b64",
+          "gitBlob": "1e482aa9c540589658e2495a610ca02bd98249a5",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_render_frontier-atlas.png.008.b64",
+          "gitBlob": "7c26b71b2f6303f6265784efd0aa6e08f95c0f1d",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_render_frontier-atlas.png.009.b64",
+          "gitBlob": "cac885e2c1cbed401d13b6a76e4c2539f116c64f",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_render_frontier-atlas.png.010.b64",
+          "gitBlob": "a1f12899fe5e0b4db65cfa3715fd4519166c44ee",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_render_frontier-atlas.png.011.b64",
+          "gitBlob": "2fdb686543fb6a5b59e6b297fe1e17cbe1d7170f",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_render_frontier-atlas.png.012.b64",
+          "gitBlob": "b5ae07780fa8686bcd1c944f54797380c77657e5",
+          "chars": 69892
+        }
+      ]
+    },
+    {
+      "path": "icons/icon-192.png",
+      "size": 5742,
+      "sha256": "768362514e49ac22ea9ab4c10ade0915b7722b75d1fa479d25559430feb7030d",
+      "parts": [
+        {
+          "path": "transport/icons_icon-192.png.000.b64",
+          "gitBlob": "824f1cf21993734cf64b12ec6251cb5b15224cf0",
+          "chars": 7656
+        }
+      ]
+    },
+    {
+      "path": "icons/icon-512.png",
+      "size": 20463,
+      "sha256": "1c5619e9d86b5931b1db4b0596c222e01a78df26019e76e875c0919b141e5a33",
+      "parts": [
+        {
+          "path": "transport/icons_icon-512.png.000.b64",
+          "gitBlob": "0d69c02c7f0576d136981018bdbb037ea63175b5",
+          "chars": 27284
+        }
+      ]
+    }
+  ]
+}

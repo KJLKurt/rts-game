@@ -1,0 +1,3 @@
+QA-only binary transport. These are base64 representations of the same authorized production assets, not new artwork.
+Fetch manifest.json and each listed UTF-8 .b64 part, preserving paths. Each part has its own Git blob SHA. Run python3 transport/decode-assets.py from this build root. The script concatenates parts, strictly decodes base64, checks length and SHA256, and writes the original binary assets.
+Serve this build directory mounted at /rts-game/ (for example a parent directory with this directory named rts-game). No npm install or build is needed. The production service worker caches only game files, not transport files. QA_PROVENANCE.json names the exact source commit.
