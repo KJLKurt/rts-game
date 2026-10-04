@@ -1,8 +1,8 @@
 {
-  "sourceCommit": "31e64feabb19448b55e0aaaea3ded6ee08a131a7",
-  "sourceTree": "dee79540dce60c7cb1dfb809e5f80f646d652889",
+  "sourceCommit": "b41af521ad7440d3ae11ed6bb18e38ddc4003759",
+  "sourceTree": "93282476894e49a15bd1f57fdbb00c0a56df82e7",
   "sourceRepository": "KJLKurt/rts-game",
-  "purpose": "Production core build for browser QA; excludes experimental attack frames/picking changes",
+  "purpose": "Polish candidate for focused browser QA; not yet deployed to main",
   "basePath": "/rts-game/",
-  "builtAt": "2026-10-04T05:21:10.131610+00:00"
+  "builtAt": "2026-10-04T06:19:09.122692+00:00"
 }

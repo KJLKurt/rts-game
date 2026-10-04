@@ -1,5 +1,5 @@
 {
-  "sourceCommit": "31e64feabb19448b55e0aaaea3ded6ee08a131a7",
+  "sourceCommit": "b41af521ad7440d3ae11ed6bb18e38ddc4003759",
   "encoding": "base64 chunk concatenation",
   "files": [
     {
@@ -204,6 +204,68 @@
           "path": "transport/assets_render_frontier-atlas.png.012.b64",
           "gitBlob": "b5ae07780fa8686bcd1c944f54797380c77657e5",
           "chars": 69892
+        }
+      ]
+    },
+    {
+      "path": "assets/render/frontier-combat-animation.png",
+      "size": 2102745,
+      "sha256": "664b416192cbd297655a63fd8ec048f1b79030b35b3c0af7a3fc9ecd4073758f",
+      "parts": [
+        {
+          "path": "transport/assets_render_frontier-combat-animation.png.000.b64",
+          "gitBlob": "83da78d70f99afe0a7a12208b21ee141980a3a8a",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_render_frontier-combat-animation.png.001.b64",
+          "gitBlob": "ad5ad80935b6b63db674e7ad73f293413f561dcb",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_render_frontier-combat-animation.png.002.b64",
+          "gitBlob": "635bfb3f70796c05164cdc9c6c7838181ef8e41d",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_render_frontier-combat-animation.png.003.b64",
+          "gitBlob": "79d1039586dab12537b3d88cbe2f90665eb85352",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_render_frontier-combat-animation.png.004.b64",
+          "gitBlob": "77aafd3ef06d38a35997fbb907ac0993f73f3d6e",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_render_frontier-combat-animation.png.005.b64",
+          "gitBlob": "724ef7928fd7f734d75306f61daed33102a2e1ef",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_render_frontier-combat-animation.png.006.b64",
+          "gitBlob": "61162cd0dfe66d10d8ac390a57a353aa80656f73",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_render_frontier-combat-animation.png.007.b64",
+          "gitBlob": "d9d934c8fbf22f619b9b38db8afe6e41094d23e1",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_render_frontier-combat-animation.png.008.b64",
+          "gitBlob": "b6a63bfeb634a38943b1a074d3fa732e6dd55ee5",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_render_frontier-combat-animation.png.009.b64",
+          "gitBlob": "63079fc8eaedfb0a8bceccb64de787c2b13b7f16",
+          "chars": 262144
+        },
+        {
+          "path": "transport/assets_render_frontier-combat-animation.png.010.b64",
+          "gitBlob": "509bdf0b3e9c13e740a124fe23952e2d3ed10cb7",
+          "chars": 182220
         }
       ]
     },

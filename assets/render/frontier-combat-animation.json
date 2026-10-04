@@ -1,0 +1,382 @@
+{
+  "version": 1,
+  "image": "frontier-combat-animation.png",
+  "width": 1024,
+  "height": 1536,
+  "format": "RGBA",
+  "columns": 4,
+  "rows": 6,
+  "cellSize": 256,
+  "direction": "southeast",
+  "mirrorForWest": true,
+  "actors": {
+    "warlord": {
+      "referenceBodyHeight": 146,
+      "suggestedHeight": 55,
+      "walkFrameMs": 130,
+      "attackFrameMs": [
+        110,
+        170,
+        100,
+        200
+      ],
+      "impactFrame": 2,
+      "walk": [],
+      "attack": [
+        "warlord-attack-0",
+        "warlord-attack-1",
+        "warlord-attack-2",
+        "warlord-attack-3"
+      ]
+    },
+    "swordsman": {
+      "referenceBodyHeight": 171,
+      "suggestedHeight": 44,
+      "walkFrameMs": 120,
+      "attackFrameMs": [
+        90,
+        130,
+        90,
+        180
+      ],
+      "impactFrame": 2,
+      "walk": [],
+      "attack": [
+        "swordsman-attack-0",
+        "swordsman-attack-1",
+        "swordsman-attack-2",
+        "swordsman-attack-3"
+      ]
+    },
+    "archer": {
+      "referenceBodyHeight": 155,
+      "suggestedHeight": 36,
+      "walkFrameMs": 130,
+      "attackFrameMs": [
+        100,
+        190,
+        90,
+        220
+      ],
+      "impactFrame": 2,
+      "walk": [],
+      "attack": [
+        "archer-attack-0",
+        "archer-attack-1",
+        "archer-attack-2",
+        "archer-attack-3"
+      ]
+    }
+  },
+  "frames": {
+    "warlord-attack-0": {
+      "x": 0,
+      "y": 256,
+      "w": 256,
+      "h": 256,
+      "anchorX": 0.56640625,
+      "anchorY": 0.9609375,
+      "groundPivot": {
+        "x": 145,
+        "y": 246
+      },
+      "visibleBounds": {
+        "x": 52,
+        "y": 97,
+        "w": 158,
+        "h": 154
+      },
+      "actor": "warlord",
+      "action": "attack",
+      "index": 0,
+      "durationMs": 110
+    },
+    "warlord-attack-1": {
+      "x": 256,
+      "y": 256,
+      "w": 256,
+      "h": 256,
+      "anchorX": 0.56640625,
+      "anchorY": 0.9140625,
+      "groundPivot": {
+        "x": 145,
+        "y": 234
+      },
+      "visibleBounds": {
+        "x": 58,
+        "y": 74,
+        "w": 154,
+        "h": 164
+      },
+      "actor": "warlord",
+      "action": "attack",
+      "index": 1,
+      "durationMs": 170
+    },
+    "warlord-attack-2": {
+      "x": 512,
+      "y": 256,
+      "w": 256,
+      "h": 256,
+      "anchorX": 0.484375,
+      "anchorY": 0.94140625,
+      "groundPivot": {
+        "x": 124,
+        "y": 241
+      },
+      "visibleBounds": {
+        "x": 29,
+        "y": 116,
+        "w": 211,
+        "h": 130
+      },
+      "actor": "warlord",
+      "action": "attack",
+      "index": 2,
+      "durationMs": 100
+    },
+    "warlord-attack-3": {
+      "x": 768,
+      "y": 256,
+      "w": 256,
+      "h": 256,
+      "anchorX": 0.52734375,
+      "anchorY": 0.9609375,
+      "groundPivot": {
+        "x": 135,
+        "y": 246
+      },
+      "visibleBounds": {
+        "x": 51,
+        "y": 103,
+        "w": 154,
+        "h": 147
+      },
+      "actor": "warlord",
+      "action": "attack",
+      "index": 3,
+      "durationMs": 200
+    },
+    "swordsman-attack-0": {
+      "x": 0,
+      "y": 768,
+      "w": 256,
+      "h": 256,
+      "anchorX": 0.55078125,
+      "anchorY": 0.9140625,
+      "groundPivot": {
+        "x": 141,
+        "y": 234
+      },
+      "visibleBounds": {
+        "x": 66,
+        "y": 67,
+        "w": 152,
+        "h": 170
+      },
+      "actor": "swordsman",
+      "action": "attack",
+      "index": 0,
+      "durationMs": 90
+    },
+    "swordsman-attack-1": {
+      "x": 256,
+      "y": 768,
+      "w": 256,
+      "h": 256,
+      "anchorX": 0.546875,
+      "anchorY": 0.9140625,
+      "groundPivot": {
+        "x": 140,
+        "y": 234
+      },
+      "visibleBounds": {
+        "x": 64,
+        "y": 33,
+        "w": 153,
+        "h": 204
+      },
+      "actor": "swordsman",
+      "action": "attack",
+      "index": 1,
+      "durationMs": 130
+    },
+    "swordsman-attack-2": {
+      "x": 512,
+      "y": 768,
+      "w": 256,
+      "h": 256,
+      "anchorX": 0.484375,
+      "anchorY": 0.9140625,
+      "groundPivot": {
+        "x": 124,
+        "y": 234
+      },
+      "visibleBounds": {
+        "x": 38,
+        "y": 74,
+        "w": 199,
+        "h": 163
+      },
+      "actor": "swordsman",
+      "action": "attack",
+      "index": 2,
+      "durationMs": 90
+    },
+    "swordsman-attack-3": {
+      "x": 768,
+      "y": 768,
+      "w": 256,
+      "h": 256,
+      "anchorX": 0.52734375,
+      "anchorY": 0.9140625,
+      "groundPivot": {
+        "x": 135,
+        "y": 234
+      },
+      "visibleBounds": {
+        "x": 62,
+        "y": 67,
+        "w": 141,
+        "h": 171
+      },
+      "actor": "swordsman",
+      "action": "attack",
+      "index": 3,
+      "durationMs": 180
+    },
+    "archer-attack-0": {
+      "x": 0,
+      "y": 1280,
+      "w": 256,
+      "h": 256,
+      "anchorX": 0.546875,
+      "anchorY": 0.7734375,
+      "groundPivot": {
+        "x": 140,
+        "y": 198
+      },
+      "visibleBounds": {
+        "x": 59,
+        "y": 48,
+        "w": 153,
+        "h": 154
+      },
+      "actor": "archer",
+      "action": "attack",
+      "index": 0,
+      "durationMs": 100
+    },
+    "archer-attack-1": {
+      "x": 256,
+      "y": 1280,
+      "w": 256,
+      "h": 256,
+      "anchorX": 0.55078125,
+      "anchorY": 0.7734375,
+      "groundPivot": {
+        "x": 141,
+        "y": 198
+      },
+      "visibleBounds": {
+        "x": 60,
+        "y": 34,
+        "w": 182,
+        "h": 167
+      },
+      "actor": "archer",
+      "action": "attack",
+      "index": 1,
+      "durationMs": 190
+    },
+    "archer-attack-2": {
+      "x": 512,
+      "y": 1280,
+      "w": 256,
+      "h": 256,
+      "anchorX": 0.51953125,
+      "anchorY": 0.7734375,
+      "groundPivot": {
+        "x": 133,
+        "y": 198
+      },
+      "visibleBounds": {
+        "x": 47,
+        "y": 42,
+        "w": 183,
+        "h": 160
+      },
+      "actor": "archer",
+      "action": "attack",
+      "index": 2,
+      "durationMs": 90
+    },
+    "archer-attack-3": {
+      "x": 768,
+      "y": 1280,
+      "w": 256,
+      "h": 256,
+      "anchorX": 0.52734375,
+      "anchorY": 0.78125,
+      "groundPivot": {
+        "x": 135,
+        "y": 200
+      },
+      "visibleBounds": {
+        "x": 58,
+        "y": 50,
+        "w": 145,
+        "h": 154
+      },
+      "actor": "archer",
+      "action": "attack",
+      "index": 3,
+      "durationMs": 220
+    }
+  },
+  "rendering": {
+    "scaleRule": "Use a single scale = target body height / actors[actor].referenceBodyHeight for every frame of this actor. Draw source frame at width 256*scale and height 256*scale; destination top-left is groundWorld - groundPivot*scale. Never scale to an individual frame visibleBounds or total weapon extent.",
+    "idleRule": "Use the original approved atlas for idle or any missing sequence.",
+    "attackRule": "Frames are ready, windup, impact/release, recovery. Tie frame 2 to the actual attack/damage or projectile event.",
+    "shadowRule": "Draw engine-owned grounding shadow and team ring; art has no team ring.",
+    "transparencyRule": "Keep original RGBA data unchanged. Invisible RGB behind alpha is present and must not be used as background."
+  },
+  "qa": {
+    "status": "Static native-scale registration and left-to-right pose sequencing visually reviewed. Runtime playback remains unverified.",
+    "limitations": [
+      "Walk poses vary, but do not form a clean traditional alternating four-contact cycle; archer walking is the weakest.",
+      "Fixed southeast camera only; mirror west.",
+      "Some apparent body-size and armor-detail variation remains across generated poses.",
+      "No directional atlases, death or hit sprite sequence."
+    ],
+    "sourceSha256": "664b416192cbd297655a63fd8ec048f1b79030b35b3c0af7a3fc9ecd4073758f",
+    "recommendation": "Integrate the three attack sequences behind existing idle fallback. Retain current locomotion fallback until runtime review; the generated walks are subtle pose variations, not a clean alternating gait.",
+    "verified": [
+      "RGBA alpha preserved; 24 isolated major silhouettes at alpha > 16.",
+      "All high-opacity visible bounds stay within their 256x256 cells.",
+      "Uniform per-actor scale checked against approved original idle on green background.",
+      "Each attack row visibly follows ready, windup/draw, strike/release, recovery order.",
+      "Frame pixels unchanged from selected imagegen output; SHA-256 matches original."
+    ],
+    "proofs": [
+      "registration-proof-1.png",
+      "registration-proof-2.png",
+      "frontier-animation-registration-proof.pdf",
+      "preview.html"
+    ],
+    "runtimeBlocker": "Cloud browser rejected localhost preview with ERR_BLOCKED_BY_CLIENT; static proof rendering succeeded."
+  },
+  "provenance": {
+    "method": "built-in image_gen.imagegen",
+    "createdDate": "2026-10-04",
+    "referenceImage": "existing approved public/assets/render/frontier-atlas.png",
+    "referenceSha256": "7a6c1f79fece96ce65464831cb161b6a4fb60c098afaf3717b271812b20f87ed",
+    "generationPrompts": "generation-prompts.json",
+    "selectedIteration": "v3",
+    "pixelEdits": "none; immutable generated PNG copied byte-for-byte"
+  },
+  "acceptedStates": [
+    "attack"
+  ],
+  "trialIntegration": true
+}
