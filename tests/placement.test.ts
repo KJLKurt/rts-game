@@ -1,8 +1,28 @@
 import { describe, expect, it } from "vitest";
-import { createGame, canBuild } from "../src/sim";
+import { createGame, canBuild, spawnEntity, issueCommand } from "../src/sim";
 import { plannedBuildResult } from "../src/ui/placement";
 
 describe("tactical construction planning", () => {
+  it("allows neighboring houses while rejecting overlapping footprints", () => {
+    const state = createGame({ seed: "ADJACENT-HOUSES", startingWood: 1000 });
+    state.map.tiles.fill("grass");
+    state.map.nodes = [];
+    state.entities = state.entities.filter(
+      (e) => e.kind === "building" || e.team !== 0,
+    );
+    const house = spawnEntity(state, 0, "building", "house", 12, 12);
+    expect(canBuild(state, 0, "house", house.x + 2, house.y).ok).toBe(false);
+    expect(canBuild(state, 0, "house", house.x + 2.5, house.y).ok).toBe(true);
+    expect(
+      issueCommand(state, {
+        type: "build",
+        team: 0,
+        building: "house",
+        x: house.x + 2.5,
+        y: house.y,
+      }).ok,
+    ).toBe(true);
+  });
   it("rejects an invalid site before it can become a queued order", () => {
     const state = createGame();
     state.paused = true;

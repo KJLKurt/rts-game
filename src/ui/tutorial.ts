@@ -18,7 +18,7 @@ export function advanceTutorial(
   const moved = state.commandLog.some(
     ({ command }) =>
       command.team === 0 &&
-      ["move", "attackMove", "capture"].includes(command.type),
+      ["move", "attackMove", "capture", "steer"].includes(command.type),
   );
   if (
     moved &&
@@ -77,7 +77,7 @@ export function restoreTutorial(
     state.commandLog.some(
       ({ command }) =>
         command.team === 0 &&
-        ["move", "attackMove", "capture"].includes(command.type),
+        ["move", "attackMove", "capture", "steer"].includes(command.type),
     )
   ) {
     // A completed supply lesson must survive returning home before this older save.

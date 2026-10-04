@@ -18,6 +18,7 @@ export type MapSize = 'tiny' | 'small' | 'medium' | 'large' | 'huge';
 export type MapPreset = 'competitive' | 'balanced' | 'wild' | 'chaotic';
 export interface GameSettings {
     seed: string;
+    learning?: boolean;
     /** Preserve this together with the seed to reproduce generated layouts. */
     mapGenerationVersion?: 3 | 4;
     biome: BiomeId;
@@ -177,8 +178,10 @@ export type EntityOrder = {
     targetId: string;
 };
 export interface ProductionItem {
-    type: 'unit' | 'research';
-    id: UnitId | TechId;
+    type: 'unit' | 'research' | 'buildingUpgrade';
+    id: UnitId | TechId | BuildingId;
+    queueId?: string;
+    paidCost?: Cost;
     remaining: number;
     total: number;
 }
@@ -210,6 +213,8 @@ export interface Entity extends Point {
     buildProgress: number;
     buildTime: number;
     queue: ProductionItem[];
+    buildingLevel?: number;
+    directControl?: { x: number; y: number; until: number };
     rally: Point | null;
     abilityCooldowns: Record<string, number>;
     buffUntil: number;
@@ -389,6 +394,20 @@ export interface RushState {
     nextHazardAt: number;
 }
 export type GameCommand = {
+    type: 'steer';
+    team: number;
+    dx: number;
+    dy: number;
+} | {
+    type: 'cancelProduction';
+    team: number;
+    buildingId: string;
+    queueId: string;
+} | {
+    type: 'upgradeBuilding';
+    team: number;
+    buildingId: string;
+} | {
     type: 'upgrade';
     team: number;
     upgrade: RushUpgradeId;

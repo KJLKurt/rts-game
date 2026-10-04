@@ -1,4 +1,19 @@
+import { EditorHistory, strokeTiles } from "./ui/editor-tools";
+import {
+  LESSONS,
+  advanceLearning,
+  learningTarget,
+  restoreLearning,
+  type LearningProgress,
+} from "./ui/learning";
+import { snapConstruction } from "./sim/construction";
 import "./style.css";
+import { inspectionHTML, productionHTML, economyHTML } from "./ui/inspection";
+import {
+  populationBreakdown,
+  technologyCost,
+  nextBuildingUpgrade,
+} from "./sim/progression";
 import { relicSummary, nearestRelic } from "./ui/objectives";
 import { battleResultReason } from "./ui/results";
 import { buildingUnderAttack } from "./ui/battle-guidance";
@@ -23,6 +38,7 @@ import {
   canBuild,
   validateMap,
   getUnitCost,
+  projectPendingCommands,
 } from "./sim";
 import type {
   GameState,
@@ -66,13 +82,22 @@ const renderer = new Battlefield(canvas),
   audio = new AudioDirector();
 let preferences = readLocal("preferences", defaultPreferences),
   profile = readLocal("profile", defaultProfile);
+document.documentElement.style.setProperty(
+  "--ui-scale",
+  String(Math.max(1, Math.min(1.3, preferences.uiScale))),
+);
 audio.setMaster(preferences.master, preferences.muted);
 audio.setVolumes(preferences.music, preferences.sfx);
 let state: GameState,
   playing = false,
   selection = new Set<string>(),
   panel = "army",
+  deckCollapsed = true,
+  minimapCollapsed = false,
+  recruitBatch = 1,
+  rallyBuildingId: string | null = null,
   placement: BuildingId | null = null,
+  repeatPlacement = false,
   targetPoint: Point | null = null,
   followCommander = true,
   modalOpen = false,
@@ -111,17 +136,32 @@ let settings: Partial<GameSettings> = {
   preset: "balanced",
 };
 let activeCampaign = CAMPAIGNS[0];
+let learningProgress: LearningProgress | null = null,
+  guideCollapsed = false,
+  learningCompletionShown = false;
 let tutorialOrigin: Point | null = null;
 let previousFocus: HTMLElement | null = null;
 let frameRate = 60;
 let runtimeFailed = false;
 let lastDeckSignature = "";
+let planningSignature = "",
+  planningSnapshot: GameState | null = null;
+function planningState() {
+  if (!state.paused || !state.pendingCommands.length) return state;
+  const signature = `${state.tick}:${state.pendingCommands.length}:${state.nextId}`;
+  if (signature !== planningSignature || !planningSnapshot) {
+    planningSnapshot = projectPendingCommands(state);
+    planningSignature = signature;
+  }
+  return planningSnapshot;
+}
 const hudHTML = new Map<string, string>();
 let playfieldCenterY = innerHeight / 2;
 const debugEnabled = new URLSearchParams(location.search).has("debug");
 let debugReveal = false;
 const pointers = new Map<number, Point>();
 let pinchDistance = 0;
+let pinchCenter: Point | null = null;
 function randomSeed() {
   return `FRONTIER-${Math.floor(Math.random() * 999999)
     .toString()
@@ -157,7 +197,8 @@ function cost(c: { gold: number; wood: number }) {
   return `<span class="cost">${c.gold ? `<span>${icon("gold")}${c.gold}</span>` : ""}${c.wood ? `<span>${icon("wood")}${c.wood}</span>` : ""}</span>`;
 }
 function affordable(c: { gold: number; wood: number }) {
-  return state.players[0].gold >= c.gold && state.players[0].wood >= c.wood;
+  const player = planningState().players[0];
+  return player.gold >= c.gold && player.wood >= c.wood;
 }
 function showMenu(page = "home") {
   playing = false;
@@ -178,7 +219,7 @@ function showMenu(page = "home") {
     renderer.camera.zoom = 0.95;
   }
   if (page === "home") {
-    screen.innerHTML = `<div class="menu-scrim"></div><main class="home"><div class="brandmark">${icon("crown")}<span>A WORLD WORTH FIGHTING FOR</span></div><h1>FRONTIER<br><em>COMMAND</em></h1><p class="home-lede">Build your stronghold. Lead from the front.<br>Turn one small army into a legend.</p><div class="home-actions">${button("Play skirmish", "skirmish", "primary large", "sword")}${button("Rush Arena · 4 minute survival", "rush", "secondary rush-entry", "lightning")}${savedGame ? button("Continue battle", "continue", "secondary", "play") : ""}${button("Rise of the Frontier", "campaign", "secondary", "flag")}${button("Frontier expedition", "expedition", "secondary", "map")}</div><div class="home-links">${button("How to play", "help", "", "book")}${button("Map workshop", "editor", "", "map")}${button("Command record", "record", "", "star")}${button("Settings", "settings", "", "gear")}</div><footer><span class="offline-dot"></span> <span id="offline-status">${navigator.serviceWorker?.controller ? "Offline ready" : "Offline after first full load"}</span> · Solo strategy <span class="version">v0.1 · Testing preview</span></footer></main><aside class="home-aside"><div class="vertical-rule"></div><span>YOUR BANNER.<br>YOUR FRONTIER.</span></aside>`;
+    screen.innerHTML = `<div class="menu-scrim"></div><main class="home"><div class="brandmark">${icon("crown")}<span>A WORLD WORTH FIGHTING FOR</span></div><h1>FRONTIER<br><em>COMMAND</em></h1><p class="home-lede">Build your stronghold. Lead from the front.<br>Turn one small army into a legend.</p><div class="home-actions">${button(preferences.learningComplete ? "Practice the basics" : "Learn to command · start here", "learn", preferences.learningComplete ? "secondary" : "primary large", "book")}${button("Play skirmish", "skirmish", "primary large", "sword")}${button("Rush Arena · 4 minute survival", "rush", "secondary rush-entry", "lightning")}${savedGame ? button("Continue battle", "continue", "secondary", "play") : ""}${button("Rise of the Frontier", "campaign", "secondary", "flag")}${button("Frontier expedition", "expedition", "secondary", "map")}</div><div class="home-links">${button("How to play", "help", "", "book")}${button("Map workshop", "editor", "", "map")}${button("Command record", "record", "", "star")}${button("Settings", "settings", "", "gear")}</div><footer><span class="offline-dot"></span> <span id="offline-status">${navigator.serviceWorker?.controller ? "Offline ready" : "Offline after first full load"}</span> · Solo strategy <span class="version">v0.1 · Testing preview</span></footer></main><aside class="home-aside"><div class="vertical-rule"></div><span>YOUR BANNER.<br>YOUR FRONTIER.</span></aside>`;
   } else if (page === "skirmish") renderSetup();
   else if (page === "campaign") renderCampaign();
   else if (page === "expedition") renderExpedition();
@@ -255,6 +296,15 @@ function launchGame(
   expedition: number | null = null,
 ) {
   state = createGame({ ...settings, ...options });
+  planningSnapshot = null;
+  planningSignature = "";
+  deckCollapsed = true;
+  recruitBatch = 1;
+  learningProgress = state.settings.learning
+    ? restoreLearning(state, null)
+    : null;
+  learningCompletionShown = false;
+  guideCollapsed = false;
   missionIndex = mission;
   expeditionStage = expedition;
   if (mission !== null) {
@@ -289,7 +339,12 @@ function launchGame(
   renderer.centerOn(c.x, c.y);
   renderGameShell();
   void persist();
-  if (mission !== null) showBriefing(mission);
+  if (state.settings.learning)
+    showDialog(
+      "Your first settlement",
+      `<p class="story">You’ll start with one commander and a small keep. Learn one action at a time, then turn your settlement into an army.</p><p>This peaceful practice has no enemy raids or time limit. Gold and timber gather automatically after you capture them. The guide will point out each next step.</p>${button("Start learning", "begin-briefing", "primary large", "play")}`,
+    );
+  else if (mission !== null) showBriefing(mission);
   else if (
     !state.rush &&
     profile.games === 0 &&
@@ -306,7 +361,7 @@ function launchGame(
 }
 function renderGameShell() {
   hudHTML.clear();
-  screen.innerHTML = `<header class="hud"><button class="brand-button" data-action="pause-menu" aria-label="Battle menu">${icon("crown")}</button><div class="resources"><span title="Gold">${icon("gold")}<b id="gold">0</b></span><span title="Wood">${icon("wood")}<b id="wood">0</b></span><span title="Population">${icon("flag")}<b id="population">0</b></span></div><div class="hud-time" id="match-time">0:00</div><button class="pause-button" data-action="pause" aria-label="Tactical pause">${icon("pause")}</button></header><div class="objective-bar" id="objective"></div><div class="battle-hint" id="battle-hint"></div><div class="map-controls">${button("Focus commander", "focus", "square", "crosshair")}${button("Zoom in", "zoom-in", "square", "plus")}${button("Zoom out", "zoom-out", "square", "minus")}</div><div class="minimap-wrap"><canvas id="minimap" width="160" height="120" aria-label="Minimap: tap to move camera"></canvas><span id="map-seed"></span></div><div class="commander-strip" id="commander-strip"></div><div id="joystick" aria-label="Drag to move commander" role="application"><div class="joystick-ring"></div><div class="joystick-stick">${icon("crosshair")}</div></div><div class="ability-dock" id="abilities"></div><section class="command-deck"><div class="selection-row"><div class="selection-info" id="selection-info"></div><div class="selection-tools">${button("Commander", "select-commander", "", "crown")}${button("Army", "select-army", "", "flag")}${button("Relic", "march-relic", "relic-command", "spark", 'aria-label="March to relic"')}${button("Hold", "hold", "", "hold")}</div></div><nav class="deck-tabs">${button("Recruit", "panel-army", "active", "sword")}${button("Build", "panel-build", "", "house")}${button("Research", "panel-research", "", "spark")}${button("Orders", "panel-orders", "", "flag")}</nav><div class="deck-content" id="deck-content"></div></section><div class="paused-ribbon" id="paused-ribbon"></div>`;
+  screen.innerHTML = `<header class="hud"><button class="brand-button" data-action="pause-menu" aria-label="Battle menu">${icon("crown")}</button><div class="resources"><button data-action="economy" title="Gold and income sources" aria-label="Gold and income sources">${icon("gold")}<b id="gold">0</b></button><button data-action="economy" title="Wood and income sources" aria-label="Wood and income sources">${icon("wood")}<b id="wood">0</b></button><button data-action="economy" title="Population and maximum capacity" aria-label="Population and maximum capacity">${icon("flag")}<b id="population">0</b></button></div><div class="hud-time" id="match-time">0:00</div><button class="pause-button" data-action="pause" aria-label="Tactical pause">${icon("pause")}</button></header><div class="objective-bar" id="objective"></div><div class="battle-hint" id="battle-hint"></div><div class="map-controls">${button("Focus commander", "focus", "square", "crosshair")}${button("Zoom in", "zoom-in", "square", "plus")}${button("Zoom out", "zoom-out", "square", "minus")}</div><div class="minimap-wrap"><button class="minimap-toggle" data-action="toggle-minimap" aria-label="Minimize minimap">Map −</button><canvas id="minimap" width="160" height="120" aria-label="Minimap: tap to move camera"></canvas><span id="map-seed"></span></div><div class="commander-strip" id="commander-strip"></div><div id="joystick" aria-label="Drag to move commander" role="application"><div class="joystick-ring"></div><div class="joystick-stick">${icon("crosshair")}</div></div><div class="ability-dock" id="abilities"></div><section class="command-deck"><div class="selection-row"><div class="selection-info" id="selection-info"></div><div class="selection-tools">${button("Minimize panel", "toggle-deck", "deck-toggle", "minus")}${button("Commander", "select-commander", "", "crown")}${button("Army", "select-army", "", "flag")}${button("Relic", "march-relic", "relic-command", "spark", 'aria-label="March to relic"')}${button("Hold", "hold", "", "hold")}</div></div><nav class="deck-tabs">${button("Details", "panel-inspect", "", "book")}${button("Recruit", "panel-army", "active", "sword")}${button("Build", "panel-build", "", "house")}${button("Research", "panel-research", "", "spark")}${button("Orders", "panel-orders", "", "flag")}</nav><div class="deck-content" id="deck-content"></div></section><div id="placement-controls"></div><div class="paused-ribbon" id="paused-ribbon"></div>`;
   measurePlayfield();
   renderDeck();
   updateHUD();
@@ -335,14 +390,23 @@ function refreshDeckState() {
   const signature = JSON.stringify([
     panel,
     placement,
+    [...selection],
+    recruitBatch,
+    state.pendingCommands.length,
     renderer.atlas.ready,
     state.entities
       .filter((e) => e.team === 0 && e.kind === "building" && e.hp > 0)
-      .map((e) => [e.type, e.buildProgress >= 1]),
+      .map((e) => [
+        e.id,
+        e.type,
+        e.buildProgress >= 1,
+        e.buildingLevel,
+        e.queue.map((q) => [q.type, q.id, q.queueId]),
+      ]),
     Object.values(UNITS).map((u) => affordable(getUnitCost(state, 0, u.id))),
     Object.values(BUILDINGS).map((b) => affordable(b.cost)),
     Object.values(TECHNOLOGIES).map((t) => [
-      affordable(t.cost),
+      affordable(technologyCost(state, 0, t.id)),
       player.research[t.id] || 0,
     ]),
   ]);
@@ -371,8 +435,12 @@ function renderDeck() {
     el.innerHTML = `<div id="rush-status"></div>`;
     return;
   }
-  if (panel === "army")
-    el.innerHTML = `<div class="action-cards">${Object.values(UNITS)
+  if (panel === "inspect")
+    el.innerHTML = inspectionHTML(planningState(), selection);
+  else if (panel === "army")
+    el.innerHTML = `<div class="recruit-controls"><span>Queue at a time</span>${[1, 3, 5].map((n) => button(String(n), "recruit-batch", recruitBatch === n ? "active" : "", undefined, `data-id="${n}" aria-label="Queue ${n} at a time"`)).join("")}<small>Tap a troop to add ${recruitBatch} to production.</small></div><div class="action-cards">${Object.values(
+      UNITS,
+    )
       .map((u) => {
         const ready = state.entities.some(
           (e) =>
@@ -381,7 +449,7 @@ function renderDeck() {
             BUILDINGS[e.type as BuildingId]?.recruits.includes(u.id) &&
             e.buildProgress >= 1,
         );
-        return `<button class="action-card ${!ready ? "unavailable" : ""} ${affordable(getUnitCost(state, 0, u.id)) ? "" : "funds-low"}" data-action="recruit" data-id="${u.id}" title="${esc(u.description)}" aria-label="Recruit ${u.name}"><span class="action-icon">${cardArt(u.id)}</span><strong>${u.name}</strong>${cost(getUnitCost(state, 0, u.id))}<small>${ready ? `${Math.round(u.trainTime * (state.players[0].research.logistics ? 0.85 : 1))}s · ${u.population} pop` : `Needs ${BUILDINGS[u.building].name}`}</small><small class="unit-counter">${{ swordsman: "Frontline", spearman: "Counters cavalry", archer: "Counters infantry", cavalry: "Counters archers", siege: "Breaks buildings", support: "Heals your army" }[u.id]}</small></button>`;
+        return `<button class="action-card ${!ready ? "unavailable" : ""} ${affordable(getUnitCost(state, 0, u.id)) ? "" : "funds-low"}" data-action="recruit" data-id="${u.id}" title="${esc(u.description)}" aria-label="Recruit ${u.name}"><span class="action-icon">${cardArt(u.id)}</span><strong>${u.name}</strong>${cost({ gold: getUnitCost(state, 0, u.id).gold * recruitBatch, wood: getUnitCost(state, 0, u.id).wood * recruitBatch })}<small>${ready ? `${Math.round(u.trainTime * (state.players[0].research.logistics ? 0.85 : 1))}s · ${u.population} pop` : `Needs ${BUILDINGS[u.building].name}`}</small><small class="unit-counter">${{ swordsman: "Frontline", spearman: "Counters cavalry", archer: "Counters infantry", cavalry: "Counters archers", siege: "Breaks buildings", support: "Heals your army" }[u.id]}</small></button>`;
       })
       .join("")}</div>`;
   else if (panel === "build")
@@ -396,11 +464,14 @@ function renderDeck() {
     el.innerHTML = `<div class="action-cards">${Object.values(TECHNOLOGIES)
       .map(
         (t) =>
-          `<button class="action-card ${(state.players[0].research[t.id] || 0) >= t.maxLevel ? "completed" : ""}" data-action="research" data-id="${t.id}" title="${esc(t.description)}"><span class="action-icon">${icon("spark")}</span><strong>${t.name}</strong>${cost(t.cost)}<small>${state.players[0].research[t.id] || 0} / ${t.maxLevel} · ${t.description}</small></button>`,
+          `<button class="action-card ${(state.players[0].research[t.id] || 0) >= t.maxLevel ? "completed" : ""}" data-action="research" data-id="${t.id}" title="${esc(t.description)}"><span class="action-icon">${icon("spark")}</span><strong>${t.name}</strong>${cost(technologyCost(state, 0, t.id))}<small>${state.players[0].research[t.id] || 0} / ${t.maxLevel} · ${t.description}</small></button>`,
       )
       .join("")}</div>`;
   else
     el.innerHTML = `<div class="order-cards">${button("Move", "order-move", uiAction === "move" ? "chosen" : "", "arrow")}${button("Attack-move", "order-attackMove", uiAction === "attackMove" ? "chosen" : "", "sword")}${button("Rally at commander", "rally-all", "", "flag")}${button("Save battle", "save", "", "save")}${button(`${speed}× speed`, "speed", "", "clock")}</div><p class="deck-tip">Tap a friendly to select. Tap ground to command. Drag the map to look around.</p>`;
+  el.insertAdjacentHTML("beforeend", `<div id="production-strip"></div>`);
+  hudHTML.delete("production-strip");
+  updateDeckLayout();
   const cards = el.querySelector(".action-cards");
   if (cards) cards.scrollLeft = oldScroll;
   if (focused?.action) {
@@ -409,6 +480,33 @@ function renderDeck() {
     );
     next?.focus({ preventScroll: true });
   }
+}
+function updateDeckLayout() {
+  const deck = document.querySelector<HTMLElement>(".command-deck");
+  deck?.classList.toggle("collapsed", deckCollapsed);
+  const toggle = deck?.querySelector<HTMLButtonElement>(
+    '[data-action="toggle-deck"]',
+  );
+  if (toggle) {
+    toggle.setAttribute(
+      "aria-label",
+      deckCollapsed ? "Expand panel" : "Minimize panel",
+    );
+    toggle.innerHTML = icon(deckCollapsed ? "plus" : "minus");
+    toggle.setAttribute("aria-expanded", String(!deckCollapsed));
+  }
+  document
+    .querySelector(".minimap-wrap")
+    ?.classList.toggle("collapsed", minimapCollapsed);
+  measurePlayfield();
+}
+function selectedBuilding() {
+  const entities = state.entities.filter(
+    (e) => selection.has(e.id) && e.team === 0 && e.hp > 0,
+  );
+  return entities.length === 1 && entities[0].kind === "building"
+    ? entities[0]
+    : undefined;
 }
 function dispatch(
   command: GameCommand,
@@ -431,7 +529,7 @@ function dispatch(
 function updateHUD() {
   if (!playing) return;
   refreshDeckState();
-  const p = state.players[0],
+  const p = planningState().players[0],
     c = commander();
   const set = (id: string, html: string) => {
     const el = document.querySelector(`#${id}`);
@@ -458,7 +556,14 @@ function updateHUD() {
     "population",
     state.rush
       ? `${p.population}<small> squad</small>`
-      : `${p.population}<small>/${p.populationCap}</small>`,
+      : `${p.population}<small>/${p.populationCap} · max ${p.maxPopulation}</small>`,
+  );
+  set(
+    "production-strip",
+    productionHTML(planningState(), selectedBuilding()?.id) +
+      (state.paused && state.pendingCommands.length
+        ? `<p class="planned-orders">${state.pendingCommands.length} planned orders · ${Math.floor(state.players[0].gold - planningState().players[0].gold)} gold / ${Math.floor(state.players[0].wood - planningState().players[0].wood)} wood reserved. Resume to begin.</p>`
+        : ""),
   );
   set(
     "match-time",
@@ -485,6 +590,17 @@ function updateHUD() {
     "selection-info",
     `${icon(chosen.length === 1 ? unitIcons[chosen[0].type] : "flag")}<div><strong>${placement ? `Place ${BUILDINGS[placement].name}` : chosen.length === 1 ? (UNITS as any)[chosen[0].type]?.name || (BUILDINGS as any)[chosen[0].type]?.name || (COMMANDERS as any)[chosen[0].type]?.name || "Commander" : `${chosen.length} units selected`}</strong><small>${placement ? "Tap open ground near your frontier" : chosen.length === 1 ? `${Math.ceil(chosen[0].hp)} / ${Math.ceil(chosen[0].maxHp)} health${chosen[0].queue.length ? ` · ${chosen[0].queue.length} queued` : ""}` : "Tap the battlefield to give an order"}</small></div>${placement ? button("Cancel", "cancel-build", "cancel", "close") : ""}`,
   );
+  const site =
+    placement && targetPoint
+      ? plannedBuildResult(state, 0, placement, targetPoint.x, targetPoint.y)
+      : null;
+  set(
+    "placement-controls",
+    placement
+      ? `<div class="placement-toolbar"><div><b>Place ${BUILDINGS[placement].name}</b><small>${site?.ok ? "Ready. Confirm to start construction." : (site?.error ?? "Tap ground or drag the preview. Pinch to move the map.")}</small></div><div>${button("Cancel", "cancel-build", "", "close")}${button(repeatPlacement ? "Repeat on" : "Repeat off", "repeat-placement", repeatPlacement ? "active" : "")}${button("Build here", "confirm-placement", "primary", "check", site?.ok ? "" : "disabled")}</div></div>`
+      : "",
+  );
+  document.body.classList.toggle("placing-building", !!placement);
   set(
     "commander-strip",
     c
@@ -587,6 +703,31 @@ function showFirstBriefing() {
 function updateTutorial() {
   const el = document.querySelector("#battle-hint");
   if (!el) return;
+  if (state.settings.learning && learningProgress) {
+    learningProgress = advanceLearning(state, learningProgress);
+    if (learningProgress.step >= LESSONS.length) {
+      el.innerHTML = "";
+      if (!learningCompletionShown) {
+        learningCompletionShown = true;
+        preferences.learningComplete = true;
+        writeLocal("preferences", preferences);
+        showDialog(
+          "Your settlement is ready",
+          `<p class="story">You captured gold and timber, trained an army, built and upgraded a house, and claimed a relic.</p><p>In a real battle, defend your deposits and keep while growing toward the map’s objectives. Pause whenever you need time to plan. Building Details and the resource bar always explain your options.</p>${button("Play The Outpost", "learning-campaign", "primary large", "flag")}${button("Keep practicing", "close-dialog", "", "play")}${button("Main menu", "save-leave", "", "back")}`,
+        );
+      }
+      return;
+    }
+    const lesson = LESSONS[learningProgress.step];
+    const html = `<button data-action="toggle-guide" aria-label="${guideCollapsed ? "Expand guide" : "Minimize guide"}">${icon(guideCollapsed ? "plus" : "minus")}</button><span>LEARN TO COMMAND · ${learningProgress.step + 1}/${LESSONS.length}</span><b>${lesson.title}</b>${guideCollapsed ? "" : `<p>${lesson.text}</p>${button(lesson.action, "learning-help", "lesson-action", "crosshair")}`}`;
+    el.classList.add("learning-guide");
+    if (hudHTML.get("battle-hint") !== html) {
+      el.innerHTML = html;
+      hudHTML.set("battle-hint", html);
+    }
+    return;
+  }
+  el.classList.remove("learning-guide");
   const attacked = buildingUnderAttack(state);
   el.classList.toggle("critical", !!attacked);
   if (attacked) {
@@ -658,6 +799,10 @@ function updateTutorial() {
   }
 }
 function showDialog(title: string, body: string, cls = "") {
+  if (playing && commander()?.directControl)
+    issueCommand(state, { type: "steer", team: 0, dx: 0, dy: 0 });
+  keys.clear();
+  joystickVector = { x: 0, y: 0 };
   if (!modalOpen) previousFocus = document.activeElement as HTMLElement;
   modalOpen = true;
   modal.innerHTML = `<div class="modal-backdrop"><section class="dialog ${cls}" role="dialog" aria-modal="true" aria-label="${esc(title)}"><header><h2>${esc(title)}</h2>${button("Close", "close-dialog", "square", "close", 'aria-label="Close dialog"')}</header>${body}</section></div>`;
@@ -685,7 +830,7 @@ function showHelp() {
 function showSettings() {
   showDialog(
     "Settings",
-    `<div class="settings-fields"><label>Master volume <output id="master-value">${Math.round(preferences.master * 100)}%</output><input id="master-slider" aria-label="Master volume" type="range" min="0" max="1" step=".05" value="${preferences.master}"></label><label class="check-field"><input id="mute-audio" type="checkbox" ${preferences.muted ? "checked" : ""}> Mute all audio</label><label>Music <output id="music-value">${Math.round(preferences.music * 100)}%</output><input id="music-slider" aria-label="Music" type="range" min="0" max="1" step=".05" value="${preferences.music}"></label><label>Sound effects <output id="sfx-value">${Math.round(preferences.sfx * 100)}%</output><input id="sfx-slider" aria-label="Sound effects" type="range" min="0" max="1" step=".05" value="${preferences.sfx}"></label><label class="check-field"><input id="reduced-motion" type="checkbox" ${preferences.reducedMotion ? "checked" : ""}> Reduced motion and effects</label><label class="check-field"><input id="show-tips" type="checkbox" ${preferences.showTips ? "checked" : ""}> Commander’s field guide</label><p class="muted">Teams use blue circles and coral diamonds, as well as banners. Music and effects work offline. The soundtrack can be replaced later through the repository’s audio manifest; see docs/AUDIO_REPLACEMENT.md for file names and loop settings.</p></div>${button("Done", "close-dialog", "primary", "check")}`,
+    `<div class="settings-fields"><label>Interface text size <select id="ui-scale" aria-label="Interface text size"><option value="1" ${preferences.uiScale === 1 ? "selected" : ""}>Standard</option><option value="1.15" ${preferences.uiScale === 1.15 ? "selected" : ""}>Larger · 115%</option><option value="1.3" ${preferences.uiScale === 1.3 ? "selected" : ""}>Largest · 130%</option></select></label><label>Master volume <output id="master-value">${Math.round(preferences.master * 100)}%</output><input id="master-slider" aria-label="Master volume" type="range" min="0" max="1" step=".05" value="${preferences.master}"></label><label class="check-field"><input id="mute-audio" type="checkbox" ${preferences.muted ? "checked" : ""}> Mute all audio</label><label>Music <output id="music-value">${Math.round(preferences.music * 100)}%</output><input id="music-slider" aria-label="Music" type="range" min="0" max="1" step=".05" value="${preferences.music}"></label><label>Sound effects <output id="sfx-value">${Math.round(preferences.sfx * 100)}%</output><input id="sfx-slider" aria-label="Sound effects" type="range" min="0" max="1" step=".05" value="${preferences.sfx}"></label><label class="check-field"><input id="reduced-motion" type="checkbox" ${preferences.reducedMotion ? "checked" : ""}> Reduced motion and effects</label><label class="check-field"><input id="show-tips" type="checkbox" ${preferences.showTips ? "checked" : ""}> Commander’s field guide</label><p class="muted">Teams use blue circles and coral diamonds, as well as banners. Music and effects work offline. The soundtrack can be replaced later through the repository’s audio manifest; see docs/AUDIO_REPLACEMENT.md for file names and loop settings.</p></div>${button("Done", "close-dialog", "primary", "check")}`,
   );
 }
 function showPauseMenu() {
@@ -705,6 +850,7 @@ async function persist(): Promise<boolean> {
     tutorial: tutorialOrigin
       ? advanceTutorial(state, { step: tutorialStep, origin: tutorialOrigin })
       : undefined,
+    learningProgress,
     missionIndex,
     campaignId: activeCampaign.id,
     expeditionStage,
@@ -727,6 +873,9 @@ async function continueGame() {
   if (!record) return toast("No saved battle yet.");
   try {
     state = restoreGame(record.game);
+    planningSnapshot = null;
+    planningSignature = "";
+    deckCollapsed = true;
     if (state.winner !== null || state.players[0].defeated) {
       await removeRecord("battle");
       savedGame = null;
@@ -748,6 +897,10 @@ async function continueGame() {
       record.expeditionStage <= 2
         ? record.expeditionStage
         : null;
+    learningProgress = state.settings.learning
+      ? restoreLearning(state, record.learningProgress)
+      : null;
+    learningCompletionShown = false;
     const tutorial = restoreTutorial(state, record.tutorial);
     tutorialStep = tutorial.step;
     tutorialOrigin = tutorial.origin;
@@ -912,7 +1065,12 @@ function readSetup(): boolean {
 }
 // A deliberately small, real editor: generated maps are immediately paintable, validated, exportable, and playable.
 let editing = false,
-  editorBrush = "grass";
+  editorBrush = "grass",
+  editorMode: "paint" | "pan" = "paint",
+  editorBrushSize = 1;
+let editorHistory = new EditorHistory(),
+  editorStrokeStart: GameState["map"] | null = null,
+  editorLastPaint: Point | null = null;
 function renderEditorMenu() {
   screen.innerHTML = `<div class="menu-scrim solid"></div><main class="content-page">${pageHeader("MAP WORKSHOP", "Make your frontier", "Start from a generated world. Paint terrain, move spawns, and place resources.")}<div class="expedition-intro">${icon("map")}<h2>A blank page is optional.</h2><p>Open a fresh seeded map, or return to your saved workshop. Export a JSON map to share it. Validation checks keep every spawn, supply, and objective reachable.</p><div class="menu-stack">${button("Create a map", "new-editor", "primary", "plus")}${button("Open saved map", "load-editor", "", "save")}<label class="file-button">${icon("map")} Import map JSON<input type="file" id="import-map" accept="application/json,.json"></label></div></div></main>`;
 }
@@ -923,6 +1081,9 @@ function openEditor(map?: GameState["map"]) {
     ...(map ? { customMap: map } : {}),
   });
   if (map) next.map = map;
+  editorHistory = new EditorHistory();
+  editorStrokeStart = null;
+  editorLastPaint = null;
   playing = false;
   editing = true;
   state = next;
@@ -930,7 +1091,7 @@ function openEditor(map?: GameState["map"]) {
   renderer.centerOn(state.map.width / 2, state.map.height / 2);
   renderer.camera.zoom = innerWidth < 600 ? 0.55 : 0.75;
   document.body.classList.add("in-game");
-  screen.innerHTML = `<header class="editor-header">${button("Workshop", "exit-editor", "back", "back")}<h2>Map workshop</h2>${button("Save", "save-map", "", "save")}${button("Test map", "test-map", "primary", "play")}</header><aside class="editor-tools"><span class="eyebrow">PAINT THE FRONTIER</span><div class="brushes">${["grass", "forest", "water", "rock", "sand", "snow", "road", "marsh", "gold", "wood", "relic", "spawn-0", "spawn-1", "erase"].map((b) => button(b.replace("-", " "), `brush-${b}`, b === editorBrush ? "active" : "", b === "gold" ? "gold" : b === "wood" ? "wood" : b === "relic" ? "spark" : "map")).join("")}</div><p>Tap to paint. Drag to pan. Pinch or scroll to zoom.</p><div id="map-validation"></div>${button("Validate", "validate-map", "", "check")}${button("Export JSON", "export-map", "", "save")}</aside><div class="editor-bottom"><span>${state.map.width} × ${state.map.height} · ${esc(state.map.seed)}</span>${button("Regenerate", "regenerate-map", "", "spark")}</div>`;
+  screen.innerHTML = `<header class="editor-header">${button("Workshop", "exit-editor", "back", "back")}<h2>Map workshop</h2>${button("Save", "save-map", "", "save")}${button("Test map", "test-map", "primary", "play")}</header><aside class="editor-tools"><span class="eyebrow">MAP TOOLS</span><div class="editor-mode-tools">${button("Paint", "editor-paint", editorMode === "paint" ? "active" : "", "map")}${button("Pan", "editor-pan", editorMode === "pan" ? "active" : "", "crosshair")}${button("Undo", "editor-undo", "", "back")}${button("Redo", "editor-redo", "", "arrow")}</div><label class="brush-size">Brush size <select id="brush-size" aria-label="Brush size"><option value="1">1 tile</option><option value="3">3 tiles</option><option value="5">5 tiles</option></select></label><div class="brushes">${["grass", "forest", "water", "rock", "sand", "snow", "road", "marsh", "gold", "wood", "relic", "spawn-0", "spawn-1", "erase"].map((b) => button(b.replace("-", " "), `brush-${b}`, b === editorBrush ? "active" : "", b === "gold" ? "gold" : b === "wood" ? "wood" : b === "relic" ? "spark" : "map")).join("")}</div><p id="editor-tool-help">Paint: press and drag to draw. Pan: drag to move the map. Two fingers always pan/zoom. Undo reverses one stroke.</p><div id="map-validation"></div>${button("Validate", "validate-map", "", "check")}${button("Export JSON", "export-map", "", "save")}</aside><div class="editor-bottom"><span>${state.map.width} × ${state.map.height} · ${esc(state.map.seed)}</span>${button("Regenerate", "regenerate-map", "", "spark")}</div>`;
   validateEditor();
 }
 async function validateEditor() {
@@ -956,8 +1117,11 @@ function paintEditor(point: Point) {
     state.map.nodes = state.map.nodes.filter(
       (n) => Math.hypot(n.x - x - 0.5, n.y - y - 0.5) > 1,
     );
+    const used = new Set(state.map.nodes.map((n) => n.id));
+    let nodeId = `editor-${state.nextId++}`;
+    while (used.has(nodeId)) nodeId = `editor-${state.nextId++}`;
     state.map.nodes.push({
-      id: `editor-${Date.now()}`,
+      id: nodeId,
       kind: editorBrush as any,
       x: x + 0.5,
       y: y + 0.5,
@@ -977,6 +1141,30 @@ function paintEditor(point: Point) {
     state.map.tiles[y * state.map.width + x] = "grass";
   } else state.map.tiles[y * state.map.width + x] = editorBrush as any;
   renderer.invalidateTerrain();
+}
+function paintEditorStroke(point: Point) {
+  const tiles = strokeTiles(
+    editorLastPaint ?? point,
+    point,
+    state.map.width,
+    state.map.height,
+  );
+  for (const tile of tiles) {
+    const radius = ["gold", "wood", "relic", "spawn-0", "spawn-1"].includes(
+      editorBrush,
+    )
+      ? 0
+      : Math.floor(editorBrushSize / 2);
+    for (let y = -radius; y <= radius; y++)
+      for (let x = -radius; x <= radius; x++)
+        paintEditor({ x: tile.x + x, y: tile.y + y });
+  }
+  editorLastPaint = point;
+}
+function finishEditorStroke() {
+  if (editorStrokeStart) editorHistory.record(editorStrokeStart, state.map);
+  editorStrokeStart = null;
+  editorLastPaint = null;
   void validateEditor();
 }
 function downloadMap() {
@@ -995,11 +1183,21 @@ async function handleAction(action: string, id?: string) {
   audio.unlock();
   if (action.startsWith("panel-")) {
     panel = action.slice(6);
+    deckCollapsed = false;
     renderDeck();
     return;
   }
   if (action.startsWith("brush-")) {
     editorBrush = action.slice(6);
+    editorMode = "paint";
+    screen
+      .querySelectorAll(".editor-mode-tools button")
+      .forEach((b) =>
+        b.classList.toggle(
+          "active",
+          b.getAttribute("data-action") === "editor-paint",
+        ),
+      );
     screen
       .querySelectorAll(".brushes button")
       .forEach((b) =>
@@ -1008,6 +1206,206 @@ async function handleAction(action: string, id?: string) {
     return;
   }
   switch (action) {
+    case "editor-paint":
+    case "editor-pan":
+      editorMode = action === "editor-paint" ? "paint" : "pan";
+      screen
+        .querySelectorAll(".editor-mode-tools button")
+        .forEach((b) =>
+          b.classList.toggle(
+            "active",
+            b.getAttribute("data-action") === action,
+          ),
+        );
+      break;
+    case "editor-undo":
+    case "editor-redo": {
+      const map =
+        action === "editor-undo"
+          ? editorHistory.undo(state.map)
+          : editorHistory.redo(state.map);
+      if (map) {
+        state.map = map;
+        renderer.invalidateTerrain();
+        void validateEditor();
+      } else
+        toast(
+          action === "editor-undo" ? "Nothing to undo." : "Nothing to redo.",
+        );
+      break;
+    }
+    case "learn":
+      launchGame({
+        learning: true,
+        seed: "FIRST-SETTLEMENT",
+        mapSize: "tiny",
+        difficulty: "easy",
+        aiPlayers: 1,
+        commander: "warlord",
+        faction: "ironhold",
+        duration: 18,
+        mode: "domination",
+        startingGold: 180,
+        startingWood: 160,
+        populationCap: 40,
+      });
+      break;
+    case "toggle-guide":
+      guideCollapsed = !guideCollapsed;
+      updateHUD();
+      break;
+    case "learning-campaign":
+      closeDialog();
+      launchGame(activeCampaign.missions[0].settings, 0);
+      break;
+    case "learning-help": {
+      if (!learningProgress) break;
+      if (learningProgress.step === 4 || learningProgress.step === 5) {
+        panel = learningProgress.step === 4 ? "army" : "build";
+        deckCollapsed = false;
+        renderDeck();
+      } else {
+        const target = learningTarget(state, learningProgress.step);
+        if (target) {
+          renderer.centerOn(target.x, target.y);
+          followCommander = false;
+          targetPoint = { x: target.x, y: target.y };
+        }
+      }
+      break;
+    }
+    case "repeat-placement":
+      repeatPlacement = !repeatPlacement;
+      updateHUD();
+      break;
+    case "confirm-placement": {
+      if (!placement || !targetPoint) break;
+      const building = placement,
+        point = snapConstruction(targetPoint),
+        check = plannedBuildResult(state, 0, building, point.x, point.y);
+      if (!check.ok) {
+        toast(check.error ?? "Choose another site.", "warning");
+        updateHUD();
+        break;
+      }
+      if (dispatch({ type: "build", team: 0, building, ...point }, "build")) {
+        toast(
+          state.paused
+            ? `${BUILDINGS[building].name} planned. Resume to build.`
+            : `${BUILDINGS[building].name} under construction.`,
+        );
+        if (repeatPlacement)
+          targetPoint = snapConstruction({
+            x: point.x + BUILDINGS[building].size * 2 + 0.5,
+            y: point.y,
+          });
+        else {
+          placement = null;
+          targetPoint = null;
+        }
+        renderDeck();
+        updateHUD();
+      }
+      break;
+    }
+    case "toggle-deck":
+      deckCollapsed = !deckCollapsed;
+      updateDeckLayout();
+      break;
+    case "toggle-minimap":
+      minimapCollapsed = !minimapCollapsed;
+      updateDeckLayout();
+      break;
+    case "economy":
+      showDialog(
+        "Your economy and army",
+        economyHTML(state) +
+          button("Back to battle", "close-dialog", "primary"),
+        "wide",
+      );
+      break;
+    case "economy-build":
+      closeDialog();
+      panel = "build";
+      deckCollapsed = false;
+      renderDeck();
+      break;
+    case "find-gold":
+    case "find-wood": {
+      closeDialog();
+      const kind = action === "find-gold" ? "gold" : "wood",
+        c = commander() ?? state.map.spawns[0];
+      const node = state.map.nodes
+        .filter(
+          (n) =>
+            n.kind === kind &&
+            n.owner !== 0 &&
+            n.amount > 0 &&
+            state.fog.explored[0][
+              Math.floor(n.y) * state.map.width + Math.floor(n.x)
+            ],
+        )
+        .sort(
+          (a, b) =>
+            Math.hypot(a.x - c.x, a.y - c.y) - Math.hypot(b.x - c.x, b.y - c.y),
+        )[0];
+      if (node) {
+        renderer.centerOn(node.x, node.y);
+        followCommander = false;
+        toast(
+          `Tap this ${kind === "gold" ? "mine" : "timber camp"} to send your selected troops to capture it.`,
+        );
+      } else toast("Explore beyond your frontier to find another deposit.");
+      break;
+    }
+    case "view-resource": {
+      closeDialog();
+      const n = state.map.nodes.find((n) => n.id === id);
+      if (n) {
+        renderer.centerOn(n.x, n.y);
+        followCommander = false;
+      }
+      break;
+    }
+    case "recruit-batch":
+      recruitBatch = Number(id) || 1;
+      renderDeck();
+      break;
+    case "inspect-building": {
+      const b = state.entities.find(
+        (e) => e.id === id && e.team === 0 && e.hp > 0,
+      );
+      if (b) {
+        if (learningProgress && b.type === "keep")
+          learningProgress.inspectedKeep = true;
+        selection = new Set([b.id]);
+        panel = "inspect";
+        deckCollapsed = false;
+        renderDeck();
+        updateHUD();
+      }
+      break;
+    }
+    case "set-rally":
+      rallyBuildingId = id ?? selectedBuilding()?.id ?? null;
+      uiAction = "rally";
+      deckCollapsed = true;
+      updateDeckLayout();
+      toast("Tap open ground to set this building’s rally point.");
+      break;
+    case "upgrade-building":
+      if (id)
+        dispatch({ type: "upgradeBuilding", team: 0, buildingId: id }, "build");
+      renderDeck();
+      break;
+    case "cancel-production": {
+      const [buildingId, queueId] = (id ?? "").split("|");
+      if (buildingId && queueId)
+        dispatch({ type: "cancelProduction", team: 0, buildingId, queueId });
+      renderDeck();
+      break;
+    }
+
     case "debug-reveal":
       debugReveal = !debugReveal;
       closeDialog();
@@ -1185,7 +1583,23 @@ async function handleAction(action: string, id?: string) {
       dispatch({ type: "hold", team: 0, entityIds: [...selection] });
       break;
     case "recruit":
-      if (dispatch({ type: "recruit", team: 0, unit: id as UnitId }, "recruit"))
+      if (
+        dispatch(
+          {
+            type: "recruit",
+            team: 0,
+            unit: id as UnitId,
+            count: panel === "inspect" ? 1 : recruitBatch,
+            ...(selectedBuilding() &&
+            BUILDINGS[
+              selectedBuilding()!.type as BuildingId
+            ]?.recruits.includes(id as UnitId)
+              ? { buildingId: selectedBuilding()!.id }
+              : {}),
+          },
+          "recruit",
+        )
+      )
         toast(
           state.paused
             ? `${UNITS[id as UnitId].name} order queued`
@@ -1201,8 +1615,22 @@ async function handleAction(action: string, id?: string) {
       }
       placement = id as BuildingId;
       targetPoint = null;
+      const anchor = commander() ?? state.map.spawns[0];
+      for (let radius = 3; radius <= 8 && !targetPoint; radius += 1)
+        for (let i = 0; i < 12 && !targetPoint; i++) {
+          const point = snapConstruction({
+            x: anchor.x + Math.cos((i * Math.PI) / 6) * radius,
+            y: anchor.y + Math.sin((i * Math.PI) / 6) * radius,
+          });
+          if (plannedBuildResult(state, 0, placement, point.x, point.y).ok)
+            targetPoint = point;
+        }
+      targetPoint ??= snapConstruction(anchor);
+      deckCollapsed = true;
       followCommander = false;
-      toast(`Tap open ground near your keep to place ${def.name}.`);
+      toast(
+        `Drag the ${def.name} preview, then choose Build here. Pinch to pan or zoom.`,
+      );
       renderDeck();
       updateHUD();
       break;
@@ -1216,7 +1644,14 @@ async function handleAction(action: string, id?: string) {
     case "research":
       if (
         dispatch(
-          { type: "research", team: 0, technology: id as TechId },
+          {
+            type: "research",
+            team: 0,
+            technology: id as TechId,
+            ...(selectedBuilding()?.type === TECHNOLOGIES[id as TechId].building
+              ? { buildingId: selectedBuilding()!.id }
+              : {}),
+          },
           "build",
         )
       )
@@ -1425,6 +1860,18 @@ app.addEventListener("submit", (e) => {
 });
 app.addEventListener("input", (e) => {
   const t = e.target as HTMLInputElement;
+  if (t.id === "ui-scale") {
+    preferences.uiScale = Math.max(1, Math.min(1.3, Number(t.value)));
+    document.documentElement.style.setProperty(
+      "--ui-scale",
+      String(preferences.uiScale),
+    );
+    measurePlayfield();
+  }
+  if (t.id === "brush-size") {
+    editorBrushSize = Number(t.value);
+    return;
+  }
   if (t.id === "master-slider") {
     preferences.master = Number(t.value);
     audio.setMaster(preferences.master, preferences.muted);
@@ -1469,23 +1916,39 @@ canvas.addEventListener("pointerdown", (e) => {
   const point = canvasPoint(e);
   pointers.set(e.pointerId, point);
   if (pointers.size === 2) {
+    if (editing && editorStrokeStart) {
+      state.map = editorStrokeStart;
+      editorStrokeStart = null;
+      editorLastPaint = null;
+      renderer.invalidateTerrain();
+    }
     const ps = [...pointers.values()];
     pinchDistance = Math.hypot(ps[0].x - ps[1].x, ps[0].y - ps[1].y);
+    pinchCenter = { x: (ps[0].x + ps[1].x) / 2, y: (ps[0].y + ps[1].y) / 2 };
     dragged = true;
   } else {
     pointerDown = point;
     pointerLast = point;
     dragged = false;
+    if (editing && editorMode === "paint") {
+      editorStrokeStart = structuredClone(state.map);
+      paintEditorStroke(renderer.screenToWorld(point.x, point.y));
+    }
   }
 });
 canvas.addEventListener("pointermove", (e) => {
   const point = canvasPoint(e);
-  if (placement) targetPoint = renderer.screenToWorld(point.x, point.y);
+  if (placement && pointers.size === 1 && pointers.has(e.pointerId))
+    targetPoint = snapConstruction(renderer.screenToWorld(point.x, point.y));
   if (!pointers.has(e.pointerId)) return;
   pointers.set(e.pointerId, point);
   if (pointers.size === 2) {
     const ps = [...pointers.values()],
       d = Math.hypot(ps[0].x - ps[1].x, ps[0].y - ps[1].y);
+    const center = { x: (ps[0].x + ps[1].x) / 2, y: (ps[0].y + ps[1].y) / 2 };
+    if (pinchCenter)
+      renderer.pan(center.x - pinchCenter.x, center.y - pinchCenter.y);
+    pinchCenter = center;
     if (pinchDistance)
       renderer.zoomAt(
         d / pinchDistance,
@@ -1499,7 +1962,12 @@ canvas.addEventListener("pointermove", (e) => {
   if (pointerDown && pointerLast) {
     if (Math.hypot(point.x - pointerDown.x, point.y - pointerDown.y) > 8)
       dragged = true;
-    if (dragged) {
+    if (editing && editorMode === "paint" && editorStrokeStart) {
+      paintEditorStroke(renderer.screenToWorld(point.x, point.y));
+    } else if (dragged && placement) {
+      targetPoint = snapConstruction(renderer.screenToWorld(point.x, point.y));
+      updateHUD();
+    } else if (dragged) {
       renderer.pan(point.x - pointerLast.x, point.y - pointerLast.y);
       followCommander = false;
     }
@@ -1510,36 +1978,20 @@ function releasePointer(e: PointerEvent) {
   const point = canvasPoint(e);
   pointers.delete(e.pointerId);
   if (pointers.size) return;
+  if (editing) {
+    finishEditorStroke();
+    pointerDown = null;
+    pointerLast = null;
+    pinchDistance = 0;
+    pinchCenter = null;
+    return;
+  }
   if (!dragged && pointerDown && !modalOpen) {
     const world = renderer.screenToWorld(point.x, point.y);
     if (editing) paintEditor(world);
     else if (placement) {
-      targetPoint = world;
-      const planned = plannedBuildResult(state, 0, placement, world.x, world.y);
-      if (!planned.ok) {
-        toast(planned.error || "Choose another construction site.", "warning");
-        audio.play("error");
-      } else if (
-        dispatch(
-          {
-            type: "build",
-            team: 0,
-            building: placement,
-            x: world.x,
-            y: world.y,
-          },
-          "build",
-        )
-      ) {
-        toast(
-          state.paused
-            ? `Build order queued: ${BUILDINGS[placement].name}`
-            : `${BUILDINGS[placement].name} under construction`,
-        );
-        placement = null;
-        targetPoint = null;
-        renderDeck();
-      }
+      targetPoint = snapConstruction(world);
+      updateHUD();
     } else {
       const item = renderer.pick(state, point.x, point.y);
       if (item && "team" in item) {
@@ -1548,9 +2000,10 @@ function releasePointer(e: PointerEvent) {
           audio.play("select");
           followCommander = item.kind === "commander";
           if (item.kind === "building") {
-            panel = BUILDINGS[item.type as BuildingId]?.recruits.length
-              ? "army"
-              : "build";
+            if (learningProgress && item.type === "keep")
+              learningProgress.inspectedKeep = true;
+            panel = "inspect";
+            deckCollapsed = false;
             renderDeck();
           }
         } else
@@ -1561,6 +2014,18 @@ function releasePointer(e: PointerEvent) {
             targetId: item.id,
           });
       } else if (item && "owner" in item) {
+        if (
+          !state.entities.some(
+            (e) =>
+              selection.has(e.id) &&
+              e.team === 0 &&
+              e.kind !== "building" &&
+              e.hp > 0,
+          )
+        ) {
+          const hero = commander();
+          if (hero) selection = new Set([hero.id]);
+        }
         dispatch({
           type: "capture",
           team: 0,
@@ -1575,15 +2040,22 @@ function releasePointer(e: PointerEvent) {
         );
       } else {
         const selected = state.entities.filter((e) => selection.has(e.id));
-        if (selected.length === 1 && selected[0].kind === "building")
+        if (uiAction === "rally" && rallyBuildingId) {
           dispatch({
             type: "rally",
             team: 0,
-            buildingId: selected[0].id,
+            buildingId: rallyBuildingId,
             x: world.x,
             y: world.y,
           });
-        else
+          uiAction = "move";
+          rallyBuildingId = null;
+          toast("Rally point set. New troops will gather here.");
+        } else if (selected.length === 1 && selected[0].kind === "building") {
+          toast(
+            "Use this building’s Details panel to train, research, upgrade, or set a rally point.",
+          );
+        } else
           dispatch({
             type: uiAction === "attackMove" ? "attackMove" : "move",
             team: 0,
@@ -1599,13 +2071,16 @@ function releasePointer(e: PointerEvent) {
   pointerDown = null;
   pointerLast = null;
   pinchDistance = 0;
+  pinchCenter = null;
 }
 canvas.addEventListener("pointerup", releasePointer);
 canvas.addEventListener("pointercancel", () => {
+  if (editing) finishEditorStroke();
   pointers.clear();
   pointerDown = null;
   pointerLast = null;
   pinchDistance = 0;
+  pinchCenter = null;
 });
 canvas.addEventListener("contextmenu", (e) => e.preventDefault());
 canvas.addEventListener(
@@ -1628,13 +2103,15 @@ function setupJoystick() {
     const length = Math.hypot(dx, dy),
       limit = 30;
     joystickVector = {
-      x: dx / Math.max(length, limit),
-      y: dy / Math.max(length, limit),
+      x: length < 5 ? 0 : dx / Math.max(length, limit),
+      y: length < 5 ? 0 : dy / Math.max(length, limit),
     };
     const stick = el.querySelector<HTMLElement>(".joystick-stick")!;
     stick.style.transform = `translate(${joystickVector.x * limit}px,${joystickVector.y * limit}px)`;
   };
   el.addEventListener("pointerdown", (e) => {
+    if (joystickPointer !== null) return;
+    e.preventDefault();
     audio.unlock();
     joystickPointer = e.pointerId;
     el.setPointerCapture(e.pointerId);
@@ -1648,14 +2125,14 @@ function setupJoystick() {
   });
   const end = () => {
     const c = commander();
-    if (c && !state.paused)
-      issueCommand(state, { type: "hold", team: 0, entityIds: [c.id] });
+    if (c) issueCommand(state, { type: "steer", team: 0, dx: 0, dy: 0 });
     joystickVector = { x: 0, y: 0 };
     joystickPointer = null;
     el.querySelector<HTMLElement>(".joystick-stick")!.style.transform = "";
   };
   el.addEventListener("pointerup", end);
   el.addEventListener("pointercancel", end);
+  el.addEventListener("lostpointercapture", end);
 }
 const keys = new Set<string>();
 window.addEventListener("keydown", (e) => {
@@ -1749,8 +2226,7 @@ window.addEventListener("keyup", (e) => {
     )
   ) {
     const c = commander();
-    if (c && !state.paused)
-      issueCommand(state, { type: "hold", team: 0, entityIds: [c.id] });
+    if (c) issueCommand(state, { type: "steer", team: 0, dx: 0, dy: 0 });
   }
 });
 window.addEventListener("blur", () => {
@@ -1765,10 +2241,13 @@ function measurePlayfield() {
   const hud = document.querySelector(".hud")?.getBoundingClientRect();
   const deck = document.querySelector(".command-deck")?.getBoundingClientRect();
   const abilities = document.querySelector<HTMLElement>(".ability-dock");
+  if (deck)
+    document.documentElement.style.setProperty(
+      "--deck-height",
+      `${Math.ceil(innerHeight - deck.top)}px`,
+    );
   const landscape = innerHeight < 500 && innerWidth > 600;
-  if (abilities)
-    abilities.style.bottom =
-      landscape && deck ? `${innerHeight - deck.top + 8}px` : "";
+  if (abilities) abilities.style.bottom = "";
   if (landscape && hud && deck) {
     const objective = document
       .querySelector(".objective-bar")
@@ -1835,20 +2314,18 @@ function frame(now: number) {
             (keys.has("s") || keys.has("arrowdown") ? 1 : 0) -
             (keys.has("w") || keys.has("arrowup") ? 1 : 0) +
             joystickVector.y;
-        if ((dx || dy) && !state.paused && now - lastJoystick > 100) {
+        if ((dx || dy) && !state.paused && now - lastJoystick > 60) {
           const c = commander();
           if (c) {
-            const a = renderer.screenToWorld(innerWidth / 2, innerHeight / 2),
-              b = renderer.screenToWorld(
-                innerWidth / 2 + dx * 60,
-                innerHeight / 2 + dy * 60,
-              );
+            const wx = dx + dy * 2,
+              wy = dy * 2 - dx,
+              length = Math.hypot(wx, wy) || 1;
+            const magnitude = Math.min(1, Math.hypot(dx, dy));
             issueCommand(state, {
-              type: "move",
+              type: "steer",
               team: 0,
-              entityIds: [c.id],
-              x: c.x + (b.x - a.x),
-              y: c.y + (b.y - a.y),
+              dx: (wx / length) * magnitude,
+              dy: (wy / length) * magnitude,
             });
             followCommander = true;
           }

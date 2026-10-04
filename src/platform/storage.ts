@@ -9,6 +9,7 @@ export interface Preferences {
   reducedMotion: boolean;
   showTips: boolean;
   tutorialSeen: boolean;
+  learningComplete: boolean;
   uiScale: number;
 }
 export interface Profile {
@@ -32,6 +33,7 @@ export const defaultPreferences: Preferences = {
   reducedMotion: matchMedia("(prefers-reduced-motion: reduce)").matches,
   showTips: true,
   tutorialSeen: false,
+  learningComplete: false,
   uiScale: 1,
 };
 export const defaultProfile: Profile = {

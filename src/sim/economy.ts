@@ -1,3 +1,4 @@
+import { buildingLevel } from './progression';
 import { BIOMES, FIXED_STEP } from './content';
 import { distance } from './maps';
 import type { GameState } from './types';
@@ -41,8 +42,9 @@ export function getEconomyRates(state: GameState, team = 0, stepSeconds = FIXED_
     result.woodPerSecond = (.45 + lateRelics * .35) * state.escalation;
     for (const [nodeIndex, node] of state.map.nodes.entries())
         if (node.owner === player.team && node.kind !== 'relic' && node.amount > 0) {
-            const depot = state.entities.some(e => e.team === player.team && e.type === 'depot' && e.hp > 0 && e.buildProgress >= 1 && distance(e, node) < 7);
-            const amount = Math.min(node.amount, node.income * modifier * (depot ? 1.35 : 1) * stepSeconds);
+            const depots = state.entities.filter(e => e.team === player.team && e.type === 'depot' && e.hp > 0 && e.buildProgress >= 1 && distance(e, node) < 7);
+            const depotBonus = Math.max(0, ...depots.map(e => .35 + (buildingLevel(e) - 1) * .15));
+            const amount = Math.min(node.amount, node.income * modifier * (1 + depotBonus) * stepSeconds);
             result.withdrawals.push({ nodeIndex, amount });
             if (node.kind === 'gold') {
                 result.goldPerSecond += amount / stepSeconds;

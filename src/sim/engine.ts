@@ -1,3 +1,5 @@
+import { footprintsOverlap } from './construction';
+import { PRODUCTION_QUEUE_LIMIT, BUILDING_UPGRADES, buildingLevel, buildingPopulation, nextBuildingUpgrade, productionRate, productionRefund, technologyCost, queueItemCost } from './progression';
 import { getEconomyRates } from './economy';
 import { validateTriggers, parseBoundedJSON, MAX_SAVE_JSON_BYTES, MAX_MAP_JSON_BYTES } from './validation';
 import type { GameMap, GameState, GameSettings, GameCommand, CommandResult, Entity, Point, Player, PlayerStats, UnitId, BuildingId, TechId, GameEvent, CommanderId, ScriptAction, RushUpgradeId } from './types';
@@ -48,6 +50,13 @@ export function createGame(partial: Partial<GameSettings> = {}): GameState {
         spawnEntity(state, team, 'commander', p.commander, spawn.x + inward.x * 3, spawn.y + inward.y * 3, true);
         ['swordsman', 'swordsman', 'spearman', 'archer'].forEach((id, i) => spawnEntity(state, team, 'unit', id as UnitId, spawn.x + inward.x * (3 + (i % 2)) - side.x * (1.7 + Math.floor(i / 2) * .9), spawn.y + inward.y * (3 + (i % 2)) - side.y * (1.7 + Math.floor(i / 2) * .9), true));
     });
+    if (settings.learning) {
+        state.entities = state.entities.filter(e => e.type === 'keep' || e.team === 0 && e.kind === 'commander');
+        state.players.forEach(p => { p.ai = false; p.stats.unitsCreated = 0; p.stats.buildingsCreated = 1; });
+        state.map.nodes.forEach(n => n.owner = null);
+        state.navigationVersion++;
+        state.objectiveText = 'Learn to command: capture supplies, grow your settlement, and claim a relic.';
+    }
     if (settings.mode === 'rush')
         initializeRush(state);
     updatePopulation(state);
@@ -136,7 +145,7 @@ function selected(s: GameState, c: {
     entityIds?: string[];
 }): Entity[] { return s.entities.filter(e => e.team === c.team && living(e) && e.kind !== 'building' && (c.entityIds ? c.entityIds.includes(e.id) : e.kind === 'commander')); }
 function setOrder(e: Entity, order: Entity['order']) {
-    e.order = order; e.path = []; e.pathTarget = null; e.pathTimer = 0; e.targetId = null; delete e.escortId;
+    e.order = order; e.path = []; e.pathTarget = null; e.pathTimer = 0; e.targetId = null; delete e.escortId; delete e.directControl;
     if (order.type === 'idle' && e.kind !== 'building')
         e.guardAnchor = { x: e.x, y: e.y };
     else
@@ -164,7 +173,7 @@ export function canBuild(s: GameState, team: number, id: BuildingId, x: number, 
         for (let xx = x - d.size; xx <= x + d.size; xx += .6)
             if (!isBuildable(s.map, xx, yy))
                 return { ok: false, error: 'Build on clear, dry ground.' };
-    if (s.entities.some(e => e.kind === 'building' && living(e) && distance(e, { x, y }) < e.radius + d.size + 1.2))
+    if (s.entities.some(e => e.kind === 'building' && living(e) && footprintsOverlap(e, e.radius, { x, y }, d.size)))
         return { ok: false, error: 'Too close to another building.' };
     if (s.entities.some(e => e.kind !== 'building' && living(e) && distance(e, { x, y }) < d.size + e.radius + .3))
         return { ok: false, error: 'Move your troops clear of the construction site.' };
@@ -203,12 +212,19 @@ export function issueCommand(s: GameState, c: GameCommand): CommandResult {
         }
         return { ok: true };
     }
+    if (s.paused && c.type === 'steer') {
+        if (c.dx || c.dy) return { ok: false, error: 'Resume the battle to move directly.' };
+        return executeCommand(s, c);
+    }
     if (s.paused) {
         const invalid = validateStoredCommand(s, c);
         if (invalid)
             return { ok: false, error: `This order ${invalid}` };
         if (s.pendingCommands.length >= 60)
             return { ok: false, error: 'Tactical queue is full.' };
+        const planned = projectPendingCommands(s);
+        const possible = executeCommand(planned, c);
+        if (!possible.ok) return possible;
         s.pendingCommands.push(JSON.parse(JSON.stringify(c)));
         return { ok: true, queued: true };
     }
@@ -217,13 +233,29 @@ export function issueCommand(s: GameState, c: GameCommand): CommandResult {
         s.commandLog.push({ tick: s.tick, command: JSON.parse(JSON.stringify(c)) });
     return result;
 }
+/** Pure planning snapshot: queued costs, capacity, footprints and jobs are reserved together. */
+export function projectPendingCommands(state: GameState): GameState {
+    if (!state.paused || !state.pendingCommands.length) return structuredClone(state);
+    const planned = structuredClone(state); planned.paused = false; planned.pendingCommands = [];
+    for (const command of state.pendingCommands) if (command.type !== 'pause') executeCommand(planned, command);
+    return planned;
+}
 function executeCommand(s: GameState, c: Exclude<GameCommand, {
     type: 'pause';
 }>): CommandResult {
     const p = s.players[c.team];
+    if (c.type === 'steer') {
+        if (!Number.isFinite(c.dx) || !Number.isFinite(c.dy)) return { ok: false, error: 'Invalid movement direction.' };
+        const commander = getCommander(s, c.team);
+        if (!commander || !living(commander)) return { ok: false, error: 'Your commander is recovering.' };
+        const length = Math.hypot(c.dx, c.dy);
+        setOrder(commander, { type: length > .001 ? 'hold' : 'idle' });
+        if (length > .001) commander.directControl = { x: c.dx / Math.max(1, length), y: c.dy / Math.max(1, length), until: s.time + .5 };
+        return { ok: true };
+    }
     if (c.type === 'upgrade')
         return chooseRushUpgrade(s, c.team, c.upgrade);
-    if (s.rush && ['build', 'recruit', 'research', 'rally'].includes(c.type))
+    if (s.rush && ['build', 'recruit', 'research', 'rally', 'upgradeBuilding', 'cancelProduction'].includes(c.type))
         return { ok: false, error: 'In Rush Arena, find supplies and choose field upgrades.' };
     if (c.type === 'move' || c.type === 'attackMove') {
         if (!Number.isFinite(c.x) || !Number.isFinite(c.y))
@@ -277,12 +309,12 @@ function executeCommand(s: GameState, c: Exclude<GameCommand, {
         if (!d)
             return { ok: false, error: 'Unknown unit.' };
         const count = c.count ?? 1;
-        if (!Number.isInteger(count) || count < 1 || count > 6)
-            return { ok: false, error: 'Recruit between one and six troops at a time.' };
+        if (!Number.isInteger(count) || count < 1 || count > PRODUCTION_QUEUE_LIMIT)
+            return { ok: false, error: 'Recruit between one and twelve troops at a time.' };
         const b = s.entities.filter(e => e.team === c.team && e.kind === 'building' && e.type !== 'turret' && active(e) && BUILDINGS[e.type as BuildingId].recruits.includes(c.unit) && (!c.buildingId || e.id === c.buildingId)).sort((a, b) => a.queue.length - b.queue.length)[0];
         if (!b)
             return { ok: false, error: `Build a ${BUILDINGS[d.building].name} first.` };
-        if (b.queue.length + count > 6)
+        if (b.queue.length + count > PRODUCTION_QUEUE_LIMIT)
             return { ok: false, error: 'Recruitment queue is full.' };
         const one = getUnitCost(s, c.team, c.unit), cost = { gold: one.gold * count, wood: one.wood * count };
         if (!affordable(p, cost))
@@ -293,7 +325,7 @@ function executeCommand(s: GameState, c: Exclude<GameCommand, {
         pay(p, cost);
         const total = d.trainTime * (p.research.logistics ? .85 : 1);
         for (let i = 0; i < count; i++)
-            b.queue.push({ type: 'unit', id: c.unit, total, remaining: total });
+            b.queue.push({ type: 'unit', id: c.unit, total, remaining: total, queueId: `q${s.nextId++}`, paidCost: { ...one } });
         updatePopulation(s);
         return { ok: true };
     }
@@ -309,13 +341,33 @@ function executeCommand(s: GameState, c: Exclude<GameCommand, {
         const b = s.entities.find(e => e.team === c.team && e.type === d.building && active(e) && (!c.buildingId || e.id === c.buildingId));
         if (!b)
             return { ok: false, error: `Requires ${BUILDINGS[d.building].name}.` };
-        if (b.queue.length >= 6)
+        if (b.queue.length >= PRODUCTION_QUEUE_LIMIT)
             return { ok: false, error: 'Production queue is full.' };
-        const cost = { gold: d.cost.gold * (level + 1), wood: d.cost.wood * (level + 1) };
+        const cost = technologyCost(s, c.team, c.technology);
         if (!affordable(p, cost))
             return { ok: false, error: `Need ${cost.gold} gold and ${cost.wood} wood.` };
         pay(p, cost);
-        b.queue.push({ type: 'research', id: d.id, total: d.time, remaining: d.time });
+        b.queue.push({ type: 'research', id: d.id, total: d.time, remaining: d.time, queueId: `q${s.nextId++}`, paidCost: { ...cost } });
+        return { ok: true };
+    }
+    if (c.type === 'cancelProduction') {
+        const building = s.entities.find(e => e.id === c.buildingId && e.team === c.team && e.kind === 'building' && living(e));
+        const index = building?.queue.findIndex(q => q.queueId === c.queueId) ?? -1;
+        if (!building || index < 0) return { ok: false, error: 'That production job has already finished.' };
+        const refund = productionRefund(s, building, building.queue[index]);
+        building.queue.splice(index, 1); p.gold += refund.gold; p.wood += refund.wood; updatePopulation(s);
+        return { ok: true };
+    }
+    if (c.type === 'upgradeBuilding') {
+        const building = s.entities.find(e => e.id === c.buildingId && e.team === c.team && e.kind === 'building' && e.type !== 'turret' && active(e));
+        if (!building) return { ok: false, error: 'Select a completed friendly building.' };
+        const upgrade = nextBuildingUpgrade(building);
+        if (!upgrade) return { ok: false, error: 'This building is at its maximum level.' };
+        if (building.queue.some(q => q.type === 'buildingUpgrade')) return { ok: false, error: 'This building upgrade is already queued.' };
+        if (building.queue.length >= PRODUCTION_QUEUE_LIMIT) return { ok: false, error: 'Production queue is full.' };
+        if (!affordable(p, upgrade.cost)) return { ok: false, error: `Need ${upgrade.cost.gold} gold and ${upgrade.cost.wood} wood.` };
+        pay(p, upgrade.cost);
+        building.queue.push({ type: 'buildingUpgrade', id: building.type as BuildingId, queueId: `q${s.nextId++}`, paidCost: { ...upgrade.cost }, total: upgrade.time, remaining: upgrade.time });
         return { ok: true };
     }
     if (c.type === 'ability')
@@ -490,16 +542,7 @@ function moveToward(s: GameState, e: Entity, goal: Point, dt: number, guardRadiu
     if (d < .01)
         return;
     e.facing = Math.atan2(dy, dx);
-    let speed = e.speed * BIOMES[s.map.biome].speed * (1 + (s.players[e.team].research.logistics ?? 0) * .15);
-    const terrain = terrainAt(s.map, e.x, e.y);
-    if (terrain === 'forest')
-        speed *= e.type === 'cavalry' || e.type === 'siege' ? .6 : .82;
-    if (terrain === 'marsh')
-        speed *= .55;
-    if (terrain === 'road')
-        speed *= 1.12;
-    if (e.slowUntil > s.time)
-        speed *= .45;
+    let speed = movementSpeed(s, e);
     if (e.escortId && e.order.type === 'attackMove' && !e.targetId) {
         const escort = s.entities.find(a => a.id === e.escortId && living(a));
         if (escort) {
@@ -530,6 +573,30 @@ function moveToward(s: GameState, e: Entity, goal: Point, dt: number, guardRadiu
         e.path = [];
         e.pathTimer = 0;
     }
+}
+function movementSpeed(s: GameState, e: Entity): number {
+    let speed = e.speed * BIOMES[s.map.biome].speed * (1 + (s.players[e.team].research.logistics ?? 0) * .15);
+    const terrain = terrainAt(s.map, e.x, e.y);
+    if (terrain === 'forest')
+        speed *= e.type === 'cavalry' || e.type === 'siege' ? .6 : .82;
+    if (terrain === 'marsh')
+        speed *= .55;
+    if (terrain === 'road')
+        speed *= 1.12;
+    if (e.slowUntil > s.time)
+        speed *= .45;
+    return speed;
+}
+function steerEntity(s: GameState, e: Entity, dt: number) {
+    const input = e.directControl;
+    if (!input) return;
+    if (input.until <= s.time) { setOrder(e, { type: 'idle' }); return; }
+    const dx = input.x * movementSpeed(s, e) * dt, dy = input.y * movementSpeed(s, e) * dt;
+    const free = (x: number, y: number) => isWalkable(s.map, x, y) && !blockers(s).has(tileIndex(s.map, x, y)) && !s.entities.some(b => b.kind === 'building' && living(b) && distance(b, { x, y }) < b.radius + e.radius * .8);
+    if (free(e.x + dx, e.y + dy)) { e.x += dx; e.y += dy; }
+    else if (Math.abs(dx) >= Math.abs(dy)) { if (free(e.x + dx, e.y)) e.x += dx; if (free(e.x, e.y + dy)) e.y += dy; }
+    else { if (free(e.x, e.y + dy)) e.y += dy; if (free(e.x + dx, e.y)) e.x += dx; }
+    if (dx || dy) e.facing = Math.atan2(dy, dx);
 }
 function attackRange(s: GameState, e: Entity) { return e.range + (e.type === 'archer' ? (s.players[e.team].research.fletching ?? 0) : 0); }
 function updateEntities(s: GameState, dt: number) {
@@ -580,7 +647,7 @@ function updateEntities(s: GameState, dt: number) {
         }
         if (e.queue.length) {
             const q = e.queue[0];
-            q.remaining -= dt;
+            q.remaining -= dt * (q.type === 'buildingUpgrade' ? 1 : productionRate(e));
             if (q.remaining <= 0) {
                 e.queue.shift();
                 if (q.type === 'unit') {
@@ -590,6 +657,17 @@ function updateEntities(s: GameState, dt: number) {
                     const goal = e.rally ?? (commander && living(commander) ? commander : null);
                     if (goal)
                         setOrder(unit, { type: e.rally ? 'attackMove' : 'move', x: goal.x, y: goal.y });
+                }
+                else if (q.type === 'buildingUpgrade') {
+                    const upgrade = nextBuildingUpgrade(e);
+                    if (upgrade) {
+                        e.buildingLevel = buildingLevel(e) + 1;
+                        const hpAdded = BUILDINGS[e.type as BuildingId].hp * FACTIONS[s.players[e.team].faction].buildingHealth * upgrade.health;
+                        e.maxHp += hpAdded; e.hp = Math.min(e.maxHp, e.hp + hpAdded);
+                        e.damage += (BUILDINGS[e.type as BuildingId].damage ?? 0) * upgrade.damage; e.range += upgrade.range;
+                        updatePopulation(s);
+                        emit(s, { type: 'research', x: e.x, y: e.y, team: e.team, entityId: e.id, subtype: 'buildingUpgrade', text: `${upgrade.name} complete · level ${e.buildingLevel}` });
+                    }
                 }
                 else {
                     const id = q.id as TechId;
@@ -620,6 +698,7 @@ function updateEntities(s: GameState, dt: number) {
                 emit(s, { type: 'heal', x: ally.x, y: ally.y, team: e.team, value: heal });
             }
         }
+        if (e.directControl) steerEntity(s, e, dt);
         let target: Entity | undefined;
         if (!s.rush && e.order.type === 'capture' && !e.guardAnchor && (distance(e, e.order) <= 2.2 || s.map.nodes.some(n => n.id === (e.order as { nodeId?: string }).nodeId && n.owner === e.team)))
             e.guardAnchor = { x: e.order.x, y: e.order.y };
@@ -735,7 +814,7 @@ function updatePopulation(s: GameState) {
                 if (e.kind === 'unit')
                     pop += UNITS[e.type as UnitId].population;
                 if (e.kind === 'building' && e.type !== 'turret' && active(e))
-                    cap += BUILDINGS[e.type as BuildingId].population;
+                    cap += buildingPopulation(e);
                 for (const q of e.queue)
                     if (q.type === 'unit')
                         pop += UNITS[q.id as UnitId].population;
@@ -840,6 +919,7 @@ function endGame(s: GameState, team: number, reason: string) {
     emit(s, { type: 'victory', x: s.map.spawns[team].x, y: s.map.spawns[team].y, team, text: reason });
 }
 function checkVictory(s: GameState) {
+    if (s.settings.learning) return;
     const remaining = s.players.filter(p => !p.defeated);
     if (remaining.length === 1) {
         endGame(s, remaining[0].team, 'All enemy Command Keeps destroyed');
@@ -1249,9 +1329,19 @@ export function restoreGame(input: string | object): GameState {
             e.guardAnchor ??= { x: e.x, y: e.y };
         if (e.rally !== null && !point(e.rally))
             fail(`entity ${e.id} has an invalid rally point.`);
-        for (const q of e.queue)
-            if (!q || !['unit', 'research'].includes(q.type) || (q.type === 'unit' && !knownId(UNITS, q.id as UnitId)) || (q.type === 'research' && !knownId(TECHNOLOGIES, q.id as TechId)) || !number(q.total, .001) || !number(q.remaining, 0, q.total))
+        if (e.directControl !== undefined) {
+            if (!number(e.directControl.x, -1, 1) || !number(e.directControl.y, -1, 1) || !number(e.directControl.until, 0)) fail(`entity ${e.id} has invalid direct controls.`);
+            // A resumed save must never retain a held thumbstick or keyboard key.
+            delete e.directControl; if (e.kind === 'commander') setOrder(e, { type: 'idle' });
+        }
+        if (e.buildingLevel !== undefined && (!Number.isInteger(e.buildingLevel) || e.buildingLevel < 1 || e.buildingLevel > 3 || e.kind !== 'building')) fail(`entity ${e.id} has an invalid building level.`);
+        for (const [index, q] of e.queue.entries()) {
+            if (!q || !['unit', 'research', 'buildingUpgrade'].includes(q.type) || (q.type === 'unit' && !knownId(UNITS, q.id as UnitId)) || (q.type === 'research' && !knownId(TECHNOLOGIES, q.id as TechId)) || (q.type === 'buildingUpgrade' && (e.kind !== 'building' || q.id !== e.type || !nextBuildingUpgrade(e))) || !number(q.total, .001) || !number(q.remaining, 0, q.total))
                 fail(`entity ${e.id} has an invalid production queue.`);
+            q.queueId ??= `${e.id}-legacy-${index}`;
+            if (typeof q.queueId !== 'string' || q.queueId.length > 100 || (q.paidCost && (!number(q.paidCost.gold, 0) || !number(q.paidCost.wood, 0)))) fail(`entity ${e.id} has invalid production costs.`);
+            q.paidCost ??= queueItemCost(data, e, q);
+        }
     }
     data.pendingCommands ??= [];
     if (!Array.isArray(data.pendingCommands) || data.pendingCommands.length > 60)
@@ -1314,6 +1404,7 @@ function validateStoredCommand(s: GameState, c: GameCommand): string | null {
         return 'has an invalid unit selection.';
     if (c.type === 'move' || c.type === 'attackMove')
         return position(c) ? null : 'has an invalid destination.';
+    if (c.type === 'steer') return Number.isFinite(c.dx) && Number.isFinite(c.dy) ? null : 'has an invalid movement direction.';
     if (c.type === 'hold')
         return null;
     if (c.type === 'attack')
@@ -1323,9 +1414,11 @@ function validateStoredCommand(s: GameState, c: GameCommand): string | null {
     if (c.type === 'build')
         return BUILDINGS[c.building] && position(c) ? null : 'has an invalid building or location.';
     if (c.type === 'recruit')
-        return UNITS[c.unit] && (c.count === undefined || Number.isInteger(c.count) && c.count >= 1 && c.count <= 6) ? null : 'has an unknown troop type or count.';
+        return UNITS[c.unit] && (c.count === undefined || Number.isInteger(c.count) && c.count >= 1 && c.count <= PRODUCTION_QUEUE_LIMIT) ? null : 'has an unknown troop type or count.';
     if (c.type === 'research')
         return TECHNOLOGIES[c.technology] ? null : 'has an unknown technology.';
+    if (c.type === 'cancelProduction') return typeof c.buildingId === 'string' && typeof c.queueId === 'string' ? null : 'has an invalid production job.';
+    if (c.type === 'upgradeBuilding') return typeof c.buildingId === 'string' ? null : 'has an invalid building upgrade.';
     if (c.type === 'rally')
         return typeof c.buildingId === 'string' && position(c) ? null : 'has an invalid rally order.';
     if (c.type === 'ability') {

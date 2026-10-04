@@ -2897,3 +2897,638 @@ footer {
 .paused-ribbon.visible.hint-visible {
   display: none;
 }
+
+/* Discoverable, collapsible command surface. World input never sits under these panels. */
+.resources > button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 8px;
+  border: 0;
+  background: transparent;
+  min-height: 44px;
+  text-align: left;
+  color: inherit;
+}
+.resources > button > .icon {
+  width: 20px;
+  height: 20px;
+  color: var(--gold);
+}
+.resources > button b {
+  display: flex;
+  flex-direction: column;
+  font-size: 15px;
+}
+.resources > button small {
+  font-size: 10px;
+  white-space: nowrap;
+  font-weight: 500;
+}
+.command-deck .selection-info strong {
+  font-size: 13px;
+}
+.command-deck .selection-info small {
+  font-size: 11px;
+}
+.command-deck .selection-tools button {
+  min-width: 40px;
+  min-height: 44px;
+}
+.command-deck .deck-tabs button {
+  min-height: 44px;
+  font-size: 12px;
+}
+.command-deck .deck-content {
+  height: auto;
+  max-height: min(32vh, 330px);
+  overflow: auto;
+  padding: 10px 12px;
+  overscroll-behavior: contain;
+}
+.command-deck.collapsed .deck-content {
+  display: none;
+}
+.command-deck .action-card {
+  min-height: 112px;
+}
+.command-deck .action-card small {
+  font-size: 11px;
+  line-height: 1.35;
+  white-space: normal;
+}
+.command-deck .action-cards {
+  min-height: 112px;
+}
+.deck-toggle {
+  flex: none;
+}
+.recruit-controls {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+.recruit-controls button {
+  min-width: 44px;
+  min-height: 36px;
+  padding: 4px 10px;
+  background: #1e3c47;
+}
+.recruit-controls button.active {
+  border-color: var(--gold);
+  background: #4c4a30;
+}
+.recruit-controls small {
+  color: #c0d2ce;
+}
+.inspection {
+  font-size: 13px;
+  line-height: 1.45;
+}
+.inspection p {
+  margin: 5px 0 10px;
+  color: #c2d6d0;
+}
+.inspection h3,
+.inspection h4,
+.production-list h4 {
+  margin: 4px 0 8px;
+}
+.inspection h3 {
+  font-size: 17px;
+}
+.inspection h4 {
+  color: #eed49a;
+  font-size: 12px;
+  margin-top: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.inspect-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+}
+.level-badge {
+  flex: none;
+  align-self: flex-start;
+  color: #f2d897;
+  border: 1px solid #d9b96566;
+  padding: 4px 7px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+.inspect-stats {
+  display: flex;
+  gap: 8px 18px;
+  flex-wrap: wrap;
+  color: #adc4bf;
+}
+.inspect-stats b {
+  color: #f5e6bf;
+}
+.inspect-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px;
+}
+.inspect-action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  background: #08202970;
+  border: 1px solid #9dbeb52b;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 6px 0;
+}
+.inspect-action > span {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.inspect-action small {
+  font-size: 12px;
+  color: #b9d0c8;
+}
+.inspect-action button,
+.inspect-rally button,
+.economy-overview button {
+  min-height: 44px;
+  padding: 8px 12px;
+  background: #2c4d50;
+  border: 1px solid #9cc6b44d;
+  flex: none;
+}
+.inspection button:disabled {
+  opacity: 0.6;
+}
+.construction-progress {
+  background: #58492155;
+  border-radius: 6px;
+  padding: 8px;
+  color: #f6d48c !important;
+}
+.production-list {
+  border-top: 1px solid #95b6ad3b;
+  padding-top: 10px;
+  margin-top: 12px;
+}
+.production-list h4 {
+  font-size: 13px;
+}
+.production-list h4 small {
+  color: #b4c9c4;
+  font-weight: 400;
+  font-size: 11px;
+  margin-left: 8px;
+}
+.producer-name {
+  border: 0;
+  padding: 6px 0;
+  min-height: 36px;
+  background: transparent;
+  font-size: 12px;
+  color: #f0d899;
+}
+.producer ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+}
+.producer li {
+  display: flex;
+  min-width: 220px;
+  gap: 8px;
+  align-items: center;
+  border-radius: 8px;
+  border: 1px solid #789b9066;
+  padding: 8px;
+  background: #18363e;
+}
+.producer li > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.producer li b {
+  font-size: 12px;
+}
+.producer li small {
+  font-size: 11px;
+  color: #bad1c8;
+}
+.producer li button {
+  min-height: 44px;
+  padding: 7px;
+  background: #493f37;
+  font-size: 11px;
+}
+.producer progress {
+  width: 100%;
+  height: 5px;
+  accent-color: #e8ca76;
+}
+.job-number {
+  font-size: 11px;
+  color: #c5d4be;
+}
+.planned-orders {
+  font-size: 12px;
+  color: #efd7a1;
+}
+.economy-overview {
+  font-size: 14px;
+  line-height: 1.5;
+}
+.economy-overview h3 {
+  font-size: 16px;
+}
+.economy-totals {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.economy-totals > div {
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+  gap: 5px;
+  border: 1px solid #bdd5b747;
+  border-radius: 8px;
+  background: #162f37;
+}
+.economy-totals .icon {
+  width: 24px;
+  height: 24px;
+  color: var(--gold);
+}
+.economy-totals span {
+  font-size: 12px;
+  color: #b6cdc3;
+}
+.population-breakdown {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+.population-breakdown span {
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  background: #203a42;
+  padding: 8px;
+  border-radius: 6px;
+}
+.population-breakdown b {
+  font-size: 23px;
+  color: #e7d38a;
+}
+.minimap-toggle {
+  min-height: 32px;
+  width: 100%;
+  padding: 4px 7px;
+  font-size: 11px;
+  border: 0;
+  border-radius: 5px;
+  background: #17343feb;
+  color: #e5d39f;
+}
+.minimap-wrap.collapsed canvas,
+.minimap-wrap.collapsed > span {
+  display: none;
+}
+.minimap-wrap.collapsed {
+  width: 64px;
+  padding: 0;
+}
+.ability-dock {
+  bottom: calc(var(--deck-height, 200px) + 14px);
+}
+.commander-strip {
+  bottom: calc(var(--deck-height, 200px) + 104px);
+}
+@media (max-width: 600px) {
+  .hud {
+    gap: 4px;
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+  .resources {
+    flex: 1;
+    gap: 0;
+    justify-content: space-between;
+  }
+  .resources > button {
+    padding: 2px 3px;
+    gap: 4px;
+  }
+  .resources > button > .icon {
+    width: 17px;
+    height: 17px;
+  }
+  .resources > button b {
+    font-size: 13px;
+  }
+  .resources > button small {
+    font-size: 9px;
+  }
+  .command-deck .selection-row {
+    padding: 3px 6px;
+  }
+  .command-deck .selection-info {
+    min-width: 0;
+  }
+  .command-deck .selection-info strong {
+    font-size: 12px;
+  }
+  .command-deck .selection-info small {
+    font-size: 10px;
+    max-width: 140px;
+  }
+  .command-deck .selection-tools {
+    gap: 0;
+  }
+  .command-deck .selection-tools button {
+    min-width: 36px;
+    width: 36px;
+    min-height: 44px;
+    padding: 6px;
+  }
+  .command-deck .deck-tabs {
+    height: 44px;
+  }
+  .command-deck .deck-tabs button {
+    font-size: 11px;
+    padding: 5px 3px;
+    gap: 3px;
+  }
+  .command-deck .deck-content {
+    max-height: 32vh;
+    padding: 8px;
+  }
+  .command-deck .action-card {
+    min-width: 132px;
+    padding-left: 40px;
+  }
+  .command-deck .action-card strong {
+    font-size: 12px;
+  }
+  .recruit-controls {
+    gap: 5px;
+  }
+  .recruit-controls small {
+    width: 100%;
+  }
+  #joystick {
+    bottom: calc(var(--deck-height, 92px) + 12px);
+    width: 94px;
+    height: 94px;
+    left: 14px;
+  }
+  .commander-strip {
+    bottom: calc(var(--deck-height, 92px) + 113px);
+    left: 14px;
+  }
+  .ability-dock {
+    bottom: calc(var(--deck-height, 92px) + 18px);
+    right: 12px;
+  }
+  .population-breakdown {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .minimap-wrap {
+    width: 116px;
+  }
+  .minimap-wrap canvas {
+    width: 100%;
+    height: auto;
+  }
+}
+@media (max-height: 500px) and (min-width: 601px) {
+  .command-deck .deck-content {
+    max-height: 29vh;
+  }
+  .command-deck .selection-row {
+    min-height: 40px;
+  }
+  .command-deck .deck-tabs {
+    height: 40px;
+  }
+  .command-deck .deck-tabs button {
+    min-height: 40px;
+  }
+  .ability-dock {
+    bottom: calc(var(--deck-height, 88px) + 8px);
+  }
+  #joystick {
+    bottom: calc(var(--deck-height, 88px) + 8px);
+  }
+  .commander-strip {
+    display: none;
+  }
+}
+.placement-toolbar {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(var(--deck-height, 92px) + 12px);
+  width: min(540px, calc(100% - 20px));
+  background: #102b37f5;
+  border: 1px solid #d9c98b;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 8px 28px #0008;
+  pointer-events: auto;
+}
+.placement-toolbar b,
+.placement-toolbar small {
+  display: block;
+}
+.placement-toolbar small {
+  margin: 5px 0 10px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #d6dfc6;
+}
+.placement-toolbar > div:last-child {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+.placement-toolbar button {
+  min-height: 44px;
+  font-size: 12px;
+  padding: 8px 12px;
+}
+.placement-toolbar button.active {
+  border-color: #f1d18c;
+}
+.placing-building .ability-dock,
+.placing-building #joystick,
+.placing-building .commander-strip {
+  visibility: hidden;
+}
+.battle-hint.learning-guide {
+  width: 280px;
+  max-width: calc(100vw - 152px);
+  padding: 12px 14px;
+}
+.battle-hint.learning-guide p {
+  font-size: 12px;
+  line-height: 1.45;
+}
+.battle-hint.learning-guide > .lesson-action {
+  position: static;
+  width: auto;
+  height: auto;
+  min-height: 40px;
+  padding: 6px 10px;
+  margin-top: 8px;
+  border-radius: 6px;
+  background: #335355;
+  font-size: 12px;
+  display: flex;
+  gap: 6px;
+}
+@media (max-width: 600px) {
+  .battle-hint.learning-guide {
+    top: 128px;
+    left: 10px;
+    width: 220px;
+    padding: 10px;
+  }
+  .battle-hint.learning-guide > b {
+    font-size: 13px;
+  }
+}
+@media (max-height: 500px) and (min-width: 601px) {
+  .battle-hint.learning-guide {
+    top: 100px;
+    width: 240px;
+    max-width: 34vw;
+  }
+  .battle-hint.learning-guide p {
+    font-size: 11px;
+  }
+}
+.editor-mode-tools {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  margin: 10px 0;
+}
+.editor-mode-tools button {
+  min-height: 44px;
+  font-size: 12px;
+}
+.editor-mode-tools button.active {
+  color: #f7e4ae;
+  border-color: #dfc987;
+  background: #425348;
+}
+.brush-size {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  margin: 8px 0 12px;
+}
+.brush-size select {
+  min-height: 40px;
+  padding: 6px;
+  color: #e6e6cb;
+  background: #193440;
+  border: 1px solid #94b4a25c;
+  border-radius: 6px;
+}
+@media (max-width: 600px) {
+  .command-deck .selection-tools button {
+    flex-direction: column;
+    gap: 2px;
+    width: auto;
+    min-width: 38px;
+    padding: 3px 5px;
+  }
+  .command-deck .selection-tools button span {
+    display: block;
+    font-size: 10px;
+  }
+  .command-deck .selection-tools button .icon {
+    width: 17px;
+    height: 17px;
+  }
+  .command-deck .selection-info {
+    flex: 1;
+  }
+  .command-deck .selection-info strong {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 130px;
+  }
+  .command-deck .selection-info > .icon {
+    display: none;
+  }
+}
+@media (max-height: 500px) and (min-width: 601px) {
+  .minimap-wrap {
+    left: auto;
+    right: 10px;
+    top: 108px;
+    bottom: auto;
+    width: 115px;
+  }
+  .minimap-wrap canvas {
+    width: 100%;
+    height: auto;
+  }
+  .selection-tools button span {
+    display: block;
+  }
+}
+.inspection,
+.economy-overview {
+  font-size: calc(13px * var(--ui-scale, 1));
+}
+.inspection p,
+.inspection .inspect-action small {
+  font-size: calc(12px * var(--ui-scale, 1));
+}
+.command-deck .selection-info strong,
+.command-deck .action-card strong {
+  font-size: calc(12px * var(--ui-scale, 1));
+}
+.command-deck .selection-info small,
+.command-deck .action-card small {
+  font-size: calc(11px * var(--ui-scale, 1));
+}
+.command-deck .deck-tabs button {
+  font-size: calc(11px * var(--ui-scale, 1));
+}
+.battle-hint.learning-guide p,
+.production-list h4,
+.producer li b {
+  font-size: calc(12px * var(--ui-scale, 1));
+}
+.producer li small {
+  font-size: calc(11px * var(--ui-scale, 1));
+}
+.settings-fields select {
+  min-height: 44px;
+  color: #eff0d8;
+  background: #173641;
+  border: 1px solid #abc4b266;
+  border-radius: 6px;
+  padding: 8px;
+}
