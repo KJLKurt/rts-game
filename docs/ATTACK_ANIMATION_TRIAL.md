@@ -54,8 +54,9 @@ Automated renderer tests cover the actual production manifest, all actor/frame
 pivot calculations, fixed body scale, anticipation/release/recovery transitions,
 idle fallback, absent assets, invalid metadata, decode failure, reduced motion,
 refusal of walk frames, and refusal of cross-actor frames. They do not replace
-live browser playback review. This trial has not yet been published or verified
-as a running browser animation.
+live browser playback review. Independent focused browser review of source
+`b41af521` inspected all four live frames on Warlord, Swordsman and Archer and
+found no obvious scale/pivot jump. Physical-device performance remains unverified.
 
 ## Provenance
 

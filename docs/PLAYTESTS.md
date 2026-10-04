@@ -18,6 +18,12 @@ Automated simulation is useful for determinism and balance probes; it does not e
 - Invalid paused building locations were not rejected until Resume. The current candidate validates immediately, retains the placement preview on error and reserves space around queued buildings.
 - Stockpiles hid the need to protect income, and damaged buildings lacked a persistent inspectable warning. Current candidate HUD feedback addresses both without resource/HP bonuses or automated recalls.
 
-## Still to inspect in the candidate
+## Focused polish review
 
-Attack frame transitions and pivot continuity; upper-art taps on real pixels; short-phone/landscape HUD and warnings; completed Capture holding behavior; queued placement feedback; save/update/offline continuity with the new assets. Codec metrics, decoded buffers and an unlocked AudioContext do not establish that the music was subjectively heard. Physical-phone hardware performance remains unverified.
+Independent browser review of `b41af521` / static preview `5ad7c5b` passed natural upper-gold/relic taps, immediate Keep overlap and queued-House overlap rejection, completed Capture holding (20 seconds at gold, 16 at a relic), income and relic rates, a natural Keep-under-attack View action, portrait–landscape–portrait joystick use/release, exact gameplay/settings save continuity, and every live attack frame for Warlord, Swordsman and Archer without obvious pivot/scale jumps. Desktop battle and 390×844 phone screenshots were inspected.
+
+That review caught guide stage resetting on Continue and a tactical-pause ribbon covering guide instructions. The follow-up correction persists per-battle guide progress, conservatively restores older saves, and suppresses the duplicate banner while a visible guide or raid warning needs the space. Focused confirmation and final acceptance results are recorded in `QA.md` when complete.
+
+## Remaining limits
+
+Complete manual campaign and expedition runs, broad difficulty/faction win-rate balancing, installed-app lifecycle on physical phone hardware, and subjective music listening remain unverified. Codec metrics, decoded buffers and an unlocked AudioContext do not establish that the music was subjectively heard. A full browser suite does not replace physical-device performance or repeated human play.

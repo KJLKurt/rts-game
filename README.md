@@ -17,9 +17,9 @@ Open `/rts-game/` on the development or preview server. Production paths target 
 
 ## Current checkpoint
 
-The deterministic engine, mobile/desktop interface, isometric renderer, seeded skirmishes, data-driven story missions, three-battle expedition, map workshop, save system, original adaptive music and event audio, and scoped PWA cache are implemented. Build/typecheck and the current unit/contract suite pass, including 400 generated maps and natural siege-victory regressions. The deployed core passed 86 browser cases (plus 7 input-specific skips), with actual full-match and offline/update checks. Newer polish candidates are separately labeled in docs/QA.md; this is still a testing preview.
+The deterministic engine, mobile/desktop interface, isometric renderer, seeded skirmishes, data-driven story missions, three-battle expedition, map workshop, save system, original adaptive music and event audio, and scoped PWA cache are implemented. Build/typecheck and the current unit/contract suite pass, including 400 generated maps and natural siege-victory regressions. The final tested release passed 98 browser cases (plus 7 input-specific skips) and 200 local tests, with actual full-match wins/losses, offline/update checks and independent combat/touch review. Exact source and test provenance are recorded in docs/QA.md; this is still a testing preview.
 
-The initial implementation is being actively playtested and expanded. A minimal GitHub Pages workflow is enabled for final-stage testing. It runs only for game/build changes on main, or a manual dispatch. Documentation-only checkpoints do not consume deployment runs. The hosted version is a testing preview while complete-match verification continues.
+The initial implementation is being actively playtested and expanded. A minimal GitHub Pages workflow is enabled for final-stage testing. It runs only for game/build changes on main, or a manual dispatch. Documentation-only checkpoints do not consume deployment runs. Complete-match loops are verified; broader device and difficulty coverage remains ongoing.
 
 The Rush Arena side mode is a complete four-minute commander survival loop with waves, field upgrades, supplies, shrinking territory, and telegraphed hazards.
 
@@ -54,4 +54,4 @@ Workflow design follows [GitHub’s custom Pages workflow documentation](https:/
 
 ## Audio and animation
 
-Master, Music, Effects and mute controls are saved per device. Replaceable soundtrack files and the audio manifest are documented in `docs/AUDIO_REPLACEMENT.md`. There is no in-app audio upload. The current candidate adds attack-only frames for three actors; locomotion and the remaining actors retain cutout-based animation. Exact presentation and reduced-motion behavior are described in `docs/RENDERING_AND_COMBAT_FEEDBACK.md`.
+Master, Music, Effects and mute controls are saved per device. Replaceable soundtrack files and the audio manifest are documented in `docs/AUDIO_REPLACEMENT.md`. There is no in-app audio upload. The release includes attack-only frames for three actors; locomotion and the remaining actors retain cutout-based animation. Exact presentation and reduced-motion behavior are described in `docs/RENDERING_AND_COMBAT_FEEDBACK.md`.
