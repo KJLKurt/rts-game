@@ -28,7 +28,9 @@ test('after install, offline reload supports saved battle, new game, campaign, a
  await context.setOffline(true);await page.reload();await expect(action(page,'continue')).toBeVisible();
  await action(page,'continue').click();await expect(page.locator('.hud')).toBeVisible();
  await action(page,'pause-menu').click();await action(page,'save-leave').click();
- await action(page,'campaign').click();await page.locator('.mission-card').first().click();await action(page,'begin-mission').click();await expect(page.locator('.hud')).toBeVisible();
+ await action(page,'campaign').click();
+ const story=page.locator('[data-action="choose-campaign"][data-id="rise-of-the-frontier"]');if(await story.count())await story.click();
+ await page.locator('[data-action="mission"]').first().click();await action(page,'begin-mission').click();await expect(page.locator('.hud')).toBeVisible();
  await action(page,'pause-menu').click();await action(page,'save-leave').click();
  await action(page,'editor').click();await action(page,'new-editor').click();await expect(page.locator('.editor-header')).toBeVisible();
  await action(page,'save-map').click();await expect(page.getByRole('status')).toContainText(/Workshop saved/);

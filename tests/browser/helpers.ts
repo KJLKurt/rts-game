@@ -23,7 +23,11 @@ export const test=base.extend<{runtimeErrors: string[]}>({
 export {expect};
 export const action=(page:Page,name:string)=>page.locator(`[data-action="${name}"]`);
 export async function home(page:Page){await page.goto('./');await expect(action(page,'skirmish')).toBeVisible();}
-export async function launch(page:Page,options:{difficulty?:string;commander?:string}={}){
+export async function acknowledgeFirstBriefing(page:Page){
+ const start=page.getByRole('button',{name:'Start battle',exact:true});
+ if(await start.count()){await start.click();await expect(page.getByRole('dialog',{name:'Your first frontier',exact:true})).toHaveCount(0);}
+}
+export async function launch(page:Page,options:{difficulty?:string;commander?:string;keepTips?:boolean}={}){
  await home(page);await action(page,'skirmish').click();
  await page.getByLabel('Map seed',{exact:true}).fill('QA-FRONTIER-2026');
  await page.locator('select[name="mapSize"]').selectOption('small');
@@ -32,7 +36,8 @@ export async function launch(page:Page,options:{difficulty?:string;commander?:st
  await action(page,'launch').click();
  await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.playing)).toBe(true);
  await expect(page.locator('.hud')).toBeVisible();
- const dismiss=action(page,'dismiss-tips');if(await dismiss.count())await dismiss.click();
+ await acknowledgeFirstBriefing(page);
+ const dismiss=action(page,'dismiss-tips');if(!options.keepTips&&await dismiss.count())await dismiss.click();
 }
 export async function commander(page:Page){return page.evaluate(()=>{
  const c=window.__FRONTIER__.state.entities.find(e=>e.team===0&&e.kind==='commander')!;
@@ -43,9 +48,10 @@ export async function tap(page:Page,point:Point){
  if(touch)await page.touchscreen.tap(point.x,point.y);else await page.mouse.click(point.x,point.y);
 }
 /** Read geometry to choose an unobstructed screen target, then use actual input. */
-export async function clearGround(page:Page,build=false):Promise<Point>{
+export async function clearGround(page:Page,build:boolean|number=false):Promise<Point>{
  return page.evaluate(build=>{
   const {state:s,renderer:r}=window.__FRONTIER__;
+  const size=build===true?1:Number(build);
   const c=s.entities.find(e=>e.team===0&&e.kind==='commander')!;
   const okay=(x:number,y:number)=>{
    const tile=s.map.tiles[Math.floor(y)*s.map.width+Math.floor(x)];
@@ -56,8 +62,8 @@ export async function clearGround(page:Page,build=false):Promise<Point>{
    const p={x:x+.5,y:y+.5};const distance=Math.hypot(c.x-p.x,c.y-p.y);
    if(distance<3||distance>7||!okay(p.x,p.y))continue;
    if(build){
-    let good=true;for(let dy=-1;dy<=1;dy+=.6)for(let dx=-1;dx<=1;dx+=.6)if(!okay(p.x+dx,p.y+dy))good=false;
-    if(!good||s.entities.some(e=>e.kind==='building'&&e.hp>0&&Math.hypot(e.x-p.x,e.y-p.y)<e.radius+1.5)||s.map.nodes.some(n=>Math.hypot(n.x-p.x,n.y-p.y)<2.5))continue;
+    let good=true;for(let dy=-size;dy<=size;dy+=.6)for(let dx=-size;dx<=size;dx+=.6)if(!okay(p.x+dx,p.y+dy))good=false;
+    if(!good||s.entities.some(e=>e.kind==='building'&&e.hp>0&&Math.hypot(e.x-p.x,e.y-p.y)<e.radius+size+.5)||s.map.nodes.some(n=>Math.hypot(n.x-p.x,n.y-p.y)<size+1.5))continue;
    }
    const screen=r.worldToScreen(p.x,p.y);
    if(screen.x<20||screen.y<120||screen.x>innerWidth-20||screen.y>innerHeight-30)continue;
@@ -82,4 +88,12 @@ export async function expectWithinViewport(page:Page,selector:string){
  expect(rect!.x,selector).toBeGreaterThanOrEqual(-1);expect(rect!.y,selector).toBeGreaterThanOrEqual(-1);
  expect(rect!.x+rect!.width,selector).toBeLessThanOrEqual(viewport.width+1);
  expect(rect!.y+rect!.height,selector).toBeLessThanOrEqual(viewport.height+1);
+}
+
+/** Native range controls do not support Playwright fill; use their actual keyboard interaction. */
+export async function setSlider(page:Page,selector:string,value:number){
+ const slider=page.locator(selector);const {min,step}=await slider.evaluate((node:HTMLInputElement)=>({min:Number(node.min||0),step:Number(node.step||1)}));
+ const steps=Math.round((value-min)/step);await slider.press('Home');
+ for(let i=0;i<steps;i++)await slider.press('ArrowRight');
+ await expect(slider).toHaveValue(String(value));
 }

@@ -12,6 +12,7 @@ test('Rush setup can be cancelled and restarted, then real movement and waves wo
  await home(page);await action(page,'rush').click();await action(page,'close-dialog').click();await expect(page.getByRole('dialog')).toHaveCount(0);
  await enterRush(page);await expect(page.locator('#objective')).toContainText('RUSH ARENA');
  await expect(page.locator('.deck-tabs')).toBeHidden();await expect(page.locator('.resources [title="Gold"]')).toBeHidden();
+ await expect(page.locator('#population')).toHaveText(/\d+\s+squad/);await expect(page.locator('#population')).not.toContainText('/0');
  const arena=await page.evaluate(()=>{const s=window.__FRONTIER__.state;return{mode:s.settings.mode,commander:s.settings.commander,buildings:s.entities.filter(e=>e.kind==='building').length,nodes:s.map.nodes.length};});
  expect(arena).toEqual({mode:'rush',commander:'engineer',buildings:0,nodes:0});
  const before=await commander(page);await tap(page,await clearGround(page));
@@ -48,7 +49,7 @@ test('Rush save, reload, and continue retain run state and presentation',async({
  await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.playing)).toBe(true);
  expect(await page.evaluate(()=>{const s=window.__FRONTIER__.state;return{seed:s.settings.seed,time:s.time,rush:s.rush};})).toEqual(before);
  await expect(page.locator('body')).toHaveClass(/rush-mode/);await expect(page.locator('.deck-tabs')).toBeHidden();
- await expect(page.locator('#objective')).toContainText('RUSH ARENA');await resume(page);
+ await expect(page.locator('#objective')).toContainText('RUSH ARENA');await expect(page.locator('#population')).toHaveText(/\d+\s+squad/);await resume(page);
  await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.state.time)).toBeGreaterThan(before.time);
 });
 

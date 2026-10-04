@@ -1,10 +1,13 @@
 const PREFIX = "frontier-command:rts-game:v1:";
 const DB = "frontier-command-rts-game";
 export interface Preferences {
+  master: number;
+  muted: boolean;
   music: number;
   sfx: number;
   reducedMotion: boolean;
   showTips: boolean;
+  tutorialSeen: boolean;
   uiScale: number;
 }
 export interface Profile {
@@ -21,10 +24,13 @@ export interface Profile {
   expedition: number;
 }
 export const defaultPreferences: Preferences = {
+  master: 0.85,
+  muted: false,
   music: 0.32,
   sfx: 0.65,
   reducedMotion: matchMedia("(prefers-reduced-motion: reduce)").matches,
   showTips: true,
+  tutorialSeen: false,
   uiScale: 1,
 };
 export const defaultProfile: Profile = {

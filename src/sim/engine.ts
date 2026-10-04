@@ -3,6 +3,8 @@ import type { GameMap, GameState, GameSettings, GameCommand, CommandResult, Enti
 import { DEFAULT_SETTINGS, UNITS, BUILDINGS, COMMANDERS, FACTIONS, TECHNOLOGIES, BIOMES, FIXED_STEP, TEAM_COLORS, TEAM_SYMBOLS, MAP_DIMENSIONS, RUSH_UPGRADES } from './content';
 import { generateMap, validateMap, hashSeed, distance, isWalkable, isBuildable, terrainAt, tileIndex, findPath } from './maps';
 const clamp = (n: number, a: number, b: number) => Math.max(a, Math.min(b, n));
+const IDLE_GUARD_RADIUS = 2;
+const EASY_OPENING_SECONDS = 60;
 const knownId = (definitions: object, id: unknown) => typeof id === 'string' && Object.prototype.hasOwnProperty.call(definitions, id);
 const direction = (a: Point, b: Point): Point => { const d = distance(a, b); return d > .001 ? { x: (b.x - a.x) / d, y: (b.y - a.y) / d } : { x: 1, y: 0 }; };
 const living = (e: Entity) => e.hp > 0;
@@ -112,6 +114,8 @@ export function spawnEntity(s: GameState, team: number, kind: Entity['kind'], ty
     }
     const pos = kind === 'building' ? { x, y } : freePosition(s, x, y, radius);
     const e: Entity = { id: `e${s.nextId++}`, team, kind, type, ...pos, hp: complete ? hp : hp * .12, maxHp: hp, damage, armor, range, speed, vision, attackCooldown: 0, attackPeriod: period, radius, facing: 0, order: { type: 'idle' }, path: [], pathTarget: null, pathTimer: 0, targetId: null, buildProgress: complete ? 1 : 0, buildTime, queue: [], rally: null, abilityCooldowns: {}, buffUntil: 0, slowUntil: 0, invulnerableUntil: 0, respawnAt: null, lifetime: type === 'turret' ? 30 : null, lastHitAt: -100 };
+    if (kind === 'unit')
+        e.guardAnchor = { ...pos };
     s.entities.push(e);
     if (kind === 'unit')
         p.stats.unitsCreated++;
@@ -126,7 +130,13 @@ function selected(s: GameState, c: {
     team: number;
     entityIds?: string[];
 }): Entity[] { return s.entities.filter(e => e.team === c.team && living(e) && e.kind !== 'building' && (c.entityIds ? c.entityIds.includes(e.id) : e.kind === 'commander')); }
-function setOrder(e: Entity, order: Entity['order']) { e.order = order; e.path = []; e.pathTarget = null; e.pathTimer = 0; e.targetId = null; delete e.escortId; }
+function setOrder(e: Entity, order: Entity['order']) {
+    e.order = order; e.path = []; e.pathTarget = null; e.pathTimer = 0; e.targetId = null; delete e.escortId;
+    if (order.type === 'idle' && e.kind === 'unit')
+        e.guardAnchor = { x: e.x, y: e.y };
+    else
+        delete e.guardAnchor;
+}
 function affordable(p: Player, cost: {
     gold: number;
     wood: number;
@@ -498,6 +508,12 @@ function moveToward(s: GameState, e: Entity, goal: Point, dt: number) {
             delete e.escortId;
     }
     const amount = Math.min(speed * dt, d), nx = e.x + dx / d * amount, ny = e.y + dy / d * amount;
+    // An idle guard must not route around obstacles into an unbounded pursuit.
+    if (!s.rush && e.order.type === 'idle' && e.guardAnchor && distance({ x: nx, y: ny }, e.guardAnchor) > IDLE_GUARD_RADIUS && distance({ x: nx, y: ny }, e.guardAnchor) >= distance(e, e.guardAnchor)) {
+        e.path = [];
+        e.pathTimer = 0;
+        return;
+    }
     if (isWalkable(s.map, nx, ny) && !blockers(s).has(tileIndex(s.map, nx, ny))) {
         e.x = nx;
         e.y = ny;
@@ -554,7 +570,7 @@ function updateEntities(s: GameState, dt: number) {
                     const commander = getCommander(s, e.team);
                     const goal = e.rally ?? (commander && living(commander) ? commander : null);
                     if (goal)
-                        setOrder(unit, { type: 'attackMove', x: goal.x, y: goal.y });
+                        setOrder(unit, { type: e.rally ? 'attackMove' : 'move', x: goal.x, y: goal.y });
                 }
                 else {
                     const id = q.id as TechId;
@@ -586,6 +602,7 @@ function updateEntities(s: GameState, dt: number) {
             }
         }
         let target: Entity | undefined;
+        const guard = !s.rush && e.kind === 'unit' && e.order.type === 'idle' ? (e.guardAnchor ??= { x: e.x, y: e.y }) : undefined;
         const range = attackRange(s, e);
         if (e.order.type === 'attack')
             target = alive.find(a => a.id === (e.order as {
@@ -601,6 +618,8 @@ function updateEntities(s: GameState, dt: number) {
                 if (d > sight)
                     continue;
                 if (e.order.type === 'capture' && distance(enemy, e.order) > 6.5)
+                    continue;
+                if (guard && distance(enemy, guard) - enemy.radius > IDLE_GUARD_RADIUS + range)
                     continue;
                 const priority = d + (e.type === 'siege' ? (enemy.kind === 'building' ? -4 : 6) : (enemy.kind === 'building' ? 3 : 0));
                 if (priority < best) {
@@ -623,13 +642,18 @@ function updateEntities(s: GameState, dt: number) {
                     dealDamage(s, e, target, combatDamage(s, e, target));
                 }
             }
-            else if (e.kind !== 'building' && e.order.type !== 'hold' && e.order.type !== 'move')
-                moveToward(s, e, target, dt);
+            else if (e.kind !== 'building' && e.order.type !== 'hold' && e.order.type !== 'move') {
+                const delta = guard ? direction(guard, target) : undefined;
+                const goal = guard && delta ? { x: guard.x + delta.x * Math.min(IDLE_GUARD_RADIUS, distance(guard, target)), y: guard.y + delta.y * Math.min(IDLE_GUARD_RADIUS, distance(guard, target)) } : target;
+                moveToward(s, e, goal, dt);
+            }
             if (e.kind === 'commander' && e.order.type === 'move')
                 moveToward(s, e, e.order, dt);
         }
         else {
             e.targetId = null;
+            if (guard && distance(e, guard) > .3)
+                moveToward(s, e, guard, dt);
             if (e.kind !== 'building' && (e.order.type === 'move' || e.order.type === 'attackMove' || e.order.type === 'capture')) {
                 const goal = e.order;
                 if (distance(e, goal) > .3)
@@ -907,9 +931,10 @@ function aiOrder(s: GameState, p: Player, entities: Entity[], goal: Point, nodeI
         if (!living(e))
             continue;
         const order = e.order;
-        if ((order.type === 'capture' || order.type === 'attackMove') && distance(order, goal) < 2)
+        const movement = p.aiPhase === 'Preparing the opening army' ? 'move' : 'attackMove';
+        if ((order.type === 'capture' || order.type === movement) && distance(order, goal) < 2)
             continue;
-        setOrder(e, nodeId ? { type: 'capture', x: goal.x, y: goal.y, nodeId } : { type: 'attackMove', x: goal.x, y: goal.y });
+        setOrder(e, nodeId ? { type: 'capture', x: goal.x, y: goal.y, nodeId } : { type: movement, x: goal.x, y: goal.y });
     }
     if (!nodeId && p.aiPhase === 'Advancing a combined siege column')
         assignSiegeEscorts(entities);
@@ -987,10 +1012,28 @@ function thinkAI(s: GameState, p: Player) {
     if (!savingForExpansion && !savingForEconomy && issueCommand(s, { type: 'recruit', team: p.team, unit: p.aiRecruitPlan }).ok)
         p.aiRecruitPlan = undefined;
     const threats = visibleEnemies.filter(e => e.kind !== 'building' && distance(e, spawn) < 11);
+    const easyOpening = s.settings.difficulty === 'easy' && s.time < EASY_OPENING_SECONDS;
     let goal: Point | undefined, nodeId: string | undefined;
-    if (threats.length >= 2) {
+    if (threats.length >= (easyOpening ? 1 : 2)) {
         goal = threats[0];
         p.aiPhase = 'Defending the command keep';
+    }
+    else if (easyOpening) {
+        // Spend the first minute consolidating the home side, rather than racing
+        // through neutral camps into a beginner's starter army. Costs and combat
+        // remain unchanged, and a genuine home attack still triggers defense.
+        const homeSide = (point: Point) => s.map.spawns.every((other, team) => team === p.team || distance(point, spawn) + 4 < distance(point, other));
+        const local = s.map.nodes.filter(n => n.kind !== 'relic' && n.amount > 100 && n.owner !== p.team && homeSide(n)).sort((a, b) => distance(a, commander ?? spawn) - distance(b, commander ?? spawn))[0];
+        if (local) {
+            goal = local;
+            nodeId = local.id;
+            p.aiPhase = 'Securing nearby supplies';
+        }
+        else {
+            const inward = direction(spawn, { x: s.map.width / 2 + .5, y: s.map.height / 2 + .5 });
+            goal = freePosition(s, spawn.x + inward.x * 5, spawn.y + inward.y * 5);
+            p.aiPhase = 'Preparing the opening army';
+        }
     }
     else {
         const ownedGold = s.map.nodes.filter(n => n.kind === 'gold' && n.owner === p.team && n.amount > 100).length, ownedWood = s.map.nodes.filter(n => n.kind === 'wood' && n.owner === p.team && n.amount > 100).length;
@@ -1050,7 +1093,7 @@ function thinkAI(s: GameState, p: Player) {
     if (goal) {
         const fighters = [...army, ...(commander ? [commander] : [])];
         // A small detached patrol captures a second point while the commander leads the main force.
-        if (s.settings.mode !== 'conquest' && army.length >= 8 && threats.length === 0) {
+        if (!easyOpening && s.settings.mode !== 'conquest' && army.length >= 8 && threats.length === 0) {
             const secondary = s.map.nodes.filter(n => n.owner !== p.team && n.id !== nodeId && (p.personality === 'raider' ? n.kind !== 'relic' && n.amount > 100 : n.kind === 'relic' || n.amount > 100)).sort((a, b) => distance(a, spawn) - distance(b, spawn))[0];
             if (secondary) {
                 const patrol = army.filter(e => e.type === 'cavalry' || e.type === 'spearman').slice(-2);
@@ -1064,7 +1107,7 @@ function thinkAI(s: GameState, p: Player) {
             aiOrder(s, p, fighters, goal, nodeId);
         for (const building of buildings)
             if (building.type !== 'turret')
-                building.rally = { x: goal.x, y: goal.y };
+                building.rally = p.aiPhase === 'Preparing the opening army' ? null : { x: goal.x, y: goal.y };
         if (s.settings.mode === 'conquest' && (p.aiAttackUntil ?? 0) > s.time) {
             const fortress = visibleEnemies.filter(e => e.type === 'keep').sort((a, b) => distance(a, goal!) - distance(b, goal!))[0];
             if (fortress)
@@ -1177,6 +1220,10 @@ export function restoreGame(input: string | object): GameState {
         e.pathTimer ??= 0;
         if (e.pathTarget !== null && !point(e.pathTarget) || !number(e.pathTimer))
             fail(`entity ${e.id} has invalid navigation data.`);
+        if (e.guardAnchor !== undefined && !point(e.guardAnchor))
+            fail(`entity ${e.id} has an invalid guard anchor.`);
+        if (e.kind === 'unit' && e.order.type === 'idle')
+            e.guardAnchor ??= { x: e.x, y: e.y };
         if (e.rally !== null && !point(e.rally))
             fail(`entity ${e.id} has an invalid rally point.`);
         for (const q of e.queue)

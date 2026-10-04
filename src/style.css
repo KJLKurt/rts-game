@@ -2697,3 +2697,128 @@ footer {
   margin: 15px 0 20px;
   resize: vertical;
 }
+:root {
+  color-scheme: dark;
+}
+.home {
+  scrollbar-width: thin;
+  scrollbar-color: #38565b transparent;
+}
+.action-card strong {
+  font-size: 11px;
+}
+.action-card small {
+  font-size: 9px;
+}
+.action-card .unit-counter {
+  font-size: 8px;
+}
+@media (max-width: 600px) {
+  .battle-hint {
+    width: calc(100% - 116px);
+  }
+  .action-card strong {
+    font-size: 10px;
+  }
+  .action-card small,
+  .action-card .unit-counter {
+    font-size: 8px;
+  }
+  .cost {
+    font-size: 9px;
+  }
+}
+@media (max-width: 600px) and (max-height: 700px) {
+  .battle-hint > p {
+    display: none;
+  }
+}
+.objective-description {
+  display: inline-block;
+  max-width: 92%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.objective-income {
+  display: block;
+  font-size: 10px;
+  color: #e7d296;
+  margin-top: 3px;
+}
+.selection-tools .relic-command {
+  color: var(--gold);
+  background: #dfbd7412;
+  border: 1px solid #dfbd7435;
+}
+.selection-tools .relic-command[hidden] {
+  display: none;
+}
+.mission-goal {
+  font-size: 12px;
+  color: #d2dccc;
+  background: #1a394444;
+  padding: 12px;
+  border-radius: 6px;
+}
+.mission-goal .icon {
+  width: 17px;
+  height: 17px;
+  color: var(--gold);
+}
+@media (max-width: 600px) {
+  .objective-income {
+    font-size: 8px;
+    margin-top: 2px;
+  }
+  .battle-hint {
+    top: calc(140px + var(--safe-top));
+  }
+  .selection-info small {
+    max-width: 145px;
+  }
+  .selection-tools button {
+    min-width: 36px;
+    padding: 6px;
+  }
+  .selection-info strong {
+    max-width: 165px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .selection-tools .relic-command {
+    border-radius: 5px;
+  }
+  .score-track b {
+    font-size: 8px;
+  }
+  .score-track em {
+    font-size: 7px;
+  }
+}
+
+@media (max-width: 600px) {
+  .selection-info {
+    min-width: 0;
+    flex: 1;
+  }
+  .selection-info > div {
+    min-width: 0;
+  }
+  .selection-info small,
+  .selection-info strong {
+    max-width: 100%;
+  }
+  .selection-tools {
+    flex-shrink: 0;
+  }
+  .selection-tools .relic-command span {
+    display: inline;
+    font-size: 9px;
+  }
+  .selection-tools .relic-command {
+    gap: 3px;
+  }
+}

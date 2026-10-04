@@ -205,6 +205,8 @@ export interface Entity extends Point {
     targetId: string | null;
     /** Optional slow-unit anchor for a combined-arms attack-move column. */
     escortId?: string;
+    /** Idle troops defend within two tiles of this point, then return. */
+    guardAnchor?: Point;
     buildProgress: number;
     buildTime: number;
     queue: ProductionItem[];

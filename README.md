@@ -17,7 +17,7 @@ Open `/rts-game/` on the development or preview server. Production paths target 
 
 ## Current checkpoint
 
-The deterministic engine, mobile/desktop interface, isometric renderer, seeded skirmishes, data-driven story missions, three-battle expedition, map workshop, save system, original adaptive music and event audio, and scoped PWA cache are implemented. Build/typecheck and 96 unit/contract tests pass, including 400 generated maps and natural siege-victory regressions. Browser verification is in progress on a separate production runner; this checkpoint is not a final release.
+The deterministic engine, mobile/desktop interface, isometric renderer, seeded skirmishes, data-driven story missions, three-battle expedition, map workshop, save system, original adaptive music and event audio, and scoped PWA cache are implemented. Build/typecheck and the current unit/contract suite pass, including 400 generated maps and natural siege-victory regressions. Browser verification is in progress on a separate production runner; this checkpoint is not a final release.
 
 The initial implementation is being actively playtested and expanded. A minimal GitHub Pages workflow is enabled for final-stage testing. It runs only for game/build changes on main, or a manual dispatch. Documentation-only checkpoints do not consume deployment runs. The hosted version is a testing preview while complete-match verification continues.
 
@@ -30,6 +30,8 @@ The Rush Arena side mode is a complete four-minute commander survival loop with 
 - Phone thumbstick and desktop WASD directly move the commander.
 - Q / E: commander abilities. Space: tactical pause. 1: commander. 2: army.
 - Recruit, build, and research from the bottom command deck.
+- The gold Relic button sends your army to a victory landmark; resources fund troops, while held relics earn points.
+- First skirmishes open with a frozen briefing. Easy gives you a home-side opening phase. Troops guard locally until ordered.
 - Save and continue on the same device. App updates require an explicit restart.
 
 See `docs/ENGINE.md` for simulation contracts and `docs/ART_DIRECTION.md` for art provenance and limitations.
@@ -45,3 +47,11 @@ Headless balance sweep: `npm run simulate -- --games=20 --mode=conquest --durati
 The repository publishing source must be GitHub Actions. `.github/workflows/pages.yml` installs the lockfile on Node24, runs regressions, builds `/rts-game/`, uploads only `dist`, and deploys to the protected `github-pages` environment. Official actions are pinned to verified commit SHAs. Checkout credentials are not persisted; only the deployment job receives the Pages/OIDC permissions required by GitHub.
 
 Workflow design follows [GitHub’s custom Pages workflow documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages). Batch game changes into meaningful checkpoints to conserve runner usage.
+
+## Browser acceptance
+
+`.github/workflows/browser-qa.yml` runs only on the dedicated `qa-browser-check` branch or a manual dispatch. It tests the production build on desktop, portrait/landscape touch viewports, and actual offline/update lifecycles. It never deploys Pages. Reports and failure traces are retained for seven days. See `docs/QA.md` for executed results; test discovery is not a passing run. The workflow follows [Playwright's CI guidance](https://playwright.dev/docs/ci-intro).
+
+## Audio and animation
+
+Master, Music, Effects and mute controls are saved per device. Replaceable soundtrack files and the audio manifest are documented in `docs/AUDIO_REPLACEMENT.md`. There is no in-app audio upload. Current units use static atlas cutouts with event-synchronized combat transforms; exact presentation and reduced-motion behavior are described in `docs/RENDERING_AND_COMBAT_FEEDBACK.md`.

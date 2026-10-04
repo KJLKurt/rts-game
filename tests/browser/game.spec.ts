@@ -1,4 +1,4 @@
-import {test,expect,action,home,launch,commander,tap,clearGround,pause,resume,expectWithinViewport} from './helpers';
+import {test,expect,action,home,launch,commander,tap,clearGround,pause,resume,expectWithinViewport,acknowledgeFirstBriefing,setSlider} from './helpers';
 
 test('home navigation, dismissals, and repeated setup preserve choices',async({page})=>{
  await home(page);
@@ -71,6 +71,8 @@ test('tactical pause freezes simulation and queues move, build, and research',as
  await tap(page,await clearGround(page));
  await action(page,'panel-build').click();await page.getByRole('button',{name:'Build House',exact:true}).click();
  await tap(page,await clearGround(page,true));
+ await expect(page.getByRole('status')).toContainText('Build order queued: House');
+ expect(await page.evaluate(()=>window.__FRONTIER__.state.entities.some(e=>e.team===0&&e.type==='house'))).toBe(false);
  await action(page,'panel-research').click();await page.locator('[data-action="research"][data-id="economy"]').click();
  await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.state.pendingCommands.map(c=>c.type))).toEqual(['move','build','research']);
  await page.waitForTimeout(400);expect(await page.evaluate(()=>window.__FRONTIER__.state.time)).toBe(time);
@@ -107,7 +109,9 @@ test('manual save, leave, refresh, and repeated continue retain queued orders',a
 });
 
 test('campaign briefing, pause, save, and continue keep mission identity',async({page})=>{
- await home(page);await action(page,'campaign').click();await expect(page.locator('.mission-card')).toHaveCount(5);
+ await home(page);await action(page,'campaign').click();
+ const story=page.locator('[data-action="choose-campaign"][data-id="rise-of-the-frontier"]');if(await story.count())await story.click();
+ await expect(page.locator('[data-action="mission"]')).toHaveCount(5);
  await expect(page.locator('.mission-card').nth(1)).toBeDisabled();await page.locator('.mission-card').first().click();
  await expect(page.getByRole('dialog')).toBeVisible();
  expect(await page.evaluate(()=>window.__FRONTIER__.state.paused)).toBe(true);
@@ -120,8 +124,10 @@ test('campaign briefing, pause, save, and continue keep mission identity',async(
 
 test('settings persist through refresh and reopening dialogs',async({page})=>{
  await home(page);await action(page,'settings').click();
- await page.locator('#music-slider').fill('0.1');await page.locator('#sfx-slider').fill('0.2');await page.locator('#reduced-motion').check();
+ await setSlider(page,'#master-slider',.4);await page.locator('#mute-audio').check();
+ await setSlider(page,'#music-slider',.1);await setSlider(page,'#sfx-slider',.2);await page.locator('#reduced-motion').check();
  await action(page,'close-dialog').last().click();await page.reload();await action(page,'settings').click();
+ await expect(page.locator('#master-slider')).toHaveValue('0.4');await expect(page.locator('#mute-audio')).toBeChecked();
  await expect(page.locator('#music-slider')).toHaveValue('0.1');await expect(page.locator('#sfx-slider')).toHaveValue('0.2');await expect(page.locator('#reduced-motion')).toBeChecked();
  await action(page,'close-dialog').first().click();await expect(action(page,'skirmish')).toBeVisible();
 });
@@ -182,6 +188,7 @@ test('delayed IndexedDB startup never hides the menu or replaces a newly started
  });
  await home(page);await action(page,'skirmish').click();await page.getByLabel('Map seed',{exact:true}).fill('START-WITH-DELAYED-STORAGE');
  await action(page,'launch').click();await expect(page.locator('.hud')).toBeVisible();
+ await acknowledgeFirstBriefing(page);
  await page.evaluate(()=>{(window as any).__QA_RELEASE_DB__();});
  // Waiting for an actual save also drains startup's delayed database work.
  await page.evaluate(()=>window.__FRONTIER__.save());
@@ -207,4 +214,92 @@ test('Escape dismisses home help and settings dialogs repeatedly',async({page,is
   await page.keyboard.press('Escape');await expect(page.getByRole('dialog')).toHaveCount(0);
   await expect(action(page,'skirmish')).toBeVisible();
  }
+});
+
+test('first skirmish briefing freezes the battle until Start battle is acknowledged',async({page})=>{
+ await home(page);await action(page,'skirmish').click();await page.locator('select[name="difficulty"]').selectOption('easy');
+ await action(page,'launch').click();
+ const briefing=page.getByRole('dialog',{name:'Your first frontier',exact:true});await expect(briefing).toBeVisible();
+ await expect(briefing).toContainText('first minute consolidating their own side');
+ const before=await page.evaluate(()=>{const s=window.__FRONTIER__.state;return{time:s.time,tick:s.tick,positions:s.entities.map(e=>[e.id,e.x,e.y,e.hp]),unitsLost:s.players[0].stats.unitsLost};});
+ await page.waitForTimeout(900);
+ expect(await page.evaluate(()=>{const s=window.__FRONTIER__.state;return{time:s.time,tick:s.tick,positions:s.entities.map(e=>[e.id,e.x,e.y,e.hp]),unitsLost:s.players[0].stats.unitsLost};})).toEqual(before);
+ await page.getByRole('button',{name:'Start battle',exact:true}).click();await expect(briefing).toHaveCount(0);
+ await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.state.time)).toBeGreaterThan(before.time);
+ await action(page,'pause-menu').click();await action(page,'save-leave').click();
+ await action(page,'skirmish').click();await action(page,'launch').click();
+ await expect(page.getByRole('dialog',{name:'Your first frontier',exact:true})).toHaveCount(0);
+});
+
+test('ability buttons preserve their DOM identity while idle, cooling down, and becoming ready',async({page})=>{
+ await launch(page,{difficulty:'easy',commander:'ranger'});
+ const button=page.getByRole('button',{name:'Windstep',exact:true});const handle=await button.elementHandle();expect(handle).not.toBeNull();
+ await page.waitForTimeout(700);expect(await handle!.evaluate(node=>node.isConnected)).toBe(true);
+ await button.click();await expect(button).toBeDisabled();
+ const cooldown=await page.evaluate(()=>window.__FRONTIER__.state.entities.find(e=>e.team===0&&e.kind==='commander')!.abilityCooldowns.dodge);
+ expect(cooldown).toBeGreaterThan(0);
+ await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.state.entities.find(e=>e.team===0&&e.kind==='commander')!.abilityCooldowns.dodge)).toBeLessThan(cooldown-.4);
+ expect(await handle!.evaluate(node=>node.isConnected)).toBe(true);
+ expect(await handle!.evaluate(node=>node===document.querySelector('[data-action="ability"][data-id="dodge"]'))).toBe(true);
+ await expect(button).toBeEnabled({timeout:10_000});expect(await handle!.evaluate(node=>node.isConnected)).toBe(true);
+ await expect(button.locator('b')).toHaveText('Windstep');await handle!.dispose();
+});
+
+test('the field guide stays on movement when the first recruit finishes before movement or capture',async({page})=>{
+ await launch(page,{difficulty:'easy',keepTips:true});await expect(page.locator('#battle-hint')).toContainText('FIELD GUIDE · 1/4');
+ const created=await page.evaluate(()=>window.__FRONTIER__.state.players[0].stats.unitsCreated);
+ await page.getByRole('button',{name:'Recruit Swordsman',exact:true}).click();
+ await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.state.players[0].stats.unitsCreated),{timeout:15_000}).toBe(created+1);
+ await expect(page.locator('#battle-hint')).toContainText('FIELD GUIDE · 1/4');
+ await expect(page.locator('#battle-hint')).toContainText('Step into the frontier');
+ expect(await page.evaluate(()=>window.__FRONTIER__.state.players[0].stats.captures)).toBe(0);
+});
+
+test('Archery Range completion updates the visible Recruit panel without reopening it',async({page})=>{
+ await launch(page,{difficulty:'easy'});
+ const archer=page.getByRole('button',{name:'Recruit Archer',exact:true});await expect(archer).toHaveClass(/unavailable/);await expect(archer).toContainText('Needs Archery Range');
+ await action(page,'panel-orders').click();await action(page,'speed').click();await action(page,'speed').click();
+ await action(page,'panel-build').click();await page.getByRole('button',{name:'Build Archery Range',exact:true}).click();
+ await tap(page,await clearGround(page,1.4));await expect(page.getByRole('status')).toContainText('Archery Range under construction');
+ await action(page,'panel-army').click();await expect(archer).toHaveClass(/unavailable/);
+ await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.state.entities.some(e=>e.team===0&&e.type==='range'&&e.buildProgress>=1)),{timeout:18_000}).toBe(true);
+ await expect(archer).not.toHaveClass(/unavailable/);await expect(archer).not.toContainText('Needs Archery Range');
+ await archer.click();await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.state.entities.some(e=>e.team===0&&e.type==='range'&&e.queue.some(q=>q.type==='unit'&&q.id==='archer')))).toBe(true);
+});
+
+test('commander focus keeps the hero on an unobscured part of the battlefield',async({page})=>{
+ await launch(page,{difficulty:'easy'});await action(page,'select-commander').click();
+ const placement=await page.evaluate(()=>{const f=window.__FRONTIER__,c=f.state.entities.find(e=>e.team===0&&e.kind==='commander')!,p=f.renderer.worldToScreen(c.x,c.y);return{...p,topElement:document.elementFromPoint(p.x,p.y)?.id,width:innerWidth,height:innerHeight};});
+ expect(placement.x).toBeGreaterThan(20);expect(placement.x).toBeLessThan(placement.width-20);
+ expect(placement.y).toBeGreaterThan(90);expect(placement.y).toBeLessThan(placement.height-100);expect(placement.topElement).toBe('world');
+});
+
+test('March to relic queues one whole-army capture and keeps objective information public and readable',async({page})=>{
+ await launch(page,{difficulty:'easy'});await pause(page);
+ const march=page.getByRole('button',{name:'March to relic',exact:true});
+ await expect(march).toBeVisible();await expectWithinViewport(page,'[data-action="march-relic"]');
+ const before=await page.evaluate(()=>{
+  const {state:s,renderer:r}=window.__FRONTIER__,hero=s.entities.find(e=>e.team===0&&e.kind==='commander'&&e.hp>0)!;
+  const relics=s.map.nodes.filter(n=>n.kind==='relic'),targets=relics.filter(n=>n.owner!==0);
+  const nearest=targets.sort((a,b)=>Math.hypot(a.x-hero.x,a.y-hero.y)-Math.hypot(b.x-hero.x,b.y-hero.y))[0];
+  const troops=s.entities.filter(e=>e.team===0&&e.kind!=='building'&&e.hp>0);
+  const hidden=s.entities.filter(e=>e.team!==0&&e.hp>0&&!s.fog.visible[0][Math.floor(e.y)*s.map.width+Math.floor(e.x)]);
+  return{time:s.time,troopIds:troops.map(e=>e.id),positions:troops.map(e=>({id:e.id,x:e.x,y:e.y})),nearestId:nearest.id,owned:relics.filter(n=>n.owner===0).length,total:relics.length,visible:s.fog.visible[0],explored:s.fog.explored[0],hiddenIds:hidden.map(e=>e.id),hiddenPickable:hidden.some(e=>{const p=r.worldToScreen(e.x,e.y);return(r.pick(s,p.x,p.y) as {id?:string}|undefined)?.id===e.id;})};
+ });
+ expect(before.hiddenIds.length).toBeGreaterThan(0);expect(before.hiddenPickable).toBe(false);expect(before.owned).toBe(0);
+ const income=page.locator('.objective-income');await expect(income).toBeVisible();
+ await expect(income).toHaveText(`${before.owned} / ${before.total} relics controlled · +0.0 points / sec`);
+ await expectWithinViewport(page,'.objective-income');
+ const textLayout=await income.evaluate(el=>({width:el.clientWidth,scrollWidth:el.scrollWidth,fontSize:parseFloat(getComputedStyle(el).fontSize)}));
+ expect(textLayout.scrollWidth).toBeLessThanOrEqual(textLayout.width+1);expect(textLayout.fontSize).toBeGreaterThanOrEqual(8);
+ await march.click();await expect(page.getByRole('status')).toContainText('Relic march queued.');
+ await expect(page.locator('#selection-info')).toContainText(`${before.troopIds.length} units selected`);
+ expect(await page.evaluate(()=>window.__FRONTIER__.state.pendingCommands)).toEqual([{type:'capture',team:0,entityIds:before.troopIds,nodeId:before.nearestId}]);
+ const queued=await page.evaluate(()=>{
+  const {state:s,renderer:r}=window.__FRONTIER__;
+  return{time:s.time,visible:s.fog.visible[0],explored:s.fog.explored[0],hiddenPickable:s.entities.filter(e=>e.team!==0&&e.hp>0&&!s.fog.visible[0][Math.floor(e.y)*s.map.width+Math.floor(e.x)]).some(e=>{const p=r.worldToScreen(e.x,e.y);return(r.pick(s,p.x,p.y) as {id?:string}|undefined)?.id===e.id;})};
+ });
+ expect(queued.time).toBe(before.time);expect(queued.visible).toEqual(before.visible);expect(queued.explored).toEqual(before.explored);expect(queued.hiddenPickable).toBe(false);
+ await resume(page);await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.state.pendingCommands.length)).toBe(0);
+ await expect.poll(()=>page.evaluate(positions=>positions.filter(before=>{const now=window.__FRONTIER__.state.entities.find(e=>e.id===before.id);return now&&Math.hypot(now.x-before.x,now.y-before.y)>.25;}).length,before.positions)).toBe(before.troopIds.length);
 });

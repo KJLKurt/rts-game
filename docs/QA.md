@@ -2,13 +2,15 @@
 
 ## What has actually been checked
 
-Local verification on 2026-10-04 (latest aggregate: 03:53 UTC):
+Local verification on 2026-10-04 (latest aggregate: 04:48 UTC):
 
 - TypeScript: `npm run check` passed.
-- Unit/contract suite: `npm test` passed 96 tests across engine, maps, strategic AI, Rush Arena, content, save restoration, and platform storage/PWA. The map suite includes 400 deterministic generated maps.
+- Unit/contract suite: `npm test` passed 127 tests across 17 files, covering engine, maps, strategic AI, Rush Arena, content, save restoration, input targeting, combat feedback, audio controls, and platform storage/PWA. The map suite includes 400 deterministic generated maps.
 - Production: `npm run build` passed, including generated service worker and 14 precached files at this checkpoint. Asset counts can change as art/audio are integrated.
-- Browser suite: `npx playwright test --list` discovered 72 cases, including intentional platform-specific skips. Discovery and TypeScript compilation are **not browser execution**.
+- Browser suite: `npx playwright test --list` discovered 90 cases, including intentional platform-specific skips. Discovery and TypeScript compilation are **not browser execution**.
 - Real browser execution in the original workspace was blocked by Chromium socket sandbox EPERM. A separate attempted executor escalation failed at infrastructure setup. Cloud browser navigation to that workspace's loopback URL was also blocked. No browser pass, offline-reload pass, touch pass, screenshot review, or audible-audio verification is claimed from that workspace. Do not weaken sandbox/browser security to work around this.
+
+Separate supported cloud-runner playtesting on the earlier preview reported a complete 240-second Engineer Rush victory, service-worker update consent with save preservation, and phone offline play with the atlas loaded. Those are useful real-browser results, but the newest onboarding/guard/HUD/audio-control fix batch is not yet included in that preview. The 90-case Playwright suite has still not been executed; its dedicated acceptance workflow is prepared, do not describe manual checks as a full automated-suite pass. The then-public `3937eef` preview predates this batch.
 
 This is a checkpoint, not a permanent assertion that later edits passed. Rerun the commands after integration. Record the exact commit and final results when the supported browser runner is available.
 
@@ -56,18 +58,23 @@ Three projects exercise desktop 1440×900, phone portrait 390×844, and phone la
 
 - Main menu, repeated help/settings Escape dismissal, setup choice persistence, achievements and expedition entry.
 - Delayed real IndexedDB request completion: the menu appears immediately and late Continue hydration cannot replace a new active match.
-- Configured skirmish launch at the repository base path.
+- Configured skirmish launch at the repository base path; helpers explicitly acknowledge the first-skirmish briefing instead of clicking through its overlay.
+- First-run briefing freezes tick, time, entity positions, health and losses until Start battle is acknowledged, and does not repeat on the next skirmish.
+- An ElementHandle for Windstep remains connected and identifies the same button while idle, through a full cooldown, and after readiness returns.
+- The field guide stays on its movement step after a first recruit finishes when the commander has not moved/captured.
+- A newly built Archery Range updates visible Archer readiness without switching/reopening Recruit, then accepts a real recruitment order. This waits for actual construction at the UI's 2× speed.
+- Commander focus centers the hero on an unobscured battlefield location in all tested orientations.
 - Real map clicks/taps, army selection, hold orders, WASD/space, and Chromium touch input to the joystick, including cancellation.
 - Recruitment through the UI followed by actual production time.
-- Tactical pause freezing time while move, build, and research orders queue, then execute on resume.
+- Tactical pause freezing time while move, build, and research orders queue, then execute on resume. A queued House reports a queued build and is not created before resume.
 - Repeated building-placement cancel without spending resources.
 - Save/leave, page reload, repeated Continue, retained queued orders and mission identity.
-- Settings persistence and dialog dismissal.
+- Master volume, mute, Music/Effects and reduced-motion persistence plus dialog dismissal. Range sliders use native Home/ArrowRight interaction; unsupported range-input fill is not used.
 - Viewport containment, horizontal overflow, and rotation.
 - Brutal's ordinary menu suspending simulation despite restrictions on tactical pause.
 - Unsupported-save recovery without a dead-end menu.
 - Rush setup/cancel/reopen, real commander input, the first naturally spawned enemy wave, and a turret ability.
-- Rush upgrade offer/dismiss/reopen/claim, run save/continue, and completed-run save/profile protection. Rush upgrade and terminal tests shorten the next scheduled simulation deadline solely to reach the relevant UI state; they do not prove survival balance or a full four-minute playthrough.
+- Rush squad population has an honest squad label rather than a zero population cap. Rush upgrade offer/dismiss/reopen/claim, run save/continue, and completed-run save/profile protection. Rush upgrade and terminal tests shorten the next scheduled simulation deadline solely to reach the relevant UI state; they do not prove survival balance or a full four-minute playthrough.
 - Editor paint, save/open, downloaded JSON, import, validation, and test-map round trip; malformed imports.
 - Manifest/icon paths, service-worker scope and precache, offline launch/continue/campaign/editor/new game.
 - New worker discovery waiting for consent, save-before-restart, and restored battle after update.
@@ -115,6 +122,14 @@ Keep regressions as tests rather than suppressing them to obtain a green report.
 
 ## Separate production-runner evidence
 
-The separate browser runner materialized the exact checkpoint02 production build and verified every asset hash. It rendered the real atlas on desktop and phone. It exercised movement, selection, recruitment, construction, captures, combat, abilities, tactical queued orders, saving/reloading, pan/pinch, and loss/restart. Its production service worker activated within `/rts-game/`, cached all14assets, and a phone save resumed and advanced with network disabled. These checks are narrower than execution of the entire Playwright suite, and they do not establish a complete skirmish win or repeated-match fun. A first normal-input Rush attempt ended in defeat at114seconds outside the shrinking ward; a retry remained under review.
+The separate browser runner materialized the exact checkpoint02 production build and verified every asset hash. It rendered the real atlas on desktop and phone. It exercised movement, selection, recruitment, construction, captures, combat, abilities, tactical queued orders, saving/reloading, pan/pinch, and loss/restart. Its production service worker activated within `/rts-game/`, cached all14assets, and a phone save resumed and advanced with network disabled. These checks are narrower than execution of the entire Playwright suite, and they do not establish a complete skirmish win or repeated-match fun. A first normal-input Rush attempt ended in defeat at 114 seconds outside the shrinking ward. The next normal-speed Engineer attempt won at 240 seconds, wave 14, with 80 kills and five survivors using actual movement, abilities and five upgrades. A complete phone skirmish ended in defeat at 510.6 seconds, with five captures and 76 kills; recruitment, commander respawn, house capacity and restart were exercised. Those results establish functioning repeated match loops, not broad difficulty balance.
 
 The v4 checkpoint was also installed from a clean archive using `npm ci` with the lockfile and then passed typecheck, all90 tests present at that point, and production build. Later validation additions are covered by the final aggregate above.
+
+## Fair opening and objective-clarity release
+
+The first skirmish now waits on a frozen briefing. Idle troops use a fixed two-tile guard anchor and return locally rather than chasing through camps; Easy consolidates its home side for its first minute and still defends real attacks. Relic control and actual score income are visible in the HUD. Public relic landmarks appear as neutral gold minimap symbols before exploration, and the gold Relic button gives an explicit army capture order. Unknown enemy ownership and hidden troops remain concealed. Camera focus accounts for HUD and command-deck occlusion.
+
+The browser suite now also checks visible relic income, one queued capture order, public-landmark routing, fog privacy and actual army movement in all three viewports. New render tests cover one-shot event feedback, hidden-event privacy and minimap markers. New Master/mute controls are covered by audio routing contracts and browser persistence cases. The newest batch still needs its isolated actual-browser execution and manual visual recheck.
+
+Outpost opening regression uses the reported 1.5-second diagonal joystick displacement at 4.5s and confirms all four starters remain full health at 6.2s. A genuine save produced by deployed3937eef, with idle troops already pursuing and an injured archer, restores without healing or economy changes, fixes guard anchors once and remains deterministic for 80 seconds.

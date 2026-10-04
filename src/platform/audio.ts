@@ -1,5 +1,7 @@
 /** Original generative score. No network, sampled copyrighted music, or timing in the simulation. */
 export class AudioDirector {
+  private masterVolume = 0.85;
+  private muted = false;
   private lastMixSignature = "";
   private trackLoad: Promise<void> | null = null;
   private tracksReady = false;
@@ -21,18 +23,35 @@ export class AudioDirector {
       this.context = new AudioContext();
       this.master = this.context.createGain();
       this.master.connect(this.context.destination);
+      this.master.gain.value = this.muted ? 0 : this.masterVolume;
       this.musicGain = this.context.createGain();
       this.musicGain.connect(this.master);
       this.musicGain.gain.value = this.musicVolume * 0.18;
     }
     void this.context.resume();
   }
+  setMaster(volume: number, muted = false) {
+    this.masterVolume = Number.isFinite(volume)
+      ? Math.max(0, Math.min(1, volume))
+      : 0.85;
+    this.muted = muted;
+    if (this.master)
+      this.master.gain.setTargetAtTime(
+        muted ? 0 : this.masterVolume,
+        this.context!.currentTime,
+        0.05,
+      );
+  }
   setVolumes(music: number, sfx: number) {
-    this.musicVolume = music;
-    this.sfxVolume = sfx;
+    this.musicVolume = Number.isFinite(music)
+      ? Math.max(0, Math.min(1, music))
+      : 0.32;
+    this.sfxVolume = Number.isFinite(sfx)
+      ? Math.max(0, Math.min(1, sfx))
+      : 0.65;
     if (this.musicGain)
       this.musicGain.gain.setTargetAtTime(
-        this.tracksReady ? 0 : music * 0.18,
+        this.tracksReady ? 0 : this.musicVolume * 0.18,
         this.context!.currentTime,
         0.15,
       );

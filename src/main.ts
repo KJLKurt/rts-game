@@ -1,4 +1,5 @@
 import "./style.css";
+import { relicSummary, nearestRelic } from "./ui/objectives";
 import { encodeMapCode, decodeMapCode } from "./ui/map-code";
 import { chooseAbilityTarget } from "./ui/targeting";
 import {
@@ -53,6 +54,8 @@ const renderer = new Battlefield(canvas),
   audio = new AudioDirector();
 let preferences = readLocal("preferences", defaultPreferences),
   profile = readLocal("profile", defaultProfile);
+audio.setMaster(preferences.master, preferences.muted);
+audio.setVolumes(preferences.music, preferences.sfx);
 let state: GameState,
   playing = false,
   selection = new Set<string>(),
@@ -102,6 +105,8 @@ let previousFocus: HTMLElement | null = null;
 let frameRate = 60;
 let runtimeFailed = false;
 let lastDeckSignature = "";
+const hudHTML = new Map<string, string>();
+let playfieldCenterY = innerHeight / 2;
 const debugEnabled = new URLSearchParams(location.search).has("debug");
 let debugReveal = false;
 const pointers = new Map<number, Point>();
@@ -277,6 +282,13 @@ function launchGame(
   renderGameShell();
   void persist();
   if (mission !== null) showBriefing(mission);
+  else if (
+    !state.rush &&
+    profile.games === 0 &&
+    preferences.showTips &&
+    !preferences.tutorialSeen
+  )
+    showFirstBriefing();
   else
     toast(
       state.rush
@@ -285,10 +297,14 @@ function launchGame(
     );
 }
 function renderGameShell() {
-  screen.innerHTML = `<header class="hud"><button class="brand-button" data-action="pause-menu" aria-label="Battle menu">${icon("crown")}</button><div class="resources"><span title="Gold">${icon("gold")}<b id="gold">0</b></span><span title="Wood">${icon("wood")}<b id="wood">0</b></span><span title="Population">${icon("flag")}<b id="population">0</b></span></div><div class="hud-time" id="match-time">0:00</div><button class="pause-button" data-action="pause" aria-label="Tactical pause">${icon("pause")}</button></header><div class="objective-bar" id="objective"></div><div class="battle-hint" id="battle-hint"></div><div class="map-controls">${button("Focus commander", "focus", "square", "crosshair")}${button("Zoom in", "zoom-in", "square", "plus")}${button("Zoom out", "zoom-out", "square", "minus")}</div><div class="minimap-wrap"><canvas id="minimap" width="160" height="120" aria-label="Minimap: tap to move camera"></canvas><span id="map-seed"></span></div><div class="commander-strip" id="commander-strip"></div><div id="joystick" aria-label="Drag to move commander" role="application"><div class="joystick-ring"></div><div class="joystick-stick">${icon("crosshair")}</div></div><div class="ability-dock" id="abilities"></div><section class="command-deck"><div class="selection-row"><div class="selection-info" id="selection-info"></div><div class="selection-tools">${button("Commander", "select-commander", "", "crown")}${button("Army", "select-army", "", "flag")}${button("Hold", "hold", "", "hold")}</div></div><nav class="deck-tabs">${button("Recruit", "panel-army", "active", "sword")}${button("Build", "panel-build", "", "house")}${button("Research", "panel-research", "", "spark")}${button("Orders", "panel-orders", "", "flag")}</nav><div class="deck-content" id="deck-content"></div></section><div class="paused-ribbon" id="paused-ribbon"></div>`;
+  hudHTML.clear();
+  screen.innerHTML = `<header class="hud"><button class="brand-button" data-action="pause-menu" aria-label="Battle menu">${icon("crown")}</button><div class="resources"><span title="Gold">${icon("gold")}<b id="gold">0</b></span><span title="Wood">${icon("wood")}<b id="wood">0</b></span><span title="Population">${icon("flag")}<b id="population">0</b></span></div><div class="hud-time" id="match-time">0:00</div><button class="pause-button" data-action="pause" aria-label="Tactical pause">${icon("pause")}</button></header><div class="objective-bar" id="objective"></div><div class="battle-hint" id="battle-hint"></div><div class="map-controls">${button("Focus commander", "focus", "square", "crosshair")}${button("Zoom in", "zoom-in", "square", "plus")}${button("Zoom out", "zoom-out", "square", "minus")}</div><div class="minimap-wrap"><canvas id="minimap" width="160" height="120" aria-label="Minimap: tap to move camera"></canvas><span id="map-seed"></span></div><div class="commander-strip" id="commander-strip"></div><div id="joystick" aria-label="Drag to move commander" role="application"><div class="joystick-ring"></div><div class="joystick-stick">${icon("crosshair")}</div></div><div class="ability-dock" id="abilities"></div><section class="command-deck"><div class="selection-row"><div class="selection-info" id="selection-info"></div><div class="selection-tools">${button("Commander", "select-commander", "", "crown")}${button("Army", "select-army", "", "flag")}${button("Relic", "march-relic", "relic-command", "spark", 'aria-label="March to relic"')}${button("Hold", "hold", "", "hold")}</div></div><nav class="deck-tabs">${button("Recruit", "panel-army", "active", "sword")}${button("Build", "panel-build", "", "house")}${button("Research", "panel-research", "", "spark")}${button("Orders", "panel-orders", "", "flag")}</nav><div class="deck-content" id="deck-content"></div></section><div class="paused-ribbon" id="paused-ribbon"></div>`;
+  measurePlayfield();
   renderDeck();
   updateHUD();
   setupJoystick();
+  const hero = commander();
+  if (hero) centerCommander(hero);
   document.querySelector("#minimap")?.addEventListener("pointerdown", (e) => {
     const ev = e as PointerEvent;
     const box = (ev.currentTarget as HTMLElement).getBoundingClientRect();
@@ -411,11 +427,19 @@ function updateHUD() {
     c = commander();
   const set = (id: string, html: string) => {
     const el = document.querySelector(`#${id}`);
-    if (el && el.innerHTML !== html) el.innerHTML = html;
+    if (el && hudHTML.get(id) !== html) {
+      el.innerHTML = html;
+      hudHTML.set(id, html);
+    }
   };
   set("gold", Math.floor(p.gold).toString());
   set("wood", Math.floor(p.wood).toString());
-  set("population", `${p.population}<small>/${p.populationCap}</small>`);
+  set(
+    "population",
+    state.rush
+      ? `${p.population}<small> squad</small>`
+      : `${p.population}<small>/${p.populationCap}</small>`,
+  );
   set(
     "match-time",
     `${time(state.time)}${speed !== 1 ? ` <small>${speed}×</small>` : ""}`,
@@ -423,10 +447,19 @@ function updateHUD() {
   set("map-seed", `${esc(state.settings.seed)} · v${state.map.version}`);
   const enemy = state.players.filter((pl) => pl.team !== 0 && !pl.defeated);
   const maxScore = Math.max(1, state.scoreTarget);
-  set(
-    "objective",
-    `<span>${icon(state.settings.mode === "conquest" ? "sword" : "spark")} ${esc(state.objectiveText || "Claim territory. Hold the relic.")}</span><div class="score-track"><i style="width:${Math.min(100, (p.score / maxScore) * 100)}%"></i><b>${state.settings.mode === "conquest" ? `${enemy.length} enemy keep${enemy.length === 1 ? "" : "s"} remain` : `${Math.floor(p.score)} / ${maxScore}`}</b>${state.settings.mode === "conquest" ? "" : `<em>${Math.floor(Math.max(...enemy.map((e) => e.score), 0))}</em>`}</div>`,
+  const control = relicSummary(state);
+  if (!state.rush)
+    set(
+      "objective",
+      `<span title="${esc(state.objectiveText)}">${icon(state.settings.mode === "conquest" ? "sword" : "spark")} <span class="objective-description">${missionIndex !== null ? esc(state.objectiveText) : state.settings.mode === "conquest" ? "Destroy the enemy keeps" : "Relics earn victory points"}</span><small class="objective-income">${control.owned} / ${control.total} relics controlled · ${state.settings.mode === "conquest" ? "Relics fund your siege" : `+${control.pointsPerSecond.toFixed(1)} points / sec`}</small></span><div class="score-track"><i style="width:${Math.min(100, (p.score / maxScore) * 100)}%"></i><b>${state.settings.mode === "conquest" ? `${enemy.length} enemy keep${enemy.length === 1 ? "" : "s"} remain` : `YOU ${Math.floor(p.score)} / ${maxScore}`}</b>${state.settings.mode === "conquest" ? "" : `<em>RIVAL ${Math.floor(Math.max(...enemy.map((e) => e.score), 0))}</em>`}</div>`,
+    );
+  const relicControl = document.querySelector<HTMLButtonElement>(
+    '[data-action="march-relic"]',
   );
+  if (relicControl) {
+    relicControl.hidden = !!state.rush || !!placement;
+    relicControl.title = "Send your army toward the nearest unclaimed relic.";
+  }
   const chosen = state.entities.filter((e) => selection.has(e.id) && e.hp > 0);
   set(
     "selection-info",
@@ -438,18 +471,14 @@ function updateHUD() {
       ? `<button data-action="focus" aria-label="Focus commander">${icon(unitIcons[c.type])}<span><b>${COMMANDERS[state.settings.commander].name}</b><i><em style="width:${(c.hp / c.maxHp) * 100}%"></em></i></span><small>${Math.ceil(c.hp)}</small></button>`
       : `<span class="respawning">Commander recovering at the keep…</span>`,
   );
-  set(
-    "abilities",
-    COMMANDERS[state.settings.commander].abilities
-      .map((a, i) => {
-        const remaining = c?.abilityCooldowns[a.id] || 0;
-        return `<button class="ability ${remaining > 0 ? "cooling" : ""}" data-action="ability" data-id="${a.id}" aria-label="${a.name}" title="${esc(a.description)}" ${!c || remaining > 0 ? "disabled" : ""}>${icon(i === 0 ? "lightning" : state.settings.commander === "engineer" ? "gear" : "flag")}<b>${remaining > 0 ? Math.ceil(remaining) : a.name}</b><kbd>${i === 0 ? "Q" : "E"}</kbd></button>`;
-      })
-      .join(""),
-  );
+  updateAbilities(c);
   const pause = document.querySelector(".pause-button");
   if (pause) {
-    pause.innerHTML = icon(state.paused ? "play" : "pause");
+    if (
+      pause.getAttribute("aria-label") !==
+      (state.paused ? "Resume battle" : "Tactical pause")
+    )
+      pause.innerHTML = icon(state.paused ? "play" : "pause");
     pause.setAttribute(
       "aria-label",
       state.paused ? "Resume battle" : "Tactical pause",
@@ -480,15 +509,67 @@ function updateHUD() {
   const mini = document.querySelector<HTMLCanvasElement>("#minimap");
   if (mini) renderer.renderMinimap(mini, state);
 }
+function updateAbilities(c: Entity | undefined) {
+  const dock = document.querySelector<HTMLElement>("#abilities");
+  if (!dock) return;
+  const definitions = COMMANDERS[state.settings.commander].abilities;
+  if (dock.dataset.commander !== state.settings.commander) {
+    dock.innerHTML = definitions
+      .map(
+        (ability, index) =>
+          `<button class="ability" data-action="ability" data-id="${ability.id}" aria-label="${ability.name}" title="${esc(ability.description)}">${icon(index === 0 ? "lightning" : state.settings.commander === "engineer" ? "gear" : "flag")}<b>${ability.name}</b><kbd>${index === 0 ? "Q" : "E"}</kbd></button>`,
+      )
+      .join("");
+    dock.dataset.commander = state.settings.commander;
+  }
+  for (const ability of definitions) {
+    const control = dock.querySelector<HTMLButtonElement>(
+      `[data-id="${ability.id}"]`,
+    )!;
+    const remaining = c?.abilityCooldowns[ability.id] || 0;
+    const queued =
+      state.paused &&
+      state.pendingCommands.some(
+        (cmd) =>
+          cmd.type === "ability" &&
+          cmd.team === 0 &&
+          cmd.ability === ability.id,
+      );
+    control.disabled = !c || remaining > 0 || queued;
+    control.classList.toggle("cooling", remaining > 0 || queued);
+    const text = queued
+      ? "Queued"
+      : remaining > 0
+        ? String(Math.ceil(remaining))
+        : ability.name;
+    const label = control.querySelector("b")!;
+    if (label.textContent !== text) label.textContent = text;
+  }
+}
+function showFirstBriefing() {
+  preferences.tutorialSeen = true;
+  writeLocal("preferences", preferences);
+  showDialog(
+    "Your first frontier",
+    `<span class="eyebrow">THE BATTLE WAITS WHILE YOU GET YOUR BEARINGS</span><div class="help-grid"><article>${icon("flag")}<h3>Lead together</h3><p>Select Army, then tap open ground to move your commander and soldiers. Idle troops guard their position.</p></article><article>${icon("gold")}<h3>Claim and grow</h3><p>Tap neutral gold or timber to capture supplies. Recruit soldiers below; build Houses for a bigger army.</p></article><article>${icon("spark")}<h3>Take the center</h3><p>Relics earn victory points; gold and wood fund your army. The gold Relic button sends your army toward an objective. Use both abilities in close fights.</p></article><article>${icon("pause")}<h3>Take your time</h3><p>${state.settings.difficulty === "easy" ? "Easy opponents spend the first minute consolidating their own side. " : ""}Use the pause button to plan orders${state.settings.difficulty === "hard" ? " (three tactical pauses on Hard)" : state.settings.difficulty === "brutal" ? " (tactical pause is disabled on Brutal)" : ""}.</p></article></div>${button("Start battle", "begin-briefing", "primary large", "play")}`,
+    "wide",
+  );
+}
 function updateTutorial() {
   const el = document.querySelector("#battle-hint");
   if (!el) return;
   if (state.rush || !preferences.showTips || state.time > 200) {
     el.innerHTML = "";
+    hudHTML.delete("battle-hint");
     return;
   }
   const currentCommander = commander();
   if (
+    state.commandLog.some(
+      ({ command }) =>
+        command.team === 0 &&
+        ["move", "attackMove", "capture"].includes(command.type),
+    ) &&
     currentCommander &&
     tutorialOrigin &&
     Math.hypot(
@@ -497,9 +578,15 @@ function updateTutorial() {
     ) > 3
   )
     tutorialStep = Math.max(tutorialStep, 1);
-  if (state.players[0].stats.captures > 0)
+  if (tutorialStep >= 1 && state.players[0].stats.captures > 0)
     tutorialStep = Math.max(tutorialStep, 2);
-  if (state.players[0].stats.unitsCreated > 4)
+  if (
+    tutorialStep >= 2 &&
+    state.commandLog.some(
+      ({ command }) => command.team === 0 && command.type === "recruit",
+    ) &&
+    state.players[0].stats.unitsCreated > 4
+  )
     tutorialStep = Math.max(tutorialStep, 3);
   const tips = [
     [
@@ -516,10 +603,14 @@ function updateTutorial() {
     ],
     [
       "Take the center",
-      "Select Army, then tap a glowing relic. Build houses to grow. Use both abilities.",
+      "Use the gold Relic button to march your army. Hold more relics than your rival to outscore them.",
     ],
   ];
-  el.innerHTML = `<button data-action="dismiss-tips" aria-label="Dismiss tips">${icon("close")}</button><span>COMMANDER’S FIELD GUIDE · ${tutorialStep + 1}/4</span><b>${tips[tutorialStep][0]}</b><p>${tips[tutorialStep][1]}</p>`;
+  const tipHTML = `<button data-action="dismiss-tips" aria-label="Dismiss tips">${icon("close")}</button><span>COMMANDER’S FIELD GUIDE · ${tutorialStep + 1}/4</span><b>${tips[tutorialStep][0]}</b><p>${tips[tutorialStep][1]}</p>`;
+  if (hudHTML.get("battle-hint") !== tipHTML) {
+    el.innerHTML = tipHTML;
+    hudHTML.set("battle-hint", tipHTML);
+  }
 }
 function showDialog(title: string, body: string, cls = "") {
   if (!modalOpen) previousFocus = document.activeElement as HTMLElement;
@@ -549,13 +640,13 @@ function showHelp() {
 function showSettings() {
   showDialog(
     "Settings",
-    `<div class="settings-fields"><label>Music <output id="music-value">${Math.round(preferences.music * 100)}%</output><input id="music-slider" type="range" min="0" max="1" step=".05" value="${preferences.music}"></label><label>Sound effects <output id="sfx-value">${Math.round(preferences.sfx * 100)}%</output><input id="sfx-slider" type="range" min="0" max="1" step=".05" value="${preferences.sfx}"></label><label class="check-field"><input id="reduced-motion" type="checkbox" ${preferences.reducedMotion ? "checked" : ""}> Reduced motion and effects</label><label class="check-field"><input id="show-tips" type="checkbox" ${preferences.showTips ? "checked" : ""}> Commander’s field guide</label><p class="muted">Teams use blue circles and coral diamonds, as well as banners. Sound is generated locally and works offline.</p></div>${button("Done", "close-dialog", "primary", "check")}`,
+    `<div class="settings-fields"><label>Master volume <output id="master-value">${Math.round(preferences.master * 100)}%</output><input id="master-slider" aria-label="Master volume" type="range" min="0" max="1" step=".05" value="${preferences.master}"></label><label class="check-field"><input id="mute-audio" type="checkbox" ${preferences.muted ? "checked" : ""}> Mute all audio</label><label>Music <output id="music-value">${Math.round(preferences.music * 100)}%</output><input id="music-slider" aria-label="Music" type="range" min="0" max="1" step=".05" value="${preferences.music}"></label><label>Sound effects <output id="sfx-value">${Math.round(preferences.sfx * 100)}%</output><input id="sfx-slider" aria-label="Sound effects" type="range" min="0" max="1" step=".05" value="${preferences.sfx}"></label><label class="check-field"><input id="reduced-motion" type="checkbox" ${preferences.reducedMotion ? "checked" : ""}> Reduced motion and effects</label><label class="check-field"><input id="show-tips" type="checkbox" ${preferences.showTips ? "checked" : ""}> Commander’s field guide</label><p class="muted">Teams use blue circles and coral diamonds, as well as banners. Music and effects work offline. The soundtrack can be replaced later through the repository’s audio manifest; see docs/AUDIO_REPLACEMENT.md for file names and loop settings.</p></div>${button("Done", "close-dialog", "primary", "check")}`,
   );
 }
 function showPauseMenu() {
   showDialog(
     "Take a breath",
-    `<p class="muted">The battle is paused. Your frontier will wait.</p><div class="menu-stack">${button("Return to battle", "resume-dialog", "primary", "play")}${button("Save battle", "save", "", "save")}${button("Copy map code", "copy-map-code", "", "map")}${button("How to play", "help", "", "book")}${button("Settings", "settings", "", "gear")}${button("Save & leave", "save-leave", "", "back")}</div>`,
+    `<p class="muted">The battle is paused. Your frontier will wait.</p><p class="mission-goal">${icon("flag")} ${esc(state.objectiveText)}</p><div class="menu-stack">${button("Return to battle", "resume-dialog", "primary", "play")}${button("Save battle", "save", "", "save")}${button("Copy map code", "copy-map-code", "", "map")}${button("How to play", "help", "", "book")}${button("Settings", "settings", "", "gear")}${button("Save & leave", "save-leave", "", "back")}</div>`,
   );
   updateHUD();
 }
@@ -953,6 +1044,9 @@ async function handleAction(action: string, id?: string) {
     case "mission":
       launchGame(activeCampaign.missions[Number(id)].settings, Number(id));
       break;
+    case "begin-briefing":
+      closeDialog();
+      break;
     case "begin-mission":
     case "resume-dialog":
       closeDialog();
@@ -970,11 +1064,44 @@ async function handleAction(action: string, id?: string) {
       const c = commander();
       if (c) {
         selection = new Set([c.id]);
-        renderer.centerOn(c.x, c.y);
+        centerCommander(c);
         followCommander = true;
         placement = null;
         audio.play("select");
         updateHUD();
+      }
+      break;
+    }
+    case "march-relic": {
+      const troops = state.entities.filter(
+        (e) => e.team === 0 && e.kind !== "building" && e.hp > 0,
+      );
+      if (!troops.length) {
+        toast("Wait for your commander or recruit troops first.");
+        break;
+      }
+      const target = nearestRelic(state, commander() ?? state.map.spawns[0]);
+      if (target) {
+        selection = new Set(troops.map((e) => e.id));
+        placement = null;
+        followCommander = true;
+        if (
+          dispatch({
+            type: "capture",
+            team: 0,
+            entityIds: [...selection],
+            nodeId: target.id,
+          })
+        ) {
+          targetPoint = { x: target.x, y: target.y };
+          toast(
+            state.paused
+              ? "Relic march queued."
+              : state.settings.mode === "conquest"
+                ? "Army advancing to a relic. Hold it to fund your siege."
+                : "Army advancing to a relic. Hold it to earn victory points.",
+          );
+        }
       }
       break;
     }
@@ -994,7 +1121,11 @@ async function handleAction(action: string, id?: string) {
       break;
     case "recruit":
       if (dispatch({ type: "recruit", team: 0, unit: id as UnitId }, "recruit"))
-        toast(`${UNITS[id as UnitId].name} queued for training`);
+        toast(
+          state.paused
+            ? `${UNITS[id as UnitId].name} order queued`
+            : `${UNITS[id as UnitId].name} queued for training`,
+        );
       break;
     case "build": {
       const def = BUILDINGS[id as BuildingId];
@@ -1024,7 +1155,11 @@ async function handleAction(action: string, id?: string) {
           "build",
         )
       )
-        toast(`${TECHNOLOGIES[id as TechId].name} research started`);
+        toast(
+          state.paused
+            ? `${TECHNOLOGIES[id as TechId].name} order queued`
+            : `${TECHNOLOGIES[id as TechId].name} research started`,
+        );
       renderDeck();
       break;
     case "ability": {
@@ -1140,6 +1275,7 @@ async function handleAction(action: string, id?: string) {
       launchGame(
         {
           seed: randomSeed(),
+          mode: "domination",
           mapSize: "small",
           difficulty: "easy",
           duration: 8,
@@ -1161,6 +1297,7 @@ async function handleAction(action: string, id?: string) {
       launchGame(
         {
           seed: randomSeed(),
+          mode: "domination",
           biome: action === "expedition-forest" ? "forest" : "desert",
           mapSize: stage === 2 ? "medium" : "small",
           difficulty: stage === 2 ? "hard" : "normal",
@@ -1223,7 +1360,15 @@ app.addEventListener("submit", (e) => {
 });
 app.addEventListener("input", (e) => {
   const t = e.target as HTMLInputElement;
-  if (t.id === "music-slider" || t.id === "sfx-slider") {
+  if (t.id === "master-slider") {
+    preferences.master = Number(t.value);
+    audio.setMaster(preferences.master, preferences.muted);
+    document.querySelector("#master-value")!.textContent =
+      `${Math.round(preferences.master * 100)}%`;
+  } else if (t.id === "mute-audio") {
+    preferences.muted = t.checked;
+    audio.setMaster(preferences.master, preferences.muted);
+  } else if (t.id === "music-slider" || t.id === "sfx-slider") {
     preferences[t.id === "music-slider" ? "music" : "sfx"] = Number(t.value);
     audio.setVolumes(preferences.music, preferences.sfx);
     document.querySelector(`#${t.id.split("-")[0]}-value`)!.textContent =
@@ -1325,7 +1470,11 @@ function releasePointer(e: PointerEvent) {
           "build",
         )
       ) {
-        toast(`${BUILDINGS[placement].name} under construction`);
+        toast(
+          state.paused
+            ? `Build order queued: ${BUILDINGS[placement].name}`
+            : `${BUILDINGS[placement].name} under construction`,
+        );
         placement = null;
         targetPoint = null;
         renderDeck();
@@ -1551,8 +1700,43 @@ window.addEventListener("blur", () => {
     issueCommand(state, { type: "pause", team: 0, paused: true });
   }
 });
+function measurePlayfield() {
+  const hud = document.querySelector(".hud")?.getBoundingClientRect();
+  const deck = document.querySelector(".command-deck")?.getBoundingClientRect();
+  playfieldCenterY =
+    hud && deck ? (hud.bottom + deck.top) / 2 : innerHeight / 2;
+}
+function cameraFocus(point: Point): Point {
+  const middle = renderer.screenToWorld(innerWidth / 2, innerHeight / 2),
+    shifted = renderer.screenToWorld(
+      innerWidth / 2,
+      innerHeight - playfieldCenterY,
+    );
+  return {
+    x: point.x + shifted.x - middle.x,
+    y: point.y + shifted.y - middle.y,
+  };
+}
+function centerCommander(point: Point) {
+  const focus = cameraFocus(point);
+  renderer.centerOn(focus.x, focus.y);
+}
 function resize() {
+  if (joystickPointer !== null && playing && !state.paused) {
+    const hero = commander();
+    if (hero)
+      issueCommand(state, { type: "hold", team: 0, entityIds: [hero.id] });
+  }
+  joystickVector = { x: 0, y: 0 };
+  joystickPointer = null;
+  pointers.clear();
+  pointerDown = null;
+  pointerLast = null;
+  pinchDistance = 0;
+  const stick = document.querySelector<HTMLElement>(".joystick-stick");
+  if (stick) stick.style.transform = "";
   renderer.resize(innerWidth, innerHeight, devicePixelRatio);
+  if (playing) measurePlayfield();
 }
 addEventListener("resize", resize);
 resize();
@@ -1599,8 +1783,9 @@ function frame(now: number) {
         const c = commander();
         if (c) {
           const blend = 1 - Math.exp(-dt * 6);
-          renderer.camera.x += (c.x - renderer.camera.x) * blend;
-          renderer.camera.y += (c.y - renderer.camera.y) * blend;
+          const focus = cameraFocus(c);
+          renderer.camera.x += (focus.x - renderer.camera.x) * blend;
+          renderer.camera.y += (focus.y - renderer.camera.y) * blend;
         }
       }
       for (const event of state.events) {
@@ -1640,7 +1825,7 @@ function frame(now: number) {
     }
     if (state)
       renderer.render(state, playing ? selection : [], {
-        time: now / 1000,
+        time: playing ? state.time + state.accumulator : now / 1000,
         reveal: !playing || debugReveal,
         quality: frameRate < 35 ? "low" : "high",
         reducedMotion: preferences.reducedMotion,
@@ -1677,7 +1862,7 @@ function frame(now: number) {
       const box = document.createElement("div");
       box.className = "fatal-error";
       box.innerHTML =
-        '<b>The battlefield hit a snag.</b><p>Your last autosave is safe. Reload to continue.</p><button onclick="location.reload()">Reload</button>';
+        '<b>The battlefield hit a snag.</b><p>Reload to return to the menu. Any saved battle will be available under Continue.</p><button onclick="location.reload()">Reload</button>';
       app.append(box);
     }
   }

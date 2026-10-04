@@ -87,9 +87,9 @@ export function building(c:Ctx,type:string,team:number,time=0){
  else if(type==='depot'){for(let i=0;i<3;i++){block(c,-24+i*12,8+i%2*4,7,4,9,'#b99e66','#715d3f','#a08350');line(c,[-27+i*12,-1+i%2*4,-27+i*12,7+i%2*4],'#d0b47b',1);}}
  if(!['house','keep','townhall','commandKeep'].includes(type))flag(c,17,-47,team,time,true);
 }
-export function unit(c:Ctx,type:string,team:number,time:number,moving:boolean,attacking:boolean,facing=1){
+export function unit(c:Ctx,type:string,team:number,time:number,moving:boolean,attacking:boolean,facing=1,attackProgress=0){
  const p=palette(team),commander=['warlord','ranger','engineer','commander'].includes(type);const scale=commander?1.27:1;
- c.save();c.scale(scale,scale);const stride=moving?Math.sin(time*10)*3:0;const swing=attacking?Math.sin(time*15)*9:0;shadow(c,type==='cavalry'?15:10,4.8,.28);
+ c.save();c.scale(scale,scale);const stride=moving?Math.sin(time*10)*3:0;const swing=attacking?Math.sin(Math.max(0,Math.min(1,attackProgress))*Math.PI)*12:0;shadow(c,type==='cavalry'?15:10,4.8,.28);
  if(type==='siege'){
   for(const sx of [-1,1])ellipse(c,sx*12,0,6,8,'#524d3d','#ccb579',2);poly(c,[-15,-7,7,-17,19,-10,-3,1],'#7d6744','#c4a870',1);line(c,[-9,-9,8,-31],'#b0955b',5);poly(c,[5,-34,15,-31,14,-24,4,-27],'#54666b','#a9bdba',1);poly(c,[-4,-19,9,-23,13,-16,0,-12],p.banner);c.restore();return;
  }
