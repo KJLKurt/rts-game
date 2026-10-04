@@ -192,3 +192,11 @@ Independent focused confirmation on the exact production build (`qa-preview` `dd
 No known blocking defect remains in the tested single-player vertical slice. This is still a preview: physical iPhone/Safari and installed-app hardware performance, complete manual campaign/expedition playthroughs, broad difficulty/faction balance, and subjective soundtrack listening remain outside the evidence obtained. Deeper editor/roguelite systems, multiplayer, full theme packs and full directional walk animation are explicitly deferred in the requirement matrix.
 
 Pages [deployment 37184119680](https://github.com/KJLKurt/rts-game/actions/runs/37184119680) succeeded for that exact source. The public URL loaded the matching JS/CSS bundles and completed Update & restart. Ordinary-UI campaign progression and a full expedition route are the remaining bounded mode checks; those are still in progress.
+
+## Post-release campaign findings and defense candidate
+
+Two ordinary-UI Outpost attempts ended cleanly (one score defeat/retry, one Keep defeat). Neither proves chapter unlocking. The staged retry exposed a genuine intuitive-defense issue: ranged attackers could damage an assembled group while a full-health idle commander stood nearby outside its weapon acquisition range. The candidate adds only attributed, visible, short-lived threat retaliation with fixed-anchor pursuit bounds; explicit Hold remains stationary and no costs, stats, AI timing or resources are changed. Full mechanics and preserved opening assertions are in `ENGINE.md`.
+
+The same Keep loss exposed winner-perspective result text on the losing screen and “You’s Command Keep” alert wording. A pure local-perspective presenter and team-aware alert now cover both.
+
+The candidate passes typecheck, all 226 local checks across 29 files and the production build. Nineteen new threat-response tests and two alert tests join five result-wording tests. Browser discovery is now 108 cases, adding three explicitly labeled result-presentation/retry fixtures. Those fixtures are not campaign-completion evidence. The new browser acceptance and ordinary-UI progression review remain pending.

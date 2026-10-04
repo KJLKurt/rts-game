@@ -265,6 +265,9 @@ export interface GameEvent extends Point {
     team: number;
     targetX?: number;
     targetY?: number;
+    /** Actual damage attribution for bounded guard retaliation; absent in older saves. */
+    sourceId?: string;
+    targetTeam?: TeamId;
     entityId?: string;
     value?: number;
     text?: string;

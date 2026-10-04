@@ -5,6 +5,10 @@ import { DEFAULT_SETTINGS, UNITS, BUILDINGS, COMMANDERS, FACTIONS, TECHNOLOGIES,
 import { generateMap, validateMap, hashSeed, distance, isWalkable, isBuildable, terrainAt, tileIndex, findPath } from './maps';
 const clamp = (n: number, a: number, b: number) => Math.max(a, Math.min(b, n));
 const IDLE_GUARD_RADIUS = 2;
+const ACTIVE_GUARD_RADIUS = 6;
+const ACTIVE_ATTACKER_RADIUS = 7.5;
+const GUARD_CLUSTER_RADIUS = 3;
+const GUARD_DAMAGE_MEMORY = 2.5;
 const EASY_OPENING_SECONDS = 60;
 const knownId = (definitions: object, id: unknown) => typeof id === 'string' && Object.prototype.hasOwnProperty.call(definitions, id);
 const direction = (a: Point, b: Point): Point => { const d = distance(a, b); return d > .001 ? { x: (b.x - a.x) / d, y: (b.y - a.y) / d } : { x: 1, y: 0 }; };
@@ -115,7 +119,7 @@ export function spawnEntity(s: GameState, team: number, kind: Entity['kind'], ty
     }
     const pos = kind === 'building' ? { x, y } : freePosition(s, x, y, radius);
     const e: Entity = { id: `e${s.nextId++}`, team, kind, type, ...pos, hp: complete ? hp : hp * .12, maxHp: hp, damage, armor, range, speed, vision, attackCooldown: 0, attackPeriod: period, radius, facing: 0, order: { type: 'idle' }, path: [], pathTarget: null, pathTimer: 0, targetId: null, buildProgress: complete ? 1 : 0, buildTime, queue: [], rally: null, abilityCooldowns: {}, buffUntil: 0, slowUntil: 0, invulnerableUntil: 0, respawnAt: null, lifetime: type === 'turret' ? 30 : null, lastHitAt: -100 };
-    if (kind === 'unit')
+    if (kind !== 'building')
         e.guardAnchor = { ...pos };
     s.entities.push(e);
     if (kind === 'unit')
@@ -133,7 +137,7 @@ function selected(s: GameState, c: {
 }): Entity[] { return s.entities.filter(e => e.team === c.team && living(e) && e.kind !== 'building' && (c.entityIds ? c.entityIds.includes(e.id) : e.kind === 'commander')); }
 function setOrder(e: Entity, order: Entity['order']) {
     e.order = order; e.path = []; e.pathTarget = null; e.pathTimer = 0; e.targetId = null; delete e.escortId;
-    if (order.type === 'idle' && e.kind === 'unit')
+    if (order.type === 'idle' && e.kind !== 'building')
         e.guardAnchor = { x: e.x, y: e.y };
     else
         delete e.guardAnchor;
@@ -404,7 +408,7 @@ function dealDamage(s: GameState, source: Entity, target: Entity, amount: number
     target.hp = Math.max(0, target.hp - amount);
     target.lastHitAt = s.time;
     s.players[source.team].stats.damageDealt += dealt;
-    emit(s, { type: 'hit', x: target.x, y: target.y, team: source.team, entityId: target.id, value: Math.round(dealt), subtype: source.type });
+    emit(s, { type: 'hit', x: target.x, y: target.y, team: source.team, entityId: target.id, value: Math.round(dealt), subtype: source.type, sourceId: source.id, targetTeam: target.team });
     if (target.hp <= 0) {
         const loser = s.players[target.team];
         if (target.kind === 'building') {
@@ -428,7 +432,7 @@ function dealDamage(s: GameState, source: Entity, target: Entity, amount: number
             for (const n of s.map.nodes)
                 if (n.owner === target.team)
                     n.owner = null;
-            emit(s, { type: 'alert', x: target.x, y: target.y, team: target.team, text: `${loser.name}'s Command Keep has fallen!` });
+            emit(s, { type: 'alert', x: target.x, y: target.y, team: target.team, text: target.team === 0 ? 'Your Command Keep has fallen!' : `${loser.name}'s Command Keep has fallen!` });
         }
     }
 }
@@ -451,7 +455,7 @@ function blockers(s: GameState) {
     navCache.set(s, { version: s.navigationVersion, blocked });
     return blocked;
 }
-function moveToward(s: GameState, e: Entity, goal: Point, dt: number) {
+function moveToward(s: GameState, e: Entity, goal: Point, dt: number, guardRadius = IDLE_GUARD_RADIUS) {
     const dist = distance(e, goal);
     if (dist < .12) {
         e.path = [];
@@ -509,11 +513,11 @@ function moveToward(s: GameState, e: Entity, goal: Point, dt: number) {
             delete e.escortId;
     }
     const amount = Math.min(speed * dt, d), nx = e.x + dx / d * amount, ny = e.y + dy / d * amount;
-    // Guards cannot route around an obstacle into an unbounded pursuit. A
-    // capture unit returning from outside its leash may take a detour home.
+    // Guards cannot route around an obstacle into an unbounded pursuit.
+    // Returning guards may take a detour around terrain to their original anchor.
     const guarding = !s.rush && (e.order.type === 'idle' || e.order.type === 'capture') && e.guardAnchor;
-    const returningToObjective = guarding && e.order.type === 'capture' && distance(e, guarding) > IDLE_GUARD_RADIUS && distance(goal, guarding) < .3;
-    if (guarding && !returningToObjective && distance({ x: nx, y: ny }, guarding) > IDLE_GUARD_RADIUS && distance({ x: nx, y: ny }, guarding) >= distance(e, guarding)) {
+    const returningToAnchor = guarding && distance(e, guarding) > guardRadius && distance(goal, guarding) < .3;
+    if (guarding && !returningToAnchor && distance({ x: nx, y: ny }, guarding) > guardRadius && distance({ x: nx, y: ny }, guarding) >= distance(e, guarding)) {
         e.path = [];
         e.pathTimer = 0;
         return;
@@ -530,6 +534,16 @@ function moveToward(s: GameState, e: Entity, goal: Point, dt: number) {
 function attackRange(s: GameState, e: Entity) { return e.range + (e.type === 'archer' ? (s.players[e.team].research.fletching ?? 0) : 0); }
 function updateEntities(s: GameState, dt: number) {
     const alive = s.entities.filter(living);
+    // Read the serialized, recent damage facts once per tick. Old unattributed
+    // events do not imply an attacker, and shots dealing no damage do not count.
+    const recentDamage = new Map<string, GameEvent[]>();
+    if (!s.rush)
+        for (const event of s.events)
+            if (event.type === 'hit' && event.sourceId && event.targetTeam !== undefined && (event.value ?? 0) > 0 && event.time <= s.time && s.time - event.time < GUARD_DAMAGE_MEMORY) {
+                const hits = recentDamage.get(event.sourceId) ?? [];
+                hits.push(event);
+                recentDamage.set(event.sourceId, hits);
+            }
     for (const e of s.entities) {
         if (e.hp <= 0) {
             if (e.kind === 'commander' && e.respawnAt !== null && e.respawnAt <= s.time && !s.players[e.team].defeated) {
@@ -537,6 +551,7 @@ function updateEntities(s: GameState, dt: number) {
                 e.x = pos.x;
                 e.y = pos.y;
                 e.hp = e.maxHp;
+                setOrder(e, { type: 'idle' });
                 e.respawnAt = null;
                 e.invulnerableUntil = s.time + 3;
                 emit(s, { type: 'spawn', x: e.x, y: e.y, team: e.team, entityId: e.id, subtype: e.type });
@@ -608,8 +623,14 @@ function updateEntities(s: GameState, dt: number) {
         let target: Entity | undefined;
         if (!s.rush && e.order.type === 'capture' && !e.guardAnchor && (distance(e, e.order) <= 2.2 || s.map.nodes.some(n => n.id === (e.order as { nodeId?: string }).nodeId && n.owner === e.team)))
             e.guardAnchor = { x: e.order.x, y: e.order.y };
-        const guard = !s.rush && e.order.type === 'capture' ? e.guardAnchor : !s.rush && e.kind === 'unit' && e.order.type === 'idle' ? (e.guardAnchor ??= { x: e.x, y: e.y }) : undefined;
-        const returningToObjective = guard && e.order.type === 'capture' && distance(e, guard) > IDLE_GUARD_RADIUS + .2;
+        const guard = !s.rush && e.order.type === 'capture' ? e.guardAnchor : !s.rush && e.kind !== 'building' && e.order.type === 'idle' ? (e.guardAnchor ??= { x: e.x, y: e.y }) : undefined;
+        const activeAttackers = new Set<string>();
+        if (guard && recentDamage.size)
+            for (const enemy of alive)
+                if (recentDamage.has(enemy.id) && enemy.team !== e.team && enemy.kind !== 'building' && enemy.hp > 0 && !s.players[enemy.team].defeated && distance(enemy, guard) <= ACTIVE_ATTACKER_RADIUS && isVisible(s, e.team, enemy.x, enemy.y) && recentDamage.get(enemy.id)?.some(hit => hit.team === enemy.team && hit.targetTeam === e.team && (hit.entityId === e.id || distance(hit, guard) <= GUARD_CLUSTER_RADIUS)))
+                    activeAttackers.add(enemy.id);
+        let guardRadius = IDLE_GUARD_RADIUS;
+        const returningToObjective = guard && distance(e, guard) > (activeAttackers.size ? ACTIVE_GUARD_RADIUS : IDLE_GUARD_RADIUS) + .2;
         const range = attackRange(s, e);
         if (e.order.type === 'attack')
             target = alive.find(a => a.id === (e.order as {
@@ -621,14 +642,15 @@ function updateEntities(s: GameState, dt: number) {
             for (const enemy of alive) {
                 if (enemy.team === e.team || enemy.hp <= 0 || s.players[enemy.team].defeated || !isVisible(s, e.team, enemy.x, enemy.y))
                     continue;
+                const responding = activeAttackers.has(enemy.id);
                 const d = distance(e, enemy) - enemy.radius;
-                if (d > sight)
+                if (!responding && d > sight)
                     continue;
-                if (e.order.type === 'capture' && distance(enemy, e.order) > 6.5)
+                if (!responding && e.order.type === 'capture' && distance(enemy, e.order) > 6.5)
                     continue;
-                if (guard && distance(enemy, guard) - enemy.radius > IDLE_GUARD_RADIUS + range)
+                if (guard && distance(enemy, guard) - enemy.radius > (responding ? ACTIVE_GUARD_RADIUS : IDLE_GUARD_RADIUS) + range)
                     continue;
-                const priority = d + (e.type === 'siege' ? (enemy.kind === 'building' ? -4 : 6) : (enemy.kind === 'building' ? 3 : 0));
+                const priority = d + (responding ? -20 : 0) + (e.type === 'siege' ? (enemy.kind === 'building' ? -4 : 6) : (enemy.kind === 'building' ? 3 : 0));
                 if (priority < best) {
                     best = priority;
                     target = enemy;
@@ -636,11 +658,13 @@ function updateEntities(s: GameState, dt: number) {
             }
         }
         if (target && e.damage > 0) {
+            if (activeAttackers.has(target.id))
+                guardRadius = ACTIVE_GUARD_RADIUS;
             e.targetId = target.id;
             const d = distance(e, target);
             e.facing = Math.atan2(target.y - e.y, target.x - e.x);
             if (s.players[e.team].ai && s.settings.difficulty !== 'easy' && e.kind !== 'building' && e.type !== 'siege' && range > 3 && target.range < 3 && d < range * .65 && d > .1 && e.attackCooldown > .25 && e.order.type !== 'hold' && e.order.type !== 'move') {
-                moveToward(s, e, { x: clamp(e.x + (e.x - target.x) / d * 2.2, 1, s.map.width - 2), y: clamp(e.y + (e.y - target.y) / d * 2.2, 1, s.map.height - 2) }, dt);
+                moveToward(s, e, { x: clamp(e.x + (e.x - target.x) / d * 2.2, 1, s.map.width - 2), y: clamp(e.y + (e.y - target.y) / d * 2.2, 1, s.map.height - 2) }, dt, guardRadius);
             }
             if (d <= range + target.radius) {
                 if (e.attackCooldown <= 0) {
@@ -651,8 +675,8 @@ function updateEntities(s: GameState, dt: number) {
             }
             else if (e.kind !== 'building' && e.order.type !== 'hold' && e.order.type !== 'move') {
                 const delta = guard ? direction(guard, target) : undefined;
-                const goal = guard && delta ? { x: guard.x + delta.x * Math.min(IDLE_GUARD_RADIUS, distance(guard, target)), y: guard.y + delta.y * Math.min(IDLE_GUARD_RADIUS, distance(guard, target)) } : target;
-                moveToward(s, e, goal, dt);
+                const goal = guard && delta ? { x: guard.x + delta.x * Math.min(guardRadius, distance(guard, target)), y: guard.y + delta.y * Math.min(guardRadius, distance(guard, target)) } : target;
+                moveToward(s, e, goal, dt, guardRadius);
             }
             if (e.kind === 'commander' && e.order.type === 'move')
                 moveToward(s, e, e.order, dt);
@@ -1221,7 +1245,7 @@ export function restoreGame(input: string | object): GameState {
             fail(`entity ${e.id} has invalid navigation data.`);
         if (e.guardAnchor !== undefined && !point(e.guardAnchor))
             fail(`entity ${e.id} has an invalid guard anchor.`);
-        if (e.kind === 'unit' && e.order.type === 'idle')
+        if (e.kind !== 'building' && e.order.type === 'idle')
             e.guardAnchor ??= { x: e.x, y: e.y };
         if (e.rally !== null && !point(e.rally))
             fail(`entity ${e.id} has an invalid rally point.`);

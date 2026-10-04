@@ -141,16 +141,26 @@ describe('deployed Outpost opening and legacy-save regressions', () => {
             s.triggers = structuredClone(mission.triggers);
             s.objectiveText = mission.briefing;
             const homes = positions(s);
+            const attackedGuards = new Set<string>();
             expect(issueCommand(s, { type: 'move', team: 0, ...target }).ok).toBe(true);
             for (let tick = 0; tick < 600; tick++) {
                 stepGame(s, .1);
-                expect(s.players[0].stats.unitsLost).toBe(0);
+                // Retreating within home territory remains a safe opening. A
+                // deliberate forward incursion can provoke real cluster combat.
+                if (target.x === 7) expect(s.players[0].stats.unitsLost).toBe(0);
                 for (const home of homes) {
-                    const troop = s.entities.find(e => e.id === home.id)!;
+                    if (s.events.some(e => e.type === 'hit' && e.sourceId && e.targetTeam === 0 && (e.entityId === home.id || distance(e, home) <= 3))) attackedGuards.add(home.id);
+                    const troop = s.entities.find(e => e.id === home.id);
+                    if (!troop) { expect(target.x).toBe(15); expect(attackedGuards.has(home.id)).toBe(true); continue; }
                     expect(troop.hp).toBeGreaterThan(0);
+                    if (target.x === 7) {
+                        expect(troop.hp).toBe(troop.maxHp);
+                        expect(distance(troop, home)).toBeLessThan(.01);
+                        expect(attackedGuards.has(home.id)).toBe(false);
+                    }
                     expect(troop.order.type).toBe('idle');
                     expect(troop.guardAnchor).toEqual({ x: home.x, y: home.y });
-                    expect(distance(troop, home)).toBeLessThanOrEqual(2.15);
+                    expect(distance(troop, home)).toBeLessThanOrEqual(attackedGuards.has(home.id) ? 6.15 : 2.15);
                 }
             }
             expect(s.triggers.find(t => t.id === 'welcome')!.fired).toBe(true);
@@ -208,14 +218,16 @@ describe('deployed Outpost opening and legacy-save regressions', () => {
             expect(troop.hp).toBe(oldOutpostSave.entities.find(e => e.id === home.id)!.hp);
         }
         const resumed = restoreGame(serializeGame(s));
+        const attackedGuards = new Set<string>();
         for (let tick = 0; tick < 800; tick++) {
             stepGame(s, .1);
             stepGame(resumed, .1);
             for (const home of homes) {
+                if (s.events.some(e => e.type === 'hit' && e.sourceId && e.targetTeam === 0 && (e.entityId === home.id || distance(e, home) <= 3))) attackedGuards.add(home.id);
                 const troop = s.entities.find(e => e.id === home.id);
                 if (!troop) continue;
                 expect(troop.guardAnchor).toEqual({ x: home.x, y: home.y });
-                expect(distance(troop, home)).toBeLessThanOrEqual(2.15);
+                expect(distance(troop, home)).toBeLessThanOrEqual(attackedGuards.has(home.id) ? 6.15 : 2.15);
             }
         }
         expect(serializeGame(resumed)).toBe(serializeGame(s));

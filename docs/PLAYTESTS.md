@@ -27,3 +27,9 @@ That review caught guide stage resetting on Continue and a tactical-pause ribbon
 ## Remaining limits
 
 Complete manual campaign and expedition runs, broad difficulty/faction win-rate balancing, installed-app lifecycle on physical phone hardware, and subjective music listening remain unverified. Codec metrics, decoded buffers and an unlocked AudioContext do not establish that the music was subjectively heard. A full browser suite does not replace physical-device performance or repeated human play.
+
+## Advertised-mode follow-up
+
+Hosted `2b2141f`, Outpost story chapter, first ordinary-UI attempt: defeat by relic score at 8:29, 125–640, 59 kills,seven captures. The run used recruitment, ranged/healing/cavalry unlocks, buildings, economy research, capture, tactical pause and recovery; an overextended opening and long command gaps contributed to failure. Results and Try again restored the correct Outpost briefing, seed, 0:00, starting stocks and army. This establishes a normal loss/retry path, not chapter unlocking; a second staged-opening attempt and an independent expedition run are still in progress.
+
+The second hosted Outpost attempt used a protected Range/House and a staged mixed army, then explicit counterattacks, captures and cavalry. It ended in Keep destruction at 8:08, with 76 kills and three captures. Active recovery stopped at 5:05; the remaining decline was observed at the ordinary 2× UI speed, so it is not a sustained-play balance measurement. It exposed the local guard-retaliation gap documented in `ENGINE.md` and a result-copy perspective defect. Both corrections are in a candidate; chapter unlocking remains an outstanding ordinary-UI check.

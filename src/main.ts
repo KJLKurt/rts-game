@@ -1,5 +1,6 @@
 import "./style.css";
 import { relicSummary, nearestRelic } from "./ui/objectives";
+import { battleResultReason } from "./ui/results";
 import { buildingUnderAttack } from "./ui/battle-guidance";
 import { advanceTutorial, restoreTutorial } from "./ui/tutorial";
 import { getEconomyRates } from "./sim/economy";
@@ -839,7 +840,7 @@ function showResult() {
   audio.play(win ? "victory" : "defeat");
   showDialog(
     win ? "The frontier is yours." : "The banner will rise again.",
-    `<div class="result-emblem ${win ? "win" : ""}">${icon(win ? "crown" : "shield")}</div><p class="result-reason">${esc(state.players[0].defeated && state.winner === null ? "Your Command Keep has fallen." : state.victoryReason || "The battle has ended.")}</p><div class="record-stats"><div><b>${time(state.time)}</b><span>Battle time</span></div><div><b>${state.players[0].stats.kills}</b><span>Enemies defeated</span></div><div><b>${state.players[0].stats.captures}</b><span>Points captured</span></div></div>${earned.length ? `<div class="new-achievements">${earned.map((id) => `<span>${icon("star")}${ACHIEVEMENTS.find((a) => a.id === id)?.name}</span>`).join("")}</div>` : ""}<div class="result-actions">${win && missionIndex !== null && missionIndex < activeCampaign.missions.length - 1 ? button("Next chapter", "next-mission", "primary", "arrow") : win && expeditionStage !== null && expeditionStage < 2 ? button("Choose your next frontier", "next-expedition", "primary", "arrow") : win ? button("Another frontier", "rematch", "primary", "arrow") : button(expeditionStage !== null ? "Start a new expedition" : "Try again", "retry", "primary", "play")}${button("Command record", "result-record", "", "star")}${button("Main menu", "result-home", "", "back")}</div>`,
+    `<div class="result-emblem ${win ? "win" : ""}">${icon(win ? "crown" : "shield")}</div><p class="result-reason">${esc(battleResultReason(state))}</p><div class="record-stats"><div><b>${time(state.time)}</b><span>Battle time</span></div><div><b>${state.players[0].stats.kills}</b><span>Enemies defeated</span></div><div><b>${state.players[0].stats.captures}</b><span>Points captured</span></div></div>${earned.length ? `<div class="new-achievements">${earned.map((id) => `<span>${icon("star")}${ACHIEVEMENTS.find((a) => a.id === id)?.name}</span>`).join("")}</div>` : ""}<div class="result-actions">${win && missionIndex !== null && missionIndex < activeCampaign.missions.length - 1 ? button("Next chapter", "next-mission", "primary", "arrow") : win && expeditionStage !== null && expeditionStage < 2 ? button("Choose your next frontier", "next-expedition", "primary", "arrow") : win ? button("Another frontier", "rematch", "primary", "arrow") : button(expeditionStage !== null ? "Start a new expedition" : "Try again", "retry", "primary", "play")}${button("Command record", "result-record", "", "star")}${button("Main menu", "result-home", "", "back")}</div>`,
     "result-dialog",
   );
 }
