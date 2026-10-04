@@ -45,7 +45,10 @@ test('Rush upgrade offers survive dismissal and are claimed once through the UI'
 test('Rush save, reload, and continue retain run state and presentation',async({page})=>{
  await enterRush(page);await pause(page);
  const before=await page.evaluate(()=>{const s=window.__FRONTIER__.state;return{seed:s.settings.seed,time:s.time,rush:s.rush};});
- await action(page,'pause-menu').click();await action(page,'save-leave').click();await page.reload();await action(page,'continue').click();
+ await action(page,'pause-menu').click();await action(page,'save-leave').click();
+ // Navigation is the UI acknowledgement that the awaited write completed.
+ await expect(action(page,'continue')).toBeVisible();await expect(page.getByRole('dialog')).toHaveCount(0);
+ await page.reload();await action(page,'continue').click();
  await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.playing)).toBe(true);
  expect(await page.evaluate(()=>{const s=window.__FRONTIER__.state;return{seed:s.settings.seed,time:s.time,rush:s.rush};})).toEqual(before);
  await expect(page.locator('body')).toHaveClass(/rush-mode/);await expect(page.locator('.deck-tabs')).toBeHidden();

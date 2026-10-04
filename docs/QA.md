@@ -149,3 +149,14 @@ Confirmed causes and follow-up fixes:
 The seven skips are deliberate input-applicability exclusions: keyboard movement on two touch projects; desktop Escape dismissal on two touch projects for each of two cases; and phone joystick on the desktop project. The counterpart input paths remain tested. No PWA case was skipped on the isolated production host.
 
 CI now stops after six failures to bound systemic fixture waste. Videos are disabled, traces are recorded only on the first retry (original failures still retain screenshots), duplicate result/trace trees are omitted, and future artifacts retain two days. The original archive remains unchanged pending owner approval for cleanup; its full traces/screenshots were preserved and a concise failure summary retained locally. The corrected93-case run adds a deterministic delayed-IndexedDB save-race check in all three viewports. It is pending; do not claim a passing full suite.
+
+## Corrected run: 2026-10-04, 05:23 UTC
+
+Exact source `31e64feabb19448b55e0aaaea3ded6ee08a131a7`, [run37179505878](https://github.com/KJLKurt/rts-game/actions/runs/37179505878): **84 passed,2 failed,7 skipped** in4.7minutes. All three deterministic delayed-save tests passed, as did all PWA cases; no flaky result was reported.
+
+The two remaining failures were diagnosed from the downloaded report and actual trace/screenshots:
+
+- Rush's older fixture reloaded immediately after clicking Save & leave, before its asynchronous completion/menu acknowledgement. It now waits for visible Continue and a closed dialog, then checks exactly the same saved seed/time/Rush state. The deterministic in-flight-write test remains unchanged.
+- Real landscape→portrait defect: the prior fixed pixel canvas display width retained an844px mobile layout viewport after a390px rotation, shrinking the whole interface. The backing buffer remains pixel-sized, but CSS now controls display dimensions responsively and root overflow is bounded. Rotation checks now assert exact layout viewport dimensions before and after opening/dismissing a dialog, plus the existing control bounds.
+
+The second artifact ZIP was31,556,860bytes with two-day retention, versus the first1,544,649,507byte archive. The next acceptance run is pending.

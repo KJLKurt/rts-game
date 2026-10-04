@@ -136,7 +136,14 @@ test('settings persist through refresh and reopening dialogs',async({page})=>{
 });
 
 test('battle controls fit the viewport and survive rotation',async({page,isMobile})=>{
- await launch(page);
+ const expectLayoutViewport=async()=>{
+  // Let resize handlers and one subsequent layout frame settle, then require
+  // actual CSS viewport dimensions, not just Playwright's requested dimensions.
+  await page.evaluate(()=>new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve()))));
+  const requested=page.viewportSize()!;
+  await expect.poll(()=>page.evaluate(()=>({width:innerWidth,height:innerHeight,clientWidth:document.documentElement.clientWidth,clientHeight:document.documentElement.clientHeight}))).toEqual({width:requested.width,height:requested.height,clientWidth:requested.width,clientHeight:requested.height});
+ };
+ await launch(page);await expectLayoutViewport();
  await expect(action(page,'select-commander')).toHaveAccessibleName('Commander');
  await expect(action(page,'select-army')).toHaveAccessibleName('Army');
  await expect(action(page,'hold')).toHaveAccessibleName('Hold');
@@ -144,11 +151,12 @@ test('battle controls fit the viewport and survive rotation',async({page,isMobil
  const noOverflow=await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth);expect(noOverflow).toBe(true);
  if(isMobile){
   const current=page.viewportSize()!;await page.setViewportSize({width:current.height,height:current.width});
+  await expectLayoutViewport();
   for(const selector of ['.hud','.command-deck','.ability-dock','.minimap-wrap','#joystick'])await expectWithinViewport(page,selector);
   await expect(page.locator('#joystick')).toBeVisible();
  }
- await action(page,'pause-menu').click();await expectWithinViewport(page,'.dialog');await action(page,'resume-dialog').click();
- await expect(page.getByRole('dialog')).toHaveCount(0);
+ await action(page,'pause-menu').click();await expectLayoutViewport();await expectWithinViewport(page,'.dialog');
+ await action(page,'resume-dialog').click();await expect(page.getByRole('dialog')).toHaveCount(0);await expectLayoutViewport();
 });
 
 test('Brutal menu and background interruption really suspend the fight',async({page})=>{

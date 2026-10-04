@@ -1722,7 +1722,11 @@ function resize() {
   pinchDistance = 0;
   const stick = document.querySelector<HTMLElement>(".joystick-stick");
   if (stick) stick.style.transform = "";
-  renderer.resize(innerWidth, innerHeight, devicePixelRatio);
+  renderer.resize(
+    document.documentElement.clientWidth,
+    document.documentElement.clientHeight,
+    devicePixelRatio,
+  );
   if (playing) measurePlayfield();
 }
 addEventListener("resize", resize);
