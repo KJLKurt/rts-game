@@ -2892,3 +2892,8 @@ footer {
     font-size: 10px;
   }
 }
+
+/* Preserve field-guide instructions and raid warnings while tactically paused. */
+.paused-ribbon.visible.hint-visible {
+  display: none;
+}

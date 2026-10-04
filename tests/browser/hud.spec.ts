@@ -53,7 +53,7 @@ test('recent building-damage UI fixture warns with tips off after 200s, freezes 
  expect(focused.camera).not.toEqual(before.camera);expect(focused.screen.x).toBeCloseTo(page.viewportSize()!.width/2,5);
  expect(focused.screen.y).toBeGreaterThan(0);expect(focused.screen.y).toBeLessThan(page.viewportSize()!.height);
  expect(focused.pending).toEqual(before.pending);expect(focused.log).toEqual(before.log);expect(focused.orders).toEqual(before.orders);
- await expect(page.locator('#selection-info')).toHaveText(selection);
+ await expect(page.locator('#selection-info')).toHaveText(selection,{useInnerText:true});
  // The real alert lifetime is six game-seconds. More wall time must not expire it while paused.
  await page.waitForTimeout(6500);expect(await page.evaluate(()=>window.__FRONTIER__.state.time)).toBe(before.time);await expect(keepView).toBeVisible();
  // Move only this fixture's game clock past expiry; simulation remains paused.
@@ -62,6 +62,6 @@ test('recent building-damage UI fixture warns with tips off after 200s, freezes 
  // Non-Keep structures get their real building name and the same non-commanding View behavior.
  await page.evaluate(()=>{const s=window.__FRONTIER__.state,b=s.entities.find(e=>e.team===0&&e.type==='barracks')!;b.hp-=50;b.lastHitAt=s.time;});
  const barracksView=page.getByRole('button',{name:'Barracks under attack · View',exact:true});await expect(barracksView).toBeVisible();await barracksView.click();
- await expect(page.locator('#selection-info')).toHaveText(selection);
+ await expect(page.locator('#selection-info')).toHaveText(selection,{useInnerText:true});
  expect(await page.evaluate(()=>({pending:window.__FRONTIER__.state.pendingCommands,log:window.__FRONTIER__.state.commandLog}))).toEqual({pending:before.pending,log:before.log});
 });

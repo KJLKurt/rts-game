@@ -1,6 +1,7 @@
 import "./style.css";
 import { relicSummary, nearestRelic } from "./ui/objectives";
-import { buildingUnderAttack, hasClaimedSupplies } from "./ui/battle-guidance";
+import { buildingUnderAttack } from "./ui/battle-guidance";
+import { advanceTutorial, restoreTutorial } from "./ui/tutorial";
 import { getEconomyRates } from "./sim/economy";
 import { encodeMapCode, decodeMapCode } from "./ui/map-code";
 import { chooseAbilityTarget } from "./ui/targeting";
@@ -524,6 +525,15 @@ function updateHUD() {
     );
   }
   updateTutorial();
+  // The guide and damage alerts outrank a duplicate pause banner. Keep the
+  // always-visible top Resume button; recompute visibility after rotation.
+  const hint = document.querySelector<HTMLElement>("#battle-hint");
+  document
+    .querySelector("#paused-ribbon")
+    ?.classList.toggle(
+      "hint-visible",
+      !!hint?.textContent && hint.getBoundingClientRect().height > 0,
+    );
   const mini = document.querySelector<HTMLCanvasElement>("#minimap");
   if (mini) renderer.renderMinimap(mini, state);
 }
@@ -617,35 +627,11 @@ function updateTutorial() {
     hudHTML.delete("battle-hint");
     return;
   }
-  const currentCommander = commander();
-  if (
-    state.commandLog.some(
-      ({ command }) =>
-        command.team === 0 &&
-        ["move", "attackMove", "capture"].includes(command.type),
-    ) &&
-    currentCommander &&
-    tutorialOrigin &&
-    Math.hypot(
-      currentCommander.x - tutorialOrigin.x,
-      currentCommander.y - tutorialOrigin.y,
-    ) > 3
-  )
-    tutorialStep = Math.max(tutorialStep, 1);
-  if (
-    tutorialStep >= 1 &&
-    state.players[0].stats.captures > 0 &&
-    hasClaimedSupplies(state)
-  )
-    tutorialStep = Math.max(tutorialStep, 2);
-  if (
-    tutorialStep >= 2 &&
-    state.commandLog.some(
-      ({ command }) => command.team === 0 && command.type === "recruit",
-    ) &&
-    state.players[0].stats.unitsCreated > 4
-  )
-    tutorialStep = Math.max(tutorialStep, 3);
+  if (tutorialOrigin)
+    tutorialStep = advanceTutorial(state, {
+      step: tutorialStep,
+      origin: tutorialOrigin,
+    }).step;
   const tips = [
     [
       "Step into the frontier",
@@ -715,6 +701,9 @@ async function persist(): Promise<boolean> {
   const record = {
     version: 1,
     game: serializeGame(state),
+    tutorial: tutorialOrigin
+      ? advanceTutorial(state, { step: tutorialStep, origin: tutorialOrigin })
+      : undefined,
     missionIndex,
     campaignId: activeCampaign.id,
     expeditionStage,
@@ -758,6 +747,9 @@ async function continueGame() {
       record.expeditionStage <= 2
         ? record.expeditionStage
         : null;
+    const tutorial = restoreTutorial(state, record.tutorial);
+    tutorialStep = tutorial.step;
+    tutorialOrigin = tutorial.origin;
     state.paused = true;
     playing = true;
     document.body.classList.toggle("rush-mode", !!state.rush);
