@@ -1,3 +1,4 @@
+import { parseBoundedJSON, MAX_SAVE_JSON_BYTES } from "../sim/validation";
 const PREFIX = "frontier-command:rts-game:v1:";
 const DB = "frontier-command-rts-game";
 export interface Preferences {
@@ -49,7 +50,22 @@ export const defaultProfile: Profile = {
 export function readLocal<T>(key: string, fallback: T): T {
   try {
     const v = localStorage.getItem(PREFIX + key);
-    return v ? { ...fallback, ...JSON.parse(v) } : structuredClone(fallback);
+    const safe = structuredClone(fallback);
+    if (!v) return safe;
+    const parsed = parseBoundedJSON(v, 256 * 1024);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed))
+      return safe;
+    for (const [field, sample] of Object.entries(fallback as object)) {
+      const value = (parsed as Record<string, unknown>)[field];
+      const matches = Array.isArray(sample)
+        ? Array.isArray(value)
+        : sample !== null && typeof sample === "object"
+          ? value !== null && typeof value === "object" && !Array.isArray(value)
+          : typeof value === typeof sample &&
+            (typeof value !== "number" || Number.isFinite(value));
+      if (matches) (safe as Record<string, unknown>)[field] = value;
+    }
+    return safe;
   } catch {
     return structuredClone(fallback);
   }
@@ -92,23 +108,37 @@ export async function loadRecord<T>(key: string): Promise<T | null> {
       r.onsuccess = () => resolve(r.result);
       r.onerror = () => reject(r.error);
     });
-    if (data !== undefined) return data;
+    if (data !== undefined)
+      return parseBoundedJSON(JSON.stringify(data), MAX_SAVE_JSON_BYTES) as T;
   } catch {
   } finally {
     db?.close();
   }
   try {
-    return JSON.parse(localStorage.getItem(PREFIX + key) || "null");
+    return parseBoundedJSON(
+      localStorage.getItem(PREFIX + key) || "null",
+      MAX_SAVE_JSON_BYTES,
+    ) as T;
   } catch {
     return null;
   }
 }
 export async function removeRecord(key: string) {
-  localStorage.removeItem(PREFIX + key);
   try {
-    const db = await database();
-    const tx = db.transaction("records", "readwrite");
-    tx.objectStore("records").delete(key);
-    tx.oncomplete = () => db.close();
+    localStorage.removeItem(PREFIX + key);
   } catch {}
+  let db: IDBDatabase | undefined;
+  try {
+    db = await database();
+    await new Promise<void>((resolve, reject) => {
+      const tx = db!.transaction("records", "readwrite");
+      tx.objectStore("records").delete(key);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+      tx.onabort = () => reject(tx.error);
+    });
+  } catch {
+  } finally {
+    db?.close();
+  }
 }

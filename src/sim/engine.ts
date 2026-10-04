@@ -1,4 +1,4 @@
-import { validateTriggers } from './validation';
+import { validateTriggers, parseBoundedJSON, MAX_SAVE_JSON_BYTES, MAX_MAP_JSON_BYTES } from './validation';
 import type { GameMap, GameState, GameSettings, GameCommand, CommandResult, Entity, Point, Player, PlayerStats, UnitId, BuildingId, TechId, GameEvent, CommanderId, ScriptAction, RushUpgradeId } from './types';
 import { DEFAULT_SETTINGS, UNITS, BUILDINGS, COMMANDERS, FACTIONS, TECHNOLOGIES, BIOMES, FIXED_STEP, TEAM_COLORS, TEAM_SYMBOLS, MAP_DIMENSIONS, RUSH_UPGRADES } from './content';
 import { generateMap, validateMap, hashSeed, distance, isWalkable, isBuildable, terrainAt, tileIndex, findPath } from './maps';
@@ -24,7 +24,7 @@ export function createGame(partial: Partial<GameSettings> = {}): GameState {
     settings.populationCap = clamp(settings.populationCap, 12, 200);
     if (!knownId(BIOMES, settings.biome) || !knownId(FACTIONS, settings.faction) || !knownId(COMMANDERS, settings.commander))
         throw new Error('Unknown biome, faction or commander.');
-    const map: GameMap = settings.customMap ? JSON.parse(JSON.stringify(settings.customMap)) : generateMap(settings);
+    const map: GameMap = settings.customMap ? parseBoundedJSON(JSON.stringify(settings.customMap), MAX_MAP_JSON_BYTES) as GameMap : generateMap(settings);
     if (settings.customMap && (map.version === 3 || map.version === 4))
         settings.mapGenerationVersion = map.version;
     map.validation = validateMap(map, settings.preset === 'competitive');
@@ -1141,7 +1141,7 @@ export function serializeGame(state: GameState): string { return JSON.stringify(
 export function restoreGame(input: string | object): GameState {
     let data: GameState;
     try {
-        data = (typeof input === 'string' ? JSON.parse(input) : JSON.parse(JSON.stringify(input))) as GameState;
+        data = parseBoundedJSON(typeof input === 'string' ? input : JSON.stringify(input), MAX_SAVE_JSON_BYTES) as GameState;
     }
     catch {
         throw new Error('This save is not valid JSON.');

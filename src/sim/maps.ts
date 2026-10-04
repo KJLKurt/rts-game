@@ -1,5 +1,6 @@
 import type { GameMap, GameSettings, MapValidation, Point, TerrainType, ResourceNode } from './types';
 import { BIOMES, MAP_DIMENSIONS } from './content';
+import { validateMapStructure } from './validation';
 export function hashSeed(seed: string): number {
     let h = 2166136261;
     for (let i = 0; i < seed.length; i++) {
@@ -135,6 +136,8 @@ export function reachableTiles(map: GameMap, start: Point): Set<number> {
     return seen;
 }
 export function validateMap(map: GameMap, competitive = false): MapValidation {
+    const structuralErrors = validateMapStructure(map);
+    if (structuralErrors.length) return { valid: false, errors: structuralErrors, warnings: [], reachablePercent: 0, fairness: 0 };
     const errors: string[] = [], warnings: string[] = [];
     if (!map || typeof map !== 'object' || !Array.isArray(map.tiles) || !Array.isArray(map.spawns) || !Array.isArray(map.nodes))
         return { valid: false, errors: ['Map must contain terrain, spawn locations, and resource points.'], warnings, reachablePercent: 0, fairness: 0 };

@@ -2,15 +2,15 @@
 
 ## What has actually been checked
 
-Local verification on 2026-10-04 (latest aggregate: 04:48 UTC):
+Local verification on 2026-10-04 (latest aggregate: 05:16 UTC):
 
 - TypeScript: `npm run check` passed.
-- Unit/contract suite: `npm test` passed 127 tests across 17 files, covering engine, maps, strategic AI, Rush Arena, content, save restoration, input targeting, combat feedback, audio controls, and platform storage/PWA. The map suite includes 400 deterministic generated maps.
+- Unit/contract suite: `npm test` passed 149 tests across 19 files, covering engine, maps, strategic AI, Rush Arena, content, save restoration, input targeting, combat feedback, audio controls, and platform storage/PWA. The map suite includes 400 deterministic generated maps.
 - Production: `npm run build` passed, including generated service worker and 14 precached files at this checkpoint. Asset counts can change as art/audio are integrated.
-- Browser suite: `npx playwright test --list` discovered 90 cases, including intentional platform-specific skips. Discovery and TypeScript compilation are **not browser execution**.
+- Browser suite: `npx playwright test --list` discovered 93 cases, including intentional platform-specific skips. Discovery and TypeScript compilation are **not browser execution**.
 - Real browser execution in the original workspace was blocked by Chromium socket sandbox EPERM. A separate attempted executor escalation failed at infrastructure setup. Cloud browser navigation to that workspace's loopback URL was also blocked. No browser pass, offline-reload pass, touch pass, screenshot review, or audible-audio verification is claimed from that workspace. Do not weaken sandbox/browser security to work around this.
 
-Separate supported cloud-runner playtesting on the earlier preview reported a complete 240-second Engineer Rush victory, service-worker update consent with save preservation, and phone offline play with the atlas loaded. Those are useful real-browser results, but the newest onboarding/guard/HUD/audio-control fix batch is not yet included in that preview. The 90-case Playwright suite has still not been executed; its dedicated acceptance workflow is prepared, do not describe manual checks as a full automated-suite pass. The then-public `3937eef` preview predates this batch.
+Separate supported cloud-runner playtesting on the earlier preview reported a complete 240-second Engineer Rush victory, service-worker update consent with save preservation, and phone offline play with the atlas loaded. Those are useful real-browser results, but the newest onboarding/guard/HUD/audio-control fix batch is not yet included in that preview. The first isolated90-case Playwright run is recorded below; do not describe manual checks as a full automated-suite pass. The then-public `3937eef` preview predates this batch.
 
 This is a checkpoint, not a permanent assertion that later edits passed. Rerun the commands after integration. Record the exact commit and final results when the supported browser runner is available.
 
@@ -48,7 +48,7 @@ npx playwright show-report
 npx playwright show-trace test-results/.../trace.zip
 ```
 
-Screenshots, traces, and failure videos are retained under ignored output directories. The skirmish test also captures the battlefield in each tested viewport.
+Screenshots and traces are retained under ignored output directories. CI videos are disabled; the report contains failure traces/screenshots without a second copied trace/video tree. The skirmish test also captures the battlefield in each tested viewport.
 
 ## Coverage and evidence boundaries
 
@@ -133,3 +133,19 @@ The first skirmish now waits on a frozen briefing. Idle troops use a fixed two-t
 The browser suite now also checks visible relic income, one queued capture order, public-landmark routing, fog privacy and actual army movement in all three viewports. New render tests cover one-shot event feedback, hidden-event privacy and minimap markers. New Master/mute controls are covered by audio routing contracts and browser persistence cases. The newest batch still needs its isolated actual-browser execution and manual visual recheck.
 
 Outpost opening regression uses the reported 1.5-second diagonal joystick displacement at 4.5s and confirms all four starters remain full health at 6.2s. A genuine save produced by deployed3937eef, with idle troops already pursuing and an injured archer, restores without healing or economy changes, fixes guard anchors once and remains deterministic for 80 seconds.
+
+## First isolated browser run: 2026-10-04, 05:04 UTC
+
+Exact source `1a6b1ae72be0eef5f33de86dcb82a77196db1803`, [run37178182518](https://github.com/KJLKurt/rts-game/actions/runs/37178182518): **63 passed,19 failed,1 flaky,7 skipped** in12.2minutes. The run is not green and was not promoted to Pages.
+
+Confirmed causes and follow-up fixes:
+
+- A shared helper attempted to dismiss a landscape-hidden guide, accounting for the broad landscape timeout cluster. It now clicks only a visible control. No product assertions were removed.
+- Campaign briefing used modal suspension rather than the internal tactical-pause flag. The fixture now checks that actual time,tick and entities freeze, then resume through the real button.
+- Build-site fixtures copied obsolete spacing rules. They now run canonical `canBuild` on a read-only state snapshot, while placement remains a real screen tap.
+- **Genuine save race:** an immediate Rush Save & leave reused the startup save promise and its older time0 snapshot. Each new request now captures its own snapshot and enters an ordered write queue. Save/delete/continue ordering is tested, and the exact saved-state browser assertion remains intact. The related flaky landscape Rush save had the same time0 symptom and is treated as the same defect, not dismissed as harmless flakiness.
+- All three actual PWA tests passed: scoped worker/assets, offline save/continue/new game/campaign/editor, and explicit update consent with save-before-restart.
+
+The seven skips are deliberate input-applicability exclusions: keyboard movement on two touch projects; desktop Escape dismissal on two touch projects for each of two cases; and phone joystick on the desktop project. The counterpart input paths remain tested. No PWA case was skipped on the isolated production host.
+
+CI now stops after six failures to bound systemic fixture waste. Videos are disabled, traces are recorded only on the first retry (original failures still retain screenshots), duplicate result/trace trees are omitted, and future artifacts retain two days. The original archive remains unchanged pending owner approval for cleanup; its full traces/screenshots were preserved and a concise failure summary retained locally. The corrected93-case run adds a deterministic delayed-IndexedDB save-race check in all three viewports. It is pending; do not claim a passing full suite.

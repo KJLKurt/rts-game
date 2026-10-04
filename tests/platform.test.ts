@@ -34,6 +34,14 @@ describe('namespaced offline storage',()=>{
   storage.writeLocal('preferences',{music:.2});expect([...local.values.keys()]).toEqual([prefix+'preferences']);
   expect(storage.readLocal('preferences',storage.defaultPreferences)).toMatchObject({music:.2,sfx:.65,showTips:true});
  });
+ it('rejects wrong primitive preference/profile types and unknown stored fields',async()=>{
+  const local=localStore();vi.stubGlobal('localStorage',local);const storage=await import('../src/platform/storage');
+  local.values.set(prefix+'preferences',JSON.stringify({master:'\" oninput=alert(1)',muted:'false',showTips:false,music:.5,unknown:'ignored'}));
+  const preferences=storage.readLocal('preferences',storage.defaultPreferences);
+  expect(preferences).toMatchObject({master:.85,muted:false,showTips:false,music:.5});expect(preferences).not.toHaveProperty('unknown');
+  local.values.set(prefix+'profile',JSON.stringify({games:'<img src=x>',wins:null,unlocked:'all',campaignProgress:{'rise-of-the-frontier':2}}));
+  expect(storage.readLocal('profile',storage.defaultProfile)).toMatchObject({games:0,wins:0,unlocked:[],campaignProgress:{'rise-of-the-frontier':2}});
+ });
  it('preference reads and writes survive blocked storage',async()=>{
   vi.stubGlobal('localStorage',{getItem(){throw new Error('denied');},setItem(){throw new Error('denied');}});
   const storage=await import('../src/platform/storage');expect(storage.readLocal('preferences',{music:.4})).toEqual({music:.4});expect(()=>storage.writeLocal('preferences',{})).not.toThrow();

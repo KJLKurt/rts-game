@@ -43,5 +43,6 @@ jobs:
           name: frontier-browser-acceptance-${{ github.sha }}
           path: |
             playwright-report/
-            test-results/
-          retention-days: 7
+            test-results/**/*.png
+            test-results/**/error-context.md
+          retention-days: 2

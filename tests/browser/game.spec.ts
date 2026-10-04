@@ -114,8 +114,11 @@ test('campaign briefing, pause, save, and continue keep mission identity',async(
  await expect(page.locator('[data-action="mission"]')).toHaveCount(5);
  await expect(page.locator('.mission-card').nth(1)).toBeDisabled();await page.locator('.mission-card').first().click();
  await expect(page.getByRole('dialog')).toBeVisible();
- expect(await page.evaluate(()=>window.__FRONTIER__.state.paused)).toBe(true);
+ const frozen=await page.evaluate(()=>{const s=window.__FRONTIER__.state;return{time:s.time,tick:s.tick,entities:s.entities};});
+ await page.waitForTimeout(500);
+ expect(await page.evaluate(()=>{const s=window.__FRONTIER__.state;return{time:s.time,tick:s.tick,entities:s.entities};})).toEqual(frozen);
  await action(page,'begin-mission').click();await expect(page.getByRole('dialog')).toHaveCount(0);
+ await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.state.time)).toBeGreaterThan(frozen.time);
  const seed=await page.evaluate(()=>window.__FRONTIER__.state.settings.seed);
  await action(page,'pause-menu').click();await action(page,'save-leave').click();await page.reload();await action(page,'continue').click();
  await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.state.settings.seed)).toBe(seed);
@@ -260,7 +263,7 @@ test('Archery Range completion updates the visible Recruit panel without reopeni
  const archer=page.getByRole('button',{name:'Recruit Archer',exact:true});await expect(archer).toHaveClass(/unavailable/);await expect(archer).toContainText('Needs Archery Range');
  await action(page,'panel-orders').click();await action(page,'speed').click();await action(page,'speed').click();
  await action(page,'panel-build').click();await page.getByRole('button',{name:'Build Archery Range',exact:true}).click();
- await tap(page,await clearGround(page,1.4));await expect(page.getByRole('status')).toContainText('Archery Range under construction');
+ await tap(page,await clearGround(page,'range'));await expect(page.getByRole('status')).toContainText('Archery Range under construction');
  await action(page,'panel-army').click();await expect(archer).toHaveClass(/unavailable/);
  await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.state.entities.some(e=>e.team===0&&e.type==='range'&&e.buildProgress>=1)),{timeout:18_000}).toBe(true);
  await expect(archer).not.toHaveClass(/unavailable/);await expect(archer).not.toContainText('Needs Archery Range');
@@ -302,4 +305,60 @@ test('March to relic queues one whole-army capture and keeps objective informati
  expect(queued.time).toBe(before.time);expect(queued.visible).toEqual(before.visible);expect(queued.explored).toEqual(before.explored);expect(queued.hiddenPickable).toBe(false);
  await resume(page);await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.state.pendingCommands.length)).toBe(0);
  await expect.poll(()=>page.evaluate(positions=>positions.filter(before=>{const now=window.__FRONTIER__.state.entities.find(e=>e.id===before.id);return now&&Math.hypot(now.x-before.x,now.y-before.y)>.25;}).length,before.positions)).toBe(before.troopIds.length);
+});
+
+test('Save & leave persists its newer snapshot while the startup save completion is delayed',async({page})=>{
+ await page.addInitScript(()=>{
+  // The real IndexedDB put/commit still happens. Delay only the first battle
+  // transaction's oncomplete notification to keep launch's save promise open.
+  const nativePut=IDBObjectStore.prototype.put;
+  const oncomplete=Object.getOwnPropertyDescriptor(IDBTransaction.prototype,'oncomplete');
+  if(!oncomplete?.set)throw new Error('IndexedDB oncomplete descriptor unavailable for save-race fixture.');
+  const gate={armed:false,committed:false,released:false,initial:null as null|{seed:string;time:number;pending:unknown[]},release:():void=>{throw new Error('First save has not committed yet.');}};
+  (window as any).__QA_FIRST_SAVE_GATE__=gate;
+  IDBObjectStore.prototype.put=function(this:IDBObjectStore,value:unknown,key?:IDBValidKey){
+   const request=key===undefined?nativePut.call(this,value):nativePut.call(this,value,key);
+   const tx=this.transaction;
+   if(!gate.armed&&key==='battle'&&tx.mode==='readwrite'&&tx.db.name==='frontier-command-rts-game'){
+    gate.armed=true;
+    const game=JSON.parse((value as {game:string}).game);
+    gate.initial={seed:game.settings.seed,time:game.time,pending:game.pendingCommands};
+    let listener:((event:Event)=>unknown)|null=null;
+    Object.defineProperty(tx,'oncomplete',{
+     configurable:true,get:()=>listener,
+     set(callback:((event:Event)=>unknown)|null){
+      listener=callback;
+      oncomplete.set!.call(tx,(event:Event)=>{
+       gate.committed=true;
+       gate.release=()=>{
+        if(gate.released)throw new Error('First save completion already released.');
+        gate.released=true;callback?.call(tx,event);
+       };
+      });
+     },
+    });
+   }
+   return request;
+  };
+ });
+ await launch(page,{difficulty:'easy'});
+ await expect.poll(()=>page.evaluate(()=>(window as any).__QA_FIRST_SAVE_GATE__.committed)).toBe(true);
+ const initial=await page.evaluate(()=>(window as any).__QA_FIRST_SAVE_GATE__.initial as {seed:string;time:number;pending:unknown[]});
+ expect(initial.time).toBe(0);expect(initial.pending).toEqual([]);
+ await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.state.time)).toBeGreaterThanOrEqual(initial.time+1);
+ await pause(page);await action(page,'hold').click();
+ const later=await page.evaluate(()=>{const s=window.__FRONTIER__.state;return{seed:s.settings.seed,time:s.time,pending:s.pendingCommands};});
+ expect(later.seed).toBe(initial.seed);expect(later.time).toBeGreaterThan(initial.time);expect(later.pending).toHaveLength(1);
+ expect(later.pending[0].type).toBe('hold');
+ await action(page,'pause-menu').click();await action(page,'save-leave').click();
+ // Both old and fixed implementations are genuinely waiting on the first
+ // completion here; the later requested snapshot is what distinguishes them.
+ await expect(page.getByRole('dialog',{name:'Take a breath',exact:true})).toBeVisible();
+ expect(await page.evaluate(()=>(window as any).__QA_FIRST_SAVE_GATE__.released)).toBe(false);
+ await page.evaluate(()=>{(window as any).__QA_FIRST_SAVE_GATE__.release();});
+ await expect(action(page,'continue')).toBeVisible();
+ await page.reload();await action(page,'continue').click();
+ await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.playing)).toBe(true);
+ expect(await page.evaluate(()=>{const s=window.__FRONTIER__.state;return{seed:s.settings.seed,time:s.time,pending:s.pendingCommands};})).toEqual(later);
+ await expect(page.locator('#paused-ribbon')).toBeVisible();
 });

@@ -9,12 +9,13 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
+  maxFailures: process.env.CI ? 6 : 0,
   // Canvas-heavy games should not spawn one browser per reported host CPU.
   workers: process.env.FRONTIER_TEST_WORKERS ? Math.max(1, Number(process.env.FRONTIER_TEST_WORKERS)) : 2,
   reporter: [['list'], ['html', {open: 'never', outputFolder: 'playwright-report'}]],
   use: {
     baseURL: external || 'http://127.0.0.1:4181/rts-game/',
-    trace: 'retain-on-failure', screenshot: 'only-on-failure', video: 'retain-on-failure',
+    trace: 'on-first-retry', screenshot: 'only-on-failure', video: 'off',
     launchOptions: process.env.PLAYWRIGHT_EXECUTABLE_PATH ? {executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH} : {},
   },
   projects: [

@@ -42,6 +42,13 @@ import {
   defaultProfile,
 } from "./platform/storage";
 import { setupPWA } from "./platform/pwa";
+import { SaveQueue } from "./platform/save-queue";
+import { escapeText as esc } from "./ui/escape";
+import {
+  MAX_MAP_JSON_BYTES,
+  parseBoundedJSON,
+  validateMapStructure,
+} from "./sim/validation";
 import { CAMPAIGN, CAMPAIGNS, ACHIEVEMENTS } from "./ui/content";
 import { icon, unitIcons } from "./ui/icons";
 
@@ -76,9 +83,8 @@ let state: GameState,
   expeditionStage: number | null = null,
   tutorialStep = 0,
   uiAction = "move";
-let savePromise: Promise<boolean> | null = null;
+const battleSaves = new SaveQueue();
 let savedGame: unknown = null,
-  saveBusy = false,
   pointerDown: Point | null = null,
   pointerLast: Point | null = null,
   dragged = false,
@@ -111,14 +117,6 @@ const debugEnabled = new URLSearchParams(location.search).has("debug");
 let debugReveal = false;
 const pointers = new Map<number, Point>();
 let pinchDistance = 0;
-const esc = (s: unknown) =>
-  String(s ?? "").replace(
-    /[&<>"']/g,
-    (c) =>
-      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[
-        c
-      ]!,
-  );
 function randomSeed() {
   return `FRONTIER-${Math.floor(Math.random() * 999999)
     .toString()
@@ -136,7 +134,7 @@ function button(
   ico?: string,
   extra = "",
 ) {
-  return `<button class="${cls}" data-action="${action}" ${extra.includes("aria-label=") ? "" : `aria-label="${esc(label)}"`} ${extra}>${ico ? icon(ico) : ""}<span>${label}</span></button>`;
+  return `<button class="${cls}" data-action="${action}" ${extra.includes("aria-label=") ? "" : `aria-label="${esc(label)}"`} ${extra}>${ico ? icon(ico) : ""}<span>${esc(label)}</span></button>`;
 }
 function toast(text: string, tone = "") {
   const el = document.querySelector<HTMLDivElement>("#toast")!;
@@ -183,7 +181,7 @@ function showMenu(page = "home") {
   else if (page === "editor") renderEditorMenu();
 }
 function pageHeader(eyebrow: string, title: string, description: string) {
-  return `<header class="page-header">${button("Back", "home", "back", "back")}<span class="eyebrow">${eyebrow}</span><h1>${title}</h1><p>${description}</p></header>`;
+  return `<header class="page-header">${button("Back", "home", "back", "back")}<span class="eyebrow">${esc(eyebrow)}</span><h1>${esc(title)}</h1><p>${esc(description)}</p></header>`;
 }
 function optionSelect(
   label: string,
@@ -207,7 +205,7 @@ function renderSetup() {
   )
     .map(
       (c) =>
-        `<button type="button" data-action="choose-commander" data-id="${c.id}" class="commander-card ${settings.commander === c.id ? "chosen" : ""}"><div class="commander-portrait ${c.id}"><canvas class="portrait-canvas" data-portrait="${c.id}" width="220" height="180" aria-hidden="true"></canvas></div><span class="tag">${c.id === "warlord" ? "HOLD THE LINE" : c.id === "ranger" ? "STRIKE & VANISH" : "BUILD TO LAST"}</span><h3>${c.name}</h3><p>${c.description}</p><span class="chosen-check">${icon("check")}</span></button>`,
+        `<button type="button" data-action="choose-commander" data-id="${esc(c.id)}" class="commander-card ${settings.commander === c.id ? "chosen" : ""}"><div class="commander-portrait ${esc(c.id)}"><canvas class="portrait-canvas" data-portrait="${esc(c.id)}" width="220" height="180" aria-hidden="true"></canvas></div><span class="tag">${c.id === "warlord" ? "HOLD THE LINE" : c.id === "ranger" ? "STRIKE & VANISH" : "BUILD TO LAST"}</span><h3>${c.name}</h3><p>${esc(c.description)}</p><span class="chosen-check">${icon("check")}</span></button>`,
     )
     .join(
       "",
@@ -234,11 +232,11 @@ function currentChapter() {
 }
 function renderCampaign(opened = false) {
   if (CAMPAIGNS.length > 1 && !opened) {
-    screen.innerHTML = `<div class="menu-scrim solid"></div><main class="content-page">${pageHeader("STORY CAMPAIGNS", "Chronicles of the frontier", "Choose a story. Each campaign keeps its own progress.")}<div class="mission-list">${CAMPAIGNS.map((c) => `<button class="mission-card" data-action="choose-campaign" data-id="${c.id}"><span class="mission-number">${icon("book")}</span><div><h2>${c.title}</h2><p>${c.description}</p><span class="mission-meta">${c.missions.length} chapters</span></div>${icon("arrow")}</button>`).join("")}</div></main>`;
+    screen.innerHTML = `<div class="menu-scrim solid"></div><main class="content-page">${pageHeader("STORY CAMPAIGNS", "Chronicles of the frontier", "Choose a story. Each campaign keeps its own progress.")}<div class="mission-list">${CAMPAIGNS.map((c) => `<button class="mission-card" data-action="choose-campaign" data-id="${esc(c.id)}"><span class="mission-number">${icon("book")}</span><div><h2>${esc(c.title)}</h2><p>${esc(c.description)}</p><span class="mission-meta">${c.missions.length} chapters</span></div>${icon("arrow")}</button>`).join("")}</div></main>`;
     return;
   }
   const progress = currentChapter();
-  screen.innerHTML = `<div class="menu-scrim solid"></div><main class="content-page">${pageHeader("STORY CAMPAIGN", activeCampaign.title, activeCampaign.description)}<div class="mission-list">${activeCampaign.missions.map((m, i) => `<button class="mission-card ${i <= progress ? "available" : "locked"}" data-action="mission" data-id="${i}" ${i > progress ? "disabled" : ""}><span class="mission-number">${i < progress ? icon("check") : String(i + 1).padStart(2, "0")}</span><div><span class="eyebrow">${m.subtitle}</span><h2>${m.title}</h2><p>${m.briefing}</p><span class="mission-meta">${m.settings.biome} · ${m.settings.duration} min · ${i < progress ? "Completed" : i === progress ? "Next chapter" : "Locked"}</span></div>${icon("arrow")}</button>`).join("")}</div></main>`;
+  screen.innerHTML = `<div class="menu-scrim solid"></div><main class="content-page">${pageHeader("STORY CAMPAIGN", activeCampaign.title, activeCampaign.description)}<div class="mission-list">${activeCampaign.missions.map((m, i) => `<button class="mission-card ${i <= progress ? "available" : "locked"}" data-action="mission" data-id="${i}" ${i > progress ? "disabled" : ""}><span class="mission-number">${i < progress ? icon("check") : String(i + 1).padStart(2, "0")}</span><div><span class="eyebrow">${esc(m.subtitle)}</span><h2>${esc(m.title)}</h2><p>${esc(m.briefing)}</p><span class="mission-meta">${esc(m.settings.biome)} · ${esc(m.settings.duration)} min · ${i < progress ? "Completed" : i === progress ? "Next chapter" : "Locked"}</span></div>${icon("arrow")}</button>`).join("")}</div></main>`;
 }
 function renderExpedition() {
   screen.innerHTML = `<div class="menu-scrim solid"></div><main class="content-page">${pageHeader("ROGUELITE RUN", "Beyond the map", "Three frontiers. Choose your route. Each victory strengthens the next army.")}<div class="expedition-intro">${icon("map")}<h2>A fresh road, every time.</h2><p>Win three increasingly difficult battles. Between them, choose a new landscape and earn an enduring supply bonus. A defeat ends the run.</p><div class="route-line"><span>01<br>Foothold</span><i></i><span>02<br>Crossroads</span><i></i><span>03<br>Last Stand</span></div>${button("Begin expedition", "start-expedition", "primary large", "arrow")}</div></main>`;
@@ -615,7 +613,7 @@ function updateTutorial() {
 function showDialog(title: string, body: string, cls = "") {
   if (!modalOpen) previousFocus = document.activeElement as HTMLElement;
   modalOpen = true;
-  modal.innerHTML = `<div class="modal-backdrop"><section class="dialog ${cls}" role="dialog" aria-modal="true" aria-label="${esc(title)}"><header><h2>${title}</h2>${button("Close", "close-dialog", "square", "close", 'aria-label="Close dialog"')}</header>${body}</section></div>`;
+  modal.innerHTML = `<div class="modal-backdrop"><section class="dialog ${cls}" role="dialog" aria-modal="true" aria-label="${esc(title)}"><header><h2>${esc(title)}</h2>${button("Close", "close-dialog", "square", "close", 'aria-label="Close dialog"')}</header>${body}</section></div>`;
   modal.querySelector<HTMLButtonElement>("button")?.focus();
 }
 function closeDialog() {
@@ -627,7 +625,7 @@ function showBriefing(index: number) {
   const m = activeCampaign.missions[index];
   showDialog(
     m.title,
-    `<span class="eyebrow">${m.subtitle}</span><p class="story">${m.story}</p><div class="briefing-objective">${icon("flag")}<p>${m.briefing}</p></div>${button("Raise the banner", "begin-mission", "primary large", "arrow")}`,
+    `<span class="eyebrow">${esc(m.subtitle)}</span><p class="story">${esc(m.story)}</p><div class="briefing-objective">${icon("flag")}<p>${esc(m.briefing)}</p></div>${button("Raise the banner", "begin-mission", "primary large", "arrow")}`,
   );
 }
 function showHelp() {
@@ -653,32 +651,28 @@ function showPauseMenu() {
 async function persist(): Promise<boolean> {
   if (!playing || state.winner !== null || state.players[0].defeated)
     return true;
-  if (savePromise) return savePromise;
-  saveBusy = true;
-  savePromise = (async () => {
+  // Capture now, even if a startup/autosave transaction is still in flight.
+  const record = {
+    version: 1,
+    game: serializeGame(state),
+    missionIndex,
+    campaignId: activeCampaign.id,
+    expeditionStage,
+    savedAt: Date.now(),
+  };
+  return battleSaves.run(async () => {
     try {
-      const record = {
-        version: 1,
-        game: serializeGame(state),
-        missionIndex,
-        campaignId: activeCampaign.id,
-        expeditionStage,
-        savedAt: Date.now(),
-      };
       await saveRecord("battle", record);
       savedGame = record;
       return true;
     } catch {
       toast("Could not save. Your browser storage may be full.", "warning");
       return false;
-    } finally {
-      saveBusy = false;
-      savePromise = null;
     }
-  })();
-  return savePromise;
+  });
 }
 async function continueGame() {
+  await battleSaves.idle();
   const record: any = await loadRecord("battle");
   if (!record) return toast("No saved battle yet.");
   try {
@@ -780,7 +774,10 @@ function showResult() {
   if (win && expeditionStage === 2) profile.expedition++;
   const earned = checkAchievements(win);
   writeLocal("profile", profile);
-  void (savePromise ?? Promise.resolve()).then(() => removeRecord("battle"));
+  void battleSaves.run(async () => {
+    await removeRecord("battle");
+    savedGame = null;
+  });
   savedGame = null;
   audio.play(win ? "victory" : "defeat");
   showDialog(
@@ -807,7 +804,7 @@ function showRushSetup() {
     )
       .map(
         (c) =>
-          `<button data-action="rush-commander" data-id="${c.id}" class="${settings.commander === c.id ? "chosen" : ""}">${icon(unitIcons[c.id])}<b>${c.name}</b></button>`,
+          `<button data-action="rush-commander" data-id="${esc(c.id)}" class="${settings.commander === c.id ? "chosen" : ""}">${icon(unitIcons[c.id])}<b>${c.name}</b></button>`,
       )
       .join(
         "",
@@ -862,14 +859,15 @@ function renderEditorMenu() {
   screen.innerHTML = `<div class="menu-scrim solid"></div><main class="content-page">${pageHeader("MAP WORKSHOP", "Make your frontier", "Start from a generated world. Paint terrain, move spawns, and place resources.")}<div class="expedition-intro">${icon("map")}<h2>A blank page is optional.</h2><p>Open a fresh seeded map, or return to your saved workshop. Export a JSON map to share it. Validation checks keep every spawn, supply, and objective reachable.</p><div class="menu-stack">${button("Create a map", "new-editor", "primary", "plus")}${button("Open saved map", "load-editor", "", "save")}<label class="file-button">${icon("map")} Import map JSON<input type="file" id="import-map" accept="application/json,.json"></label></div></div></main>`;
 }
 function openEditor(map?: GameState["map"]) {
-  playing = false;
-  editing = true;
-  state = createGame({
+  const next = createGame({
     seed: randomSeed(),
     mapSize: "tiny",
     ...(map ? { customMap: map } : {}),
   });
-  if (map) state.map = map;
+  if (map) next.map = map;
+  playing = false;
+  editing = true;
+  state = next;
   renderer.invalidateTerrain();
   renderer.centerOn(state.map.width / 2, state.map.height / 2);
   renderer.camera.zoom = innerWidth < 600 ? 0.55 : 0.75;
@@ -1045,8 +1043,6 @@ async function handleAction(action: string, id?: string) {
       launchGame(activeCampaign.missions[Number(id)].settings, Number(id));
       break;
     case "begin-briefing":
-      closeDialog();
-      break;
     case "begin-mission":
     case "resume-dialog":
       closeDialog();
@@ -1381,22 +1377,13 @@ app.addEventListener("change", async (e) => {
   const input = e.target as HTMLInputElement;
   if (input.id === "import-map" && input.files?.[0]) {
     try {
-      const map = JSON.parse(await input.files[0].text());
-      if (
-        !Number.isInteger(map.width) ||
-        map.width < 16 ||
-        map.width > 100 ||
-        !Number.isInteger(map.height) ||
-        map.height < 16 ||
-        map.height > 100 ||
-        !Array.isArray(map.tiles) ||
-        map.tiles.length !== map.width * map.height ||
-        !Array.isArray(map.spawns) ||
-        map.spawns.length < 2 ||
-        !Array.isArray(map.nodes)
-      )
+      const file = input.files[0];
+      if (file.size > MAX_MAP_JSON_BYTES)
+        throw new Error("Map file is too large.");
+      const map = parseBoundedJSON(await file.text(), MAX_MAP_JSON_BYTES);
+      if (validateMapStructure(map).length)
         throw new Error("Invalid map structure.");
-      openEditor(map);
+      openEditor(map as GameState["map"]);
     } catch {
       toast("That file is not a supported Frontier map.", "warning");
     }
