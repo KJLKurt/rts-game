@@ -1,6 +1,6 @@
 # Creating a campaign
 
-Story missions live in `src/ui/content.ts`; simulation trigger types live in `src/sim/types.ts`. To extend the current campaign, add a `Mission` object to `CAMPAIGN.missions`. The menu, locked progression, next-chapter flow, and saved mission index use that array. To add a separate campaign selector, expose another campaign definition through the menu rather than adding mission-specific combat logic.
+Story missions live in `src/ui/content.ts`; simulation trigger types live in `src/sim/types.ts`. To extend the current campaign, add a `Mission` object to `CAMPAIGN.missions`. The menu, locked progression, next-chapter flow, and saved mission index use that array. To add a separate campaign, create a `CampaignDefinition` and register it in `CAMPAIGNS`. The menu automatically shows a campaign selector when more than one is registered. Each campaign has separate persistent chapter progress; saves retain the campaign ID. No combat or menu code needs to change.
 
 ## Mission definition
 
@@ -44,4 +44,4 @@ Place spawn actions on reachable ground and verify encounters from both perspect
 
 `npm run build` runs `scripts/validate-content.ts`. `npm test` validates IDs and starts every story mission. Run the mission in-browser, play through the trigger, save/restore around it, and verify it fires once. Headless validity does not establish that dialogue pacing or combat difficulty feels good.
 
-The current content uses linear progression with five missions and chapter unlocks. Rich campaign metadata, arbitrary graph connections, separate campaign selection, shops, and authored alliance changes are documented extension work; do not imply a field is implemented merely by adding it to a content file.
+The current content uses linear progression with five missions and chapter unlocks. Arbitrary mission graph connections, shops, and authored alliance changes are documented extension work; do not imply a field is implemented merely by adding it to a content file.

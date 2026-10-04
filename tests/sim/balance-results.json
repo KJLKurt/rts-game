@@ -1,0 +1,1078 @@
+{
+  "suite": "2026-10-04 deterministic balance sweep",
+  "notes": "Quick conquest targets8minutes. Storm weakening begins16minutes; adjudication at24minutes. A headquarters win after16minutes may include storm assistance. These are headless AI feasibility checks, not mobile human playtest claims.",
+  "summary": {
+    "conquest": {
+      "headquartersWins": 20,
+      "stormFree": 16,
+      "playerZeroWins": 16,
+      "medianSeconds": 695.1,
+      "rangeSeconds": [
+        353.4,
+        1187.1
+      ]
+    },
+    "standard": {
+      "medianSeconds": 887.6,
+      "rangeSeconds": [
+        836.2,
+        1043.9
+      ]
+    }
+  },
+  "runs": [
+    {
+      "label": "conquest-0",
+      "settings": {
+        "seed": "BALANCE-0",
+        "mode": "conquest",
+        "duration": 8,
+        "mapSize": "small",
+        "biome": "grasslands",
+        "faction": "ironhold",
+        "commander": "warlord",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 978.3,
+      "winner": 0,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": true,
+      "siegeOrders": 6,
+      "players": [
+        {
+          "team": 0,
+          "created": 93,
+          "kills": 50,
+          "buildings": 9,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 50,
+          "kills": 90,
+          "buildings": 15,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "conquest-1",
+      "settings": {
+        "seed": "BALANCE-1",
+        "mode": "conquest",
+        "duration": 8,
+        "mapSize": "small",
+        "biome": "forest",
+        "faction": "wildborn",
+        "commander": "ranger",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 697.9,
+      "winner": 1,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": false,
+      "siegeOrders": 5,
+      "players": [
+        {
+          "team": 0,
+          "created": 43,
+          "kills": 108,
+          "buildings": 14,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 114,
+          "kills": 43,
+          "buildings": 8,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "conquest-2",
+      "settings": {
+        "seed": "BALANCE-2",
+        "mode": "conquest",
+        "duration": 8,
+        "mapSize": "small",
+        "biome": "desert",
+        "faction": "arcanists",
+        "commander": "engineer",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 439.7,
+      "winner": 0,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": false,
+      "siegeOrders": 1,
+      "players": [
+        {
+          "team": 0,
+          "created": 86,
+          "kills": 18,
+          "buildings": 17,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 18,
+          "kills": 78,
+          "buildings": 14,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "conquest-3",
+      "settings": {
+        "seed": "BALANCE-3",
+        "mode": "conquest",
+        "duration": 8,
+        "mapSize": "small",
+        "biome": "snow",
+        "faction": "ironhold",
+        "commander": "warlord",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 800.3,
+      "winner": 0,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": false,
+      "siegeOrders": 5,
+      "players": [
+        {
+          "team": 0,
+          "created": 105,
+          "kills": 54,
+          "buildings": 8,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 54,
+          "kills": 102,
+          "buildings": 16,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "conquest-4",
+      "settings": {
+        "seed": "BALANCE-4",
+        "mode": "conquest",
+        "duration": 8,
+        "mapSize": "small",
+        "biome": "grasslands",
+        "faction": "wildborn",
+        "commander": "ranger",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 1174.7,
+      "winner": 0,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": true,
+      "siegeOrders": 12,
+      "players": [
+        {
+          "team": 0,
+          "created": 74,
+          "kills": 129,
+          "buildings": 17,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 129,
+          "kills": 70,
+          "buildings": 9,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "conquest-5",
+      "settings": {
+        "seed": "BALANCE-5",
+        "mode": "conquest",
+        "duration": 8,
+        "mapSize": "small",
+        "biome": "forest",
+        "faction": "arcanists",
+        "commander": "engineer",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 1187.1,
+      "winner": 0,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": true,
+      "siegeOrders": 15,
+      "players": [
+        {
+          "team": 0,
+          "created": 107,
+          "kills": 105,
+          "buildings": 41,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 105,
+          "kills": 103,
+          "buildings": 20,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "conquest-6",
+      "settings": {
+        "seed": "BALANCE-6",
+        "mode": "conquest",
+        "duration": 8,
+        "mapSize": "small",
+        "biome": "desert",
+        "faction": "ironhold",
+        "commander": "warlord",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 564.7,
+      "winner": 0,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": false,
+      "siegeOrders": 4,
+      "players": [
+        {
+          "team": 0,
+          "created": 80,
+          "kills": 46,
+          "buildings": 7,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 46,
+          "kills": 79,
+          "buildings": 8,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "conquest-7",
+      "settings": {
+        "seed": "BALANCE-7",
+        "mode": "conquest",
+        "duration": 8,
+        "mapSize": "small",
+        "biome": "snow",
+        "faction": "wildborn",
+        "commander": "ranger",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 695.1,
+      "winner": 1,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": false,
+      "siegeOrders": 6,
+      "players": [
+        {
+          "team": 0,
+          "created": 48,
+          "kills": 110,
+          "buildings": 19,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 114,
+          "kills": 48,
+          "buildings": 7,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "conquest-8",
+      "settings": {
+        "seed": "BALANCE-8",
+        "mode": "conquest",
+        "duration": 8,
+        "mapSize": "small",
+        "biome": "grasslands",
+        "faction": "arcanists",
+        "commander": "engineer",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 702.5,
+      "winner": 0,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": false,
+      "siegeOrders": 6,
+      "players": [
+        {
+          "team": 0,
+          "created": 85,
+          "kills": 52,
+          "buildings": 23,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 52,
+          "kills": 83,
+          "buildings": 13,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "conquest-9",
+      "settings": {
+        "seed": "BALANCE-9",
+        "mode": "conquest",
+        "duration": 8,
+        "mapSize": "small",
+        "biome": "forest",
+        "faction": "ironhold",
+        "commander": "warlord",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 424.7,
+      "winner": 0,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": false,
+      "siegeOrders": 1,
+      "players": [
+        {
+          "team": 0,
+          "created": 83,
+          "kills": 44,
+          "buildings": 9,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 44,
+          "kills": 68,
+          "buildings": 7,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "conquest-10",
+      "settings": {
+        "seed": "BALANCE-10",
+        "mode": "conquest",
+        "duration": 8,
+        "mapSize": "small",
+        "biome": "desert",
+        "faction": "wildborn",
+        "commander": "ranger",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 675.3,
+      "winner": 0,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": false,
+      "siegeOrders": 7,
+      "players": [
+        {
+          "team": 0,
+          "created": 104,
+          "kills": 55,
+          "buildings": 9,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 55,
+          "kills": 102,
+          "buildings": 7,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "conquest-11",
+      "settings": {
+        "seed": "BALANCE-11",
+        "mode": "conquest",
+        "duration": 8,
+        "mapSize": "small",
+        "biome": "snow",
+        "faction": "arcanists",
+        "commander": "engineer",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 498.1,
+      "winner": 1,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": false,
+      "siegeOrders": 1,
+      "players": [
+        {
+          "team": 0,
+          "created": 52,
+          "kills": 66,
+          "buildings": 22,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 77,
+          "kills": 52,
+          "buildings": 8,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "conquest-12",
+      "settings": {
+        "seed": "BALANCE-12",
+        "mode": "conquest",
+        "duration": 8,
+        "mapSize": "small",
+        "biome": "grasslands",
+        "faction": "ironhold",
+        "commander": "warlord",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 353.4,
+      "winner": 0,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": false,
+      "siegeOrders": 2,
+      "players": [
+        {
+          "team": 0,
+          "created": 73,
+          "kills": 18,
+          "buildings": 11,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 18,
+          "kills": 44,
+          "buildings": 10,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "conquest-13",
+      "settings": {
+        "seed": "BALANCE-13",
+        "mode": "conquest",
+        "duration": 8,
+        "mapSize": "small",
+        "biome": "forest",
+        "faction": "wildborn",
+        "commander": "ranger",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 661.6,
+      "winner": 0,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": false,
+      "siegeOrders": 6,
+      "players": [
+        {
+          "team": 0,
+          "created": 124,
+          "kills": 49,
+          "buildings": 8,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 49,
+          "kills": 120,
+          "buildings": 8,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "conquest-14",
+      "settings": {
+        "seed": "BALANCE-14",
+        "mode": "conquest",
+        "duration": 8,
+        "mapSize": "small",
+        "biome": "desert",
+        "faction": "arcanists",
+        "commander": "engineer",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 445.3,
+      "winner": 0,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": false,
+      "siegeOrders": 2,
+      "players": [
+        {
+          "team": 0,
+          "created": 76,
+          "kills": 31,
+          "buildings": 18,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 32,
+          "kills": 71,
+          "buildings": 9,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "conquest-15",
+      "settings": {
+        "seed": "BALANCE-15",
+        "mode": "conquest",
+        "duration": 8,
+        "mapSize": "small",
+        "biome": "snow",
+        "faction": "ironhold",
+        "commander": "warlord",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 532.2,
+      "winner": 0,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": false,
+      "siegeOrders": 2,
+      "players": [
+        {
+          "team": 0,
+          "created": 87,
+          "kills": 43,
+          "buildings": 7,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 43,
+          "kills": 84,
+          "buildings": 8,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "conquest-16",
+      "settings": {
+        "seed": "BALANCE-16",
+        "mode": "conquest",
+        "duration": 8,
+        "mapSize": "small",
+        "biome": "grasslands",
+        "faction": "wildborn",
+        "commander": "ranger",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 1131.8,
+      "winner": 1,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": true,
+      "siegeOrders": 14,
+      "players": [
+        {
+          "team": 0,
+          "created": 115,
+          "kills": 107,
+          "buildings": 14,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 111,
+          "kills": 115,
+          "buildings": 17,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "conquest-17",
+      "settings": {
+        "seed": "BALANCE-17",
+        "mode": "conquest",
+        "duration": 8,
+        "mapSize": "small",
+        "biome": "forest",
+        "faction": "arcanists",
+        "commander": "engineer",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 446.2,
+      "winner": 0,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": false,
+      "siegeOrders": 1,
+      "players": [
+        {
+          "team": 0,
+          "created": 105,
+          "kills": 28,
+          "buildings": 20,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 28,
+          "kills": 96,
+          "buildings": 10,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "conquest-18",
+      "settings": {
+        "seed": "BALANCE-18",
+        "mode": "conquest",
+        "duration": 8,
+        "mapSize": "small",
+        "biome": "desert",
+        "faction": "ironhold",
+        "commander": "warlord",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 723.3,
+      "winner": 0,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": false,
+      "siegeOrders": 8,
+      "players": [
+        {
+          "team": 0,
+          "created": 88,
+          "kills": 73,
+          "buildings": 9,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 74,
+          "kills": 86,
+          "buildings": 9,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "conquest-19",
+      "settings": {
+        "seed": "BALANCE-19",
+        "mode": "conquest",
+        "duration": 8,
+        "mapSize": "small",
+        "biome": "snow",
+        "faction": "wildborn",
+        "commander": "ranger",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 736.7,
+      "winner": 0,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": false,
+      "siegeOrders": 6,
+      "players": [
+        {
+          "team": 0,
+          "created": 121,
+          "kills": 52,
+          "buildings": 7,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 52,
+          "kills": 116,
+          "buildings": 9,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "standard-0",
+      "settings": {
+        "seed": "STANDARD-0",
+        "mode": "domination",
+        "duration": 18,
+        "mapSize": "medium",
+        "biome": "grasslands",
+        "faction": "ironhold",
+        "commander": "warlord",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 926.6,
+      "winner": 0,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": false,
+      "siegeOrders": 7,
+      "players": [
+        {
+          "team": 0,
+          "created": 114,
+          "kills": 81,
+          "buildings": 8,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 81,
+          "kills": 111,
+          "buildings": 7,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "standard-1",
+      "settings": {
+        "seed": "STANDARD-1",
+        "mode": "domination",
+        "duration": 18,
+        "mapSize": "medium",
+        "biome": "forest",
+        "faction": "wildborn",
+        "commander": "ranger",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 1043.9,
+      "winner": 0,
+      "victoryReason": "Relic domination",
+      "stormStarted": false,
+      "siegeOrders": 11,
+      "players": [
+        {
+          "team": 0,
+          "created": 131,
+          "kills": 85,
+          "buildings": 7,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 85,
+          "kills": 131,
+          "buildings": 8,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "standard-2",
+      "settings": {
+        "seed": "STANDARD-2",
+        "mode": "domination",
+        "duration": 18,
+        "mapSize": "medium",
+        "biome": "desert",
+        "faction": "arcanists",
+        "commander": "engineer",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 887.6,
+      "winner": 0,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": false,
+      "siegeOrders": 6,
+      "players": [
+        {
+          "team": 0,
+          "created": 115,
+          "kills": 73,
+          "buildings": 27,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 73,
+          "kills": 104,
+          "buildings": 8,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "standard-3",
+      "settings": {
+        "seed": "STANDARD-3",
+        "mode": "domination",
+        "duration": 18,
+        "mapSize": "medium",
+        "biome": "snow",
+        "faction": "ironhold",
+        "commander": "warlord",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 836.2,
+      "winner": 0,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": false,
+      "siegeOrders": 9,
+      "players": [
+        {
+          "team": 0,
+          "created": 109,
+          "kills": 70,
+          "buildings": 14,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 70,
+          "kills": 56,
+          "buildings": 9,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "standard-4",
+      "settings": {
+        "seed": "STANDARD-4",
+        "mode": "domination",
+        "duration": 18,
+        "mapSize": "medium",
+        "biome": "grasslands",
+        "faction": "wildborn",
+        "commander": "ranger",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 887.2,
+      "winner": 1,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": false,
+      "siegeOrders": 8,
+      "players": [
+        {
+          "team": 0,
+          "created": 78,
+          "kills": 120,
+          "buildings": 8,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 126,
+          "kills": 78,
+          "buildings": 9,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "standard-5",
+      "settings": {
+        "seed": "STANDARD-5",
+        "mode": "domination",
+        "duration": 18,
+        "mapSize": "medium",
+        "biome": "forest",
+        "faction": "arcanists",
+        "commander": "engineer",
+        "aiPlayers": 1,
+        "difficulty": "normal"
+      },
+      "durationSeconds": 850.4,
+      "winner": 1,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": false,
+      "siegeOrders": 9,
+      "players": [
+        {
+          "team": 0,
+          "created": 66,
+          "kills": 91,
+          "buildings": 26,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 129,
+          "kills": 66,
+          "buildings": 12,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    },
+    {
+      "label": "authored-ironwatch",
+      "settings": {
+        "seed": "IRONWATCH-04",
+        "mode": "conquest",
+        "duration": 18,
+        "mapSize": "medium",
+        "biome": "snow",
+        "faction": "ironhold",
+        "commander": "engineer",
+        "aiPlayers": 1,
+        "difficulty": "hard"
+      },
+      "durationSeconds": 493.8,
+      "winner": 0,
+      "victoryReason": "All enemy Command Keeps destroyed",
+      "stormStarted": false,
+      "siegeOrders": 1,
+      "players": [
+        {
+          "team": 0,
+          "created": 102,
+          "kills": 43,
+          "buildings": 21,
+          "research": {
+            "economy": 1
+          }
+        },
+        {
+          "team": 1,
+          "created": 43,
+          "kills": 90,
+          "buildings": 15,
+          "research": {
+            "economy": 1
+          }
+        }
+      ]
+    }
+  ]
+}

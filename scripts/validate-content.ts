@@ -1,4 +1,10 @@
-import { validateContent } from '../src/sim/content';
-import { CAMPAIGN, validateCampaign } from '../src/ui/content';
-const errors=[...validateContent(),...validateCampaign(CAMPAIGN)];
-if(errors.length){console.error(errors.join('\n'));process.exit(1);}console.log(`Content validated: ${CAMPAIGN.missions.length} story missions.`);
+import { validateContent } from "../src/sim/content";
+import { CAMPAIGNS, validateCampaign } from "../src/ui/content";
+const errors = [...validateContent(), ...CAMPAIGNS.flatMap(validateCampaign)];
+if (errors.length) {
+  console.error(errors.join("\n"));
+  process.exit(1);
+}
+console.log(
+  `Content validated: ${CAMPAIGNS.reduce((sum, c) => sum + c.missions.length, 0)} story missions.`,
+);

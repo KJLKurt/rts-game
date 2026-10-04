@@ -2,12 +2,12 @@
 
 ## What has actually been checked
 
-Local verification on 2026-10-04 (latest aggregate: 03:02 UTC):
+Local verification on 2026-10-04 (latest aggregate: 03:30 UTC):
 
 - TypeScript: `npm run check` passed.
-- Unit/contract suite: `npm test` passed 68 tests across engine, maps, strategic AI, Rush Arena, content, save restoration, and platform storage/PWA. The map suite includes 400 deterministic generated maps.
+- Unit/contract suite: `npm test` passed 83 tests across engine, maps, strategic AI, Rush Arena, content, save restoration, and platform storage/PWA. The map suite includes 400 deterministic generated maps.
 - Production: `npm run build` passed, including generated service worker and 14 precached files at this checkpoint. Asset counts can change as art/audio are integrated.
-- Browser suite: `npx playwright test --list` discovered 63 cases, including intentional platform-specific skips. Discovery and TypeScript compilation are **not browser execution**.
+- Browser suite: `npx playwright test --list` discovered 72 cases, including intentional platform-specific skips. Discovery and TypeScript compilation are **not browser execution**.
 - Real browser execution in the original workspace was blocked by Chromium socket sandbox EPERM. A separate attempted executor escalation failed at infrastructure setup. Cloud browser navigation to that workspace's loopback URL was also blocked. No browser pass, offline-reload pass, touch pass, screenshot review, or audible-audio verification is claimed from that workspace. Do not weaken sandbox/browser security to work around this.
 
 This is a checkpoint, not a permanent assertion that later edits passed. Rerun the commands after integration. Record the exact commit and final results when the supported browser runner is available.
@@ -54,7 +54,8 @@ Screenshots, traces, and failure videos are retained under ignored output direct
 
 Three projects exercise desktop 1440×900, phone portrait 390×844, and phone landscape 844×390. Tests cover:
 
-- Main menu, help dismissal, setup choice persistence, achievements and expedition entry.
+- Main menu, repeated help/settings Escape dismissal, setup choice persistence, achievements and expedition entry.
+- Delayed real IndexedDB request completion: the menu appears immediately and late Continue hydration cannot replace a new active match.
 - Configured skirmish launch at the repository base path.
 - Real map clicks/taps, army selection, hold orders, WASD/space, and Chromium touch input to the joystick, including cancellation.
 - Recruitment through the UI followed by actual production time.

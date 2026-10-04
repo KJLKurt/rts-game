@@ -128,6 +128,9 @@ test('settings persist through refresh and reopening dialogs',async({page})=>{
 
 test('battle controls fit the viewport and survive rotation',async({page,isMobile})=>{
  await launch(page);
+ await expect(action(page,'select-commander')).toHaveAccessibleName('Commander');
+ await expect(action(page,'select-army')).toHaveAccessibleName('Army');
+ await expect(action(page,'hold')).toHaveAccessibleName('Hold');
  for(const selector of ['.hud','.command-deck','.ability-dock','.minimap-wrap'])await expectWithinViewport(page,selector);
  const noOverflow=await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth);expect(noOverflow).toBe(true);
  if(isMobile){
@@ -157,4 +160,51 @@ test('a corrupted save gives a recoverable error without breaking menus',async({
  });
  await page.reload();await action(page,'continue').click();await expect(page.getByRole('status')).toContainText(/save.*could not be loaded/i);
  await expect(action(page,'skirmish')).toBeVisible();await action(page,'skirmish').click();await expect(action(page,'launch')).toBeVisible();
+});
+
+test('delayed IndexedDB startup never hides the menu or replaces a newly started match',async({page})=>{
+ await page.addInitScript(()=>{
+  const database=indexedDB;const originalOpen=database.open.bind(database);
+  const deferred:(()=>void)[]=[];let held=true;
+  (window as any).__QA_RELEASE_DB__=()=>{held=false;for(const callback of deferred.splice(0))callback();};
+  Object.defineProperty(database,'open',{configurable:true,value:(name:string,version?:number)=>{
+   const request=version===undefined?originalOpen(name):originalOpen(name,version);
+   return new Proxy(request,{
+    get(target,key){const value=Reflect.get(target,key,target);return typeof value==='function'?value.bind(target):value;},
+    set(target,key,value){
+     if(key==='onsuccess'){
+      target.onsuccess=event=>{const invoke=()=>value?.call(target,event);if(held)deferred.push(invoke);else invoke();};return true;
+     }
+     return Reflect.set(target,key,value,target);
+    },
+   });
+  }});
+ });
+ await home(page);await action(page,'skirmish').click();await page.getByLabel('Map seed',{exact:true}).fill('START-WITH-DELAYED-STORAGE');
+ await action(page,'launch').click();await expect(page.locator('.hud')).toBeVisible();
+ await page.evaluate(()=>{(window as any).__QA_RELEASE_DB__();});
+ // Waiting for an actual save also drains startup's delayed database work.
+ await page.evaluate(()=>window.__FRONTIER__.save());
+ await expect(page.locator('.hud')).toBeVisible();
+ expect(await page.evaluate(()=>window.__FRONTIER__.playing)).toBe(true);
+ expect(await page.evaluate(()=>window.__FRONTIER__.state.settings.seed)).toBe('START-WITH-DELAYED-STORAGE');
+});
+
+test('Escape cancels placement and dismisses a battle dialog without a stuck overlay',async({page,isMobile})=>{
+ test.skip(isMobile,'Desktop keyboard dismissal.');await launch(page);await pause(page);
+ await action(page,'panel-build').click();await page.getByRole('button',{name:'Build House',exact:true}).click();
+ await page.keyboard.press('Escape');await expect(page.locator('#selection-info')).not.toContainText('Place House');
+ await page.keyboard.press('Escape');await expect(page.getByRole('dialog')).toBeVisible();
+ await page.keyboard.press('Escape');await expect(page.getByRole('dialog')).toHaveCount(0);
+ await expect(page.locator('.modal-backdrop')).toHaveCount(0);await resume(page);
+ await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.state.paused)).toBe(false);
+});
+
+test('Escape dismisses home help and settings dialogs repeatedly',async({page,isMobile})=>{
+ test.skip(isMobile,'Desktop keyboard dismissal.');await home(page);
+ for(const name of ['help','settings','help']){
+  await action(page,name).click();await expect(page.getByRole('dialog')).toBeVisible();
+  await page.keyboard.press('Escape');await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect(action(page,'skirmish')).toBeVisible();
+ }
 });

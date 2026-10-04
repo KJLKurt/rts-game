@@ -17,9 +17,11 @@ Open `/rts-game/` on the development or preview server. Production paths target 
 
 ## Current checkpoint
 
-The deterministic engine, mobile/desktop interface, isometric renderer, seeded skirmishes, data-driven story missions, three-battle expedition, map workshop, save system, synthesized audio, and scoped PWA cache are implemented. Initial build/typecheck and 23 engine/map tests pass, including 400 generated maps. Browser verification is in progress; this checkpoint is not a final release.
+The deterministic engine, mobile/desktop interface, isometric renderer, seeded skirmishes, data-driven story missions, three-battle expedition, map workshop, save system, original adaptive music and event audio, and scoped PWA cache are implemented. Build/typecheck and 83 unit/contract tests pass, including 400 generated maps and natural siege-victory regressions. Browser verification is in progress on a separate production runner; this checkpoint is not a final release.
 
 The initial implementation is being actively playtested and expanded. No GitHub Actions workflow is enabled during early iteration to avoid unnecessary runner usage.
+
+The Rush Arena side mode is a complete four-minute commander survival loop with waves, field upgrades, supplies, shrinking territory, and telegraphed hazards.
 
 ## Controls
 
@@ -31,3 +33,9 @@ The initial implementation is being actively playtested and expanded. No GitHub 
 - Save and continue on the same device. App updates require an explicit restart.
 
 See `docs/ENGINE.md` for simulation contracts and `docs/ART_DIRECTION.md` for art provenance and limitations.
+
+## Extending the game
+
+Campaign registration and authoring: `docs/CREATING_CAMPAIGNS.md`. Units/factions/biomes: `docs/CREATING_UNITS_AND_FACTIONS.md`. Runtime and renderer decisions: `docs/ARCHITECTURE.md`. Multiplayer boundary: `docs/MULTIPLAYER_ARCHITECTURE.md`. Offline/update lifecycle: `docs/PWA_AND_OFFLINE.md`. Honest feature scope: `docs/REQUIREMENTS_STATUS.md`.
+
+Headless balance sweep: `npm run simulate -- --games=20 --mode=conquest --duration=8`. Optional diagnostics: add `?debug=1` and press the backtick key during a match.

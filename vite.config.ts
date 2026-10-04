@@ -1,2 +1,8 @@
-import { defineConfig } from 'vite';
-export default defineConfig({base:'/rts-game/', server:{host:'0.0.0.0',port:4173},preview:{host:'0.0.0.0',port:4173},build:{target:'es2022',sourcemap:true},test:{include:['tests/**/*.test.ts']}} as any);
+import { defineConfig } from "vite";
+export default defineConfig({
+  base: "/rts-game/",
+  server: { host: "0.0.0.0", port: 4173 },
+  preview: { host: "0.0.0.0", port: 4173 },
+  build: { target: "es2022", sourcemap: true },
+  test: { include: ["tests/**/*.test.ts"] },
+} as any);
