@@ -1,8 +1,8 @@
 {
-  "sourceCommit": "2b2141f62855970ae7b3cbdb4b13ec8812e30c15",
-  "sourceTree": "a39cefc35db4a1b5e9ce03f3edeb0af738dee392",
+  "sourceCommit": "85dc40b5beabd2cf07072bf85cc6758e7ac32a10",
+  "sourceTree": "13c3b3214553e69bf7d8d2e181e769304b317fea",
   "sourceRepository": "KJLKurt/rts-game",
-  "purpose": "Final guide correction candidate for focused browser QA; not yet deployed to main",
+  "purpose": "Bounded active-defense and result-copy candidate for focused browser QA; not deployed to main",
   "basePath": "/rts-game/",
-  "builtAt": "2026-10-04T06:46:06.179970+00:00"
+  "builtAt": "2026-10-04T07:41:30.031564+00:00"
 }
