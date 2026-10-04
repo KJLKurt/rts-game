@@ -10,6 +10,12 @@ presentation treatment: horizontal facing, a small walking cadence, and optional
 sprite transforms. It is **not** an eight-direction locomotion sheet or a full
 set of authored combat/death frames.
 
+The optional attack-only trial adds four authored attack poses for Warlord,
+Swordsman and Archer, while preserving original idle/walking art and all missing-
+asset fallbacks. See `ATTACK_ANIMATION_TRIAL.md` for exact scope, fixed scales,
+pivots, event timing, provenance and remaining browser validation. No walking
+strip is enabled.
+
 Combat feedback is synchronized to simulation events:
 
 - `attack` triggers a short directional melee lunge, recovery, and swipe arc.
@@ -56,3 +62,20 @@ visibility, interpolation, tactical pause, anticipation, bounded storage,
 casualty expiry, match reset, and read-only simulation guarantees. Browser
 verification is still required for visual quality; these tests do not establish
 that new image assets are stylistically consistent or properly registered.
+
+## Resource and relic touch picking
+
+Resource/relic painting and picking share the same sprite name, native aspect,
+size and ground-pivot geometry. Tapping a tall relic star, treetop or upper gold
+formation therefore targets its node rather than the unrelated ground behind it.
+A quarter-resolution alpha mask is cached once per atlas to avoid selecting
+transparent upper corners; a six-CSS-pixel touch tolerance preserves usability.
+If image readback is unavailable, registered sprite bounds remain the fallback.
+
+Overlapping entity/node silhouettes follow the same front-to-back depth as the
+renderer. Equal-depth hits use the nearest visual centre. Outside silhouettes,
+the existing capture-radius hit area is preserved and resolves to the nearest
+node, independent of map array order. Nodes still require explored terrain;
+public minimap relic landmarks do not reveal hidden world targets or enemy units.
+Tests in `tests/render/node-picking.test.ts` cover upper art, zoom, overlaps,
+alpha holes, fog, absent art, and ground fallback.

@@ -5,3 +5,5 @@ The production sprite atlas under `public/assets/render/` was generated from use
 Canvas terrain, flags, icons, particle effects, interface design and the original generative sound program were authored for this implementation. No external font service or asset CDN is required. System fonts are used.
 
 The exploration cue “Lanterns in the Pines” and combat cue “Clockwork Brigade” are original procedurally composed and synthesized scores created for this game, provided in Ogg Vorbis and MP3. They use no commercial recordings or external sample library. The replacement contract is in `docs/AUDIO_REPLACEMENT.md`; per-track metadata is in `public/assets/audio/manifest.json`.
+
+The optional attack-only sprite trial adds three four-pose attack strips generated specifically for this game from the approved atlas. The source PNG is preserved unchanged; only its accepted attack cells are referenced in production metadata. Walking rows remain inactive. Exact scope, hashes, generation provenance and runtime QA limits are in `docs/ATTACK_ANIMATION_TRIAL.md`.

@@ -48,7 +48,7 @@ export function animationFrame(
       )
     ];
   }
-  if (pose.moving)
+  if (pose.moving && actor.walk.length > 0)
     return actor.walk[
       Math.floor(((pose.travel / 2.3) * 1000) / actor.walkFrameMs) %
         actor.walk.length
@@ -75,9 +75,10 @@ export function validAnimationData(data: AnimationData): boolean {
         actor &&
         typeof actor === "object" &&
         actor.referenceBodyHeight > 0 &&
+        actor.suggestedHeight > 0 &&
         actor.walkFrameMs > 0 &&
         Array.isArray(actor.walk) &&
-        actor.walk.length === 4 &&
+        (actor.walk.length === 0 || actor.walk.length === 4) &&
         Array.isArray(actor.attack) &&
         actor.attack.length === 4 &&
         Number.isInteger(actor.impactFrame) &&
@@ -128,20 +129,36 @@ export class AnimationAtlas {
       return false;
     }
   }
-  frame(actor: string, pose: AnimationPose) {
+  /** Only approved attack poses are exposed to the live renderer. Walk strips are not enabled. */
+  attackFrame(
+    actor: string,
+    attackAge: number,
+    anticipation: number,
+    reducedMotion = false,
+  ) {
+    if (reducedMotion || !this.image) return undefined;
     const definition = this.data?.actors[actor];
-    return definition ? animationFrame(definition, pose) : undefined;
+    return definition
+      ? animationFrame(definition, {
+          attackAge,
+          anticipation,
+          moving: false,
+          travel: 0,
+        })
+      : undefined;
   }
   draw(
     c: CanvasRenderingContext2D,
     actor: string,
     frameId: string,
-    height: number,
+    height?: number,
   ): boolean {
     const definition = this.data?.actors[actor],
       frame = this.data?.frames[frameId];
     if (!this.image || !definition || !frame) return false;
-    const scale = height / definition.referenceBodyHeight;
+    if (!definition.attack.includes(frameId)) return false;
+    const scale =
+      (height ?? definition.suggestedHeight) / definition.referenceBodyHeight;
     // Constant actor-body scale and per-frame ground pivot prevent breathing-size and foot sliding.
     c.drawImage(
       this.image,

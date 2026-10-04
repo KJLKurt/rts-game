@@ -2832,3 +2832,63 @@ footer {
     gap: 3px;
   }
 }
+
+/* Current income sits inside the existing resource slots, not another HUD row. */
+.resources b {
+  display: flex;
+  flex-direction: column;
+  font-variant-numeric: tabular-nums;
+}
+.resources .resource-income {
+  display: block;
+  font-size: 10px;
+  line-height: 1.2;
+  font-weight: 500;
+  color: #a8d9bf;
+  margin-top: 2px;
+}
+.battle-hint.critical {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+.battle-hint.critical > button {
+  position: static;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px;
+  background: #512d2eea;
+  border: 1px solid #e69879;
+  border-radius: 7px;
+  color: #ffe1c9;
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.3;
+}
+.battle-hint.critical > button .icon {
+  width: 19px;
+  height: 19px;
+  flex-shrink: 0;
+}
+@media (max-width: 600px) {
+  .resources .resource-income {
+    font-size: 9px;
+  }
+  .battle-hint.critical > button {
+    font-size: 10px;
+  }
+}
+@media (max-height: 500px) and (max-width: 950px) {
+  .battle-hint.critical {
+    display: block;
+    top: calc(55px + var(--safe-top));
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(400px, 45vw);
+    z-index: 5;
+  }
+  .battle-hint.critical > button {
+    font-size: 10px;
+  }
+}

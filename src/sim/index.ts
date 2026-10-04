@@ -3,3 +3,4 @@ export * from './content';
 export * from './maps';
 export * from './engine';
 export * from './validation';
+export * from './economy';

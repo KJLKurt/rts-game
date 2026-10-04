@@ -1,3 +1,4 @@
+import {canBuild} from '../../src/sim';
 import {test,expect,action,home,launch,commander,tap,clearGround,pause,resume,expectWithinViewport,acknowledgeFirstBriefing,setSlider} from './helpers';
 
 test('home navigation, dismissals, and repeated setup preserve choices',async({page})=>{
@@ -136,6 +137,10 @@ test('settings persist through refresh and reopening dialogs',async({page})=>{
 });
 
 test('battle controls fit the viewport and survive rotation',async({page,isMobile})=>{
+ const expectAbilityClearance=async()=>{
+  const geometry=await page.evaluate(()=>({abilityBottom:document.querySelector('.ability-dock')!.getBoundingClientRect().bottom,deckTop:document.querySelector('.command-deck')!.getBoundingClientRect().top}));
+  expect(geometry.abilityBottom,'Abilities must sit entirely above the command deck').toBeLessThan(geometry.deckTop);
+ };
  const expectLayoutViewport=async()=>{
   // Let resize handlers and one subsequent layout frame settle, then require
   // actual CSS viewport dimensions, not just Playwright's requested dimensions.
@@ -143,7 +148,7 @@ test('battle controls fit the viewport and survive rotation',async({page,isMobil
   const requested=page.viewportSize()!;
   await expect.poll(()=>page.evaluate(()=>({width:innerWidth,height:innerHeight,clientWidth:document.documentElement.clientWidth,clientHeight:document.documentElement.clientHeight}))).toEqual({width:requested.width,height:requested.height,clientWidth:requested.width,clientHeight:requested.height});
  };
- await launch(page);await expectLayoutViewport();
+ await launch(page);await expectLayoutViewport();await expectAbilityClearance();
  await expect(action(page,'select-commander')).toHaveAccessibleName('Commander');
  await expect(action(page,'select-army')).toHaveAccessibleName('Army');
  await expect(action(page,'hold')).toHaveAccessibleName('Hold');
@@ -151,12 +156,12 @@ test('battle controls fit the viewport and survive rotation',async({page,isMobil
  const noOverflow=await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth);expect(noOverflow).toBe(true);
  if(isMobile){
   const current=page.viewportSize()!;await page.setViewportSize({width:current.height,height:current.width});
-  await expectLayoutViewport();
+  await expectLayoutViewport();await expectAbilityClearance();
   for(const selector of ['.hud','.command-deck','.ability-dock','.minimap-wrap','#joystick'])await expectWithinViewport(page,selector);
   await expect(page.locator('#joystick')).toBeVisible();
  }
  await action(page,'pause-menu').click();await expectLayoutViewport();await expectWithinViewport(page,'.dialog');
- await action(page,'resume-dialog').click();await expect(page.getByRole('dialog')).toHaveCount(0);await expectLayoutViewport();
+ await action(page,'resume-dialog').click();await expect(page.getByRole('dialog')).toHaveCount(0);await expectLayoutViewport();await expectAbilityClearance();
 });
 
 test('Brutal menu and background interruption really suspend the fight',async({page})=>{
@@ -280,9 +285,10 @@ test('Archery Range completion updates the visible Recruit panel without reopeni
 
 test('commander focus keeps the hero on an unobscured part of the battlefield',async({page})=>{
  await launch(page,{difficulty:'easy'});await action(page,'select-commander').click();
- const placement=await page.evaluate(()=>{const f=window.__FRONTIER__,c=f.state.entities.find(e=>e.team===0&&e.kind==='commander')!,p=f.renderer.worldToScreen(c.x,c.y);return{...p,topElement:document.elementFromPoint(p.x,p.y)?.id,width:innerWidth,height:innerHeight};});
+ const placement=await page.evaluate(()=>{const f=window.__FRONTIER__,c=f.state.entities.find(e=>e.team===0&&e.kind==='commander')!,p=f.renderer.worldToScreen(c.x,c.y),bodyY=p.y-59*f.renderer.camera.zoom/2;return{...p,bodyY,bodyTopElement:document.elementFromPoint(p.x,bodyY)?.id,feetTopElement:document.elementFromPoint(p.x,p.y)?.id,width:innerWidth,height:innerHeight};});
  expect(placement.x).toBeGreaterThan(20);expect(placement.x).toBeLessThan(placement.width-20);
- expect(placement.y).toBeGreaterThan(90);expect(placement.y).toBeLessThan(placement.height-100);expect(placement.topElement).toBe('world');
+ expect(placement.y).toBeGreaterThan(90);expect(placement.y).toBeLessThan(placement.height-100);expect(placement.feetTopElement).toBe('world');
+ expect(placement.bodyY).toBeGreaterThan(0);expect(placement.bodyTopElement,'Visible commander body must not sit behind HUD or objective overlays').toBe('world');
 });
 
 test('March to relic queues one whole-army capture and keeps objective information public and readable',async({page})=>{
@@ -369,4 +375,30 @@ test('Save & leave persists its newer snapshot while the startup save completion
  await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.playing)).toBe(true);
  expect(await page.evaluate(()=>{const s=window.__FRONTIER__.state;return{seed:s.settings.seed,time:s.time,pending:s.pendingCommands};})).toEqual(later);
  await expect(page.locator('#paused-ribbon')).toBeVisible();
+});
+
+
+test('paused construction rejects an invalid site immediately and rejects overlap with a queued house',async({page})=>{
+ await launch(page,{difficulty:'easy'});await pause(page);await action(page,'panel-build').click();
+ const house=page.getByRole('button',{name:'Build House',exact:true});await house.click();
+ // A real tap on the occupied commander/base footprint is invalid, without altering the map.
+ const invalid=await page.evaluate(()=>{const f=window.__FRONTIER__,c=f.state.entities.find(e=>e.team===0&&e.kind==='commander')!,screen=f.renderer.worldToScreen(c.x,c.y);return{screen,world:{x:c.x,y:c.y},state:f.state,topElement:document.elementFromPoint(screen.x,screen.y)?.id};});
+ expect(invalid.topElement).toBe('world');
+ const reason=canBuild(invalid.state,0,'house',invalid.world.x,invalid.world.y);expect(reason.ok).toBe(false);
+ const resources={gold:invalid.state.players[0].gold,wood:invalid.state.players[0].wood};
+ await tap(page,invalid.screen);await expect(page.getByRole('status')).toHaveClass(/warning/);await expect(page.getByRole('status')).toHaveText(reason.error!);
+ expect(await page.evaluate(()=>window.__FRONTIER__.state.pendingCommands)).toEqual([]);
+ expect(await page.evaluate(()=>({gold:window.__FRONTIER__.state.players[0].gold,wood:window.__FRONTIER__.state.players[0].wood}))).toEqual(resources);
+ await expect(page.locator('#selection-info')).toContainText('Place House');await expect(house).toHaveClass(/selected/);
+ // Keep the same placement session and choose a canonically legal, visible site.
+ const legal=await clearGround(page,true);await tap(page,legal);await expect(page.getByRole('status')).toHaveText('Build order queued: House');
+ const first=await page.evaluate(()=>window.__FRONTIER__.state.pendingCommands);expect(first).toHaveLength(1);expect(first[0]).toMatchObject({type:'build',team:0,building:'house'});
+ await house.click();await tap(page,legal);
+ await expect(page.getByRole('status')).toHaveClass(/warning/);await expect(page.getByRole('status')).toHaveText('Too close to your queued House. Pick another spot.');
+ expect(await page.evaluate(()=>window.__FRONTIER__.state.pendingCommands)).toEqual(first);
+ expect(await page.evaluate(()=>({gold:window.__FRONTIER__.state.players[0].gold,wood:window.__FRONTIER__.state.players[0].wood}))).toEqual(resources);
+ expect(await page.evaluate(()=>window.__FRONTIER__.state.entities.filter(e=>e.team===0&&e.type==='house').length)).toBe(0);
+ await expect(page.locator('#selection-info')).toContainText('Place House');await expect(house).toHaveClass(/selected/);
+ await action(page,'cancel-build').click();await resume(page);
+ await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.state.entities.filter(e=>e.team===0&&e.type==='house').length)).toBe(1);
 });

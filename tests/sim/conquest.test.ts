@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { createGame, stepGame, issueCommand, spawnEntity, isVisible, type BiomeId, type FactionId, type CommanderId } from '../../src/sim';
+import { createGame, stepGame, issueCommand, spawnEntity, isVisible, getCommander, type BiomeId, type FactionId, type CommanderId } from '../../src/sim';
 import { CAMPAIGN } from '../../src/ui/content';
 describe('siege planning regression', () => {
     for (const index of [0, 1, 2, 6, 7, 9, 13, 19])
@@ -24,8 +24,16 @@ describe('siege planning regression', () => {
         for (let second = 0; second < 240 && s.winner === null; second++) {
             const keep = s.entities.find(e => e.type === 'keep' && e.team === 1)!;
             if (second % 3 === 0) {
-                for (const ability of ['charge', 'rally'])
-                    issueCommand(s, { type: 'ability', team: 0, ability, x: keep.x, y: keep.y });
+                // Charge a visible nearby threat, then explicitly resume the assault.
+                // Blindly charging at the keep can strand the commander away from
+                // escorts while objective defenders correctly keep their position.
+                const commander = getCommander(s)!;
+                const nearby = s.entities.filter(e => e.team === 1 && e.hp > 0 && e.kind !== 'building' && isVisible(s, 0, e.x, e.y) && Math.hypot(e.x - commander.x, e.y - commander.y) < 6).sort((a, b) => Math.hypot(a.x - commander.x, a.y - commander.y) - Math.hypot(b.x - commander.x, b.y - commander.y))[0];
+                if (nearby && commander.hp > commander.maxHp * .5) {
+                    issueCommand(s, { type: 'ability', team: 0, ability: 'charge', x: nearby.x, y: nearby.y });
+                    issueCommand(s, { type: 'attackMove', team: 0, x: keep.x, y: keep.y });
+                }
+                issueCommand(s, { type: 'ability', team: 0, ability: 'rally' });
                 if (isVisible(s, 0, keep.x, keep.y))
                     issueCommand(s, { type: 'attack', team: 0, entityIds: s.entities.filter(e => e.team === 0 && e.type === 'siege').map(e => e.id), targetId: keep.id });
             }

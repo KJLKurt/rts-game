@@ -1,7 +1,10 @@
 import "./style.css";
 import { relicSummary, nearestRelic } from "./ui/objectives";
+import { buildingUnderAttack, hasClaimedSupplies } from "./ui/battle-guidance";
+import { getEconomyRates } from "./sim/economy";
 import { encodeMapCode, decodeMapCode } from "./ui/map-code";
 import { chooseAbilityTarget } from "./ui/targeting";
+import { plannedBuildResult } from "./ui/placement";
 import {
   createGame,
   stepGame,
@@ -274,7 +277,12 @@ function launchGame(
   document.body.classList.add("in-game");
   audio.start();
   audio.setVolumes(preferences.music, preferences.sfx);
-  renderer.camera.zoom = innerWidth < 600 ? 1.05 : 1.3;
+  renderer.camera.zoom =
+    innerHeight < 500 && innerWidth > 600
+      ? 0.85
+      : innerWidth < 600
+        ? 1.05
+        : 1.3;
   const c = commander() || state.map.spawns[0];
   renderer.centerOn(c.x, c.y);
   renderGameShell();
@@ -430,8 +438,20 @@ function updateHUD() {
       hudHTML.set(id, html);
     }
   };
-  set("gold", Math.floor(p.gold).toString());
-  set("wood", Math.floor(p.wood).toString());
+  const economy = getEconomyRates(state);
+  for (const resource of ["gold", "wood"] as const) {
+    const rate =
+      resource === "gold" ? economy.goldPerSecond : economy.woodPerSecond;
+    set(
+      resource,
+      `${Math.floor(p[resource])}${state.rush ? "" : `<small class="resource-income">+${rate.toFixed(1)}/s</small>`}`,
+    );
+    const slot = document.querySelector(`#${resource}`)?.parentElement;
+    const name = resource === "gold" ? "Gold" : "Wood";
+    const label = `${name}: ${Math.floor(p[resource])}${state.rush ? "" : `. Income: ${rate.toFixed(1)} per game second`}`;
+    slot?.setAttribute("aria-label", label);
+    if (slot) slot.title = label;
+  }
   set(
     "population",
     state.rush
@@ -549,13 +569,49 @@ function showFirstBriefing() {
   writeLocal("preferences", preferences);
   showDialog(
     "Your first frontier",
-    `<span class="eyebrow">THE BATTLE WAITS WHILE YOU GET YOUR BEARINGS</span><div class="help-grid"><article>${icon("flag")}<h3>Lead together</h3><p>Select Army, then tap open ground to move your commander and soldiers. Idle troops guard their position.</p></article><article>${icon("gold")}<h3>Claim and grow</h3><p>Tap neutral gold or timber to capture supplies. Recruit soldiers below; build Houses for a bigger army.</p></article><article>${icon("spark")}<h3>Take the center</h3><p>Relics earn victory points; gold and wood fund your army. The gold Relic button sends your army toward an objective. Use both abilities in close fights.</p></article><article>${icon("pause")}<h3>Take your time</h3><p>${state.settings.difficulty === "easy" ? "Easy opponents spend the first minute consolidating their own side. " : ""}Use the pause button to plan orders${state.settings.difficulty === "hard" ? " (three tactical pauses on Hard)" : state.settings.difficulty === "brutal" ? " (tactical pause is disabled on Brutal)" : ""}.</p></article></div>${button("Start battle", "begin-briefing", "primary large", "play")}`,
+    `<span class="eyebrow">THE BATTLE WAITS WHILE YOU GET YOUR BEARINGS</span><div class="help-grid"><article>${icon("flag")}<h3>Lead together</h3><p>Select Army, then tap open ground to move your commander and soldiers. Idle troops guard their position.</p></article><article>${icon("gold")}<h3>Claim and grow</h3><p>Capture gold and timber for steady income. Recruit soldiers, then claim a relic. Build Houses for more troops and Watchtowers to defend your base.</p></article><article>${icon("spark")}<h3>Take the center</h3><p>Relics earn victory points; gold and wood fund your army. The gold Relic button sends your army toward an objective. Use both abilities in close fights.</p></article><article>${icon("pause")}<h3>Take your time</h3><p>${state.settings.difficulty === "easy" ? "Easy opponents spend the first minute consolidating their own side. " : ""}Use the pause button to plan orders${state.settings.difficulty === "hard" ? " (three tactical pauses on Hard)" : state.settings.difficulty === "brutal" ? " (tactical pause is disabled on Brutal)" : ""}.</p></article></div>${button("Start battle", "begin-briefing", "primary large", "play")}`,
     "wide",
   );
 }
 function updateTutorial() {
   const el = document.querySelector("#battle-hint");
   if (!el) return;
+  const attacked = buildingUnderAttack(state);
+  el.classList.toggle("critical", !!attacked);
+  if (attacked) {
+    const name =
+      attacked.type === "keep"
+        ? "Keep"
+        : BUILDINGS[attacked.type as BuildingId].name;
+    const warning = button(
+      `${name} under attack · View`,
+      "view-attacked-building",
+      "",
+      "shield",
+      `data-id="${esc(attacked.id)}"`,
+    );
+    el.setAttribute("role", "alert");
+    if (hudHTML.get("battle-hint") !== warning) {
+      el.innerHTML = warning;
+      hudHTML.set("battle-hint", warning);
+    }
+    return;
+  }
+  el.removeAttribute("role");
+  if (
+    !state.rush &&
+    preferences.showTips &&
+    tutorialStep >= 2 &&
+    getEconomyRates(state).goldDeposits === 0
+  ) {
+    const warning =
+      "<b>No gold mine held</b><p>Claim fresh gold to keep recruiting.</p>";
+    if (hudHTML.get("battle-hint") !== warning) {
+      el.innerHTML = warning;
+      hudHTML.set("battle-hint", warning);
+    }
+    return;
+  }
   if (state.rush || !preferences.showTips || state.time > 200) {
     el.innerHTML = "";
     hudHTML.delete("battle-hint");
@@ -576,7 +632,11 @@ function updateTutorial() {
     ) > 3
   )
     tutorialStep = Math.max(tutorialStep, 1);
-  if (tutorialStep >= 1 && state.players[0].stats.captures > 0)
+  if (
+    tutorialStep >= 1 &&
+    state.players[0].stats.captures > 0 &&
+    hasClaimedSupplies(state)
+  )
     tutorialStep = Math.max(tutorialStep, 2);
   if (
     tutorialStep >= 2 &&
@@ -593,7 +653,7 @@ function updateTutorial() {
     ],
     [
       "Claim fresh supplies",
-      "Tap a neutral gold or timber deposit. Stay close until your banner rises.",
+      "Capture gold and timber. Each held deposit keeps paying until it runs out.",
     ],
     [
       "Raise your army",
@@ -601,7 +661,7 @@ function updateTutorial() {
     ],
     [
       "Take the center",
-      "Use the gold Relic button to march your army. Hold more relics than your rival to outscore them.",
+      "Hold relics to score. Keep recruiting, capture fresh gold, and protect your keep.",
     ],
   ];
   const tipHTML = `<button data-action="dismiss-tips" aria-label="Dismiss tips">${icon("close")}</button><span>COMMANDER’S FIELD GUIDE · ${tutorialStep + 1}/4</span><b>${tips[tutorialStep][0]}</b><p>${tips[tutorialStep][1]}</p>`;
@@ -705,7 +765,12 @@ async function continueGame() {
     lastEvent = state.nextEventId;
     selection = new Set(commander() ? [commander()!.id] : []);
     document.body.classList.add("in-game");
-    renderer.camera.zoom = innerWidth < 600 ? 1.05 : 1.3;
+    renderer.camera.zoom =
+      innerHeight < 500 && innerWidth > 600
+        ? 0.85
+        : innerWidth < 600
+          ? 1.05
+          : 1.3;
     const c = commander() || state.map.spawns[0];
     renderer.centerOn(c.x, c.y);
     followCommander = true;
@@ -1055,6 +1120,17 @@ async function handleAction(action: string, id?: string) {
     case "pause-menu":
       showPauseMenu();
       break;
+    case "view-attacked-building": {
+      const building = state.entities.find(
+        (e) => e.id === id && e.team === 0 && e.kind === "building" && e.hp > 0,
+      );
+      if (building) {
+        followCommander = false;
+        centerCommander(building);
+        audio.play("select");
+      }
+      break;
+    }
     case "focus":
     case "select-commander": {
       const c = commander();
@@ -1445,7 +1521,12 @@ function releasePointer(e: PointerEvent) {
     const world = renderer.screenToWorld(point.x, point.y);
     if (editing) paintEditor(world);
     else if (placement) {
-      if (
+      targetPoint = world;
+      const planned = plannedBuildResult(state, 0, placement, world.x, world.y);
+      if (!planned.ok) {
+        toast(planned.error || "Choose another construction site.", "warning");
+        audio.play("error");
+      } else if (
         dispatch(
           {
             type: "build",
@@ -1690,8 +1771,20 @@ window.addEventListener("blur", () => {
 function measurePlayfield() {
   const hud = document.querySelector(".hud")?.getBoundingClientRect();
   const deck = document.querySelector(".command-deck")?.getBoundingClientRect();
-  playfieldCenterY =
-    hud && deck ? (hud.bottom + deck.top) / 2 : innerHeight / 2;
+  const abilities = document.querySelector<HTMLElement>(".ability-dock");
+  const landscape = innerHeight < 500 && innerWidth > 600;
+  if (abilities)
+    abilities.style.bottom =
+      landscape && deck ? `${innerHeight - deck.top + 8}px` : "";
+  if (landscape && hud && deck) {
+    const objective = document
+      .querySelector(".objective-bar")
+      ?.getBoundingClientRect();
+    const top = Math.max(hud.bottom, objective?.bottom ?? hud.bottom);
+    playfieldCenterY = Math.min(deck.top - 12, (top + deck.top) / 2 + 24);
+  } else
+    playfieldCenterY =
+      hud && deck ? (hud.bottom + deck.top) / 2 : innerHeight / 2;
 }
 function cameraFocus(point: Point): Point {
   const middle = renderer.screenToWorld(innerWidth / 2, innerHeight / 2),
@@ -1826,7 +1919,7 @@ function frame(now: number) {
                 type: placement,
                 x: targetPoint.x,
                 y: targetPoint.y,
-                valid: canBuild(
+                valid: plannedBuildResult(
                   state,
                   0,
                   placement,
@@ -1834,7 +1927,7 @@ function frame(now: number) {
                   targetPoint.y,
                 ).ok,
                 size: BUILDINGS[placement].size,
-                reason: canBuild(
+                reason: plannedBuildResult(
                   state,
                   0,
                   placement,

@@ -233,7 +233,7 @@ export class CombatFeedback {
     const beat = this.attacks.get(entity.id),
       age = beat ? Math.max(0, this.time - beat.time) : Infinity;
     const ranged = beat?.ranged ?? entity.range > 2;
-    const facing = beat?.direction ?? {
+    const facing = (beat && age < 0.43 ? beat.direction : undefined) ?? {
       x: Math.cos(entity.facing),
       y: Math.sin(entity.facing),
     };

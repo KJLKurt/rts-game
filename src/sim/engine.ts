@@ -1,3 +1,4 @@
+import { getEconomyRates } from './economy';
 import { validateTriggers, parseBoundedJSON, MAX_SAVE_JSON_BYTES, MAX_MAP_JSON_BYTES } from './validation';
 import type { GameMap, GameState, GameSettings, GameCommand, CommandResult, Entity, Point, Player, PlayerStats, UnitId, BuildingId, TechId, GameEvent, CommanderId, ScriptAction, RushUpgradeId } from './types';
 import { DEFAULT_SETTINGS, UNITS, BUILDINGS, COMMANDERS, FACTIONS, TECHNOLOGIES, BIOMES, FIXED_STEP, TEAM_COLORS, TEAM_SYMBOLS, MAP_DIMENSIONS, RUSH_UPGRADES } from './content';
@@ -508,8 +509,11 @@ function moveToward(s: GameState, e: Entity, goal: Point, dt: number) {
             delete e.escortId;
     }
     const amount = Math.min(speed * dt, d), nx = e.x + dx / d * amount, ny = e.y + dy / d * amount;
-    // An idle guard must not route around obstacles into an unbounded pursuit.
-    if (!s.rush && e.order.type === 'idle' && e.guardAnchor && distance({ x: nx, y: ny }, e.guardAnchor) > IDLE_GUARD_RADIUS && distance({ x: nx, y: ny }, e.guardAnchor) >= distance(e, e.guardAnchor)) {
+    // Guards cannot route around an obstacle into an unbounded pursuit. A
+    // capture unit returning from outside its leash may take a detour home.
+    const guarding = !s.rush && (e.order.type === 'idle' || e.order.type === 'capture') && e.guardAnchor;
+    const returningToObjective = guarding && e.order.type === 'capture' && distance(e, guarding) > IDLE_GUARD_RADIUS && distance(goal, guarding) < .3;
+    if (guarding && !returningToObjective && distance({ x: nx, y: ny }, guarding) > IDLE_GUARD_RADIUS && distance({ x: nx, y: ny }, guarding) >= distance(e, guarding)) {
         e.path = [];
         e.pathTimer = 0;
         return;
@@ -602,13 +606,16 @@ function updateEntities(s: GameState, dt: number) {
             }
         }
         let target: Entity | undefined;
-        const guard = !s.rush && e.kind === 'unit' && e.order.type === 'idle' ? (e.guardAnchor ??= { x: e.x, y: e.y }) : undefined;
+        if (!s.rush && e.order.type === 'capture' && !e.guardAnchor && (distance(e, e.order) <= 2.2 || s.map.nodes.some(n => n.id === (e.order as { nodeId?: string }).nodeId && n.owner === e.team)))
+            e.guardAnchor = { x: e.order.x, y: e.order.y };
+        const guard = !s.rush && e.order.type === 'capture' ? e.guardAnchor : !s.rush && e.kind === 'unit' && e.order.type === 'idle' ? (e.guardAnchor ??= { x: e.x, y: e.y }) : undefined;
+        const returningToObjective = guard && e.order.type === 'capture' && distance(e, guard) > IDLE_GUARD_RADIUS + .2;
         const range = attackRange(s, e);
         if (e.order.type === 'attack')
             target = alive.find(a => a.id === (e.order as {
                 targetId: string;
             }).targetId && a.hp > 0 && isVisible(s, e.team, a.x, a.y));
-        if (!target && (e.order.type !== 'move' || e.kind === 'commander')) {
+        if (!target && !returningToObjective && (e.order.type !== 'move' || e.kind === 'commander')) {
             const sight = e.kind === 'building' || (e.kind === 'commander' && (e.order.type === 'move' || e.order.type === 'idle')) ? range : e.order.type === 'hold' ? range : e.order.type === 'capture' ? Math.min(e.vision, 5) : e.vision;
             let best = Infinity;
             for (const enemy of alive) {
@@ -654,7 +661,7 @@ function updateEntities(s: GameState, dt: number) {
             e.targetId = null;
             if (guard && distance(e, guard) > .3)
                 moveToward(s, e, guard, dt);
-            if (e.kind !== 'building' && (e.order.type === 'move' || e.order.type === 'attackMove' || e.order.type === 'capture')) {
+            else if (e.kind !== 'building' && (e.order.type === 'move' || e.order.type === 'attackMove' || e.order.type === 'capture')) {
                 const goal = e.order;
                 if (distance(e, goal) > .3)
                     moveToward(s, e, goal, dt);
@@ -716,21 +723,13 @@ function updatePopulation(s: GameState) {
 function updateEconomy(s: GameState, dt: number) {
     for (const p of s.players)
         if (!p.defeated) {
-            const modifier = (1 + (p.research.economy ?? 0) * .25) * BIOMES[s.map.biome].income * (s.settings.modifiers?.income ?? 1);
-            const lateRelics = s.settings.mode === 'conquest' ? s.map.nodes.filter(n => n.kind === 'relic' && n.owner === p.team).length : 0;
-            let gold = (.45 + lateRelics * .6) * s.escalation, wood = (.45 + lateRelics * .35) * s.escalation;
-            for (const node of s.map.nodes)
-                if (node.owner === p.team && node.kind !== 'relic' && node.amount > 0) {
-                    const depot = s.entities.some(e => e.team === p.team && e.type === 'depot' && active(e) && distance(e, node) < 7);
-                    const amount = Math.min(node.amount, node.income * modifier * (depot ? 1.35 : 1) * dt);
-                    node.amount -= amount;
-                    if (node.kind === 'gold')
-                        gold += amount / dt;
-                    else
-                        wood += amount / dt;
-                    if (node.amount <= 0)
-                        emit(s, { type: 'alert', x: node.x, y: node.y, team: p.team, text: `${node.kind === 'gold' ? 'Gold mine' : 'Timber grove'} depleted. Expand to a fresh deposit.` });
-                }
+            const { goldPerSecond: gold, woodPerSecond: wood, withdrawals } = getEconomyRates(s, p.team, dt);
+            for (const { nodeIndex, amount } of withdrawals) {
+                const node = s.map.nodes[nodeIndex];
+                node.amount -= amount;
+                if (node.amount <= 0)
+                    emit(s, { type: 'alert', x: node.x, y: node.y, team: p.team, text: `${node.kind === 'gold' ? 'Gold mine' : 'Timber grove'} depleted. Expand to a fresh deposit.` });
+            }
             p.gold += gold * dt;
             p.wood += wood * dt;
             p.stats.goldCollected += gold * dt;
