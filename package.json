@@ -1,0 +1,5 @@
+{
+  "name": "frontier-command", "version": "0.1.0", "private": true, "type": "module",
+  "scripts": {"dev":"vite --host 0.0.0.0", "build":"tsc --noEmit && vite build && node scripts/build-sw.mjs", "preview":"vite preview --host 0.0.0.0", "test":"vitest run", "test:watch":"vitest", "test:browser":"playwright test", "check":"tsc --noEmit", "simulate":"tsx scripts/simulate.ts"},
+  "devDependencies":{"@playwright/test":"^1.55.1","@types/node":"^22.18.0","tsx":"^4.20.5","typescript":"^5.9.2","vite":"^6.3.6","vitest":"^3.2.4"}
+}
