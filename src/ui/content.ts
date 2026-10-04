@@ -1,3 +1,5 @@
+import { validateTriggers } from "../sim/validation";
+import { MAP_DIMENSIONS } from "../sim/content";
 import type { GameSettings, ScriptTrigger } from "../sim/types";
 export interface Mission {
   id: string;
@@ -213,6 +215,16 @@ export function validateCampaign(campaign: CampaignDefinition): string[] {
   )
     errors.push("Campaign needs an id, title, and at least one mission.");
   for (const mission of campaign.missions) {
+    const dimensions = MAP_DIMENSIONS[mission.settings.mapSize ?? "medium"];
+    errors.push(
+      ...validateTriggers(mission.triggers, {
+        teamCount:
+          mission.settings.customMap?.spawns.length ??
+          Math.min(6, Math.max(2, (mission.settings.aiPlayers ?? 1) + 1)),
+        width: mission.settings.customMap?.width ?? dimensions,
+        height: mission.settings.customMap?.height ?? dimensions,
+      }).map((error) => `${mission.id}: ${error}`),
+    );
     if (!mission.id || ids.has(mission.id))
       errors.push(`Duplicate or missing mission id: ${mission.id}`);
     ids.add(mission.id);

@@ -2682,3 +2682,18 @@ footer {
 .action-card.funds-low .cost > span + span {
   color: #bfa88a;
 }
+.map-code-box {
+  display: block;
+  width: 100%;
+  min-height: 100px;
+  padding: 14px;
+  background: #0a202b;
+  color: var(--teal);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  font:
+    12px ui-monospace,
+    monospace;
+  margin: 15px 0 20px;
+  resize: vertical;
+}

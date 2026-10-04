@@ -43,7 +43,7 @@ export const BIOMES: Record<BiomeId, BiomeDefinition> = {
     desert: { id: 'desert', name: 'Sunscar Expanse', description: 'Open sight lines, precious resources, exposed approaches.', vision: 1.2, speed: 1.03, income: .92, primary: 'sand', colors: { ...palette, grass: '#a0a469', forest: '#7b894e', road: '#b29764' } },
     snow: { id: 'snow', name: 'Frostveil', description: 'Snow slows armies; marked roads make fast attack corridors.', vision: 1.05, speed: .88, income: 1, primary: 'snow', colors: { ...palette, forest: '#648784', rock: '#a4afae', road: '#9fa99d', water: '#5a91a6' } }
 };
-export const DEFAULT_SETTINGS: GameSettings = { seed: 'FRONTIER-492817', biome: 'grasslands', mapSize: 'medium', difficulty: 'normal', commander: 'warlord', faction: 'ironhold', mode: 'domination', duration: 18, aiPlayers: 1, aiControlPlayer: false, aiPersonality: 'adaptive', populationCap: 80, startingGold: 230, startingWood: 260, resourceAbundance: 1, terrainRoughness: .45, water: .12, objectiveDensity: 1, weirdness: 0, preset: 'balanced' };
+export const DEFAULT_SETTINGS: GameSettings = { seed: 'FRONTIER-492817', mapGenerationVersion: 4, biome: 'grasslands', mapSize: 'medium', difficulty: 'normal', commander: 'warlord', faction: 'ironhold', mode: 'domination', duration: 18, aiPlayers: 1, aiControlPlayer: false, aiPersonality: 'adaptive', populationCap: 80, startingGold: 230, startingWood: 260, resourceAbundance: 1, terrainRoughness: .45, water: .12, objectiveDensity: 1, weirdness: 0, preset: 'balanced' };
 export const MAP_DIMENSIONS = { tiny: 32, small: 42, medium: 54, large: 68, huge: 84 } as const;
 export const TEAM_COLORS = ['#56c5ff', '#ff9169', '#ce93ff', '#f5d46a', '#7de0ab', '#fa8bc9'];
 export const TEAM_SYMBOLS = ['◆', '▲', '●', '■', '✦', '✚'];

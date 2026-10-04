@@ -18,6 +18,8 @@ export type MapSize = 'tiny' | 'small' | 'medium' | 'large' | 'huge';
 export type MapPreset = 'competitive' | 'balanced' | 'wild' | 'chaotic';
 export interface GameSettings {
     seed: string;
+    /** Preserve this together with the seed to reproduce generated layouts. */
+    mapGenerationVersion?: 3 | 4;
     biome: BiomeId;
     mapSize: MapSize;
     difficulty: Difficulty;

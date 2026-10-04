@@ -16,10 +16,13 @@ export function isWalkable(map: GameMap, x: number, y: number): boolean { return
 export function isBuildable(map: GameMap, x: number, y: number): boolean { return isWalkable(map, x, y) && terrainAt(map, x, y) !== 'marsh' && terrainAt(map, x, y) !== 'forest'; }
 const emptyValidation = (): MapValidation => ({ valid: true, errors: [], warnings: [], reachablePercent: 1, fairness: 1 });
 export function generateMap(settings: GameSettings): GameMap {
+    const version = settings.mapGenerationVersion ?? 4;
+    if (version !== 3 && version !== 4)
+        throw new Error('Unsupported map generation version. Choose version 3 or 4.');
     const width = MAP_DIMENSIONS[settings.mapSize], height = width, center = { x: width / 2 + .5, y: height / 2 + .5 };
-    const rand = seededRandom(`${settings.seed}:v3:${settings.biome}:${settings.mapSize}:${settings.aiPlayers}:${settings.preset}`);
+    const rand = seededRandom(`${settings.seed}:v${version}:${settings.biome}:${settings.mapSize}:${settings.aiPlayers}:${settings.preset}`);
     const primary = BIOMES[settings.biome].primary;
-    const map: GameMap = { version: 3, seed: settings.seed, biome: settings.biome, width, height, tiles: Array(width * height).fill(primary), spawns: [], nodes: [], validation: emptyValidation() };
+    const map: GameMap = { version, seed: settings.seed, biome: settings.biome, width, height, tiles: Array(width * height).fill(primary), spawns: [], nodes: [], validation: emptyValidation() };
     const players = Math.min(6, Math.max(2, settings.aiPlayers + 1));
     if (players === 2) {
         map.spawns = [{ x: 6.5, y: height / 2 + .5 }, { x: width - 6.5, y: height / 2 + .5 }];
@@ -82,8 +85,24 @@ export function generateMap(settings: GameSettings): GameMap {
     }
     // Small neutral central reserves reward pushing beyond the safe starting deposits.
     if (width >= 42) {
-        node({ x: center.x - 6, y: center.y - 7 }, 'gold', null, resourceAmount * 1.8);
-        node({ x: center.x + 6, y: center.y + 7 }, 'wood', null, resourceAmount * 1.8);
+        if (version === 3) {
+            // Frozen legacy layout: explicit v3 seeds must remain reproducible.
+            node({ x: center.x - 6, y: center.y - 7 }, 'gold', null, resourceAmount * 1.8);
+            node({ x: center.x + 6, y: center.y + 7 }, 'wood', null, resourceAmount * 1.8);
+        }
+        else {
+            // Both flanks receive the same kinds and quantities of central reserves.
+            // The two-player start midpoint is (width/2, height/2+.5).
+            const left = center.x - 6, right = width - left, top = center.y - 7, bottom = center.y + 7;
+            for (const [x, y, kind] of [[left, top, 'gold'], [right, bottom, 'gold'], [left, bottom, 'wood'], [right, top, 'wood']] as [
+                number,
+                number,
+                'gold' | 'wood'
+            ][]) {
+                road({ x, y }, center, 1.1);
+                node({ x, y }, kind, null, resourceAmount * 1.8);
+            }
+        }
     }
     // Borders remain blocked for visual and navigation consistency.
     for (let x = 0; x < width; x++) {
@@ -121,6 +140,8 @@ export function validateMap(map: GameMap, competitive = false): MapValidation {
         return { valid: false, errors: ['Map must contain terrain, spawn locations, and resource points.'], warnings, reachablePercent: 0, fairness: 0 };
     if (map.spawns.some(p => !p || !Number.isFinite(p.x) || !Number.isFinite(p.y)) || map.nodes.some(n => !n || typeof n.id !== 'string' || !['gold', 'wood', 'relic'].includes(n.kind) || !Number.isFinite(n.x) || !Number.isFinite(n.y)))
         return { valid: false, errors: ['Map has invalid spawn or resource point records.'], warnings, reachablePercent: 0, fairness: 0 };
+    if (map.nodes.some(n => !Number.isFinite(n.amount) || n.amount < 0 || !Number.isFinite(n.maxAmount) || n.maxAmount < n.amount || !Number.isFinite(n.income) || n.income < 0 || !Number.isFinite(n.radius) || n.radius <= 0))
+        return { valid: false, errors: ['Resource points need nonnegative finite amounts, income, and positive capture radii.'], warnings, reachablePercent: 0, fairness: 0 };
     if (!Number.isInteger(map.width) || !Number.isInteger(map.height) || map.width < 16 || map.height < 16 || map.width > 160 || map.height > 160)
         errors.push('Map dimensions must be whole numbers from 16 to 160.');
     if (map.tiles.length !== map.width * map.height)

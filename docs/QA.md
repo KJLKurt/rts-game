@@ -2,10 +2,10 @@
 
 ## What has actually been checked
 
-Local verification on 2026-10-04 (latest aggregate: 03:30 UTC):
+Local verification on 2026-10-04 (latest aggregate: 03:53 UTC):
 
 - TypeScript: `npm run check` passed.
-- Unit/contract suite: `npm test` passed 83 tests across engine, maps, strategic AI, Rush Arena, content, save restoration, and platform storage/PWA. The map suite includes 400 deterministic generated maps.
+- Unit/contract suite: `npm test` passed 96 tests across engine, maps, strategic AI, Rush Arena, content, save restoration, and platform storage/PWA. The map suite includes 400 deterministic generated maps.
 - Production: `npm run build` passed, including generated service worker and 14 precached files at this checkpoint. Asset counts can change as art/audio are integrated.
 - Browser suite: `npx playwright test --list` discovered 72 cases, including intentional platform-specific skips. Discovery and TypeScript compilation are **not browser execution**.
 - Real browser execution in the original workspace was blocked by Chromium socket sandbox EPERM. A separate attempted executor escalation failed at infrastructure setup. Cloud browser navigation to that workspace's loopback URL was also blocked. No browser pass, offline-reload pass, touch pass, screenshot review, or audible-audio verification is claimed from that workspace. Do not weaken sandbox/browser security to work around this.
@@ -112,3 +112,9 @@ Code review found the following issues and sent them to the integration owner. L
 - Recruitment readiness used a single canonical building rather than each actual producer's roster; integration owner reported a fix.
 
 Keep regressions as tests rather than suppressing them to obtain a green report. When a browser failure is a test-fixture problem, explain that distinction and repair the fixture without weakening the product assertion.
+
+## Separate production-runner evidence
+
+The separate browser runner materialized the exact checkpoint02 production build and verified every asset hash. It rendered the real atlas on desktop and phone. It exercised movement, selection, recruitment, construction, captures, combat, abilities, tactical queued orders, saving/reloading, pan/pinch, and loss/restart. Its production service worker activated within `/rts-game/`, cached all14assets, and a phone save resumed and advanced with network disabled. These checks are narrower than execution of the entire Playwright suite, and they do not establish a complete skirmish win or repeated-match fun. A first normal-input Rush attempt ended in defeat at114seconds outside the shrinking ward; a retry remained under review.
+
+The v4 checkpoint was also installed from a clean archive using `npm ci` with the lockfile and then passed typecheck, all90 tests present at that point, and production build. Later validation additions are covered by the final aggregate above.

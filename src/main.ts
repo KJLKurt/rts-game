@@ -1,4 +1,5 @@
 import "./style.css";
+import { encodeMapCode, decodeMapCode } from "./ui/map-code";
 import { chooseAbilityTarget } from "./ui/targeting";
 import {
   createGame,
@@ -85,6 +86,8 @@ let settings: Partial<GameSettings> = {
   seed: randomSeed(),
   biome: "grasslands",
   mapSize: "medium",
+  mapGenerationVersion: 4,
+  populationCap: 80,
   difficulty: "normal",
   faction: "ironhold",
   commander: "warlord",
@@ -167,7 +170,7 @@ function showMenu(page = "home") {
     renderer.camera.zoom = 0.95;
   }
   if (page === "home") {
-    screen.innerHTML = `<div class="menu-scrim"></div><main class="home"><div class="brandmark">${icon("crown")}<span>A WORLD WORTH FIGHTING FOR</span></div><h1>FRONTIER<br><em>COMMAND</em></h1><p class="home-lede">Build your stronghold. Lead from the front.<br>Turn one small army into a legend.</p><div class="home-actions">${button("Play skirmish", "skirmish", "primary large", "sword")}${button("Rush Arena · 4 minute survival", "rush", "secondary rush-entry", "lightning")}${savedGame ? button("Continue battle", "continue", "secondary", "play") : ""}${button("Rise of the Frontier", "campaign", "secondary", "flag")}${button("Frontier expedition", "expedition", "secondary", "map")}</div><div class="home-links">${button("How to play", "help", "", "book")}${button("Map workshop", "editor", "", "map")}${button("Command record", "record", "", "star")}${button("Settings", "settings", "", "gear")}</div><footer><span class="offline-dot"></span> <span id="offline-status">${navigator.serviceWorker?.controller ? "Offline ready" : "Offline after first full load"}</span> · Solo strategy <span class="version">v0.1 · Founder's build</span></footer></main><aside class="home-aside"><div class="vertical-rule"></div><span>YOUR BANNER.<br>YOUR FRONTIER.</span></aside>`;
+    screen.innerHTML = `<div class="menu-scrim"></div><main class="home"><div class="brandmark">${icon("crown")}<span>A WORLD WORTH FIGHTING FOR</span></div><h1>FRONTIER<br><em>COMMAND</em></h1><p class="home-lede">Build your stronghold. Lead from the front.<br>Turn one small army into a legend.</p><div class="home-actions">${button("Play skirmish", "skirmish", "primary large", "sword")}${button("Rush Arena · 4 minute survival", "rush", "secondary rush-entry", "lightning")}${savedGame ? button("Continue battle", "continue", "secondary", "play") : ""}${button("Rise of the Frontier", "campaign", "secondary", "flag")}${button("Frontier expedition", "expedition", "secondary", "map")}</div><div class="home-links">${button("How to play", "help", "", "book")}${button("Map workshop", "editor", "", "map")}${button("Command record", "record", "", "star")}${button("Settings", "settings", "", "gear")}</div><footer><span class="offline-dot"></span> <span id="offline-status">${navigator.serviceWorker?.controller ? "Offline ready" : "Offline after first full load"}</span> · Solo strategy <span class="version">v0.1 · Testing preview</span></footer></main><aside class="home-aside"><div class="vertical-rule"></div><span>YOUR BANNER.<br>YOUR FRONTIER.</span></aside>`;
   } else if (page === "skirmish") renderSetup();
   else if (page === "campaign") renderCampaign();
   else if (page === "expedition") renderExpedition();
@@ -183,6 +186,14 @@ function optionSelect(
   values: string[],
   labels?: string[],
 ) {
+  if (
+    key === "duration" &&
+    settings.duration &&
+    !values.includes(String(settings.duration))
+  ) {
+    values = [String(settings.duration), ...values];
+    labels = [`${settings.duration} min · shared map`, ...(labels || [])];
+  }
   return `<label class="field"><span>${label}</span><select name="${key}">${values.map((v, i) => `<option value="${v}" ${String((settings as any)[key]) === v ? "selected" : ""}>${labels?.[i] || v[0].toUpperCase() + v.slice(1)}</option>`).join("")}</select></label>`;
 }
 function renderSetup() {
@@ -205,7 +216,7 @@ function renderSetup() {
     "biome",
     Object.keys(BIOMES),
     Object.values(BIOMES).map((b) => b.name),
-  )}${optionSelect("Match length", "duration", ["8", "18", "25", "40"], ["Quick · 8–12 min", "Standard · 15–20 min", "Long · 20–30 min", "Epic · 35–50 min"])}${optionSelect("Map size", "mapSize", ["tiny", "small", "medium", "large", "huge"])}${optionSelect("Enemy skill", "difficulty", ["easy", "normal", "hard", "brutal"])}${optionSelect("Victory", "mode", ["domination", "conquest", "relic"], ["Domination · territory & score", "Conquest · destroy every keep", "Relic race · hold the center"])}</div><details class="advanced"><summary>Advanced battlefield settings</summary><div class="field-grid">${optionSelect("Rivals", "aiPlayers", ["1", "2", "3"])}${optionSelect("Map generation", "preset", ["balanced", "competitive", "wild", "chaotic"])}${optionSelect("AI personality", "aiPersonality", ["adaptive", "aggressive", "defensive", "economic", "raider", "expansionist"])}${optionSelect("Army ceiling", "populationCap", ["40", "60", "90", "120"])}</div></details><label class="field seed-field"><span>Map seed <small>Same seed. Same frontier.</small></span><div><input name="seed" maxlength="40" value="${esc(settings.seed)}" aria-label="Map seed">${button("New seed", "new-seed", "square", "spark", 'type="button"')}</div></label></section><div class="launch-bar"><p>${icon("book")} New commander? Start the campaign for a gentler first battle.</p>${button("To the frontier", "launch", "primary large", "arrow", 'type="submit"')}</div></form></main>`;
+  )}${optionSelect("Match length", "duration", ["8", "18", "25", "40"], ["Quick · 8–12 min", "Standard · 15–20 min", "Long · 20–30 min", "Epic · 35–50 min"])}${optionSelect("Map size", "mapSize", ["tiny", "small", "medium", "large", "huge"])}${optionSelect("Enemy skill", "difficulty", ["easy", "normal", "hard", "brutal"])}${optionSelect("Victory", "mode", ["domination", "conquest", "relic"], ["Domination · territory & score", "Conquest · destroy every keep", "Relic race · hold the center"])}</div><details class="advanced"><summary>Advanced battlefield settings</summary><div class="field-grid">${optionSelect("Rivals", "aiPlayers", ["1", "2", "3", "4", "5"])}${optionSelect("Map generation", "preset", ["balanced", "competitive", "wild", "chaotic"])}${optionSelect("AI personality", "aiPersonality", ["adaptive", "aggressive", "defensive", "economic", "raider", "expansionist"])}${optionSelect("Army ceiling", "populationCap", ["40", "60", "80", "120"])}${optionSelect("Map generator", "mapGenerationVersion", ["4", "3"], ["v4 · mirrored reserves", "v3 · legacy maps"])}</div></details><label class="field seed-field"><span>Map seed or map code <small>Same code. Same frontier.</small></span><div><input name="seed" maxlength="2000" value="${esc(settings.seed)}" aria-label="Map seed">${button("New seed", "new-seed", "square", "spark", 'type="button"')}</div></label></section><div class="launch-bar"><p>${icon("book")} New commander? Start the campaign for a gentler first battle.</p>${button("To the frontier", "launch", "primary large", "arrow", 'type="submit"')}</div></form></main>`;
   screen
     .querySelectorAll<HTMLCanvasElement>("[data-portrait]")
     .forEach((c) => void renderer.renderPortrait(c, c.dataset.portrait as any));
@@ -409,7 +420,7 @@ function updateHUD() {
     "match-time",
     `${time(state.time)}${speed !== 1 ? ` <small>${speed}×</small>` : ""}`,
   );
-  set("map-seed", esc(state.settings.seed));
+  set("map-seed", `${esc(state.settings.seed)} · v${state.map.version}`);
   const enemy = state.players.filter((pl) => pl.team !== 0 && !pl.defeated);
   const maxScore = Math.max(1, state.scoreTarget);
   set(
@@ -544,7 +555,7 @@ function showSettings() {
 function showPauseMenu() {
   showDialog(
     "Take a breath",
-    `<p class="muted">The battle is paused. Your frontier will wait.</p><div class="menu-stack">${button("Return to battle", "resume-dialog", "primary", "play")}${button("Save battle", "save", "", "save")}${button("How to play", "help", "", "book")}${button("Settings", "settings", "", "gear")}${button("Save & leave", "save-leave", "", "back")}</div>`,
+    `<p class="muted">The battle is paused. Your frontier will wait.</p><div class="menu-stack">${button("Return to battle", "resume-dialog", "primary", "play")}${button("Save battle", "save", "", "save")}${button("Copy map code", "copy-map-code", "", "map")}${button("How to play", "help", "", "book")}${button("Settings", "settings", "", "gear")}${button("Save & leave", "save-leave", "", "back")}</div>`,
   );
   updateHUD();
 }
@@ -683,7 +694,7 @@ function showResult() {
   audio.play(win ? "victory" : "defeat");
   showDialog(
     win ? "The frontier is yours." : "The banner will rise again.",
-    `<div class="result-emblem ${win ? "win" : ""}">${icon(win ? "crown" : "shield")}</div><p class="result-reason">${esc(state.players[0].defeated && state.winner === null ? "Your Command Keep has fallen." : state.victoryReason || "The battle has ended.")}</p><div class="record-stats"><div><b>${time(state.time)}</b><span>Battle time</span></div><div><b>${state.players[0].stats.kills}</b><span>Enemies defeated</span></div><div><b>${state.players[0].stats.captures}</b><span>Points captured</span></div></div>${earned.length ? `<div class="new-achievements">${earned.map((id) => `<span>${icon("star")}${ACHIEVEMENTS.find((a) => a.id === id)?.name}</span>`).join("")}</div>` : ""}<div class="result-actions">${win && missionIndex !== null && missionIndex < activeCampaign.missions.length - 1 ? button("Next chapter", "next-mission", "primary", "arrow") : win && expeditionStage !== null && expeditionStage < 2 ? button("Choose your next frontier", "next-expedition", "primary", "arrow") : button("Another frontier", "rematch", "primary", "arrow")}${button("Command record", "result-record", "", "star")}${button("Main menu", "result-home", "", "back")}</div>`,
+    `<div class="result-emblem ${win ? "win" : ""}">${icon(win ? "crown" : "shield")}</div><p class="result-reason">${esc(state.players[0].defeated && state.winner === null ? "Your Command Keep has fallen." : state.victoryReason || "The battle has ended.")}</p><div class="record-stats"><div><b>${time(state.time)}</b><span>Battle time</span></div><div><b>${state.players[0].stats.kills}</b><span>Enemies defeated</span></div><div><b>${state.players[0].stats.captures}</b><span>Points captured</span></div></div>${earned.length ? `<div class="new-achievements">${earned.map((id) => `<span>${icon("star")}${ACHIEVEMENTS.find((a) => a.id === id)?.name}</span>`).join("")}</div>` : ""}<div class="result-actions">${win && missionIndex !== null && missionIndex < activeCampaign.missions.length - 1 ? button("Next chapter", "next-mission", "primary", "arrow") : win && expeditionStage !== null && expeditionStage < 2 ? button("Choose your next frontier", "next-expedition", "primary", "arrow") : win ? button("Another frontier", "rematch", "primary", "arrow") : button(expeditionStage !== null ? "Start a new expedition" : "Try again", "retry", "primary", "play")}${button("Command record", "result-record", "", "star")}${button("Main menu", "result-home", "", "back")}</div>`,
     "result-dialog",
   );
 }
@@ -724,13 +735,34 @@ function showRushUpgrade() {
       .join("")}</div>`,
   );
 }
-function readSetup() {
+function readSetup(): boolean {
   const form = document.querySelector<HTMLFormElement>("#setup-form");
-  if (!form) return;
+  if (!form) return true;
   const values = Object.fromEntries(new FormData(form).entries());
-  for (const key of ["duration", "aiPlayers", "populationCap"])
+  for (const key of [
+    "duration",
+    "aiPlayers",
+    "populationCap",
+    "mapGenerationVersion",
+  ])
     if (values[key]) values[key] = Number(values[key]) as any;
-  settings = { ...settings, ...values } as Partial<GameSettings>;
+  let imported: Partial<GameSettings> = {};
+  try {
+    if (/^FC\d+\|/.test(String(values.seed)))
+      imported = decodeMapCode(String(values.seed));
+    else if (String(values.seed).length > 80)
+      throw Error(
+        "Use a seed under 80 characters, or paste a complete map code.",
+      );
+  } catch (error) {
+    toast(
+      error instanceof Error ? error.message : "Invalid map code.",
+      "warning",
+    );
+    return false;
+  }
+  settings = { ...settings, ...values, ...imported } as Partial<GameSettings>;
+  return true;
 }
 // A deliberately small, real editor: generated maps are immediately paintable, validated, exportable, and playable.
 let editing = false,
@@ -913,8 +945,7 @@ async function handleAction(action: string, id?: string) {
       renderSetup();
       break;
     case "launch":
-      readSetup();
-      launchGame();
+      if (readSetup()) launchGame();
       break;
     case "continue":
       await continueGame();
@@ -1036,6 +1067,33 @@ async function handleAction(action: string, id?: string) {
             y: c.y,
           });
       toast("New recruits will rally here.");
+      break;
+    }
+    case "copy-map-code": {
+      if (state.settings.customMap) {
+        toast("Share this workshop map with Export JSON in the editor.");
+        break;
+      }
+      const code = encodeMapCode(state.settings, state.map.version);
+      try {
+        await navigator.clipboard.writeText(code);
+        toast("Map setup copied, including its seed and generator version.");
+      } catch {
+        showDialog(
+          "Your map code",
+          `<p class="muted">Copy this into Map seed on the skirmish screen to recreate the terrain and supplies.</p><textarea class="map-code-box" readonly aria-label="Map code">${esc(code)}</textarea>${button("Done", "close-dialog", "primary", "check")}`,
+        );
+      }
+      break;
+    }
+    case "retry": {
+      const mission = missionIndex,
+        expedition = expeditionStage,
+        previous = { ...state.settings };
+      closeDialog();
+      if (expedition !== null) {
+        void handleAction("start-expedition");
+      } else launchGame(previous, mission, null);
       break;
     }
     case "save":
@@ -1160,8 +1218,7 @@ app.addEventListener("click", (e) => {
 app.addEventListener("submit", (e) => {
   e.preventDefault();
   if ((e.target as HTMLElement).id === "setup-form") {
-    readSetup();
-    launchGame();
+    if (readSetup()) launchGame();
   }
 });
 app.addEventListener("input", (e) => {

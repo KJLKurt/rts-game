@@ -1,7 +1,9 @@
+import { validateTriggers } from './validation';
 import type { GameMap, GameState, GameSettings, GameCommand, CommandResult, Entity, Point, Player, PlayerStats, UnitId, BuildingId, TechId, GameEvent, CommanderId, ScriptAction, RushUpgradeId } from './types';
 import { DEFAULT_SETTINGS, UNITS, BUILDINGS, COMMANDERS, FACTIONS, TECHNOLOGIES, BIOMES, FIXED_STEP, TEAM_COLORS, TEAM_SYMBOLS, MAP_DIMENSIONS, RUSH_UPGRADES } from './content';
 import { generateMap, validateMap, hashSeed, distance, isWalkable, isBuildable, terrainAt, tileIndex, findPath } from './maps';
 const clamp = (n: number, a: number, b: number) => Math.max(a, Math.min(b, n));
+const knownId = (definitions: object, id: unknown) => typeof id === 'string' && Object.prototype.hasOwnProperty.call(definitions, id);
 const direction = (a: Point, b: Point): Point => { const d = distance(a, b); return d > .001 ? { x: (b.x - a.x) / d, y: (b.y - a.y) / d } : { x: 1, y: 0 }; };
 const living = (e: Entity) => e.hp > 0;
 const active = (e: Entity) => e.hp > 0 && e.buildProgress >= 1;
@@ -18,9 +20,11 @@ export function createGame(partial: Partial<GameSettings> = {}): GameState {
     settings.aiPlayers = clamp(Math.floor(settings.aiPlayers), 1, 5);
     settings.duration = clamp(settings.duration, 4, 90);
     settings.populationCap = clamp(settings.populationCap, 12, 200);
-    if (!BIOMES[settings.biome] || !FACTIONS[settings.faction] || !COMMANDERS[settings.commander])
+    if (!knownId(BIOMES, settings.biome) || !knownId(FACTIONS, settings.faction) || !knownId(COMMANDERS, settings.commander))
         throw new Error('Unknown biome, faction or commander.');
     const map: GameMap = settings.customMap ? JSON.parse(JSON.stringify(settings.customMap)) : generateMap(settings);
+    if (settings.customMap && (map.version === 3 || map.version === 4))
+        settings.mapGenerationVersion = map.version;
     map.validation = validateMap(map, settings.preset === 'competitive');
     if (!map.validation.valid)
         throw new Error(`Invalid map: ${map.validation.errors.join(' ')}`);
@@ -910,10 +914,13 @@ function aiOrder(s: GameState, p: Player, entities: Entity[], goal: Point, nodeI
     if (!nodeId && p.aiPhase === 'Advancing a combined siege column')
         assignSiegeEscorts(entities);
 }
-function assignSiegeEscorts(entities: Entity[]) { const siege = entities.find(e => e.type === 'siege' && living(e)); if (siege)
-    for (const unit of entities)
-        if (unit.type !== 'siege')
-            unit.escortId = siege.id; }
+function assignSiegeEscorts(entities: Entity[]) {
+    const siege = entities.find(e => e.type === 'siege' && living(e));
+    if (siege)
+        for (const unit of entities)
+            if (unit.type !== 'siege')
+                unit.escortId = siege.id;
+}
 function thinkAI(s: GameState, p: Player) {
     const interval = { easy: 4.2, normal: 2.5, hard: 1.5, brutal: .8 }[s.settings.difficulty];
     p.aiNextThink = s.time + interval;
@@ -1105,11 +1112,18 @@ export function restoreGame(input: string | object): GameState {
         fail('world state is incomplete.');
     if (!data.settings || typeof data.settings !== 'object')
         fail('match settings are missing.');
-    data.settings = { ...DEFAULT_SETTINGS, ...data.settings };
+    data.settings = { ...DEFAULT_SETTINGS, ...data.settings, mapGenerationVersion: data.settings.mapGenerationVersion ?? (data.map.version === 3 ? 3 : 4) };
     const settings = data.settings;
-    if (!COMMANDERS[settings.commander] || !FACTIONS[settings.faction] || !BIOMES[settings.biome] || !MAP_DIMENSIONS[settings.mapSize] || !['easy', 'normal', 'hard', 'brutal'].includes(settings.difficulty) || !['domination', 'conquest', 'relic', 'rush'].includes(settings.mode) || !['competitive', 'balanced', 'wild', 'chaotic'].includes(settings.preset) || typeof settings.seed !== 'string' || !number(settings.duration, 1, 120) || !number(settings.populationCap, 1, 500))
+    if (![3, 4].includes(settings.mapGenerationVersion ?? 4) || !knownId(COMMANDERS, settings.commander) || !knownId(FACTIONS, settings.faction) || !knownId(BIOMES, settings.biome) || !knownId(MAP_DIMENSIONS, settings.mapSize) || !['easy', 'normal', 'hard', 'brutal'].includes(settings.difficulty) || !['domination', 'conquest', 'relic', 'rush'].includes(settings.mode) || !['competitive', 'balanced', 'wild', 'chaotic'].includes(settings.preset) || typeof settings.seed !== 'string' || !number(settings.duration, 1, 120) || !number(settings.populationCap, 1, 500))
         fail('match settings contain unknown content or invalid values.');
-    if (!Array.isArray(data.map.tiles) || !Array.isArray(data.map.spawns) || !Array.isArray(data.map.nodes) || !BIOMES[data.map.biome])
+    if (settings.modifiers !== undefined) {
+        if (!settings.modifiers || typeof settings.modifiers !== 'object' || Array.isArray(settings.modifiers))
+            fail('match modifiers must be numeric multipliers.');
+        for (const [key, value] of Object.entries(settings.modifiers))
+            if (!['income', 'playerDamage', 'playerHealth', 'captureSpeed'].includes(key) || !number(value, key === 'playerHealth' ? .001 : 0, 1000))
+                fail('match modifiers contain invalid multipliers.');
+    }
+    if (!Array.isArray(data.map.tiles) || !Array.isArray(data.map.spawns) || !Array.isArray(data.map.nodes) || !knownId(BIOMES, data.map.biome))
         fail('map data is incomplete.');
     if (!number(data.map.width, 16, 160) || !number(data.map.height, 16, 160) || !data.map.spawns.every(point))
         fail('map dimensions or spawn coordinates are invalid.');
@@ -1127,10 +1141,10 @@ export function restoreGame(input: string | object): GameState {
     if (!validation.valid)
         fail(`map is invalid: ${validation.errors.join(' ')}`);
     for (const [team, p] of data.players.entries()) {
-        if (!p || p.team !== team || !FACTIONS[p.faction] || !COMMANDERS[p.commander] || !number(p.gold, 0) || !number(p.wood, 0) || !number(p.score, 0) || !number(p.maxPopulation, 1, 500) || !p.stats || !p.research)
+        if (!p || p.team !== team || !knownId(FACTIONS, p.faction) || !knownId(COMMANDERS, p.commander) || !number(p.gold, 0) || !number(p.wood, 0) || !number(p.score, 0) || !number(p.maxPopulation, 1, 500) || !p.stats || !p.research)
             fail('player data is invalid.');
         for (const [id, value] of Object.entries(p.research))
-            if (!TECHNOLOGIES[id as TechId] || !Number.isInteger(value) || !number(value, 0, TECHNOLOGIES[id as TechId].maxLevel))
+            if (!knownId(TECHNOLOGIES, id as TechId) || !Number.isInteger(value) || !number(value, 0, TECHNOLOGIES[id as TechId].maxLevel))
                 fail('research values are invalid.');
         for (const value of Object.values(p.stats))
             if (!number(value, 0))
@@ -1138,7 +1152,7 @@ export function restoreGame(input: string | object): GameState {
     }
     const entityIds = new Set<string>();
     for (const e of data.entities) {
-        if (!e || typeof e.id !== 'string' || entityIds.has(e.id) || !point(e) || !Number.isInteger(e.team) || !data.players[e.team] || !['unit', 'commander', 'building'].includes(e.kind) || (e.kind === 'unit' && !UNITS[e.type as UnitId]) || (e.kind === 'building' && e.type !== 'turret' && !BUILDINGS[e.type as BuildingId]) || (e.kind === 'commander' && !COMMANDERS[e.type as CommanderId]))
+        if (!e || typeof e.id !== 'string' || entityIds.has(e.id) || !point(e) || !Number.isInteger(e.team) || !data.players[e.team] || !['unit', 'commander', 'building'].includes(e.kind) || (e.kind === 'unit' && !knownId(UNITS, e.type as UnitId)) || (e.kind === 'building' && e.type !== 'turret' && !knownId(BUILDINGS, e.type as BuildingId)) || (e.kind === 'commander' && !knownId(COMMANDERS, e.type as CommanderId)))
             fail('entities have unknown types, IDs, teams, or locations.');
         entityIds.add(e.id);
         for (const key of ['hp', 'maxHp', 'damage', 'armor', 'range', 'speed', 'vision', 'attackCooldown', 'attackPeriod', 'radius', 'buildProgress', 'buildTime', 'buffUntil', 'slowUntil', 'invulnerableUntil'] as const)
@@ -1166,7 +1180,7 @@ export function restoreGame(input: string | object): GameState {
         if (e.rally !== null && !point(e.rally))
             fail(`entity ${e.id} has an invalid rally point.`);
         for (const q of e.queue)
-            if (!q || !['unit', 'research'].includes(q.type) || (q.type === 'unit' && !UNITS[q.id as UnitId]) || (q.type === 'research' && !TECHNOLOGIES[q.id as TechId]) || !number(q.total, .001) || !number(q.remaining, 0, q.total))
+            if (!q || !['unit', 'research'].includes(q.type) || (q.type === 'unit' && !knownId(UNITS, q.id as UnitId)) || (q.type === 'research' && !knownId(TECHNOLOGIES, q.id as TechId)) || !number(q.total, .001) || !number(q.remaining, 0, q.total))
                 fail(`entity ${e.id} has an invalid production queue.`);
     }
     data.pendingCommands ??= [];
@@ -1188,8 +1202,12 @@ export function restoreGame(input: string | object): GameState {
     if (!Array.isArray(data.commandLog))
         fail('command history is invalid.');
     data.triggers ??= [];
-    if (!Array.isArray(data.triggers))
-        fail('mission triggers are invalid.');
+    const triggerErrors = validateTriggers(data.triggers, { teamCount: data.players.length, width: data.map.width, height: data.map.height });
+    if (triggerErrors.length)
+        fail(`mission triggers are invalid: ${triggerErrors.join(' ')}`);
+    data.lastFogTick ??= data.tick - 5;
+    if (!Number.isInteger(data.lastFogTick) || data.lastFogTick > data.tick)
+        fail('fog refresh timer is invalid.');
     data.navigationVersion ??= 0;
     const fogMissing = !data.fog || !Array.isArray(data.fog.visible) || !Array.isArray(data.fog.explored);
     const validFog = (rows: number[][]) => rows.length === data.players.length && rows.every(row => Array.isArray(row) && row.length === data.map.width * data.map.height && row.every(v => v === 0 || v === 1));
@@ -1203,7 +1221,7 @@ export function restoreGame(input: string | object): GameState {
         const r = data.rush!;
         if (!r || !point(r.center) || !number(r.radius, 1, 100) || !number(r.initialRadius, 1, 100) || !number(r.surviveUntil, 1) || !number(r.wave, 0) || !number(r.nextWaveAt, 0) || !number(r.nextUpgradeAt, 0) || !number(r.upgradeAvailable, 0) || !Array.isArray(r.upgrades) || !Array.isArray(r.offeredUpgrades) || !Array.isArray(r.supplies) || !Array.isArray(r.hazards))
             fail('Rush Arena state is invalid.');
-        if ([...r.upgrades, ...r.offeredUpgrades].some(id => !RUSH_UPGRADES[id]))
+        if ([...r.upgrades, ...r.offeredUpgrades].some(id => !knownId(RUSH_UPGRADES, id)))
             fail('Rush Arena upgrades are unknown.');
         for (const p of r.supplies)
             if (!point(p) || !['heal', 'reinforcements', 'charge'].includes(p.kind) || !number(p.expiresAt, 0))

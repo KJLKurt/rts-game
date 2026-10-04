@@ -15,6 +15,7 @@ for (let n = 0; n < count; n++) {
   const state = createGame({
     seed: `${args.seed || "BALANCE"}-${n}`,
     aiControlPlayer: true,
+    mapGenerationVersion: args["map-version"] === "3" ? 3 : 4,
     mode,
     duration,
     mapSize: duration <= 8 ? "small" : "medium",
@@ -31,6 +32,7 @@ for (let n = 0; n < count; n++) {
     stepGame(state, 1);
   const result = {
     seed: state.settings.seed,
+    mapGenerationVersion: state.map.version,
     mode,
     biome: state.settings.biome,
     seconds: Math.round(state.time),

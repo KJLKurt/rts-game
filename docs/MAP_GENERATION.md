@@ -7,3 +7,7 @@ Spawns, guaranteed initial gold and wood, expansion nodes, and relics are connec
 Pathfinding uses cached A* paths on the tile grid and building occupancy. Each unit follows waypoints; it does not run full-map search every frame. Navigation revisions invalidate building-dependent routes. Direct routes use a cheap fast path. Local spacing reduces complete visual overlap but is not a full crowd fluid solver.
 
 `validateMap` is also used by the editor, game creation, and save restore. A valid map is reachable, not necessarily balanced or enjoyable: play it, contest its objectives, and inspect choke points with actual armies.
+
+## Portable map codes
+
+The battle menu can copy a map code containing its seed, generator version, biome, dimensions, player count, preset, requested duration, resource/terrain parameters, and mode. Paste that code into the skirmish seed field to restore those settings. Commander, faction, and difficulty remain your choices. Custom workshop maps use JSON export instead. Generator v4 has mirrored central resource types; explicit v3 maps remain supported for older shared seeds.

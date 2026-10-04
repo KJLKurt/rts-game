@@ -12,7 +12,7 @@ describe('siege planning regression', () => {
         }, 10000);
     it('the authored Ironwatch campaign mission can end through a real siege', () => { const mission = CAMPAIGN.missions.find(m => m.id === 'ironwatch')!; const s = createGame({ ...mission.settings, aiControlPlayer: true }); s.triggers = structuredClone(mission.triggers); stepGame(s, 3241); expect(s.victoryReason).toBe('All enemy Command Keeps destroyed'); expect(s.time).toBeLessThan(2160); }, 10000);
     it('player-issued combined arms orders can destroy a fortified keep', () => {
-        const s = createGame({ seed: 'siege-probe', mapSize: 'small', mode: 'conquest', duration: 8 });
+        const s = createGame({ seed: 'siege-probe', mapGenerationVersion: 3, mapSize: 'small', mode: 'conquest', duration: 8 });
         const start = s.map.spawns[0];
         for (let i = 0; i < 4; i++)
             spawnEntity(s, 0, 'unit', 'siege', start.x + 5, start.y + i * .7);
