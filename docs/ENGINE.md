@@ -110,9 +110,9 @@ Capture/March orders now secure and guard their objective. Units and commanders 
 
 A controlled reproduction using the `SCOUT-LIVE-002` seed and flattened test terrain confirmed that the old Capture target filter permitted a swordsman to chase retreating bait 5.08 tiles off an already-owned relic. This was an order-semantics defect; the test does not claim the seed's terrain caused the live event. The fixed unit stayed within 1.99 tiles and returned. Six dedicated regressions cover whole-army/commander arrival, capture-to-retreat, offensive override, old-save return, obstacle navigation, and recapture. The stronger positional defense changes some battle outcomes: the former four-gun test's blind keep-directed Charges lost its escort fight; aiming Charge at nearby visible troops and explicitly resuming Attack-move preserves a real player-issued siege victory without weakening the opponent.
 
-## Active local defense candidate
+## Active local defense
 
-Ordinary Outpost play exposed a consequence of the original anti-chase fix: a full-health idle Warlord could stand beside a group losing soldiers to ranged fire, because the shooter was beyond the default leash. The candidate uses only actual recent damage facts, not a universal larger acquisition radius.
+Ordinary Outpost play exposed a consequence of the original anti-chase fix: a full-health idle Warlord could stand beside a group losing soldiers to ranged fire, because the shooter was beyond the default leash. The response uses only actual recent damage facts, not a universal larger acquisition radius.
 
 - A living, visible hostile unit must have dealt damage within the last 2.5 seconds to the guard or to a friendly target within three tiles of the unchanged anchor. Buildings do not become chase targets.
 - The attacker must remain within 7.5 tiles of that anchor. Response movement caps at six tiles, then returns when the threat expires, dies, becomes hidden or leaves the boundary. Another distant attacker cannot advance the anchor.

@@ -26,10 +26,20 @@ That review caught guide stage resetting on Continue and a tactical-pause ribbon
 
 ## Remaining limits
 
-Complete manual campaign and expedition runs, broad difficulty/faction win-rate balancing, installed-app lifecycle on physical phone hardware, and subjective music listening remain unverified. Codec metrics, decoded buffers and an unlocked AudioContext do not establish that the music was subjectively heard. A full browser suite does not replace physical-device performance or repeated human play.
+Complete manual campaign playthrough, alternate expedition routes/loss handling, broad difficulty/faction win-rate balancing, installed-app lifecycle on physical phone hardware, and subjective music listening remain unverified. Codec metrics, decoded buffers and an unlocked AudioContext do not establish that the music was subjectively heard. A full browser suite does not replace physical-device performance or repeated human play.
 
 ## Advertised-mode follow-up
 
 Hosted `2b2141f`, Outpost story chapter, first ordinary-UI attempt: defeat by relic score at 8:29, 125–640, 59 kills,seven captures. The run used recruitment, ranged/healing/cavalry unlocks, buildings, economy research, capture, tactical pause and recovery; an overextended opening and long command gaps contributed to failure. Results and Try again restored the correct Outpost briefing, seed, 0:00, starting stocks and army. This establishes a normal loss/retry path, not chapter unlocking; a second staged-opening attempt and an independent expedition run are still in progress.
 
 The second hosted Outpost attempt used a protected Range/House and a staged mixed army, then explicit counterattacks, captures and cavalry. It ended in Keep destruction at 8:08, with 76 kills and three captures. Active recovery stopped at 5:05; the remaining decline was observed at the ordinary 2× UI speed, so it is not a sustained-play balance measurement. It exposed the local guard-retaliation gap documented in `ENGINE.md` and a result-copy perspective defect. Both corrections are in a candidate; chapter unlocking remains an outstanding ordinary-UI check.
+
+## Full expedition completion
+
+Independent ordinary-UI testing on deployed `2b2141f` completed all three stages at the built-in 2× speed with tactical pause: Easy Foothold at 8:10, Normal Whisperwood at 15:08, then Hard Sunscar at 19:36 (1200–977). Both route-choice screens appeared, and starting resources advanced 230/260 → 380/410 → 530/560 for both sides. Stage-two Save/reload/Continue preserved 0:39.7. The ending awarded Wayfinder and recorded three wins and one completed expedition. There was no softlock. This successful route did not test alternate biomes or an expedition defeat/retry, and it predates the active-defense correction.
+
+## Final defense and campaign-transition gate
+
+Independent ordinary-UI review of exact `85dc40b5` / static preview `846334d` verified default retaliation stayed within six tiles with unchanged anchors, explicit Hold remained stationary under fire, and the protected opening kept six troops and full commander health through the first minute. Outpost then ended in a genuine victory at 4:39 game time. Hold the Line unlocked; its briefing stayed paused at zero, and Save/reload/Continue preserved paused 0:00.3 exactly. The full Hold the Line battle and chapters3–5 were not played through in this gate.
+
+The campaign transition and full expedition route establish advertised modes can advance and end through ordinary controls; the prior failed attempts remain recorded because they exposed useful defects. The successful run is not a controlled win-rate comparison with the earlier attempts.

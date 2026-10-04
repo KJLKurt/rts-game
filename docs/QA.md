@@ -200,3 +200,15 @@ Two ordinary-UI Outpost attempts ended cleanly (one score defeat/retry, one Keep
 The same Keep loss exposed winner-perspective result text on the losing screen and “You’s Command Keep” alert wording. A pure local-perspective presenter and team-aware alert now cover both.
 
 The candidate passes typecheck, all 226 local checks across 29 files and the production build. Nineteen new threat-response tests and two alert tests join five result-wording tests. Browser discovery is now 108 cases, adding three explicitly labeled result-presentation/retry fixtures. Those fixtures are not campaign-completion evidence. The new browser acceptance and ordinary-UI progression review remain pending.
+
+## Final defense acceptance and campaign progression: 2026-10-04, 08:07 UTC
+
+Exact source `85dc40b5beabd2cf07072bf85cc6758e7ac32a10`, [run 37186731321](https://github.com/KJLKurt/rts-game/actions/runs/37186731321): **101 passed, seven documented input-specific skips, zero failures/flakes** in 4.4 minutes. All 108 discovered cases are accounted for. All 226 local tests across 29 files, typecheck, content validation and production build passed. Report artifact 11297024603 is 7,439,644 bytes and expires 2026-10-06T07:49:54Z.
+
+Independent actual-UI review of that exact production build passed bounded retaliation, unchanged anchors, stationary Hold under fire, and the protected opening. A genuine Outpost victory at 4:39 unlocked Hold the Line; its briefing and Save/reload/Continue remained correct with paused 0:00.3. The earlier complete three-stage expedition on 2b2141f is separately documented in `PLAYTESTS.md`. These close the bounded advertised-mode transition gates, not a claim that every campaign chapter or expedition branch was fully played.
+
+A synthetic 240-unit, six-team local-guard fight measured 200 headless ticks at 4.1ms mean, 13.0ms p95 and 20.2ms maximum on the development Linux executor. This is a bounded regression check for the new response logic, not renderer or physical-phone FPS.
+
+Remaining limitations: physical iPhone/Safari and installed-app hardware lifecycle/performance, subjective soundtrack listening, complete later-campaign playthroughs, alternate expedition routes/defeat handling and broad faction/difficulty balance. Full theme/style packs, authored directional locomotion, multiplayer and deeper editor/roguelite systems remain deliberately outside this vertical slice.
+
+Final Pages [deployment 37187995776](https://github.com/KJLKurt/rts-game/actions/runs/37187995776) completed successfully for exact runtime `85dc40b5beabd2cf07072bf85cc6758e7ac32a10`. The public URL loaded `index-BhKQL04t.js` and `index-M-oRBJTA.css`; Update & restart completed, the prompt cleared, the menu rendered the real atlas, and no application warnings or errors were recorded in that hosted check. Final documentation is a separate documentation-only checkpoint over this tested runtime and does not trigger another deployment.
