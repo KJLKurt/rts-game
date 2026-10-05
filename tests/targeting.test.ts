@@ -38,4 +38,30 @@ describe("touch ability targeting", () => {
     expect(Math.hypot(p.x - c.x, p.y - c.y)).toBeLessThanOrEqual(3.001);
     expect(p.x).toBeGreaterThan(c.x);
   });
+  it("ignores closer allied troops when aiming offensive abilities or evading threats", () => {
+    const s = createGame({ aiPlayers: 2 }), c = getCommander(s)!;
+    s.players[0].alliance = s.players[2].alliance = 0;
+    s.players[1].alliance = 1;
+    spawnEntity(s, 2, "unit", "archer", c.x - 1.5, c.y);
+    const enemy = spawnEntity(s, 1, "unit", "swordsman", c.x + 5, c.y);
+    updateFog(s);
+    for (const ability of ["charge", "trap"])
+      expect(chooseAbilityTarget(s, c, ability, null)).toEqual({ x: enemy.x, y: enemy.y });
+    expect(chooseAbilityTarget(s, c, "dodge", null)).toEqual({ x: c.x - 4, y: c.y });
+    expect(chooseAbilityTarget(s, c, "turret", null)).toEqual({ x: c.x + 3, y: c.y });
+  });
+  it("keeps the fallback when only an ally is visible", () => {
+    const s = createGame({ aiPlayers: 2 }), c = getCommander(s)!;
+    s.players[0].alliance = s.players[2].alliance = 0;
+    spawnEntity(s, 2, "unit", "archer", c.x - 1.5, c.y);
+    updateFog(s);
+    expect(chooseAbilityTarget(s, c, "charge", { x: 1, y: 2 })).toEqual({ x: 1, y: 2 });
+  });
+  it("still targets hostile neutral defenders", () => {
+    const s = createGame({ aiPlayers: 2 }), c = getCommander(s)!;
+    s.players[2].neutral = true;
+    const defender = spawnEntity(s, 2, "unit", "spearman", c.x + 2, c.y);
+    updateFog(s);
+    expect(chooseAbilityTarget(s, c, "charge", null)).toEqual({ x: defender.x, y: defender.y });
+  });
 });

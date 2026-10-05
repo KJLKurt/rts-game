@@ -1,4 +1,5 @@
 import type { Entity, GameState, Point } from "../sim/types";
+import { areHostile } from "../sim/alliances";
 /** Touch abilities use visible threats; defensive movement must never auto-dodge into one. */
 export function chooseAbilityTarget(
   state: GameState,
@@ -11,7 +12,7 @@ export function chooseAbilityTarget(
   const threat = state.entities
     .filter(
       (e) =>
-        e.team !== commander.team &&
+        areHostile(state, commander.team, e.team) &&
         e.hp > 0 &&
         e.kind !== "building" &&
         state.fog.visible[commander.team]?.[

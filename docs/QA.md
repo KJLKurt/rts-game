@@ -1,6 +1,29 @@
 # QA and reproducible verification
 
-## Current Practice recovery receipt — 5 October 2026
+## Current allied-ability receipt — 5 October 2026
+
+The current allied-ability checkpoint is **Build `fc-10d287331fd1`**.
+536 unit tests in 57 files, TypeScript, eight mission validations and the
+production build pass. The full production browser run recorded **319 cases:
+298 passed, 21 intentional skips, zero failures/flakes**. Three separate actual
+previous-cache upgrades fulfill three skips, giving **301 distinct passes and
+18 remaining skips across the same 319 cases**. The focused 15 ability cases
+are a subset, not added again. Earlier focused locator corrections remain
+documented separately. All 15 simulation files are unchanged. See
+[ALLY_ABILITY_NATURAL_ROUTE_QA_20261005.md](ALLY_ABILITY_NATURAL_ROUTE_QA_20261005.md)
+for exact tests, owned-save continuity, earned progression and evidence limits.
+
+A separate current-candidate native-phone continuation remains unfinished at
+279.8 seconds. It preserves the legitimately earned Foothold win, Caravan
+purchase, one-game/one-win profile, one route victory, 80 crowns and recurring
++80 gold/+80 wood. Read-only Continue verification compares the complete
+serialized game state exactly. The three Whisperwood attempts are separate;
+none establishes a later natural victory or full-route completion. The original
+Foothold win at 550.1 seconds occurred on the prior published build. Headless
+Epic/custom pacing samples are simulation evidence, not played-duration or
+physical-device performance proof.
+
+## Prior Practice recovery receipt — 5 October 2026
 
 The current Practice recovery checkpoint is **Build `fc-3c40d8eec6cf`**.
 533 unit/contract tests in 57 files pass, with TypeScript, eight mission

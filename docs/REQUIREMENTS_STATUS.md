@@ -1,6 +1,23 @@
 # Recovered candidate requirement status
 
-## Current Practice recovery checkpoint — 5 October 2026
+## Current allied-ability checkpoint — 5 October 2026
+
+The current allied-ability checkpoint is **Build `fc-10d287331fd1`**.
+536 unit tests in 57 files, TypeScript, eight mission validations and the
+production build pass. The full production browser run recorded **319 cases:
+298 passed, 21 intentional skips, zero failures/flakes**. Three separate actual
+previous-cache upgrades fulfill three skips, giving **301 distinct passes and
+18 remaining skips across the same 319 cases**. The focused 15 ability cases
+are a subset, not added again. Earlier focused locator corrections remain
+documented separately. All 15 simulation files are unchanged. See
+[ALLY_ABILITY_NATURAL_ROUTE_QA_20261005.md](ALLY_ABILITY_NATURAL_ROUTE_QA_20261005.md)
+for exact tests, owned-save continuity, earned progression and evidence limits.
+
+The dated scope and prior receipts below remain historical. Commercial readiness,
+physical-device coverage, later natural-route completion and broad balance are
+not established by this release.
+
+## Prior Practice recovery checkpoint — 5 October 2026
 
 The current Practice recovery checkpoint is **Build `fc-3c40d8eec6cf`**.
 533 unit/contract tests in 57 files pass, with TypeScript, eight mission
