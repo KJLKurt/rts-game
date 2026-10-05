@@ -1,6 +1,14 @@
 # QA and reproducible verification
 
-## Current local release receipt — 5 October 2026
+## Current isolated usability receipt — 5 October 2026
+
+The isolated usability candidate identifies itself as **Build `fc-7f2be308bbca`** in the menu footer and Credits / About. It passes **519 unit/contract tests in 55 files**, TypeScript checks and the production build. A fresh focused browser run covers **109 cases: 102 passed, seven intentional skips, zero failures/flakes**; the separate actual previous-cache upgrade adds **one passing case**, for **110 scoped cases / 103 passed / seven skipped**. This focused run does not replace the prior full-suite receipt. Runtime `index-eiI64Ww3.js` / `index-BmuM_yap.css`; worker cache `35e0f9b54183`; 24 precached files; base `/rts-game/`. A repeat build produced identical bytes in all 26 output files. See [USABILITY_RELEASE_QA.md](USABILITY_RELEASE_QA.md).
+
+Native desktop input earned the prior checkpoint’s Outpost win at 43.8 game seconds. Further actual-input play on the published clarity checkpoint ended a Balanced expedition in first-battle defeat at **408.4 game seconds (6:48)**, saved the result once and opened its defeated route with 0/4 victories. Quick-, Standard- and Epic-derived skirmish openings were played with real UI input and saved unfinished; their exact bounded observations are in [NATIVE_PLAY_20261005.md](NATIVE_PLAY_20261005.md). No successful four-battle route, guaranteed match duration or subjective fun verdict is claimed. All 15 simulation source files remain unchanged in this usability pass.
+
+Local sandbox-enabled Linux Chromium and emulated phone touch were tested. Hosted HTTPS access was denied by this cloud environment before assets loaded (proxy 403 / browser ERR_TUNNEL_CONNECTION_FAILED); hosted gameplay, asset matching and cache lifecycle therefore remain unverified here. The owner separately confirmed the updated public UI was visible, which is not a full playtest. Physical Safari/devices, installed-device lifecycle/performance, full later natural routes, broad balance, soundtrack listening and commercial asset rights remain open. No GitHub workflow or deployment was run for this QA pass.
+
+## Prior published clarity receipt — 5 October 2026
 
 **516 tests in 54 files passed**, TypeScript checks and the production build passed (eight story missions validated). The final local production browser run accounted for **262 cases: 244 passed, 18 intentional input/layout-specific skips, zero failures or flakes**. The run used sandbox-enabled Linux Chromium 151 and Playwright 1.63.0 with desktop 1440×900, emulated touch 390×844 and 844×390, plus four actual offline/update PWA cases. No new Actions or deployments were run.
 
@@ -16,7 +24,7 @@ Linux Chromium and emulated phone touch were tested; physical iPhone/Safari, ins
 
 ## Historical receipts
 
-Everything below retains dated earlier checkpoints. Their test totals and words such as “current” or “pending” describe those checkpoints, not the 5 October local release above.
+Everything below retains dated earlier checkpoints. Their test totals and words such as “current” or “pending” describe those checkpoints, not the usability candidate above.
 
 ## What has actually been checked
 

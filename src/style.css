@@ -301,6 +301,19 @@ footer {
 .version {
   margin-left: 14px;
   color: #6f8585;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 10px;
+}
+.build-identifier {
+  color: #bed5cc;
+  font-family: ui-monospace, monospace;
+  white-space: nowrap;
+}
+footer .build-identifier {
+  font-size: 11px;
+  line-height: 1.4;
 }
 .home-aside {
   position: absolute;
@@ -3209,6 +3222,17 @@ footer {
 .ability-dock {
   bottom: calc(var(--deck-height, 200px) + 14px);
 }
+/* Desktop queues grow the deck; keep every part of the minimap above it. */
+@media (min-width: 901px) and (min-height: 501px) {
+  .minimap-wrap {
+    bottom: calc(var(--deck-height, 200px) + 14px);
+  }
+}
+@media (max-width: 600px) {
+  .paused-ribbon {
+    top: calc(116px + var(--safe-top) + var(--minimap-height, 144px) + 12px);
+  }
+}
 .commander-strip {
   bottom: calc(var(--deck-height, 200px) + 104px);
 }
@@ -3886,4 +3910,18 @@ footer {
     white-space: nowrap;
   }
   .placing-building .selection-info .cancel { min-width: 44px; min-height: 44px; }
+}
+
+/* The landscape deck occupies the right column. Reserve the left column for
+   the map, lifting the thumbstick above its actual expanded/collapsed height. */
+@media (max-height: 500px) and (min-width: 601px) {
+  .minimap-wrap {
+    left: 10px;
+    right: auto;
+    top: auto;
+    bottom: 10px;
+  }
+  #joystick {
+    bottom: max(calc(var(--deck-height, 92px) + 12px), calc(var(--minimap-height, 144px) + 20px));
+  }
 }

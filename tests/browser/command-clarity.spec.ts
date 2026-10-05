@@ -30,9 +30,9 @@ test('relic plus starting deposits does not earn the supply lesson',async({page}
  await expect(page.locator('#battle-hint b')).toHaveText('Claim fresh supplies');
 });
 
-test('Rally at this position snapshots the producer destination and capture names its target',async({page})=>{
+test('Rally current producers here snapshots the producer destination and capture names its target',async({page})=>{
  await launch(page,{difficulty:'easy'});await pause(page);await action(page,'panel-orders').click();
- const before=await commander(page);await page.getByRole('button',{name:'Rally at this position',exact:true}).click();
+ const before=await commander(page);await page.getByRole('button',{name:'Rally current producers here',exact:true}).click();
  const planned=await page.evaluate(()=>window.__FRONTIER__.state.pendingCommands.filter(c=>c.type==='rally'));
  expect(planned.length).toBeGreaterThan(0);for(const order of planned)expect(order).toMatchObject({x:before.x,y:before.y});
  await action(page,'panel-army').click();await expect(page.locator('[data-action="recruit"][data-id="swordsman"] .recruit-producer')).toContainText(`fixed rally (${before.x.toFixed(1)}, ${before.y.toFixed(1)})`);

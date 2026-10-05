@@ -2,14 +2,20 @@
 import {createServer} from 'node:http';
 import {readFile, stat} from 'node:fs/promises';
 import {resolve, extname, sep} from 'node:path';
-const root=resolve('dist');
+const current=resolve('dist');
+const previous=process.env.FRONTIER_PREVIOUS_DIST ? resolve(process.env.FRONTIER_PREVIOUS_DIST) : null;
+let root=current;
 const base='/rts-game/';
 let release=0;
 const mime={'.html':'text/html','.js':'application/javascript','.css':'text/css','.json':'application/json','.webmanifest':'application/manifest+json','.png':'image/png','.svg':'image/svg+xml','.wav':'audio/wav','.mp3':'audio/mpeg','.ogg':'audio/ogg','.woff2':'font/woff2'};
 createServer(async(req,res)=>{
  try{
   const url=new URL(req.url,'http://localhost');
+  if(url.pathname==='/__qa/previous'&&req.method==='POST'&&previous){
+   root=previous;release=0;res.writeHead(200,{'content-type':'application/json'});res.end(JSON.stringify({previous:true}));return;
+  }
   if(url.pathname==='/__qa/release'&&req.method==='POST'){
+   root=current;
    release++;res.writeHead(200,{'content-type':'application/json'});res.end(JSON.stringify({release}));return;
   }
   if(!url.pathname.startsWith(base)){res.writeHead(404);res.end('Outside game scope');return;}

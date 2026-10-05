@@ -19,7 +19,13 @@ Open `/rts-game/` on the development or preview server. Production paths target 
 
 ## Current checkpoint
 
-The deterministic engine, mobile/desktop interface, isometric renderer, seeded skirmishes, data-driven story missions, branching four-battle expedition, map workshop, save system, original adaptive music and event audio, and scoped PWA cache are implemented. Build/typecheck and the current unit/contract suite pass, including 400 generated maps and natural siege-victory regressions. The 5 October local candidate passes 516 unit/contract tests in 54 files and a 262-case browser run: 244 passed, 18 intentional input/layout-specific skips, zero failures/flakes. Actual-input practice completed in desktop and both phone views; a native Outpost win and expedition opening save/resume were verified. Local offline/update checks pass; physical Safari/devices, later natural routes, broad balance, asset clearance and the newly coordinated deployed release remain open. Exact source and test provenance are recorded in docs/QA.md; this is still a testing preview.
+The deterministic engine, mobile/desktop interface, renderer, seeded skirmishes, authored campaigns, expedition, map workshop, saves, audio and scoped PWA cache are implemented. The isolated usability candidate identifies itself as **Build `fc-7f2be308bbca`** in the menu footer and Credits / About. It passes **519 unit/contract tests in 55 files**, TypeScript checks and the production build. A fresh focused browser run covers **109 cases: 102 passed, seven intentional skips, zero failures/flakes**; the separate actual previous-cache upgrade adds **one passing case**, for **110 scoped cases / 103 passed / seven skipped**. This focused run does not replace the prior full-suite receipt. Runtime `index-eiI64Ww3.js` / `index-BmuM_yap.css`; worker cache `35e0f9b54183`; 24 precached files; base `/rts-game/`. A repeat build produced identical bytes in all 26 output files. See [USABILITY_RELEASE_QA.md](docs/USABILITY_RELEASE_QA.md).
+
+The published clarity checkpoint `779745debf48ea9f18f93a5874e92cf4d8a5355a` had 516 unit tests in 54 files and a full 262-case browser run: 244 passed, 18 intentional skips, zero failures/flakes. Its runtime was `index-DJ5oCh_8.js` / `index-BLaajxx7.css`, worker cache `c8affbd450ca`. That remains prior-source evidence, not a new full run of this candidate.
+
+Native desktop input earned the prior checkpoint’s Outpost win at 43.8 game seconds. Further actual-input play on the published clarity checkpoint ended a Balanced expedition in first-battle defeat at **408.4 game seconds (6:48)**, saved the result once and opened its defeated route with 0/4 victories. Quick-, Standard- and Epic-derived skirmish openings were played with real UI input and saved unfinished; their exact bounded observations are in [NATIVE_PLAY_20261005.md](docs/NATIVE_PLAY_20261005.md). No successful four-battle route, guaranteed match duration or subjective fun verdict is claimed. All 15 simulation source files remain unchanged in this usability pass.
+
+Local sandbox-enabled Linux Chromium and emulated phone touch were tested. Hosted HTTPS access was denied by this cloud environment before assets loaded (proxy 403 / browser ERR_TUNNEL_CONNECTION_FAILED); hosted gameplay, asset matching and cache lifecycle therefore remain unverified here. The owner separately confirmed the updated public UI was visible, which is not a full playtest. Physical Safari/devices, installed-device lifecycle/performance, full later natural routes, broad balance, soundtrack listening and commercial asset rights remain open. No GitHub workflow or deployment was run for this QA pass.
 
 The initial implementation is being actively playtested and expanded. A minimal GitHub Pages workflow is enabled for final-stage testing. It runs only for game/build changes on main, or a manual dispatch. Documentation-only checkpoints do not consume deployment runs. Complete-match loops are verified; broader device and difficulty coverage remains ongoing.
 
@@ -35,7 +41,9 @@ The Rush Arena side mode is a complete four-minute commander survival loop with 
 - Recruit, build, and research from the bottom command deck.
 - The gold Relic button sends your army to a victory landmark; resources fund troops, while held relics earn points.
 - First skirmishes open with a frozen briefing. Easy gives you a home-side opening phase. Troops guard locally, respond to actual nearby attacks, and return. Explicit Hold keeps them stationary.
+- Rally current producers here fixes the destination for existing production buildings. Set a rally point for newly built producers in Details.
 - Save and continue on the same device. App updates require an explicit restart.
+- Read the Build ID in the menu footer or Credits / About to identify the loaded release.
 
 See `docs/ENGINE.md` for simulation contracts and `docs/ART_DIRECTION.md` for art provenance and limitations.
 

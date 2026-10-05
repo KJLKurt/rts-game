@@ -1,5 +1,6 @@
 import { observeControlDeck, battlefieldCenterY } from "./ui/deck-layout";
 import { aboutHTML } from "./ui/about";
+import { BUILD_ID } from "./platform/build-info";
 import { renderResearchTree } from "./ui/research";
 import { EditorHistory, strokeTiles } from "./ui/editor-tools";
 import {
@@ -372,7 +373,7 @@ function showMenu(page = "home") {
     renderer.camera.zoom = 0.95;
   }
   if (page === "home") {
-    screen.innerHTML = `<div class="menu-scrim"></div><main class="home"><div class="brandmark">${icon("crown")}<span>A WORLD WORTH FIGHTING FOR</span></div><h1>FRONTIER<br><em>COMMAND</em></h1><p class="home-lede">Build your stronghold. Lead from the front.<br>Turn one small army into a legend.</p><div class="home-actions">${button(preferences.learningComplete ? "Practice the basics" : "Learn to command · start here", "learn", preferences.learningComplete ? "secondary" : "primary large", "book")}${button("Play skirmish", "skirmish", "primary large", "sword")}${button("Rush Arena · 4 minute survival", "rush", "secondary rush-entry", "lightning")}${savedGame ? button("Continue battle", "continue", "secondary", "play") : ""}${button("Story campaigns", "campaign", "secondary", "flag")}${button("Frontier expedition", "expedition", "secondary", "map")}</div><div class="home-links">${button("How to play", "help", "", "book")}${button("Map workshop", "editor", "", "map")}${button("Command record", "record", "", "star")}${button("Settings", "settings", "", "gear")}${button("Credits / About", "about", "", "book")}</div><footer><span class="offline-dot"></span> <span id="offline-status">${navigator.serviceWorker?.controller ? "Offline ready" : "Offline after first full load"}</span> · Solo strategy <span class="version">v0.1 · Testing preview</span></footer></main><aside class="home-aside"><div class="vertical-rule"></div><span>YOUR BANNER.<br>YOUR FRONTIER.</span></aside>`;
+    screen.innerHTML = `<div class="menu-scrim"></div><main class="home"><div class="brandmark">${icon("crown")}<span>A WORLD WORTH FIGHTING FOR</span></div><h1>FRONTIER<br><em>COMMAND</em></h1><p class="home-lede">Build your stronghold. Lead from the front.<br>Turn one small army into a legend.</p><div class="home-actions">${button(preferences.learningComplete ? "Practice the basics" : "Learn to command · start here", "learn", preferences.learningComplete ? "secondary" : "primary large", "book")}${button("Play skirmish", "skirmish", "primary large", "sword")}${button("Rush Arena · 4 minute survival", "rush", "secondary rush-entry", "lightning")}${savedGame ? button("Continue battle", "continue", "secondary", "play") : ""}${button("Story campaigns", "campaign", "secondary", "flag")}${button("Frontier expedition", "expedition", "secondary", "map")}</div><div class="home-links">${button("How to play", "help", "", "book")}${button("Map workshop", "editor", "", "map")}${button("Command record", "record", "", "star")}${button("Settings", "settings", "", "gear")}${button("Credits / About", "about", "", "book")}</div><footer><span class="offline-dot"></span> <span id="offline-status">${navigator.serviceWorker?.controller ? "Offline ready" : "Offline after first full load"}</span> · Solo strategy <span class="version">v0.1 · Testing preview <span class="build-identifier" data-build-id="${esc(BUILD_ID)}">Build ${esc(BUILD_ID)}</span></span></footer></main><aside class="home-aside"><div class="vertical-rule"></div><span>YOUR BANNER.<br>YOUR FRONTIER.</span></aside>`;
   } else if (page === "skirmish") renderSetup();
   else if (page === "campaign") renderCampaign();
   else if (page === "expedition") renderExpedition();
@@ -683,7 +684,7 @@ function renderDeck() {
       ? `<p class="deck-tip">${learningPanelHint(learningProgress.step, "research")}</p>`
       : renderResearchTree(planningState(), 0, selectedBuilding()?.id);
   else
-    el.innerHTML = `<div class="order-cards">${button("Move", "order-move", uiAction === "move" ? "chosen" : "", "arrow")}${button("Attack-move", "order-attackMove", uiAction === "attackMove" ? "chosen" : "", "sword")}${button("Rally at this position", "rally-all", "", "flag")}${button("Save battle", "save", "", "save")}${button(`${speed}× speed`, "speed", "", "clock")}</div><p class="deck-tip">Capture engages nearby enemies and defends the target. Hold does not pursue. Rally at this position sets a fixed point for new recruits; it does not follow the commander.</p>`;
+    el.innerHTML = `<div class="order-cards">${button("Move", "order-move", uiAction === "move" ? "chosen" : "", "arrow")}${button("Attack-move", "order-attackMove", uiAction === "attackMove" ? "chosen" : "", "sword")}${button("Rally current producers here", "rally-all", "", "flag")}${button("Save battle", "save", "", "save")}${button(`${speed}× speed`, "speed", "", "clock")}</div><p class="deck-tip">Capture engages nearby enemies and defends the target. Hold does not pursue. Rally current producers here sets a fixed point for existing buildings. New buildings need their own rally point; it does not follow the commander.</p>`;
   if (productionStrip) {
     el.append(productionStrip);
     for (const { queue, left } of queueScroll) queue.scrollLeft = left;
@@ -2417,7 +2418,7 @@ async function performAction(action: string, id?: string) {
             x: c.x,
             y: c.y,
           });
-      toast(c ? "New recruits attack-move to this fixed position; it will not follow your commander." : "Your commander is recovering. Set a building rally point in Details.");
+      toast(c ? "Current buildings now send recruits to this fixed position. New buildings need their own rally point; it will not follow your commander." : "Your commander is recovering. Set a building rally point in Details.");
       break;
     }
     case "copy-map-code": {
@@ -3220,6 +3221,9 @@ window.addEventListener("focus", () => {
 function measurePlayfield() {
   const hud = document.querySelector(".hud")?.getBoundingClientRect();
   const deck = document.querySelector(".command-deck")?.getBoundingClientRect();
+  const minimap = document.querySelector(".minimap-wrap")?.getBoundingClientRect();
+  if (minimap)
+    document.documentElement.style.setProperty("--minimap-height", `${Math.ceil(minimap.height)}px`);
   const abilities = document.querySelector<HTMLElement>(".ability-dock");
   if (deck)
     document.documentElement.style.setProperty(
