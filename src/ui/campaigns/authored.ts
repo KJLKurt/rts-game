@@ -399,7 +399,7 @@ export const FRONTIER_CAMPAIGN: AuthoredCampaign = {
             { type: "resources", team: 0, gold: 160, wood: 140 },
             {
               type: "dialogue",
-              text: "Engineer: Workshops need a barracks. Train siege there, then move with an infantry escort. Our repair ability can keep the attack alive.",
+              text: "Engineer: Build a blacksmith after your barracks to unlock a workshop. Train siege there, then move with an infantry escort. Our repair ability can keep the attack alive.",
             },
           ],
         },

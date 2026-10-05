@@ -1,6 +1,26 @@
 # QA and reproducible verification
 
-## Current allied-ability receipt — 5 October 2026
+## Current content checkpoint — 5 October 2026
+
+Build `fc-ecbc0d4070f9` corrects the Ironwatch Barracks → Blacksmith → Workshop
+instruction and includes Vite's MIT notice in the offline cache. The candidate
+passes 536 unit tests in 57 files, TypeScript and build checks. Its full 319-case
+browser run records 298 passes, 21 intentional skips and zero failures/flakes;
+three separate previous-cache upgrades fulfill three skips, yielding 301 distinct
+passes and 18 remaining skips. All four PWA cases pass. Runtime `index-DOFdeVPS.js`,
+CSS `index-CH0dYD5l.css`, cache `410dfd12508c`, 25 precache entries and 27 output
+files are verified. All 15 simulation files and existing public assets are unchanged.
+
+See [ASSET_AUDIO_CONTENT_AUDIT_20261005.md](ASSET_AUDIO_CONTENT_AUDIT_20261005.md)
+for bounded native content/audio/save evidence and precise reference provenance.
+Twelve codecs decode and browser gesture/bus/mute/volume signals are checked;
+no subjective listening or music-quality verdict is claimed. Project use and
+publication are already authorized; selected reference creator/source-generation
+and derivative redistribution evidence remains unverified. Broken Alliance is
+saved unfinished at 465.8 seconds, with six profile games/three wins; complete
+owned-save equality is checked online/offline, not a chapter-completion claim.
+
+## Prior allied-ability receipt — 5 October 2026
 
 The current allied-ability checkpoint is **Build `fc-10d287331fd1`**.
 536 unit tests in 57 files, TypeScript, eight mission validations and the
