@@ -1,4 +1,5 @@
 import { observeControlDeck, battlefieldCenterY } from "./ui/deck-layout";
+import type { ScreenRect } from "./render/troop-summary";
 import { aboutHTML } from "./ui/about";
 import { BUILD_ID } from "./platform/build-info";
 import { renderResearchTree } from "./ui/research";
@@ -163,6 +164,7 @@ const canvas = document.querySelector<HTMLCanvasElement>("#world")!,
 const renderer = new Battlefield(canvas),
   audio = new AudioDirector();
 const battleSuspension = new BattleSuspension();
+let troopSummaryObstacles: ScreenRect[] = [];
 const suspensionRoot = document.querySelector<HTMLDivElement>("#suspension-root")!;
 let suspensionFocus: HTMLElement | null = null;
 let audioInterrupted = false;
@@ -337,6 +339,7 @@ function toast(text: string, tone = "") {
   el.className = `show ${tone}`;
   clearTimeout(toastTimer);
   toastTimer = window.setTimeout(() => (el.className = ""), 3500);
+  measureTroopSummaryObstacles();
 }
 function commander() {
   return state.entities.find(
@@ -948,6 +951,7 @@ function updateHUD() {
     );
   const mini = document.querySelector<HTMLCanvasElement>("#minimap");
   if (mini) renderer.renderMinimap(mini, state);
+  measureTroopSummaryObstacles();
 }
 function updateAbilities(c: Entity | undefined) {
   const dock = document.querySelector<HTMLElement>("#abilities");
@@ -3262,6 +3266,14 @@ window.addEventListener("focus", () => {
   if (battleSuspension.suspended && !document.hidden)
     suspensionRoot.querySelector<HTMLButtonElement>("button")?.focus();
 });
+/** Cache HTML exclusions when HUD/layout changes, rather than reading DOM every paint. */
+function measureTroopSummaryObstacles() {
+  troopSummaryObstacles = [...document.querySelectorAll<HTMLElement>(".hud,.objective-bar,.battle-hint,.minimap-wrap,.map-controls,.commander-strip,#joystick,.ability-dock,.command-deck,.paused-ribbon,.placement-toolbar,#toast,#update")].flatMap(el => {
+    const style=getComputedStyle(el),r=el.getBoundingClientRect();
+    if(style.display==="none"||style.visibility==="hidden"||(!Number(style.opacity)&&!el.matches("#toast.show"))||!r.width||!r.height)return [];
+    return [{x:r.x,y:r.y,w:r.width,h:r.height}];
+  });
+}
 function measurePlayfield() {
   const hud = document.querySelector(".hud")?.getBoundingClientRect();
   const deck = document.querySelector(".command-deck")?.getBoundingClientRect();
@@ -3290,6 +3302,7 @@ function measurePlayfield() {
     deckTop: deck?.top,
     placementTop: toolbar?.top,
   });
+  measureTroopSummaryObstacles();
 }
 function cameraFocus(point: Point): Point {
   const middle = renderer.screenToWorld(innerWidth / 2, innerHeight / 2),
@@ -3439,6 +3452,7 @@ function frame(now: number) {
         reveal: !playing || debugReveal,
         quality: frameRate < 35 ? "low" : "high",
         reducedMotion: preferences.reducedMotion,
+        screenObstacles: playing ? troopSummaryObstacles : [],
         placement:
           placement && targetPoint
             ? {

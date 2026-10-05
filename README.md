@@ -19,6 +19,15 @@ Open `/rts-game/` on the development or preview server. Production paths target 
 
 ## Current checkpoint
 
+The current checkpoint is **Build `fc-9ad03334aff3`**. Dense troop badges avoid visible HUD controls and wrap in short landscape. Broken Alliance offers preparation/combat guidance in its briefing and live objectives. All 15 simulation files and campaign settings, triggers, objective predicates, rewards and unlocks remain unchanged. **536 unit tests in 57 files**, TypeScript/build and eight mission validations pass. The full **322-case** browser run records **301 passes, 21 intentional skips and zero failures/flakes**; three actual previous-cache upgrades fulfill three skips, yielding **304 distinct passes and 18 remaining skips across the same 322 cases**. All four PWA cases pass. Runtime `index-CIPt5Qwh.js`, CSS `index-C9pWTGt4.css`, worker `f55d6fa99347`; 25 precached files, 27 dist files. See [TROOP_BADGE_DIFFICULTY_QA_20261005.md](docs/TROOP_BADGE_DIFFICULTY_QA_20261005.md).
+
+The earlier Broken Alliance attempt ended at 729.3 seconds and is recorded once. Its separate earned retry stays unfinished at 556.4 seconds; complete online/offline storage equality preserves the seven-game/three-win profile. Controlled counter/mission studies are explicitly diagnostic: enabling only canonical combat auto-kiting changes the same 15-archer/10-swordsman fixture from an archer loss to 14 archers surviving. That is not a newly earned win, broad balance proof or a deployed simulation change.
+
+## Prior content checkpoint receipt
+
+The following receipt describes the preceding content build, not a fresh run
+of this candidate.
+
 The current content checkpoint is **Build `fc-ecbc0d4070f9`**: it corrects Ironwatch’s Barracks → Blacksmith → Workshop instruction and ships Vite’s MIT notice in the offline cache. The previous alliance runtime is `fc-10d287331fd1`; its receipts below remain historical. [ASSET_AUDIO_CONTENT_AUDIT_20261005.md](docs/ASSET_AUDIO_CONTENT_AUDIT_20261005.md) records the exact supplied-art provenance, all six scores and the content inventory. Continued earned Broken Alliance is saved/reloaded unfinished at 465.8 seconds with two of three objectives; no later unlock or full-route victory is claimed. The candidate passes **536 unit/contract tests in 57 files**, TypeScript and the production build with eight validated missions. Its full **319-case** desktop/portrait/landscape/PWA run has **298 passes, 21 intentional skips, zero failures/flakes**; three separately executed upgrades from the actual published cache fulfill three skips, giving **301 verified cases / 18 remaining skips within the same 319 cases**. All four PWA cases pass. Candidate runtime `index-DOFdeVPS.js` / `index-CH0dYD5l.css`; cache `410dfd12508c`; 25 precached files; 27 byte-identical repeat-build outputs; `/rts-game/` base. Three native Ironwatch before/after candidate views, complete owned-save equality online/offline and real WebAudio signal checks provide separate bounded evidence, without inflating the suite count.
 
 ## Previous alliance checkpoint

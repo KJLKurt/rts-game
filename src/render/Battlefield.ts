@@ -5,7 +5,7 @@ import { AnimationAtlas } from './AnimationAtlas';
 import { nodeVisual } from './nodeVisual';
 import { drawFactionAdornment } from './factionIdentity';
 import { CombatFeedback, type Casualty } from './CombatFeedback';
-import { visibleTroopSummaries, type VisibleTroop } from './troop-summary';
+import { visibleTroopSummaries, troopSummaryPosition, type VisibleTroop, type ScreenRect } from './troop-summary';
 import type { UnitId } from '../sim/types';
 
 export interface RenderOptions {
@@ -13,6 +13,7 @@ export interface RenderOptions {
  placement?:{type:string;x:number;y:number;valid:boolean;size?:number;reason?:string};
  target?:{x:number;y:number;radius?:number}; dragRect?:{x:number;y:number;w:number;h:number};
  hoverId?:string|null; showHealth?:boolean;
+ screenObstacles?:readonly ScreenRect[];
 }
 interface Decoration {x:number;y:number;kind:'tree'|'rock'|'ruin';variant:number;size:number;}
 interface TerrainCache {map:GameMap;signature:string;canvas:HTMLCanvasElement;ox:number;oy:number;width:number;height:number;decor:Decoration[];water:Point[];}
@@ -176,25 +177,25 @@ export class Battlefield {
    c.save();c.font='600 12px system-ui, sans-serif';
    const headerWidth=c.measureText(header).width;
    c.font='11px system-ui, sans-serif';
-   const width=Math.min(this.width-16,Math.max(headerWidth,c.measureText(summary.types).width)+18),height=39;
-   const overlap=(x:number,y:number,r:{x:number;y:number;w:number;h:number})=>Math.max(0,Math.min(x+width,r.x+r.w)-Math.max(x,r.x))*Math.max(0,Math.min(y+height,r.y+r.h)-Math.max(y,r.y));
-   const candidates=[
-    {x:summary.x-width/2,y:summary.y-92},
-    {x:summary.x-width-45,y:summary.y-50},
-    {x:summary.x+45,y:summary.y-50},
-    {x:summary.x-width/2,y:summary.y-150},
-    {x:summary.x-width/2,y:summary.y+20},
-   ].map(p=>({x:Math.max(8,Math.min(this.width-width-8,p.x)),y:Math.max(8,Math.min(this.height-height-8,p.y))}));
-   // Keep the commander and building silhouettes readable, and never stack labels.
-   const available=candidates.filter(p=>!rectangles.some(r=>overlap(p.x,p.y,{x:r.x-4,y:r.y-4,w:r.w+8,h:r.h+8})>0));
-   available.sort((a,b)=>landmarks.reduce((sum,r)=>sum+overlap(a.x,a.y,r)-overlap(b.x,b.y,r),0));
-   if(!available.length){c.restore();continue;}
-   const {x,y}=available[0];
+   let width=Math.min(this.width-16,Math.max(headerWidth,c.measureText(summary.types).width)+18),lines=[summary.types],height=39;
+   const locate=()=>troopSummaryPosition(summary,{w:width,h:height},{w:this.width,h:this.height},options.screenObstacles??[],rectangles,landmarks);
+   let position=locate();
+   if(!position){
+    // Short landscape can leave a narrow clear column. Wrap composition, retaining the full count.
+    width=Math.min(width,Math.max(headerWidth+18,160));lines=[];
+    for(const part of summary.types.split(' · ')){
+     const last=lines.length-1,joined=last>=0?`${lines[last]} · ${part}`:part;
+     if(last>=0&&c.measureText(joined).width<=width-18)lines[last]=joined;else lines.push(part);
+    }
+    height=24+lines.length*15;position=locate();
+   }
+   if(!position){c.restore();continue;}
+   const {x,y}=position;
    rectangles.push({x,y,w:width,h:height});
    c.fillStyle='#10252eef';c.strokeStyle=palette(summary.team).main;c.lineWidth=1.5;
    c.beginPath();c.roundRect(x,y,width,height,6);c.fill();c.stroke();
    c.textAlign='left';c.fillStyle='#f4ead0';c.font='600 12px system-ui, sans-serif';c.fillText(header,x+9,y+15,width-18);
-   c.fillStyle='#d1dcca';c.font='11px system-ui, sans-serif';c.fillText(summary.types,x+9,y+30,width-18);
+   c.fillStyle='#d1dcca';c.font='11px system-ui, sans-serif';lines.forEach((text,i)=>c.fillText(text,x+9,y+30+i*15,width-18));
    c.restore();
   }
  }

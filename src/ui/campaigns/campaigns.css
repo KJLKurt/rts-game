@@ -19,6 +19,18 @@
   gap: 0.75rem;
   text-align: left;
 }
+.mission-tactics {
+  text-align: left;
+  margin: 1.2rem 0;
+}
+.mission-tactics ul {
+  padding-left: 1.3rem;
+  color: var(--muted);
+}
+.mission-tactics li {
+  margin: 0.65rem 0;
+  line-height: 1.5;
+}
 .mission-objective {
   display: grid;
   grid-template-columns: 1fr auto;

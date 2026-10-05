@@ -22,6 +22,7 @@ export interface AuthoredMission {
   subtitle: string;
   story: string;
   briefing: string;
+  tactics?: string[];
   settings: Partial<GameSettings>;
   triggers: ScriptTrigger[];
   objectives: MissionObjective[];
@@ -269,9 +270,15 @@ export const FRONTIER_CAMPAIGN: AuthoredCampaign = {
       title: "Broken Alliance",
       subtitle: "03 · Ash and oaths",
       story:
-        "A Wildborn envoy swears to keep the eastern road safe for three minutes. Beyond that, no oath is certain. Use the truce to gather gold, move through the dunes, and occupy the beacons before the fragile alliance ends.",
+        "An Arcanist envoy swears to keep the eastern road safe for three minutes. Beyond that, no oath is certain. Use the truce to gather gold, move through the dunes, and occupy the beacons before the fragile alliance ends.",
       briefing:
         "Collect 1,200 gold and control two relics after the three-minute truce ends. Rival 2 begins as your ally, then becomes hostile at 3:00.",
+      tactics: [
+        "Claim another gold mine and timber camp during the truce. Set a fixed rally point near home before your commander scouts. Allied deposits and relics stay under Rival 2’s banner until the truce ends.",
+        "Eight troops is an optional milestone, not a force target for the final push. Grow your income and army; use infantry to screen archers and keep Menders behind them.",
+        "Research Farshot for extra range. Attack-move toward defenders, then Hold at firing distance before capturing. To kite, issue a short Move away, then Hold to shoot; moving player troops do not fire.",
+        "Rival 2 is led by an Arcanist Engineer who can heal nearby groups. Use Ranger’s Trap on packed troops and focus reachable healers. Siege outranges stock archers; avoid a frontal charge into a larger mixed army.",
+      ],
       settings: {
         seed: "ALLIANCE-03",
         biome: "desert",
@@ -306,7 +313,7 @@ export const FRONTIER_CAMPAIGN: AuthoredCampaign = {
         objective(
           "scouts",
           "Optional: field eight troops",
-          "A mobile reserve can defend one beacon while the commander captures another.",
+          "An early milestone, not a target army size for the final push. Grow a mixed army as your income rises.",
           units(8),
           true,
         ),

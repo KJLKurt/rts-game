@@ -1,60 +1,14 @@
 # QA and reproducible verification
 
-## Current content checkpoint — 5 October 2026
+## Current troop badge and difficulty diagnostic receipt — 5 October 2026
 
-Build `fc-ecbc0d4070f9` corrects the Ironwatch Barracks → Blacksmith → Workshop
-instruction and includes Vite's MIT notice in the offline cache. The candidate
-passes 536 unit tests in 57 files, TypeScript and build checks. Its full 319-case
-browser run records 298 passes, 21 intentional skips and zero failures/flakes;
-three separate previous-cache upgrades fulfill three skips, yielding 301 distinct
-passes and 18 remaining skips. All four PWA cases pass. Runtime `index-DOFdeVPS.js`,
-CSS `index-CH0dYD5l.css`, cache `410dfd12508c`, 25 precache entries and 27 output
-files are verified. All 15 simulation files and existing public assets are unchanged.
+Candidate **`fc-9ad03334aff3`** corrects troop-summary overlap with visible HUD controls, including wrapped composition text in short landscape, and adds Broken Alliance preparation/combat guidance in its briefing and live objectives. All fifteen simulation files and every campaign setting, trigger, objective predicate, reward and unlock remain unchanged. The final gate passes **536 unit/contract tests in 57 files**, TypeScript/build and eight mission validations. The full **322-case** production browser run has **301 passes / 21 intentional skips / zero failures or flakes**. Three separately executed upgrades from the actual previous production cache fulfill three skipped cases, giving **304 verified / 18 remaining skips within the same 322 cases**; all four PWA cases pass. See [TROOP_BADGE_DIFFICULTY_QA_20261005.md](TROOP_BADGE_DIFFICULTY_QA_20261005.md) for three-viewport geometry evidence, native earned-profile/online-offline save checks, 13 controlled counter arenas and seven mission comparisons. Normal AI automatic ranged kiting and the earned rival territory/income advantage are identified; no balance nerf or new naturally earned win is claimed.
 
-See [ASSET_AUDIO_CONTENT_AUDIT_20261005.md](ASSET_AUDIO_CONTENT_AUDIT_20261005.md)
-for bounded native content/audio/save evidence and precise reference provenance.
-Twelve codecs decode and browser gesture/bus/mute/volume signals are checked;
-no subjective listening or music-quality verdict is claimed. Project use and
-publication are already authorized; selected reference creator/source-generation
-and derivative redistribution evidence remains unverified. Broken Alliance is
-saved unfinished at 465.8 seconds, with six profile games/three wins; complete
-owned-save equality is checked online/offline, not a chapter-completion claim.
+## Prior content build and subsequent earned terminal receipt — 5 October 2026
 
-## Prior allied-ability receipt — 5 October 2026
+Build **`fc-ecbc0d4070f9`** has the retained complete local gate: **536 unit/contract tests in 57 files**, TypeScript/build with eight validated missions, and **319 distinct browser cases: 298 passed / 21 intentional skips / zero failures or flakes**. Three separate actual previous-cache upgrades fulfill three skips, giving **301 verified / 18 remaining skips within the same 319 cases**. All four PWA cases pass. See [ASSET_AUDIO_CONTENT_AUDIT_20261005.md](ASSET_AUDIO_CONTENT_AUDIT_20261005.md). These are retained receipts, not a new suite run for the documentation continuation.
 
-The current allied-ability checkpoint is **Build `fc-10d287331fd1`**.
-536 unit tests in 57 files, TypeScript, eight mission validations and the
-production build pass. The full production browser run recorded **319 cases:
-298 passed, 21 intentional skips, zero failures/flakes**. Three separate actual
-previous-cache upgrades fulfill three skips, giving **301 distinct passes and
-18 remaining skips across the same 319 cases**. The focused 15 ability cases
-are a subset, not added again. Earlier focused locator corrections remain
-documented separately. All 15 simulation files are unchanged. See
-[ALLY_ABILITY_NATURAL_ROUTE_QA_20261005.md](ALLY_ABILITY_NATURAL_ROUTE_QA_20261005.md)
-for exact tests, owned-save continuity, earned progression and evidence limits.
-
-A separate current-candidate native-phone continuation remains unfinished at
-279.8 seconds. It preserves the legitimately earned Foothold win, Caravan
-purchase, one-game/one-win profile, one route victory, 80 crowns and recurring
-+80 gold/+80 wood. Read-only Continue verification compares the complete
-serialized game state exactly. The three Whisperwood attempts are separate;
-none establishes a later natural victory or full-route completion. The original
-Foothold win at 550.1 seconds occurred on the prior published build. Headless
-Epic/custom pacing samples are simulation evidence, not played-duration or
-physical-device performance proof.
-
-## Prior Practice recovery receipt — 5 October 2026
-
-The current Practice recovery checkpoint is **Build `fc-3c40d8eec6cf`**.
-533 unit/contract tests in 57 files pass, with TypeScript, eight mission
-validations and the production build. The full 304-case browser run initially
-recorded 282 passes, 21 skips and one campaign-Continue timing failure. After
-waiting for the actual asynchronous restore, that case passed in all three
-viewports; three previous-production-cache upgrade cases also passed. Reconciled
-distinct coverage is **286 passed, 18 intentional skips, no unresolved failures**.
-This is not a claim of a failure-free first full run. All 15 simulation files
-remain unchanged. See [PRACTICE_RECOVERY_QA.md](PRACTICE_RECOVERY_QA.md) for exact
-scope, preserved failure evidence, actual-input results and limitations.
+The same naturally earned Broken Alliance run continued to Keep defeat at **729.3 seconds**. Native result persistence and reload preserve the full profile at **seven games / three wins**, with Outpost and Hold the Line completed. The loss is recorded once; a necessary retry remains separately saved. See [EARNED_ALLIANCE_TERMINAL_QA_20261005.md](EARNED_ALLIANCE_TERMINAL_QA_20261005.md). Full natural routes, physical Safari/device testing, subjective listening and exact hosted browser play remain unverified. The lead reports publication `59bc7bdf9227af1d71865fe4e07937c92c30dd6c`; this cloud task ran no Actions/deployment.
 
 ## Prior isolated guidance receipt — 5 October 2026
 
@@ -308,3 +262,64 @@ Reopens the earlier vertical slice after actual novice feedback. This candidate 
 Changes: peaceful eight-step learn-by-doing settlement; selected-building purpose/actions/research/levels; level1–3 building upgrades; actual next-level research prices; stable production jobs, batch quantity, selected-producer routing, cancel/refund and paused reservations; inspectable automatic capture economy and population breakdown; collapsible deck/minimap, labeled mobile army controls and scalable text; half-tile construction preview with explicit confirmation and closer legal house adjacency; deterministic direct commander steering with obstacle sliding and stop/recovery; editor Pan/Paint, continuous interpolated strokes, brush sizes, undo/redo.
 
 Important review targets: first-time completion without outside instructions, mobile panel geometry and labels, stick direction/stop around obstacles at multiple zooms, selected Keep/Barracks routing, paused insufficient-resource rejection and refund, two adjacent houses, placement under rotation, complete learning save/Continue, and paint-versus-pan distinction. Source and production QA branch receipts will be recorded after publication.
+
+## Additional preserved publication receipts
+
+These notes predate the current badge checkpoint. Their counts, outcomes and
+then-open route statements remain historical and are not new suite executions.
+
+## Prior content publication checkpoint — 5 October 2026
+
+Build `fc-ecbc0d4070f9` corrects the Ironwatch Barracks → Blacksmith → Workshop
+instruction and includes Vite's MIT notice in the offline cache. The candidate
+passes 536 unit tests in 57 files, TypeScript and build checks. Its full 319-case
+browser run records 298 passes, 21 intentional skips and zero failures/flakes;
+three separate previous-cache upgrades fulfill three skips, yielding 301 distinct
+passes and 18 remaining skips. All four PWA cases pass. Runtime `index-DOFdeVPS.js`,
+CSS `index-CH0dYD5l.css`, cache `410dfd12508c`, 25 precache entries and 27 output
+files are verified. All 15 simulation files and existing public assets are unchanged.
+
+See [ASSET_AUDIO_CONTENT_AUDIT_20261005.md](ASSET_AUDIO_CONTENT_AUDIT_20261005.md)
+for bounded native content/audio/save evidence and precise reference provenance.
+Twelve codecs decode and browser gesture/bus/mute/volume signals are checked;
+no subjective listening or music-quality verdict is claimed. Project use and
+publication are already authorized; selected reference creator/source-generation
+and derivative redistribution evidence remains unverified. Broken Alliance is
+saved unfinished at 465.8 seconds, with six profile games/three wins; complete
+owned-save equality is checked online/offline, not a chapter-completion claim.
+
+## Prior allied-ability receipt — 5 October 2026
+
+The current allied-ability checkpoint is **Build `fc-10d287331fd1`**.
+536 unit tests in 57 files, TypeScript, eight mission validations and the
+production build pass. The full production browser run recorded **319 cases:
+298 passed, 21 intentional skips, zero failures/flakes**. Three separate actual
+previous-cache upgrades fulfill three skips, giving **301 distinct passes and
+18 remaining skips across the same 319 cases**. The focused 15 ability cases
+are a subset, not added again. Earlier focused locator corrections remain
+documented separately. All 15 simulation files are unchanged. See
+[ALLY_ABILITY_NATURAL_ROUTE_QA_20261005.md](ALLY_ABILITY_NATURAL_ROUTE_QA_20261005.md)
+for exact tests, owned-save continuity, earned progression and evidence limits.
+
+A separate current-candidate native-phone continuation remains unfinished at
+279.8 seconds. It preserves the legitimately earned Foothold win, Caravan
+purchase, one-game/one-win profile, one route victory, 80 crowns and recurring
++80 gold/+80 wood. Read-only Continue verification compares the complete
+serialized game state exactly. The three Whisperwood attempts are separate;
+none establishes a later natural victory or full-route completion. The original
+Foothold win at 550.1 seconds occurred on the prior published build. Headless
+Epic/custom pacing samples are simulation evidence, not played-duration or
+physical-device performance proof.
+
+## Prior Practice recovery receipt — 5 October 2026
+
+The current Practice recovery checkpoint is **Build `fc-3c40d8eec6cf`**.
+533 unit/contract tests in 57 files pass, with TypeScript, eight mission
+validations and the production build. The full 304-case browser run initially
+recorded 282 passes, 21 skips and one campaign-Continue timing failure. After
+waiting for the actual asynchronous restore, that case passed in all three
+viewports; three previous-production-cache upgrade cases also passed. Reconciled
+distinct coverage is **286 passed, 18 intentional skips, no unresolved failures**.
+This is not a claim of a failure-free first full run. All 15 simulation files
+remain unchanged. See [PRACTICE_RECOVERY_QA.md](PRACTICE_RECOVERY_QA.md) for exact
+scope, preserved failure evidence, actual-input results and limitations.

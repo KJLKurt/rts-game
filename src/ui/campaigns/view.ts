@@ -32,7 +32,12 @@ export function missionCardsHTML(
   return `<div class="mission-list">${campaign.missions.map((mission, index) => `<button class="mission-card ${available.has(mission.id) ? "available" : "locked"}" data-action="mission" data-id="${index}" ${available.has(mission.id) ? "" : "disabled"}><span class="mission-number">${completed.has(mission.id) ? "✓" : String(index + 1).padStart(2, "0")}</span><div><span class="eyebrow">${esc(mission.subtitle)}</span><h2>${esc(mission.title)}</h2><p>${esc(mission.briefing)}</p><span class="mission-meta">${esc(mission.settings.biome)} · ${completed.has(mission.id) ? "Completed · replay available" : available.has(mission.id) ? "Ready to play" : "Complete the previous chapter"}</span><p class="mission-reward">Reward: ${esc(mission.reward)}</p></div></button>`).join("")}</div>`;
 }
 export function missionBriefingHTML(mission: AuthoredMission): string {
-  return `<span class="eyebrow">${esc(mission.subtitle)}</span><p class="story">${esc(mission.story)}</p><div class="briefing-objective"><p>${esc(mission.briefing)}</p></div><ol class="mission-objectives">${mission.objectives.map((objective) => `<li><strong>${esc(objective.title)}</strong><p>${esc(objective.description)}</p></li>`).join("")}</ol><p class="muted">Victory: complete every required objective. Defeat: lose your Command Keep. You can save, leave, continue, or retry this chapter.</p><p>Reward: ${esc(mission.reward)}</p>`;
+  return `<span class="eyebrow">${esc(mission.subtitle)}</span><p class="story">${esc(mission.story)}</p><div class="briefing-objective"><p>${esc(mission.briefing)}</p></div><ol class="mission-objectives">${mission.objectives.map((objective) => `<li><strong>${esc(objective.title)}</strong><p>${esc(objective.description)}</p></li>`).join("")}</ol>${missionTacticsHTML(mission)}<p class="muted">Victory: complete every required objective. Defeat: lose your Command Keep. You can save, leave, continue, or retry this chapter.</p><p>Reward: ${esc(mission.reward)}</p>`;
+}
+function missionTacticsHTML(mission: AuthoredMission): string {
+  return mission.tactics?.length
+    ? `<section class="mission-tactics" aria-label="Plan this chapter"><h3>Plan this chapter</h3><ul>${mission.tactics.map((tip) => `<li>${esc(tip)}</li>`).join("")}</ul></section>`
+    : "";
 }
 export function missionObjectivesHTML(
   state: GameState,
@@ -46,7 +51,7 @@ export function missionObjectivesHTML(
       ({ objective, complete, current, target, text }) =>
         `<div class="mission-objective ${complete ? "complete" : ""}"><strong>${complete ? "✓ " : ""}${esc(objective.title)}</strong><span>${esc(text)}</span><progress max="${target || 1}" value="${current}" aria-label="${esc(objective.title)}"></progress><small>${esc(objective.description)}</small></div>`,
     )
-    .join("")}</div>`;
+    .join("")}</div>${missionTacticsHTML(mission)}`;
 }
 const action = (label: string, actionName: string, id = "", disabled = false) =>
   `<button class="button secondary" data-action="${actionName}" data-id="${esc(id)}" ${disabled ? "disabled" : ""}>${esc(label)}</button>`;
