@@ -3925,3 +3925,20 @@ footer .build-identifier {
     bottom: max(calc(var(--deck-height, 92px) + 12px), calc(var(--minimap-height, 144px) + 20px));
   }
 }
+
+.defeat-guidance {
+  margin: 18px 0;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+  text-align: left;
+}
+.defeat-guidance b { color: var(--gold); }
+.defeat-guidance p { margin: 6px 0 0; line-height: 1.5; }
+
+.selection-info [data-action="cancel-order"] {
+  flex-shrink: 0;
+  min-width: 44px;
+  min-height: 44px;
+}

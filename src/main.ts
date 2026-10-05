@@ -54,7 +54,7 @@ import {
   nextBuildingUpgrade,
 } from "./sim/progression";
 import { relicSummary, nearestRelic } from "./ui/objectives";
-import { battleResultReason } from "./ui/results";
+import { battleDefeatAdvice, battleResultReason } from "./ui/results";
 import { buildingUnderAttack } from "./ui/battle-guidance";
 import { advanceTutorial, restoreTutorial } from "./ui/tutorial";
 import { getEconomyRates } from "./sim/economy";
@@ -199,6 +199,7 @@ let state: GameState,
   tutorialStep = 0,
   tutorialSupplyCaptured = false,
   uiAction = "move";
+let armedOrder: "move" | "attackMove" | null = null;
 const battleSaves = new SaveQueue();
 let savedGame: unknown = null,
   pointerDown: Point | null = null,
@@ -355,7 +356,7 @@ function showMenu(page = "home") {
   playing = false;
   editing = false;
   document.body.classList.remove("in-editor");
-  cancelRallyTargeting();
+  cancelMapTargeting();
   menuPage = page;
   modalOpen = false;
   modal.innerHTML = "";
@@ -467,7 +468,7 @@ function launchGame(
   });
   editing = false;
   document.body.classList.remove("in-editor");
-  cancelRallyTargeting();
+  cancelMapTargeting();
   planningSnapshot = null;
   planningSignature = "";
   deckCollapsed = true;
@@ -684,7 +685,7 @@ function renderDeck() {
       ? `<p class="deck-tip">${learningPanelHint(learningProgress.step, "research")}</p>`
       : renderResearchTree(planningState(), 0, selectedBuilding()?.id);
   else
-    el.innerHTML = `<div class="order-cards">${button("Move", "order-move", uiAction === "move" ? "chosen" : "", "arrow")}${button("Attack-move", "order-attackMove", uiAction === "attackMove" ? "chosen" : "", "sword")}${button("Rally current producers here", "rally-all", "", "flag")}${button("Save battle", "save", "", "save")}${button(`${speed}× speed`, "speed", "", "clock")}</div><p class="deck-tip">Capture engages nearby enemies and defends the target. Hold does not pursue. Rally current producers here sets a fixed point for existing buildings. New buildings need their own rally point; it does not follow the commander.</p>`;
+    el.innerHTML = `<div class="order-cards">${button("Move", "order-move", uiAction === "move" ? "chosen" : "", "arrow")}${button("Attack-move", "order-attackMove", uiAction === "attackMove" ? "chosen" : "", "sword")}${button("Rally current producers here", "rally-all", "", "flag")}${button("Save battle", "save", "", "save")}${button(`${speed}× speed`, "speed", "", "clock")}</div><p class="deck-tip">Move and Attack-move use your next map tap as a destination. Cancel returns to selection. Ordinary taps select friendly units and buildings, attack enemies, or capture supplies. Hold does not pursue. Rally current producers here sets a fixed point for existing buildings. New buildings need their own rally point; it does not follow the commander.</p>`;
   if (productionStrip) {
     el.append(productionStrip);
     for (const { queue, left } of queueScroll) queue.scrollLeft = left;
@@ -728,7 +729,8 @@ function updateDeckLayout() {
   }
   measurePlayfield();
 }
-function cancelRallyTargeting() {
+function cancelMapTargeting() {
+  armedOrder = null;
   if (uiAction === "rally") uiAction = "move";
   rallyBuildingId = null;
 }
@@ -869,10 +871,12 @@ function updateHUD() {
     relicControl.title = "Send your army toward the nearest unclaimed relic.";
   }
   const chosen = state.entities.filter((e) => selection.has(e.id) && e.hp > 0);
-  const currentOrder = selectedOrderDescription(planningState(), selection);
+  const currentOrder = armedOrder
+    ? `Choose ${armedOrder === "attackMove" ? "attack-move" : "move"} destination`
+    : selectedOrderDescription(planningState(), selection);
   set(
     "selection-info",
-    `${icon(chosen.length === 1 ? unitIcons[chosen[0].type] : "flag")}<div><strong>${placement ? `Place ${BUILDINGS[placement].name}` : chosen.length === 1 ? (UNITS as any)[chosen[0].type]?.name || (BUILDINGS as any)[chosen[0].type]?.name || (COMMANDERS as any)[chosen[0].type]?.name || "Commander" : `${chosen.length} units selected`}</strong><small>${placement ? "Tap open ground near your frontier" : chosen.length === 1 ? `${Math.ceil(chosen[0].hp)} / ${Math.ceil(chosen[0].maxHp)} health${chosen[0].queue.length ? ` · ${chosen[0].queue.length} queued` : ""}` : ""}</small>${!placement ? `<small class="current-order" title="${esc(currentOrder)}">${esc(currentOrder)}</small>` : ""}</div>${placement ? button("Cancel", "cancel-build", "cancel", "close") : ""}`,
+    `${icon(chosen.length === 1 ? unitIcons[chosen[0].type] : "flag")}<div><strong>${placement ? `Place ${BUILDINGS[placement].name}` : chosen.length === 1 ? (UNITS as any)[chosen[0].type]?.name || (BUILDINGS as any)[chosen[0].type]?.name || (COMMANDERS as any)[chosen[0].type]?.name || "Commander" : `${chosen.length} units selected`}</strong><small>${placement ? "Tap open ground near your frontier" : chosen.length === 1 ? `${Math.ceil(chosen[0].hp)} / ${Math.ceil(chosen[0].maxHp)} health${chosen[0].queue.length ? ` · ${chosen[0].queue.length} queued` : ""}` : ""}</small>${!placement ? `<small class="current-order" title="${esc(currentOrder)}">${esc(currentOrder)}</small>` : ""}</div>${placement ? button("Cancel", "cancel-build", "cancel", "close") : armedOrder ? button("Cancel", "cancel-order", "cancel", "close", 'aria-label="Cancel destination order"') : ""}`,
   );
   const site =
     placement && targetPoint
@@ -1223,7 +1227,7 @@ async function continueGame(checkpoint?: unknown) {
     if (restoredExpedition) expeditionRun = restoredExpedition;
     speed = state.settings.gameSpeed ?? 1;
     workshopTest.clear();
-    cancelRallyTargeting();
+    cancelMapTargeting();
     planningSnapshot = null;
     planningSignature = "";
     deckCollapsed = true;
@@ -1393,9 +1397,11 @@ function showResult() {
           "primary",
           "play",
         );
+  const advice = win ? null : battleDefeatAdvice(state);
+  const adviceHTML = advice ? `<aside class="defeat-guidance" aria-label="Next battle advice"><b>${esc(advice.title)}</b><p>${esc(advice.text)}</p></aside>` : "";
   showDialog(
     win ? "The frontier is yours." : "The banner will rise again.",
-    `<div class="result-emblem ${win ? "win" : ""}">${icon(win ? "crown" : "shield")}</div><p class="result-reason">${esc(battleResultReason(state))}</p><div class="record-stats"><div><b>${time(state.time)}</b><span>Battle time</span></div><div><b>${state.players[0].stats.kills}</b><span>Enemies defeated</span></div><div><b>${state.players[0].stats.captures}</b><span>Points captured</span></div></div>${win && mission ? `<p>Reward: ${esc(mission.reward)}</p>` : ""}${result.earned.length ? `<div class="new-achievements">${result.earned.map((id) => `<span>${icon("star")}${esc(ACHIEVEMENTS.find((achievement) => achievement.id === id)?.name ?? id)}</span>`).join("")}</div>` : ""}<p id="result-save-status" aria-live="polite">Saving your result…</p>${button("Retry saving result", "result-save", "", "save", "hidden")}<div class="result-actions">${primary}${button("Command record", "result-record", "", "star")}${button("Main menu", "result-home", "", "back")}</div>`,
+    `<div class="result-emblem ${win ? "win" : ""}">${icon(win ? "crown" : "shield")}</div><p class="result-reason">${esc(battleResultReason(state))}</p><div class="record-stats"><div><b>${time(state.time)}</b><span>Battle time</span></div><div><b>${state.players[0].stats.kills}</b><span>Enemies defeated</span></div><div><b>${state.players[0].stats.captures}</b><span>Points captured</span></div></div>${adviceHTML}${win && mission ? `<p>Reward: ${esc(mission.reward)}</p>` : ""}${result.earned.length ? `<div class="new-achievements">${result.earned.map((id) => `<span>${icon("star")}${esc(ACHIEVEMENTS.find((achievement) => achievement.id === id)?.name ?? id)}</span>`).join("")}</div>` : ""}<p id="result-save-status" aria-live="polite">Saving your result…</p>${button("Retry saving result", "result-save", "", "save", "hidden")}<div class="result-actions">${primary}${!win ? button("Practice the basics", "learn", "", "book") : ""}${button("Command record", "result-record", "", "star")}${button("Main menu", "result-home", "", "back")}</div>`,
     "result-dialog",
   );
   void persistResult();
@@ -2010,6 +2016,7 @@ async function performAction(action: string, id?: string) {
       renderDeck();
       break;
     case "inspect-building": {
+      cancelMapTargeting();
       const b = state.entities.find(
         (e) => e.id === id && e.team === 0 && e.hp > 0,
       );
@@ -2025,6 +2032,7 @@ async function performAction(action: string, id?: string) {
       break;
     }
     case "set-rally":
+      armedOrder = null;
       rallyBuildingId = id ?? selectedBuilding()?.id ?? null;
       uiAction = "rally";
       deckCollapsed = true;
@@ -2217,7 +2225,7 @@ async function performAction(action: string, id?: string) {
     }
     case "focus":
     case "select-commander": {
-      cancelRallyTargeting();
+      cancelMapTargeting();
       const c = commander();
       if (c) {
         selection = new Set([c.id]);
@@ -2230,6 +2238,7 @@ async function performAction(action: string, id?: string) {
       break;
     }
     case "march-relic": {
+      cancelMapTargeting();
       const troops = state.entities.filter(
         (e) => e.team === 0 && e.kind !== "building" && e.hp > 0,
       );
@@ -2263,7 +2272,7 @@ async function performAction(action: string, id?: string) {
       break;
     }
     case "select-army":
-      cancelRallyTargeting();
+      cancelMapTargeting();
       selection = new Set(
         state.entities
           .filter((e) => e.team === 0 && e.kind !== "building" && e.hp > 0)
@@ -2275,6 +2284,7 @@ async function performAction(action: string, id?: string) {
       updateHUD();
       break;
     case "hold":
+      cancelMapTargeting();
       dispatch({ type: "hold", team: 0, entityIds: [...selection] });
       break;
     case "recruit":
@@ -2312,6 +2322,7 @@ async function performAction(action: string, id?: string) {
         audio.play("error");
         break;
       }
+      cancelMapTargeting();
       placement = id as BuildingId;
       targetPoint = null;
       const anchor = commander() ?? state.map.spawns[0];
@@ -2397,13 +2408,23 @@ async function performAction(action: string, id?: string) {
       renderer.zoomAt(1 / 1.2);
       break;
     case "order-move":
-      uiAction = "move";
+    case "order-attackMove": {
+      if (!state.entities.some(e => selection.has(e.id) && e.team === 0 && e.kind !== "building" && e.hp > 0)) {
+        toast("Select Commander or Army before choosing a destination.");
+        break;
+      }
+      cancelMapTargeting();
+      armedOrder = action === "order-attackMove" ? "attackMove" : "move";
+      uiAction = armedOrder;
       renderDeck();
+      updateHUD();
+      toast(`${armedOrder === "attackMove" ? "Attack-move" : "Move"}: tap a map destination, or Cancel to select again.`);
       break;
-    case "order-attackMove":
-      uiAction = "attackMove";
+    }
+    case "cancel-order":
+      cancelMapTargeting();
       renderDeck();
-      toast("Attack-move: tap a destination. Your army engages along the way.");
+      updateHUD();
       break;
     case "rally-all": {
       const c = commander();
@@ -2917,6 +2938,12 @@ function releasePointer(e: PointerEvent) {
     if (placement) {
       targetPoint = snapConstruction(world);
       updateHUD();
+    } else if (armedOrder) {
+      const order = armedOrder;
+      armedOrder = null;
+      dispatch({ type: order, team: 0, entityIds: [...selection], x: world.x, y: world.y });
+      targetPoint = world;
+      renderDeck();
     } else {
       const item = renderer.pick(state, point.x, point.y);
       if (item && "team" in item) {
@@ -3115,6 +3142,10 @@ window.addEventListener("keydown", (e) => {
     if (placement) {
       placement = null;
       renderDeck();
+    } else if (armedOrder) {
+      cancelMapTargeting();
+      renderDeck();
+      updateHUD();
     } else if (modalOpen) closeDialog();
     else showPauseMenu();
   }

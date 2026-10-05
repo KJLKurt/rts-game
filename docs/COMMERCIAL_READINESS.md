@@ -1,5 +1,23 @@
 # Commercial-readiness work plan and scope
 
+## Current publication checkpoint — 5 October 2026
+
+The current guidance checkpoint is **Build `fc-9011b0514b9c`**: 525 unit/contract
+tests passed; TypeScript and production build passed; 127 unique scoped browser
+cases finished with 120 passed, seven intentional skips and zero final failures
+or flakes. This is scoped coverage, not a full-suite rerun. The frozen prior
+`fc-7f2be308bbca` release separately passed 253 of 274 full-suite cases, with
+21 intentional skips. All 15 simulation files are unchanged. See
+[DEFEAT_GUIDANCE_QA.md](DEFEAT_GUIDANCE_QA.md) and [QA.md](QA.md) for the current
+receipt, actual-input evidence and limitations.
+
+The detailed scope and usability receipts below are retained from the previous
+checkpoint; their references to a current candidate or test totals describe
+that earlier checkpoint. This update does not establish commercial readiness,
+physical-device coverage, later natural-route completion or broad balance.
+
+## Retained prior-checkpoint scope
+
 Updated 5 October 2026 after the scoped usability release verification. **The local candidate passes its runnable browser gate; it remains a testing preview and is not declared commercially ready.** Linux Chromium and emulated phone touch were tested; physical iPhone/Safari, installed-device lifecycle/performance, subjective soundtrack listening, full natural campaign/expedition routes, broad balance and exact deployed-release checks remain open. Asset provenance and distribution licensing still need commercial review.
 
 ## Authority and scope

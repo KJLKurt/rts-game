@@ -1,6 +1,12 @@
 # QA and reproducible verification
 
-## Current isolated usability receipt — 5 October 2026
+## Current isolated guidance receipt — 5 October 2026
+
+Build `fc-9011b0514b9c`: **525 tests in 55 files passed**, TypeScript/eight mission validations/production build passed, and **127 unique scoped browser cases account for 120 passed/seven intentional skips/zero final failures or flakes**. This includes four local PWA cases and 21 new native-input/persistence cases. New screenshots and landscape scroll/actions were inspected. All 15 simulation files are unchanged. Earned-defeat Practice reached lesson 3/8 and reloaded exactly at 19.2 seconds; an unfinished Normal continuation reloaded exactly at 201.8 seconds. See [DEFEAT_GUIDANCE_QA.md](DEFEAT_GUIDANCE_QA.md) for reproductions, harness corrections and evidence limits.
+
+The separate unchanged frozen usability release completed full acceptance: **274 cases, 253 passed, 21 intentional skips, zero failures/flakes**, and a natural Standard-derived defeat at 863.5 seconds (14:23), followed by verified retry/reload. These totals do not describe a full rerun of the guidance candidate. Hosted access remains blocked before assets; no push, workflow or deployment was run for this batch.
+
+## Prior isolated usability receipt — 5 October 2026
 
 The isolated usability candidate identifies itself as **Build `fc-7f2be308bbca`** in the menu footer and Credits / About. It passes **519 unit/contract tests in 55 files**, TypeScript checks and the production build. A fresh focused browser run covers **109 cases: 102 passed, seven intentional skips, zero failures/flakes**; the separate actual previous-cache upgrade adds **one passing case**, for **110 scoped cases / 103 passed / seven skipped**. This focused run does not replace the prior full-suite receipt. Runtime `index-eiI64Ww3.js` / `index-BmuM_yap.css`; worker cache `35e0f9b54183`; 24 precached files; base `/rts-game/`. A repeat build produced identical bytes in all 26 output files. See [USABILITY_RELEASE_QA.md](USABILITY_RELEASE_QA.md).
 

@@ -86,6 +86,6 @@ export function expeditionHTML(
   if (run.phase === "battle" && node)
     content = `<h3>${esc(node.title)}</h3><p>${esc(node.description)}</p>${action("Continue encounter", "expedition-resume")}`;
   if (run.phase === "completed" || run.phase === "defeated")
-    content = `<p>${run.phase === "completed" ? "The expedition is complete. Your Wayfinder title is recorded; a new run starts fresh." : "Your route is preserved in the run summary. Start again with fresh supplies and new choices."}</p>${action("Start a new expedition", "expedition-new")}`;
+    content = `<p>${run.phase === "completed" ? "The expedition is complete. Your Wayfinder title is recorded; a new run starts fresh." : "Your command record is kept. A new expedition starts with fresh supplies and resets this run’s bonuses and route."}</p>${action("Start a new expedition", "expedition-new")}${run.phase === "defeated" ? `<p>Gather a mixed army at a safe rally point, defend your supplies, then push toward a relic.</p>${action("Practice the basics", "learn")}` : ""}`;
   return `${banner}${content}<p>${action("Save route", "expedition-save")}</p><details class="expedition-route-details"><summary>Inspect the whole route</summary>${map}</details>`;
 }
