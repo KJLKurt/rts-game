@@ -1,0 +1,48 @@
+# Natural route result and earned campaign progression QA
+
+5 October 2026. Actual sandbox-enabled Linux Chromium phone play at **390×844**, on frozen **`fc-10d287331fd1`**, runtime `index-BlQ4ObkR.js`, CSS `index-CH0dYD5l.css`, worker cache `728b201bd90f`, `/rts-game/`. This continues the legitimately owned 279.8-second Whisperwood save from the preceding continuation pass. Only its local browser origin port changes; no simulation clock, winner, economy, profile, objectives or expedition journal is injected.
+
+The lead reports publication at main/feature commit `4643ba69cab0b2c8992b48c7e2f31096188f1ab5`, successful Pages run `37311208194` attempt 1 and 233 matching remote source hashes. Those are lead-verified publication facts. This cloud pass runs the matching local production build; its hosted HTTPS proxy block remains a boundary, with no retry or security bypass. It runs no GitHub workflows, pushes or deployments and leaves the unrelated saved workspace repository untouched.
+
+## Actual outcomes
+
+| Encounter | Natural result | Game clock | Verified behavior |
+|---|---|---:|---|
+| Whisperwood, third owned attempt | Defeat, own Keep destroyed | 565.4s / 9:25 | Native recruiting, construction, capture, commander movement and abilities; defeated route commits and reloads |
+| The Outpost | Required objectives complete, victory | 42.7s | Supplies/relic captured, House completed, six living troops; Founder title and next chapter earned |
+| Hold the Line, first attempt | Defeat, own Keep destroyed | 348.9s / 5:48 | Towers and recruiting work, but an under-resourced defense fails before six minutes |
+| Hold the Line, second attempt | Defeat, own Keep destroyed | 392.6s / 6:32 | Keep survives six minutes with three towers; no Spearmen survive at 366.2s, so the mission correctly remains unfinished |
+| Hold the Line, third attempt | All three required objectives complete, victory | 360.0s / 6:00 | Three completed towers, three living Spearmen and own Citadel survive; Forager charter and Broken Alliance earned |
+
+The starting profile is one game/one win from the earlier naturally earned Foothold result. Five newly completed battles end at exactly **six games / three wins / six history entries**. These rows are separate matches, not combined successes. Raw creation/loss counters include commander events and are not asserted to count unique infantry deaths.
+
+Whisperwood ends with **80 kills, six captures, 51 units created/51 lost and four commander deaths**. Its human result says “Your Command Keep has fallen.” The internal winner-relative reason is “All enemy Command Keeps destroyed”; that string must not be misreported as the human defeat text. The earned expedition becomes `defeated`, with no active node, one prior victory, 80 crowns, recurring +80 gold/+80 wood and the journal `[Foothold win, Caravan stores, Whisperwood loss]`. Native Save route and reload preserve the complete expedition and profile. No later expedition victory or complete four-battle expedition is claimed.
+
+Outpost's first rush reaches the relic but loses troops near the enemy Keep. Retreat, Rally and parallel Spearman production meet the troop objective at 42.7 seconds. Its real result earns `banner-founder`, records `outpost`, and enables Hold the Line through the ordinary Next chapter button.
+
+## Successful defense reproduction
+
+1. Start the unlocked **Hold the Line**, Normal, seed `HOLD-LINE-02`. Its briefing requires six minutes, two completed towers and three living Spearmen, with the Keep alive. Ordinary score cannot end this mission.
+2. Build towers and a House through preview/confirm. In Keep Details, set a northern reserve rally around `(2.5, 6.5)`. Train three Spearmen and, after they arrive, use Army → Hold. All three remain at full 121 health. Later use Commander-only Move; moving the entire army would remove this reserve.
+3. Build the Range and more defensive towers, recruit from the selected Barracks and Range, and use Rally near the defense. Existing producer rally points are fixed destinations, not a moving commander attachment. The legal placement helper reads a cloned pending-order projection; actual construction uses native canvas taps and confirmation, with no runtime-state mutation.
+4. Spend the ordinary dawn convoy resources on **Stronghold**, then **Citadel**, using native Details → Upgrade. Six towers stand before the final assault; three survive it. At the natural 360.0-second victory, the level-three Keep has **6142.8 / 10080 health**, all three reserve Spearmen live, and the HUD reads **3 / 3 chapter objectives**. Combat records **41 kills, zero captures, 11 units created/eight lost and two commander deaths**.
+5. Wait for “Result saved on this device.” The profile becomes six games/three wins, `completedMissions["rise-of-the-frontier"] = ["outpost", "hold-line"]`, campaign progress two, and choices include **`loadout-forager`**. Return through Main menu → Campaign and reload; the completed chapters, reward and **Broken Alliance — Ready to play** persist exactly.
+6. Open Broken Alliance through its newly enabled chapter card. Raise the banner and use native Save battle / Save & leave. A real paused opening is retained for continuation. Separately, restart the ended expedition through its native New expedition action, select the earned **Forager's charter**, Save route and reload. The new, distinct run has seed `FRONTIER-164867`, zero victories, 40 crowns, −40 gold/+100 wood, an empty journal and Foothold available. The prior defeated journal remains preserved in its immutable evidence; it is not merged into the new run.
+
+The first failed defense leaves 884 gold/1097 wood unspent. The second adds defenses and a Stronghold but loses the required Spearmen; emergency replacements arrive too late. Neither loss alone proves a balance defect. The third demonstrates a successful legal strategy without changing damage, income, training, AI, mission conditions or starting resources. All 15 simulation source files and every shipped runtime asset remain unchanged.
+
+## Evidence handling and quality findings
+
+The evidence contains chronological native inputs, full read-only observations, screenshots and owned browser storage. Seven recovered driver errors are retained: clicking an underlying Army button after a terminal popup, a wrong briefing action, a pause/result timing race at the Outpost boundary, choosing View campaign after a loss, waiting for a result while the second defense remained unfinished, choosing View campaign when a successful result actually offered Next chapter, and choosing a wrong Main menu action. These are harness mistakes; no forced clicks or security bypasses were used. There are **zero runtime/page errors** in this pass.
+
+Some raw names were planning labels. In particular, `hold-line-earned-second-chapter-victory` actually records the first defense **loss**; the authoritative corrected record is `hold-line-first-attempt-confirmed-defeat`. Random storage exports can contain an earlier autosave even when the latest observation has advanced. Terminal profile/result records are committed, and exact continuation uses explicit native Save. The evidence summary identifies storage clocks instead of treating filenames as clocks.
+
+The phone interface supports the complete tested loop: selection, movement, legal construction, parallel recruiting, abilities, capture, pause/planned orders, real win/loss, retry, result persistence, chapter unlock and usable earned charter. Inspected screenshots show readable objective counters, an inspectable upgrade queue and the actual committed reward/result. Tactical pause and repeated coached retries materially assist this successful defense. This is evidence of controllable gameplay and progression, not evidence of uncoached novice comprehension or subjective fun.
+
+The cloud's frozen documentation snapshot still named older current checkpoints: README named `fc-9011b0514b9c`/525 tests, while the underlying status sections named `fc-7f2be308bbca`/519 tests and scoped totals. Parent publication notes already identified the published `fc-10d287331fd1`. This documentation-only integration reconciles the underlying sections with **536 tests/57 files**, the **319-case full gate** (298 passed/21 skipped, with three separate upgrades giving 301 passed/18 remaining skips), and the newly earned progression. Existing publication notes and historical reports are preserved. The build ID is unchanged and no deployment is required.
+
+## Release assessment and audited limits
+
+The exact published runtime has a passing local production browser/PWA gate and now has earned two-chapter teaching progression, a genuine later expedition defeat, durable rewards and a usable unlocked charter. It remains a **testing preview**. No additional runtime defect was reproduced in this natural pass, and no arbitrary balance change is justified by these retries.
+
+The controlled cloud task can close the documentation discrepancy and this bounded progression gap. Remaining gates require further evidence: all later natural campaign chapters and successful Normal/later/full expedition routes; ordinary fully played long matches; novice usability and broader difficulty/faction balance; physical Safari, installed-device lifecycle and render/input performance; subjective audio listening; fuller supplemental themes/styles/directional animation; asset distribution rights; and hosted gameplay/update/Continue beyond the lead's publication/hash verification. The separate headless pacing samples do not prove rendering performance or fun. This assessment does not call the complete original/supplemental scope finished or commercially cleared.

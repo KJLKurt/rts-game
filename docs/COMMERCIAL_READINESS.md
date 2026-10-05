@@ -1,57 +1,6 @@
 # Commercial-readiness work plan and scope
 
-## Current allied-ability checkpoint — 5 October 2026
-
-The current allied-ability checkpoint is **Build `fc-10d287331fd1`**.
-536 unit tests in 57 files, TypeScript, eight mission validations and the
-production build pass. The full production browser run recorded **319 cases:
-298 passed, 21 intentional skips, zero failures/flakes**. Three separate actual
-previous-cache upgrades fulfill three skips, giving **301 distinct passes and
-18 remaining skips across the same 319 cases**. The focused 15 ability cases
-are a subset, not added again. Earlier focused locator corrections remain
-documented separately. All 15 simulation files are unchanged. See
-[ALLY_ABILITY_NATURAL_ROUTE_QA_20261005.md](ALLY_ABILITY_NATURAL_ROUTE_QA_20261005.md)
-for exact tests, owned-save continuity, earned progression and evidence limits.
-
-The dated scope and prior receipts below remain historical. Commercial readiness,
-physical-device coverage, later natural-route completion and broad balance are
-not established by this release.
-
-## Prior Practice recovery checkpoint — 5 October 2026
-
-The current Practice recovery checkpoint is **Build `fc-3c40d8eec6cf`**.
-533 unit/contract tests in 57 files pass, with TypeScript, eight mission
-validations and the production build. The full 304-case browser run initially
-recorded 282 passes, 21 skips and one campaign-Continue timing failure. After
-waiting for the actual asynchronous restore, that case passed in all three
-viewports; three previous-production-cache upgrade cases also passed. Reconciled
-distinct coverage is **286 passed, 18 intentional skips, no unresolved failures**.
-This is not a claim of a failure-free first full run. All 15 simulation files
-remain unchanged. See [PRACTICE_RECOVERY_QA.md](PRACTICE_RECOVERY_QA.md) for exact
-scope, preserved failure evidence, actual-input results and limitations.
-
-The dated scope and prior receipts below remain historical evidence. This
-checkpoint does not establish commercial readiness or complete device/balance coverage.
-
-## Prior guidance publication checkpoint — 5 October 2026
-
-The current guidance checkpoint is **Build `fc-9011b0514b9c`**: 525 unit/contract
-tests passed; TypeScript and production build passed; 127 unique scoped browser
-cases finished with 120 passed, seven intentional skips and zero final failures
-or flakes. This is scoped coverage, not a full-suite rerun. The frozen prior
-`fc-7f2be308bbca` release separately passed 253 of 274 full-suite cases, with
-21 intentional skips. All 15 simulation files are unchanged. See
-[DEFEAT_GUIDANCE_QA.md](DEFEAT_GUIDANCE_QA.md) and [QA.md](QA.md) for the current
-receipt, actual-input evidence and limitations.
-
-The detailed scope and usability receipts below are retained from the previous
-checkpoint; their references to a current candidate or test totals describe
-that earlier checkpoint. This update does not establish commercial readiness,
-physical-device coverage, later natural-route completion or broad balance.
-
-## Retained prior-checkpoint scope
-
-Updated 5 October 2026 after the scoped usability release verification. **The local candidate passes its runnable browser gate; it remains a testing preview and is not declared commercially ready.** Linux Chromium and emulated phone touch were tested; physical iPhone/Safari, installed-device lifecycle/performance, subjective soundtrack listening, full natural campaign/expedition routes, broad balance and exact deployed-release checks remain open. Asset provenance and distribution licensing still need commercial review.
+Updated 5 October 2026 after the full alliance-targeting release verification and continued natural phone play. **The local candidate passes its runnable browser gate; it remains a testing preview and is not declared commercially ready.** Linux Chromium and emulated phone touch were tested; physical iPhone/Safari, installed-device lifecycle/performance, subjective soundtrack listening, full natural campaign/expedition routes, broad balance and exact deployed-release checks remain open. Asset provenance and distribution licensing still need commercial review.
 
 ## Authority and scope
 
@@ -65,9 +14,10 @@ Gold and wood come from captured deposits and the keep stipend; no worker microm
 
 ## Current evidence boundary
 
-- The isolated usability candidate identifies itself as **Build `fc-7f2be308bbca`** in the menu footer and Credits / About. It passes **519 unit/contract tests in 55 files**, TypeScript checks and the production build. A fresh focused browser run covers **109 cases: 102 passed, seven intentional skips, zero failures/flakes**; the separate actual previous-cache upgrade adds **one passing case**, for **110 scoped cases / 103 passed / seven skipped**. This focused run does not replace the prior full-suite receipt. Runtime `index-eiI64Ww3.js` / `index-BmuM_yap.css`; worker cache `35e0f9b54183`; 24 precached files; base `/rts-game/`. A repeat build produced identical bytes in all 26 output files. See [USABILITY_RELEASE_QA.md](USABILITY_RELEASE_QA.md).
+- The published alliance-targeting checkpoint is **Build `fc-10d287331fd1`**. It passes **536 unit/contract tests in 57 files**, TypeScript and the production build; all eight story missions validate. The full production browser suite has **319 distinct cases: 298 passed, 21 intentional skips, zero failures or flakes**. Three separately executed previous-cache upgrades fulfill three skipped cases, giving **301 passed / 18 remaining skips across the same 319 cases**; the 15 focused ability cases are already included. All four PWA cases pass. Runtime `index-BlQ4ObkR.js` / `index-CH0dYD5l.css`; worker cache `728b201bd90f`; 24 precached files; 26 byte-identical repeat-build outputs; `/rts-game/` base. See [ALLY_ABILITY_NATURAL_ROUTE_QA_20261005.md](ALLY_ABILITY_NATURAL_ROUTE_QA_20261005.md). Earlier usability/guidance reports remain dated prior-build evidence.
+- The lead reports main and feature commit `4643ba69cab0b2c8992b48c7e2f31096188f1ab5`, successful Pages run `37311208194` attempt 1 and 233 matching remote source hashes. These are lead-verified publication facts; hosted gameplay remains unverified in this cloud environment because its HTTPS proxy denied access before assets loaded. No GitHub Actions or deployments were run by this QA task.
 - The published clarity checkpoint `779745debf48ea9f18f93a5874e92cf4d8a5355a` had 516 unit tests in 54 files and a full 262-case browser run: 244 passed, 18 intentional skips, zero failures/flakes. Its runtime was `index-DJ5oCh_8.js` / `index-BLaajxx7.css`, worker cache `c8affbd450ca`. That remains prior-source evidence, not a new full run of this candidate.
-- Native desktop input earned the prior checkpoint’s Outpost win at 43.8 game seconds. Further actual-input play on the published clarity checkpoint ended a Balanced expedition in first-battle defeat at **408.4 game seconds (6:48)**, saved the result once and opened its defeated route with 0/4 victories. Quick-, Standard- and Epic-derived skirmish openings were played with real UI input and saved unfinished; their exact bounded observations are in [NATIVE_PLAY_20261005.md](NATIVE_PLAY_20261005.md). No successful four-battle route, guaranteed match duration or subjective fun verdict is claimed. All 15 simulation source files remain unchanged in this usability pass.
+- Native phone play on this runtime earned Outpost at 42.7 seconds and Hold the Line at 360.0 seconds after two failed retries. Reload preserves both completed chapters, the Forager charter and playable Broken Alliance; the earned charter starts and reloads a distinct new route. Continued owned Whisperwood ends in genuine Keep defeat at 565.4 seconds, with the prior earned Foothold/shop journal preserved. See [NATURAL_ROUTE_RESULT_CAMPAIGN_QA_20261005.md](NATURAL_ROUTE_RESULT_CAMPAIGN_QA_20261005.md). No complete natural campaign or successful four-battle expedition is claimed. All 15 simulation files remain unchanged.
 - Earlier 441/493/494/505-test receipts and historical deployed runs are retained as history, not current verification. The fresh cloud environment ran sandbox-enabled Chromium; the prior Linux socket/infrastructure block was not bypassed.
 - Performance evidence: the archived 4 October investigation (`frontier-profiling-2026-10-04.tar.gz`, SHA256 `66a7674b2cdc70fb1d1a5c133a28fd0d7349c129a57607b2558d1ac3f28946d5`, `frontier-profiling/REPORT.md` and `applied.json`) measures an applied dense-combat p95 of **65.75ms**, versus baseline repeats **77.0–96.3ms**. Cold mass movement still peaks at **223.63ms wall / 221.503ms main-thread CPU** for a 100ms simulation tick. These synthetic headless figures exclude rendering, phone thermals and input; the 600-population ceiling is not a smooth-play guarantee.
 - [REQUIREMENTS_STATUS.md](REQUIREMENTS_STATUS.md) is the current implementation/verification summary. [MATCH_SCALES.md](MATCH_SCALES.md), [BEGINNER_FLOW_QA.md](BEGINNER_FLOW_QA.md) and [JOURNEY_INTEGRATION_QA.md](JOURNEY_INTEGRATION_QA.md) retain their dated, bounded evidence.
@@ -130,7 +80,7 @@ This audits the **current recovered/hardened source**, not the old `85dc40b` imp
 | 37 Accessibility | Actual scaled text on key surfaces, keyboard menu paths/focus, six team shapes, sound controls/reduced motion; final target/overflow review pending | 6 |
 | 38 Manifest | Scoped start/scope/icons/standalone at current owner-authorized base; installed launch still needs candidate evidence | 7–8 |
 | 39 Worker | Scoped cache/consent update; source maps excluded; local offline and scope-isolation assertions passed; deployed/installed-device checks remain open | 7–8 |
-| 40 Tests | 519 unit tests in 55 files; focused 110 browser cases: 103 passed, seven intentional skips, zero failures/flakes. Prior full 262-case receipt stays separately labeled | All |
+| 40 Tests | 536 unit tests in 57 files; full 319 browser cases: 298 passed, 21 intentional skips, zero failures/flakes. Three actual cache upgrades yield 301 passed / 18 remaining skips across those same distinct cases | All |
 | 41 Bot play | Headless/accelerated AI matches and metrics; finite policy/scale comparisons; perfect balance was explicitly not requested | 3 |
 | 42 Debug | Nonintrusive reveal/resources/spawn/speed/seed/FPS subset; the listed debug tools were suggestions, not every-item mandates | 3, 7 |
 | 43 Performance | Dense-query/separation optimization with exact-equivalence checks; cold 223.63ms movement spike and renderer/mobile evidence remain open | 3, 6–7 |
@@ -138,9 +88,9 @@ This audits the **current recovered/hardened source**, not the old `85dc40b` imp
 | 45 Assets | Provenance documented in source and Credits/About; underlying reference rights and distribution license unverified | 6, 8 |
 | 46 Data definitions | Typed units/buildings/techs/commanders/factions/biomes/campaigns/objectives/achievements/upgrades; build validation | 5, 7 |
 | 47 Documentation | Required developer/authoring guides exist; current status and plan reconciled here; final release evidence still to append | 8 |
-| 48 Pages | Current owner-selected repo/base implemented; final hardened source/deployment/public checks not yet verified | 7–8 |
+| 48 Pages | Current owner-selected repo/base implemented; lead confirms commit 4643ba69, Pages run 37311208194 attempt 1 and 233 remote hashes. Hosted gameplay/update remain unverified here | 7–8 |
 | 49 Content breadth | Current counts meet/exceed approximate slice targets; quality and usable depth matter more than further count growth | All |
-| 50 Teaching campaign | Rise of the Frontier's five progressive chapters plus standalone eight-step practice and second campaign; current ordinary route review pending | 1, 5 |
+| 50 Teaching campaign | Rise of the Frontier's five chapters plus eight-step practice and second campaign; Outpost/Hold the Line earned, Broken Alliance opens. Remaining full natural route review pending | 1, 5 |
 | 51 Game feel | Responsiveness/feedback/placement/control work implemented; novice feedback remains an ordinary-play acceptance gate | All |
 | 52 Iteration | Bounded fixes/tests/profiling with failures tracked; final browser findings must drive the next corrections | All |
 | 53 Working subsets | Original expressly permits useful extensible subsets with documented expansion; no broken or misleading advertised feature is excused | All |
@@ -160,3 +110,60 @@ Current code has one coherent sprite theme, four biome palettes, three authored 
 - Asset rights/licensing require evidence before redistribution can be represented as commercially cleared. Generated or owner-supplied references alone are not proof of rights; do not invent a license grant.
 - Physical-device lifecycle/performance and subjective listening are distinct evidence categories. Original section 55 explicitly requires representative desktop/mobile viewport testing; do not call that a physical-device certification requirement, or claim emulation proves hardware performance.
 - Record final checks against the exact candidate/revision. A local test pass, a production build, a prepared QA bundle or a deployed preview alone cannot close first-time usability or commercial readiness. Resolve verified blocking failures, then provide the section 56 handoff with remaining limits stated precisely.
+
+## Preserved publication receipt history
+
+The following notes predate this natural continuation and retain their original
+build/test evidence. Their older outcome and open-route statements describe the
+time of those receipts; current progression is recorded above.
+
+## Prior allied-ability publication checkpoint — 5 October 2026
+
+The then-current allied-ability checkpoint is **Build `fc-10d287331fd1`**.
+536 unit tests in 57 files, TypeScript, eight mission validations and the
+production build pass. The full production browser run recorded **319 cases:
+298 passed, 21 intentional skips, zero failures/flakes**. Three separate actual
+previous-cache upgrades fulfill three skips, giving **301 distinct passes and
+18 remaining skips across the same 319 cases**. The focused 15 ability cases
+are a subset, not added again. Earlier focused locator corrections remain
+documented separately. All 15 simulation files are unchanged. See
+[ALLY_ABILITY_NATURAL_ROUTE_QA_20261005.md](ALLY_ABILITY_NATURAL_ROUTE_QA_20261005.md)
+for exact tests, owned-save continuity, earned progression and evidence limits.
+
+The dated scope and prior receipts below remain historical. Commercial readiness,
+physical-device coverage, later natural-route completion and broad balance are
+not established by this release.
+
+## Prior Practice recovery checkpoint — 5 October 2026
+
+The current Practice recovery checkpoint is **Build `fc-3c40d8eec6cf`**.
+533 unit/contract tests in 57 files pass, with TypeScript, eight mission
+validations and the production build. The full 304-case browser run initially
+recorded 282 passes, 21 skips and one campaign-Continue timing failure. After
+waiting for the actual asynchronous restore, that case passed in all three
+viewports; three previous-production-cache upgrade cases also passed. Reconciled
+distinct coverage is **286 passed, 18 intentional skips, no unresolved failures**.
+This is not a claim of a failure-free first full run. All 15 simulation files
+remain unchanged. See [PRACTICE_RECOVERY_QA.md](PRACTICE_RECOVERY_QA.md) for exact
+scope, preserved failure evidence, actual-input results and limitations.
+
+The dated scope and prior receipts below remain historical evidence. This
+checkpoint does not establish commercial readiness or complete device/balance coverage.
+
+## Prior guidance publication checkpoint — 5 October 2026
+
+The current guidance checkpoint is **Build `fc-9011b0514b9c`**: 525 unit/contract
+tests passed; TypeScript and production build passed; 127 unique scoped browser
+cases finished with 120 passed, seven intentional skips and zero final failures
+or flakes. This is scoped coverage, not a full-suite rerun. The frozen prior
+`fc-7f2be308bbca` release separately passed 253 of 274 full-suite cases, with
+21 intentional skips. All 15 simulation files are unchanged. See
+[DEFEAT_GUIDANCE_QA.md](DEFEAT_GUIDANCE_QA.md) and [QA.md](QA.md) for the current
+receipt, actual-input evidence and limitations.
+
+The detailed scope and usability receipts below are retained from the previous
+checkpoint; their references to a current candidate or test totals describe
+that earlier checkpoint. This update does not establish commercial readiness,
+physical-device coverage, later natural-route completion or broad balance.
+
+## Retained prior-checkpoint scope

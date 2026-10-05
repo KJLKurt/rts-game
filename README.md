@@ -19,23 +19,32 @@ Open `/rts-game/` on the development or preview server. Production paths target 
 
 ## Current checkpoint
 
+The published alliance-targeting checkpoint is **Build `fc-10d287331fd1`**. It passes **536 unit/contract tests in 57 files**, TypeScript and the production build; all eight story missions validate. The full production browser suite has **319 distinct cases: 298 passed, 21 intentional skips, zero failures or flakes**. Three separately executed previous-cache upgrades fulfill three skipped cases, giving **301 passed / 18 remaining skips across the same 319 cases**; the 15 focused ability cases are already included. All four PWA cases pass. Runtime `index-BlQ4ObkR.js` / `index-CH0dYD5l.css`; worker cache `728b201bd90f`; 24 precached files; 26 byte-identical repeat-build outputs; `/rts-game/` base. See [ALLY_ABILITY_NATURAL_ROUTE_QA_20261005.md](docs/ALLY_ABILITY_NATURAL_ROUTE_QA_20261005.md) for the exact test, update and earned-route evidence. Earlier guidance/usability reports remain dated prior-build history.
+
+The published clarity checkpoint `779745debf48ea9f18f93a5874e92cf4d8a5355a` had 516 unit tests in 54 files and a full 262-case browser run: 244 passed, 18 intentional skips, zero failures/flakes. Its runtime was `index-DJ5oCh_8.js` / `index-BLaajxx7.css`, worker cache `c8affbd450ca`. That remains prior-source evidence, not a new full run of this candidate.
+
+Actual phone input earned the earlier Foothold expedition win at **550.1 seconds**, bought the Caravan supply contract, and continued Whisperwood to a genuine Keep defeat at **565.4 seconds**. On this exact runtime it then earned Outpost at **42.7 seconds** and Hold the Line at **360.0 seconds** after two failed retries. The saved profile is six games/three wins; reload preserves both chapter completions, the Forager charter and playable Broken Alliance. The earned charter starts and reloads a distinct new expedition through native controls. See [NATURAL_ROUTE_RESULT_CAMPAIGN_QA_20261005.md](docs/NATURAL_ROUTE_RESULT_CAMPAIGN_QA_20261005.md). No successful four-battle route, broad balance or subjective fun verdict is claimed. All 15 simulation source files remain unchanged. Earlier actual gameplay remains dated history in [NATIVE_PLAY_20261005.md](docs/NATIVE_PLAY_20261005.md).
+
+Local sandbox-enabled Linux Chromium and emulated phone touch were tested. Hosted HTTPS access was denied by this cloud environment before assets loaded (proxy 403 / browser ERR_TUNNEL_CONNECTION_FAILED); hosted gameplay, asset matching and cache lifecycle therefore remain unverified here. The lead reports published commit `4643ba69cab0b2c8992b48c7e2f31096188f1ab5`, successful Pages run `37311208194` attempt 1 and 233 remote source hashes; these publication checks do not establish hosted gameplay. Physical Safari/devices, installed-device lifecycle/performance, full later natural routes, broad balance, soundtrack listening and commercial asset rights remain open. No GitHub workflow or deployment was run for this QA pass.
+
+The initial implementation is being actively playtested and expanded. A minimal GitHub Pages workflow is enabled for final-stage testing. It runs only for game/build changes on main, or a manual dispatch. Documentation-only checkpoints do not consume deployment runs. Complete-match loops are verified; broader device and difficulty coverage remains ongoing.
+
+The Rush Arena side mode is a complete four-minute commander survival loop with waves, field upgrades, supplies, shrinking territory, and telegraphed hazards.
+
+## Earlier publication observations
+
+These paragraphs retain the earlier checkpoints before the natural continuation
+reported above. Their unfinished encounters and test scopes are historical.
+
 The current checkpoint is **Build `fc-10d287331fd1`**. Touch Charge, Thorn Trap, Windstep and Runic Turret now use the existing hostility relationship rather than treating allied teams as threats. All 15 simulation files remain unchanged. **536 unit tests in 57 files**, TypeScript and build checks pass. The full production browser run recorded **298 passed, 21 intentional skips and zero failures/flakes across 319 cases**; three actual previous-cache upgrades fulfill three skips, yielding **301 distinct passes and 18 remaining skips**. Runtime `index-BlQ4ObkR.js`, CSS `index-CH0dYD5l.css`, worker cache `728b201bd90f`; 24 precache entries under `/rts-game/`. See [ALLY_ABILITY_NATURAL_ROUTE_QA_20261005.md](docs/ALLY_ABILITY_NATURAL_ROUTE_QA_20261005.md).
 
 Earlier Practice-recovery native phone input ended an owned Normal battle in Keep defeat at **398.2 seconds (6:38)**, then completed fresh Practice with exactly two neighboring Houses. Practice completed at 142.8 seconds; the later paused checkpoint saved and reloaded at **143.4 seconds**, with profile preserved. No new Outpost win or broad balance verdict is claimed.
 
 Earned phone play on the previous published build won Foothold at **550.1 seconds (9:10)** and spent earned Caravan crowns on recurring +80 gold/+80 wood. Ordinary Continue on this candidate preserves the full owned game state and the one-win route. A further current-build Whisperwood attempt remains unfinished at 279.8 seconds; no later victory or complete expedition is claimed.
 
-The following paragraphs retain prior-checkpoint evidence.
-
-The published clarity checkpoint `779745debf48ea9f18f93a5874e92cf4d8a5355a` had 516 unit tests in 54 files and a full 262-case browser run: 244 passed, 18 intentional skips, zero failures/flakes. Its runtime was `index-DJ5oCh_8.js` / `index-BLaajxx7.css`, worker cache `c8affbd450ca`. That remains prior-source evidence, not a new full run of this candidate.
-
 Native input on the frozen usability release completed a Standard-derived battle in defeat at **14:23**, verified same-seed retry and exact reload, and saved an improved actual Easy expedition opening unfinished at **3:15**. On this candidate, the earned expedition defeat opened Practice, reached lesson 3/8 and reloaded at exactly 19.2 seconds; a Normal replica continued with native orders/recruiting and reloaded exactly at 3:21. No successful four-battle route, broad balance or subjective fun verdict is claimed. All 15 simulation source files remain unchanged. Earlier actual gameplay remains documented in [NATIVE_PLAY_20261005.md](docs/NATIVE_PLAY_20261005.md).
 
 Local sandbox-enabled Linux Chromium and emulated phone touch were tested. Hosted HTTPS access was denied by this cloud environment before assets loaded (proxy 403 / browser ERR_TUNNEL_CONNECTION_FAILED); hosted gameplay, asset matching and cache lifecycle therefore remain unverified here. The owner separately confirmed the updated public UI was visible, which is not a full playtest. Physical Safari/devices, installed-device lifecycle/performance, full later natural routes, broad balance, soundtrack listening and commercial asset rights remain open. No GitHub workflow or deployment was run for this QA pass.
-
-The initial implementation is being actively playtested and expanded. A minimal GitHub Pages workflow is enabled for final-stage testing. It runs only for game/build changes on main, or a manual dispatch. Documentation-only checkpoints do not consume deployment runs. Complete-match loops are verified; broader device and difficulty coverage remains ongoing.
-
-The Rush Arena side mode is a complete four-minute commander survival loop with waves, field upgrades, supplies, shrinking territory, and telegraphed hazards.
 
 ## Controls
 
