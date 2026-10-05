@@ -48,7 +48,7 @@ import {
   capacityGainText,
 } from "./ui/inspection";
 import { updateLiveHTML } from "./ui/live-html";
-import { expeditionOpeningGuidance, rallyDestination, recruitDestination, resourceTargetName, selectedOrderDescription } from "./ui/command-guidance";
+import { expeditionOpeningGuidance, rallyDestination, recruitDestination, resourceTargetName, selectedOrderDescription, rangedSpacingDescription } from "./ui/command-guidance";
 import {
   populationBreakdown,
   technologyCost,
@@ -589,6 +589,7 @@ function currentDeckSignature(): string {
     learningProgress?.step,
     player.populationCap,
     player.maxPopulation,
+    player.rangedSpacing,
     state.pendingCommands.length,
     renderer.atlas.ready,
     state.entities
@@ -688,8 +689,10 @@ function renderDeck() {
     el.innerHTML = learningProgress && learningProgress.step < LESSONS.length
       ? `<p class="deck-tip">${learningPanelHint(learningProgress.step, "research")}</p>`
       : renderResearchTree(planningState(), 0, selectedBuilding()?.id);
-  else
-    el.innerHTML = `<div class="order-cards">${button("Move", "order-move", uiAction === "move" ? "chosen" : "", "arrow")}${button("Attack-move", "order-attackMove", uiAction === "attackMove" ? "chosen" : "", "sword")}${button("Rally current producers here", "rally-all", "", "flag")}${button("Save battle", "save", "", "save")}${button(`${speed}× speed`, "speed", "", "clock")}</div><p class="deck-tip">Move and Attack-move use your next map tap as a destination. Cancel returns to selection. Ordinary taps select friendly units and buildings, attack enemies, or capture supplies. Hold does not pursue. Rally current producers here sets a fixed point for existing buildings. New buildings need their own rally point; it does not follow the commander.</p>`;
+  else {
+    const spacing = !!planningState().players[0].rangedSpacing;
+    el.innerHTML = `<div class="order-cards">${button("Move", "order-move", uiAction === "move" ? "chosen" : "", "arrow")}${button("Attack-move", "order-attackMove", uiAction === "attackMove" ? "chosen" : "", "sword")}${button(`Keep distance: ${spacing ? "on" : "off"}`, "ranged-spacing", spacing ? "chosen" : "", "shield", `aria-pressed="${spacing}"`)}${button("Rally current producers here", "rally-all", "", "flag")}${button("Save battle", "save", "", "save")}${button(`${speed}× speed`, "speed", "", "clock")}</div><p class="deck-tip">Keep distance lets your current and future archers, Menders and ranged commander step back between shots when melee troops approach. Their damage, speed and range stay the same. Move, Hold and direct commander control take priority; they advance normally against buildings. Short retreats stay near the engagement. Move and Attack-move use your next map tap as a destination. Cancel returns to selection. Ordinary taps select friendly units and buildings, attack enemies, or capture supplies. Hold does not pursue. Rally current producers here sets a fixed point for existing buildings. New buildings need their own rally point; it does not follow the commander.</p>`;
+  }
   if (productionStrip) {
     el.append(productionStrip);
     for (const { queue, left } of queueScroll) queue.scrollLeft = left;
@@ -878,9 +881,10 @@ function updateHUD() {
   const currentOrder = armedOrder
     ? `Choose ${armedOrder === "attackMove" ? "attack-move" : "move"} destination`
     : selectedOrderDescription(planningState(), selection);
+  const spacingDescription = rangedSpacingDescription(planningState(), selection);
   set(
     "selection-info",
-    `${icon(chosen.length === 1 ? unitIcons[chosen[0].type] : "flag")}<div><strong>${placement ? `Place ${BUILDINGS[placement].name}` : chosen.length === 1 ? (UNITS as any)[chosen[0].type]?.name || (BUILDINGS as any)[chosen[0].type]?.name || (COMMANDERS as any)[chosen[0].type]?.name || "Commander" : `${chosen.length} units selected`}</strong><small>${placement ? "Tap open ground near your frontier" : chosen.length === 1 ? `${Math.ceil(chosen[0].hp)} / ${Math.ceil(chosen[0].maxHp)} health${chosen[0].queue.length ? ` · ${chosen[0].queue.length} queued` : ""}` : ""}</small>${!placement ? `<small class="current-order" title="${esc(currentOrder)}">${esc(currentOrder)}</small>` : ""}</div>${placement ? button("Cancel", "cancel-build", "cancel", "close") : armedOrder ? button("Cancel", "cancel-order", "cancel", "close", 'aria-label="Cancel destination order"') : ""}`,
+    `${icon(chosen.length === 1 ? unitIcons[chosen[0].type] : "flag")}<div><strong>${placement ? `Place ${BUILDINGS[placement].name}` : chosen.length === 1 ? (UNITS as any)[chosen[0].type]?.name || (BUILDINGS as any)[chosen[0].type]?.name || (COMMANDERS as any)[chosen[0].type]?.name || "Commander" : `${chosen.length} units selected`}</strong><small>${placement ? "Tap open ground near your frontier" : chosen.length === 1 ? `${Math.ceil(chosen[0].hp)} / ${Math.ceil(chosen[0].maxHp)} health${chosen[0].queue.length ? ` · ${chosen[0].queue.length} queued` : ""}` : ""}</small>${!placement ? `<small class="current-order" title="${esc(currentOrder)}">${esc(currentOrder)}</small>${spacingDescription ? `<small class="ranged-spacing-status" title="${esc(spacingDescription)}">${esc(spacingDescription)}</small>` : ""}` : ""}</div>${placement ? button("Cancel", "cancel-build", "cancel", "close") : armedOrder ? button("Cancel", "cancel-order", "cancel", "close", 'aria-label="Cancel destination order"') : ""}`,
   );
   const site =
     placement && targetPoint
@@ -2438,6 +2442,14 @@ async function performAction(action: string, id?: string) {
       toast(`${armedOrder === "attackMove" ? "Attack-move" : "Move"}: tap a map destination, or Cancel to select again.`);
       break;
     }
+    case "ranged-spacing": {
+      const enabled = !planningState().players[0].rangedSpacing;
+      if (dispatch({ type: "rangedSpacing", team: 0, enabled })) {
+        renderDeck();
+        toast(`Keep distance ${enabled ? "on" : "off"}${state.paused ? " when you resume" : ""}. Applies to current and future ranged troops; Move and Hold take priority.`);
+      }
+      break;
+    }
     case "cancel-order":
       cancelMapTargeting();
       renderDeck();
@@ -3278,6 +3290,8 @@ function measurePlayfield() {
   const hud = document.querySelector(".hud")?.getBoundingClientRect();
   const deck = document.querySelector(".command-deck")?.getBoundingClientRect();
   const minimap = document.querySelector(".minimap-wrap")?.getBoundingClientRect();
+  if (hud)
+    document.documentElement.style.setProperty("--hud-height", `${Math.ceil(hud.bottom)}px`);
   if (minimap)
     document.documentElement.style.setProperty("--minimap-height", `${Math.ceil(minimap.height)}px`);
   const abilities = document.querySelector<HTMLElement>(".ability-dock");

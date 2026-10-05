@@ -1178,6 +1178,9 @@ footer .build-identifier {
   border-color: var(--gold);
   color: var(--gold);
 }
+.command-deck .selection-info .ranged-spacing-status {
+  white-space: nowrap;
+}
 .deck-tip {
   text-align: center;
   color: #7a999b;
@@ -3337,6 +3340,14 @@ footer .build-identifier {
   .command-deck .deck-content {
     max-height: 29vh;
   }
+  .order-cards {
+    overflow-x: auto;
+  }
+  .order-cards > button {
+    flex: 1 0 132px;
+    flex-direction: column;
+    gap: 5px;
+  }
   .command-deck .selection-row {
     min-height: 40px;
   }
@@ -3922,7 +3933,11 @@ footer .build-identifier {
     bottom: 10px;
   }
   #joystick {
-    bottom: max(calc(var(--deck-height, 92px) + 12px), calc(var(--minimap-height, 144px) + 20px));
+    bottom: min(calc(100dvh - var(--hud-height, 48px) - 118px), max(calc(var(--deck-height, 92px) + 12px), calc(var(--minimap-height, 144px) + 20px)));
+  }
+  /* Keep the pause action above an expanded deck, including enlarged text. */
+  .paused-ribbon {
+    top: min(calc(142px + var(--safe-top)), calc(100dvh - var(--deck-height, 92px) - 64px));
   }
 }
 

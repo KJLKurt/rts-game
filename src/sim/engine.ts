@@ -257,7 +257,7 @@ function selected(s: GameState, c: {
     entityIds?: string[];
 }): Entity[] { return s.entities.filter(e => e.team === c.team && living(e) && e.kind !== 'building' && (c.entityIds ? c.entityIds.includes(e.id) : e.kind === 'commander')); }
 function setOrder(e: Entity, order: Entity['order']) {
-    e.order = order; e.path = []; e.pathTarget = null; e.pathTimer = 0; e.targetId = null; delete e.escortId; delete e.directControl;
+    e.order = order; e.path = []; e.pathTarget = null; e.pathTimer = 0; e.targetId = null; delete e.escortId; delete e.directControl; delete e.skirmishAnchor;
     if (order.type === 'idle' && e.kind !== 'building')
         e.guardAnchor = { x: e.x, y: e.y };
     else
@@ -356,6 +356,14 @@ function executeCommand(s: GameState, c: Exclude<GameCommand, {
     type: 'pause';
 }>): CommandResult {
     const p = s.players[c.team];
+    if (c.type === 'rangedSpacing') {
+        if (typeof c.enabled !== 'boolean') return { ok: false, error: 'Choose a valid ranged stance.' };
+        p.rangedSpacing = c.enabled;
+        for (const e of s.entities.filter(e => e.team === c.team && e.skirmishAnchor)) {
+            delete e.skirmishAnchor; e.path = []; e.pathTarget = null; e.pathTimer = 0;
+        }
+        return { ok: true };
+    }
     if (c.type === 'steer') {
         if (!Number.isFinite(c.dx) || !Number.isFinite(c.dy)) return { ok: false, error: 'Invalid movement direction.' };
         const commander = getCommander(s, c.team);
@@ -619,7 +627,7 @@ function blockers(s: GameState) {
     navCache.set(s, { version: s.navigationVersion, blocked });
     return blocked;
 }
-function moveToward(s: GameState, e: Entity, goal: Point, dt: number, guardRadius = IDLE_GUARD_RADIUS) {
+function moveToward(s: GameState, e: Entity, goal: Point, dt: number, guardRadius = IDLE_GUARD_RADIUS, retreatAnchor?: Point) {
     const dist = distance(e, goal);
     if (dist < .12) {
         e.path = [];
@@ -676,6 +684,10 @@ function moveToward(s: GameState, e: Entity, goal: Point, dt: number, guardRadiu
         e.path = [];
         e.pathTimer = 0;
         return;
+    }
+    // A detour must not turn a short combat retreat into a march around the map.
+    if (retreatAnchor && distance({ x: nx, y: ny }, retreatAnchor) > UNITS.archer.vision && distance({ x: nx, y: ny }, retreatAnchor) >= distance(e, retreatAnchor)) {
+        e.path = []; e.pathTimer = .5; return;
     }
     if (isWalkable(s.map, nx, ny) && !blockers(s).has(tileIndex(s.map, nx, ny))) {
         e.x = nx;
@@ -854,8 +866,14 @@ function updateEntities(s: GameState, dt: number) {
             e.targetId = target.id;
             const d = distance(e, target);
             e.facing = Math.atan2(target.y - e.y, target.x - e.x);
-            if (s.players[e.team].ai && (s.players[e.team].difficulty ?? s.settings.difficulty) !== 'easy' && !s.players[e.team].neutral && e.kind !== 'building' && e.type !== 'siege' && range > 3 && target.range < 3 && d < range * .65 && d > .1 && e.attackCooldown > .25 && e.order.type !== 'hold' && e.order.type !== 'move') {
-                moveToward(s, e, { x: clamp(e.x + (e.x - target.x) / d * 2.2, 1, s.map.width - 2), y: clamp(e.y + (e.y - target.y) / d * 2.2, 1, s.map.height - 2) }, dt, guardRadius);
+            if (e.skirmishAnchor?.targetId !== target.id || target.kind === 'building') delete e.skirmishAnchor;
+            const player = s.players[e.team], spacing = player.rangedSpacing ?? (player.ai && (player.difficulty ?? s.settings.difficulty) !== 'easy');
+            if (spacing && !player.neutral && !e.directControl && e.kind !== 'building' && e.type !== 'siege' && range > 3 && target.kind !== 'building' && target.range < 3 && d < range * .65 && d > .1 && e.attackCooldown > .25 && e.order.type !== 'hold' && e.order.type !== 'move') {
+                const anchor = e.skirmishAnchor ??= { x: e.x, y: e.y, targetId: target.id };
+                const goal = { x: clamp(e.x + (e.x - target.x) / d * 2.2, 1, s.map.width - 2), y: clamp(e.y + (e.y - target.y) / d * 2.2, 1, s.map.height - 2) };
+                const away = distance(goal, anchor);
+                if (away > UNITS.archer.vision) { goal.x = anchor.x + (goal.x - anchor.x) / away * UNITS.archer.vision; goal.y = anchor.y + (goal.y - anchor.y) / away * UNITS.archer.vision; }
+                moveToward(s, e, goal, dt, guardRadius, anchor);
             }
             if (d <= range + target.radius) {
                 if (e.attackCooldown <= 0) {
@@ -873,6 +891,7 @@ function updateEntities(s: GameState, dt: number) {
                 moveToward(s, e, e.order, dt);
         }
         else {
+            delete e.skirmishAnchor;
             e.targetId = null;
             if (guard && distance(e, guard) > .3)
                 moveToward(s, e, guard, dt);
@@ -1448,6 +1467,7 @@ export function restoreGame(input: string | object): GameState {
     if (data.players.length !== spawnCount + (hasCamps ? 1 : 0)) fail('player slots and neutral owner do not match the map.');
     if (settings.slots && settings.slots.length !== spawnCount) fail('player slots must match map spawns.');
     for (const [team, p] of data.players.entries()) {
+        if (p?.rangedSpacing !== undefined && typeof p.rangedSpacing !== 'boolean') fail('ranged stance must be a boolean.');
         if (!p || p.team !== team || !knownId(FACTIONS, p.faction) || !knownId(COMMANDERS, p.commander) || !number(p.gold, 0) || !number(p.wood, 0) || !number(p.score, 0) || !number(p.maxPopulation, 1, 500) || !p.stats || !p.research)
             fail('player data is invalid.');
         if ((p.alliance !== undefined && (!Number.isInteger(p.alliance) || !number(p.alliance, 0, 5))) || (p.neutral !== undefined && typeof p.neutral !== 'boolean') || (p.closed !== undefined && typeof p.closed !== 'boolean') || (p.difficulty !== undefined && !['easy', 'normal', 'hard', 'brutal'].includes(p.difficulty))) fail('player alliance, controller, or difficulty is invalid.');
@@ -1496,6 +1516,8 @@ export function restoreGame(input: string | object): GameState {
             fail(`entity ${e.id} has invalid navigation data.`);
         if (e.guardAnchor !== undefined && !point(e.guardAnchor))
             fail(`entity ${e.id} has an invalid guard anchor.`);
+        if (e.skirmishAnchor !== undefined && (!point(e.skirmishAnchor) || typeof e.skirmishAnchor.targetId !== 'string' || e.kind === 'building'))
+            fail(`entity ${e.id} has an invalid skirmish anchor.`);
         if (e.kind !== 'building' && e.order.type === 'idle')
             e.guardAnchor ??= { x: e.x, y: e.y };
         if (e.rally !== null && !point(e.rally))
@@ -1577,6 +1599,7 @@ function validateStoredCommand(s: GameState, c: GameCommand): string | null {
     if (c.type === 'move' || c.type === 'attackMove')
         return position(c) ? null : 'has an invalid destination.';
     if (c.type === 'steer') return Number.isFinite(c.dx) && Number.isFinite(c.dy) ? null : 'has an invalid movement direction.';
+    if (c.type === 'rangedSpacing') return typeof c.enabled === 'boolean' ? null : 'has an invalid ranged stance.';
     if (c.type === 'hold')
         return null;
     if (c.type === 'attack')

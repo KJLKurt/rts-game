@@ -236,6 +236,8 @@ export interface Entity extends Point {
     escortId?: string;
     /** Idle troops defend within two tiles of this point, then return. */
     guardAnchor?: Point;
+    /** Local retreat origin; cleared when the target or explicit order changes. */
+    skirmishAnchor?: Point & { targetId: string };
     buildProgress: number;
     buildTime: number;
     queue: ProductionItem[];
@@ -283,6 +285,8 @@ export interface Player {
     score: number;
     defeated: boolean;
     ai: boolean;
+    /** Optional battle-wide ranged spacing; older human saves remain manual. */
+    rangedSpacing?: boolean;
     personality: AIPersonality;
     stats: PlayerStats;
     aiNextThink: number;
@@ -455,6 +459,10 @@ export interface RushState {
     nextHazardAt: number;
 }
 export type GameCommand = {
+    type: 'rangedSpacing';
+    team: number;
+    enabled: boolean;
+} | {
     type: 'steer';
     team: number;
     dx: number;

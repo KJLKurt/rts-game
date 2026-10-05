@@ -276,7 +276,7 @@ export const FRONTIER_CAMPAIGN: AuthoredCampaign = {
       tactics: [
         "Claim another gold mine and timber camp during the truce. Set a fixed rally point near home before your commander scouts. Allied deposits and relics stay under Rival 2’s banner until the truce ends.",
         "Eight troops is an optional milestone, not a force target for the final push. Grow your income and army; use infantry to screen archers and keep Menders behind them.",
-        "Research Farshot for extra range. Attack-move toward defenders, then Hold at firing distance before capturing. To kite, issue a short Move away, then Hold to shoot; moving player troops do not fire.",
+        "In Orders, turn Keep distance on so your ranged troops step back between shots when melee troops approach. Research Farshot for extra range. Use Attack-move to clear the approach, then capture. Move and Hold always take priority over spacing.",
         "Rival 2 is led by an Arcanist Engineer who can heal nearby groups. Use Ranger’s Trap on packed troops and focus reachable healers. Siege outranges stock archers; avoid a frontal charge into a larger mixed army.",
       ],
       settings: {

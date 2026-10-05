@@ -45,6 +45,19 @@ export function selectedOrderDescription(state: GameState, ids: Iterable<string>
   return orders.size === 1 ? [...orders][0] : "Mixed orders: select a unit for its destination";
 }
 
+/** One battle-wide choice includes future recruits; direct movement and Hold retain priority. */
+export function rangedSpacingDescription(state: GameState, ids: Iterable<string>): string {
+  const selected = new Set(ids);
+  const ranged = state.entities.filter(e => selected.has(e.id) && e.team === 0 && e.hp > 0 && e.kind !== "building" && e.type !== "siege" && e.range > 3);
+  if (!ranged.length) return "";
+  if (!state.players[0].rangedSpacing) return "Keep distance off";
+  if (ranged.every(e => e.order.type === "hold" && !e.directControl)) return "Hold: spacing off";
+  if (ranged.every(e => e.order.type === "move" || e.directControl)) return "Move: spacing off";
+  return ranged.every(e => e.order.type === "move" || e.order.type === "hold" || e.directControl)
+    ? "Orders: spacing off"
+    : "Keep distance on";
+}
+
 /** The first encounter teaches the stakes even when optional field tips are disabled. */
 export function expeditionOpeningGuidance(nodeId: string): string {
   if (nodeId !== "foothold") return "";
