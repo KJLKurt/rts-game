@@ -1,6 +1,22 @@
 # Commercial-readiness work plan and scope
 
-## Current publication checkpoint — 5 October 2026
+## Current Practice recovery checkpoint — 5 October 2026
+
+The current Practice recovery checkpoint is **Build `fc-3c40d8eec6cf`**.
+533 unit/contract tests in 57 files pass, with TypeScript, eight mission
+validations and the production build. The full 304-case browser run initially
+recorded 282 passes, 21 skips and one campaign-Continue timing failure. After
+waiting for the actual asynchronous restore, that case passed in all three
+viewports; three previous-production-cache upgrade cases also passed. Reconciled
+distinct coverage is **286 passed, 18 intentional skips, no unresolved failures**.
+This is not a claim of a failure-free first full run. All 15 simulation files
+remain unchanged. See [PRACTICE_RECOVERY_QA.md](PRACTICE_RECOVERY_QA.md) for exact
+scope, preserved failure evidence, actual-input results and limitations.
+
+The dated scope and prior receipts below remain historical evidence. This
+checkpoint does not establish commercial readiness or complete device/balance coverage.
+
+## Prior guidance publication checkpoint — 5 October 2026
 
 The current guidance checkpoint is **Build `fc-9011b0514b9c`**: 525 unit/contract
 tests passed; TypeScript and production build passed; 127 unique scoped browser

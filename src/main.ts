@@ -61,6 +61,7 @@ import { getEconomyRates } from "./sim/economy";
 import { encodeMapCode } from "./ui/map-code";
 import { chooseAbilityTarget } from "./ui/targeting";
 import { plannedBuildResult } from "./ui/placement";
+import { findLearningHouseSite, houseHasRoom, learningHouseGuidance } from "./ui/learning-placement";
 import {
   createGame,
   issueCommand,
@@ -882,10 +883,16 @@ function updateHUD() {
     placement && targetPoint
       ? plannedBuildResult(state, 0, placement, targetPoint.x, targetPoint.y)
       : null;
+  const houseLesson = learningProgress?.step === 5 && placement === "house";
+  const siteText = site?.ok
+    ? houseLesson && targetPoint && !houseHasRoom(state, targetPoint)
+      ? "Legal, but no room for a neighbor. Use Find pair site."
+      : "Ready. Confirm to start construction."
+    : (site?.error ?? "Tap ground or drag the preview. Pinch to move the map.");
   const placementControlsChanged = set(
     "placement-controls",
     placement
-      ? `<div class="placement-toolbar"><div><b>Place ${BUILDINGS[placement].name}</b><small>${site?.ok ? "Ready. Confirm to start construction." : (site?.error ?? "Tap ground or drag the preview. Pinch to move the map.")}</small></div><div>${button("Cancel", "cancel-build", "", "close")}${button(repeatPlacement ? "Repeat on" : "Repeat off", "repeat-placement", repeatPlacement ? "active" : "")}${button("Build here", "confirm-placement", "primary", "check", site?.ok ? "" : "disabled")}</div></div>`
+      ? `<div class="placement-toolbar"><div><b>Place ${BUILDINGS[placement].name}</b><small>${siteText}</small></div><div>${button("Cancel", "cancel-build", "", "close")}${houseLesson ? button("Find pair site", "learning-house-site", "", "crosshair") : button(repeatPlacement ? "Repeat on" : "Repeat off", "repeat-placement", repeatPlacement ? "active" : "")}${button("Build here", "confirm-placement", "primary", "check", site?.ok ? "" : "disabled")}</div></div>`
       : "",
   );
   document.body.classList.toggle("placing-building", !!placement);
@@ -1010,7 +1017,8 @@ function updateTutorial() {
       return;
     }
     const lesson = LESSONS[learningProgress.step];
-    const html = `<button data-action="toggle-guide" aria-label="${guideCollapsed ? "Expand guide" : "Minimize guide"}">${icon(guideCollapsed ? "plus" : "minus")}</button><span>LEARN TO COMMAND · ${learningProgress.step + 1}/${LESSONS.length}</span><b>${lesson.title}</b>${guideCollapsed ? "" : `<p>${lesson.text}</p>${button(lesson.action, "learning-help", "lesson-action", "crosshair")}`}`;
+    const text = learningProgress.step === 5 ? learningHouseGuidance(state) : lesson.text;
+    const html = `<button data-action="toggle-guide" aria-label="${guideCollapsed ? "Expand guide" : "Minimize guide"}">${icon(guideCollapsed ? "plus" : "minus")}</button><span>LEARN TO COMMAND · ${learningProgress.step + 1}/${LESSONS.length}</span><b>${lesson.title}</b>${guideCollapsed ? "" : `<p>${text}</p>${button(learningProgress.step === 5 ? "Find House site" : lesson.action, "learning-help", "lesson-action", "crosshair")}`}`;
     el.classList.add("learning-guide");
     if (hudHTML.get("battle-hint") !== html) {
       updateLiveHTML(el as HTMLElement, html);
@@ -1897,8 +1905,10 @@ async function performAction(action: string, id?: string) {
     }
     case "learning-help": {
       if (!learningProgress) break;
-      if (learningProgress.step === 4 || learningProgress.step === 5) {
-        panel = learningProgress.step === 4 ? "army" : "build";
+      if (learningProgress.step === 5) {
+        await performAction("learning-house-site");
+      } else if (learningProgress.step === 4) {
+        panel = "army";
         deckCollapsed = false;
         renderDeck();
       } else {
@@ -1935,7 +1945,7 @@ async function performAction(action: string, id?: string) {
             ? `${BUILDINGS[building].name} planned. Resume to build.`
             : `${BUILDINGS[building].name} under construction.`,
         );
-        if (repeatPlacement)
+        if (repeatPlacement && learningProgress?.step !== 5)
           targetPoint = snapConstruction({
             x: point.x + BUILDINGS[building].size * 2 + 0.5,
             y: point.y,
@@ -2311,6 +2321,9 @@ async function performAction(action: string, id?: string) {
             : `${UNITS[id as UnitId].name} queued for training`,
         );
       break;
+    case "learning-house-site":
+      if (learningProgress?.step !== 5) break;
+      id = "house";
     case "build": {
       if (!learningActionAvailable(learningProgress?.step, "build", id ?? "")) {
         toast(learningPanelHint(learningProgress?.step, "build"));
@@ -2326,22 +2339,9 @@ async function performAction(action: string, id?: string) {
       placement = id as BuildingId;
       targetPoint = null;
       const anchor = commander() ?? state.map.spawns[0];
-      // The house lesson suggests a legal neighboring site, while leaving placement editable.
-      if (learningProgress?.step === 5 && placement === "house") {
-        const houses = state.entities.filter((e) => e.team === 0 && e.type === "house" && e.hp > 0);
-        for (const house of houses) {
-          for (let angle = 0; angle < 16 && !targetPoint; angle++) {
-            const point = snapConstruction({
-              x: house.x + Math.cos(angle * Math.PI / 8) * 2.5,
-              y: house.y + Math.sin(angle * Math.PI / 8) * 2.5,
-            });
-            if (plannedBuildResult(state, 0, placement, point.x, point.y).ok)
-              targetPoint = point;
-          }
-          if (targetPoint) break;
-        }
-      }
-      for (let radius = 3; radius <= 8 && !targetPoint; radius += 1)
+      const houseLesson = learningProgress?.step === 5 && placement === "house";
+      if (houseLesson) targetPoint = findLearningHouseSite(state, anchor) ?? null;
+      for (let radius = 3; radius <= 8 && !targetPoint && !houseLesson; radius += 1)
         for (let i = 0; i < 12 && !targetPoint; i++) {
           const point = snapConstruction({
             x: anchor.x + Math.cos((i * Math.PI) / 6) * radius,
@@ -2350,17 +2350,30 @@ async function performAction(action: string, id?: string) {
           if (plannedBuildResult(state, 0, placement, point.x, point.y).ok)
             targetPoint = point;
         }
-      targetPoint ??= snapConstruction(anchor);
+      if (!houseLesson) targetPoint ??= snapConstruction(anchor);
       deckCollapsed = true;
+      if (houseLesson) guideCollapsed = true;
       followCommander = false;
+      const homes = houseLesson ? state.entities.filter(e => e.team === 0 && e.type === "house" && e.hp > 0) : [];
+      const suggestedNeighbor = targetPoint && homes.some(house => {
+        const distance = Math.hypot(house.x - targetPoint!.x, house.y - targetPoint!.y);
+        return distance >= 2.25 && distance <= 3;
+      });
       toast(
-        `Drag the ${def.name} preview, then choose Build here. Pinch to pan or zoom.`,
+        houseLesson && !targetPoint
+          ? "No clear pair site nearby. Move troops away, or move to an open area and try Find pair site again."
+          : houseLesson && homes.length && !suggestedNeighbor
+          ? "Keep your existing Houses. This site starts a new pair; build another beside it to continue."
+          : houseLesson && homes.length > 1
+          ? "Keep your existing Houses. This additional House finishes a neighboring pair."
+          : `Drag the ${def.name} preview, then choose Build here. Pinch to pan or zoom.`,
       );
       renderDeck();
       updateHUD();
       // The placement bar participates in the usable viewport before centering the anchor.
       measurePlayfield();
-      if (innerHeight < 500 && innerWidth > 600) centerCommander(anchor);
+      if (houseLesson && targetPoint) centerCommander(targetPoint);
+      else if (innerHeight < 500 && innerWidth > 600) centerCommander(anchor);
       break;
     }
     case "cancel-build":

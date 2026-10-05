@@ -102,6 +102,8 @@ test("two authored campaign menus, live objectives and save/continue retain chap
   await action(page, "save-leave").click();
   await page.reload();
   await action(page, "continue").click();
+  // Continue reads browser storage asynchronously; wait for the restored battle.
+  await expect.poll(() => page.evaluate(() => window.__FRONTIER__.playing)).toBe(true);
   const resumed = await value(page);
   expect(resumed.matchId).toBe(initial.matchId);
   expect(resumed.campaign).toEqual(initial.campaign);

@@ -1,4 +1,4 @@
-import { test, expect, action, home, tap, clearGround } from "./helpers";
+import { test, expect, action, home, tap, clearGround, pause } from "./helpers";
 import type { Page } from "@playwright/test";
 
 async function lesson(page: Page, number: number) {
@@ -150,7 +150,7 @@ test("all eight peaceful lessons use real input, teach neighboring houses, and l
     1,
   );
   await page.getByRole("button", { name: "Build House", exact: true }).click();
-  await tap(page, await clearGround(page, "house"));
+  await expect(page.locator(".placement-toolbar small")).toContainText("Ready");
   await action(page, "confirm-placement").click();
   await expect
     .poll(
@@ -213,6 +213,17 @@ test("all eight peaceful lessons use real input, teach neighboring houses, and l
       ).length,
     })),
   ).toEqual({ winner: null, losses: 0, commanderDeaths: 0, damage: 0, wounded: 0 });
+  await page.getByRole("button", { name: "Keep practicing", exact: true }).click();
+  await pause(page);
+  await action(page, "pause-menu").click();
+  const completed = await page.evaluate(() => JSON.stringify(window.__FRONTIER__.state));
+  await action(page, "save-leave").click();
+  await expect(action(page, "continue")).toBeVisible();
+  await page.reload();
+  await action(page, "continue").click();
+  await expect(page.getByRole("dialog", { name: "Your settlement is ready", exact: true })).toBeVisible();
+  expect(await page.evaluate(() => JSON.stringify(window.__FRONTIER__.state))).toBe(completed);
+  await expect(page.getByRole("dialog", { name: "Your settlement is ready", exact: true })).toBeVisible();
   await page
     .getByRole("button", { name: "Play The Outpost", exact: true })
     .click();

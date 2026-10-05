@@ -1,6 +1,19 @@
 # QA and reproducible verification
 
-## Current isolated guidance receipt — 5 October 2026
+## Current Practice recovery receipt — 5 October 2026
+
+The current Practice recovery checkpoint is **Build `fc-3c40d8eec6cf`**.
+533 unit/contract tests in 57 files pass, with TypeScript, eight mission
+validations and the production build. The full 304-case browser run initially
+recorded 282 passes, 21 skips and one campaign-Continue timing failure. After
+waiting for the actual asynchronous restore, that case passed in all three
+viewports; three previous-production-cache upgrade cases also passed. Reconciled
+distinct coverage is **286 passed, 18 intentional skips, no unresolved failures**.
+This is not a claim of a failure-free first full run. All 15 simulation files
+remain unchanged. See [PRACTICE_RECOVERY_QA.md](PRACTICE_RECOVERY_QA.md) for exact
+scope, preserved failure evidence, actual-input results and limitations.
+
+## Prior isolated guidance receipt — 5 October 2026
 
 Build `fc-9011b0514b9c`: **525 tests in 55 files passed**, TypeScript/eight mission validations/production build passed, and **127 unique scoped browser cases account for 120 passed/seven intentional skips/zero final failures or flakes**. This includes four local PWA cases and 21 new native-input/persistence cases. New screenshots and landscape scroll/actions were inspected. All 15 simulation files are unchanged. Earned-defeat Practice reached lesson 3/8 and reloaded exactly at 19.2 seconds; an unfinished Normal continuation reloaded exactly at 201.8 seconds. See [DEFEAT_GUIDANCE_QA.md](DEFEAT_GUIDANCE_QA.md) for reproductions, harness corrections and evidence limits.
 

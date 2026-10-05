@@ -5,6 +5,8 @@ import { AnimationAtlas } from './AnimationAtlas';
 import { nodeVisual } from './nodeVisual';
 import { drawFactionAdornment } from './factionIdentity';
 import { CombatFeedback, type Casualty } from './CombatFeedback';
+import { visibleTroopSummaries, type VisibleTroop } from './troop-summary';
+import type { UnitId } from '../sim/types';
 
 export interface RenderOptions {
  time?:number; reveal?:boolean; quality?:'low'|'high'; reducedMotion?:boolean; team?:number;
@@ -143,6 +145,7 @@ export class Battlefield {
   }
   for(const event of state.events)if(this.visible(state,event.x,event.y,false,options))this.drawEvent(c,event,state,t,options);
   this.drawFog(c,state,options);
+  if(!options.placement)this.drawTroopSummaries(c,items,state,options);
   if(state.rush)this.drawRushOverlay(c,state,t,options);
   if(options.placement)this.drawPlacement(c,options.placement,t);
   if(options.target){const p=this.worldToScreen(options.target.x,options.target.y);c.save();c.translate(p.x,p.y);c.scale(z,z);const r=options.target.radius??2;ellipse(c,0,0,r*CIRCLE_X,r*CIRCLE_Y,'#8be7ff15','#a4efff',1.5);diamond(c,0,0,10,5,'#a5f0ff55','#daffff',1);line(c,[-18,0,18,0],'#d4ffff80',1);line(c,[0,-10,0,10],'#d4ffff80',1);c.restore();}
@@ -151,6 +154,49 @@ export class Battlefield {
   const dusk=(1-Math.cos(state.time/600))*.025;c.fillStyle=`rgba(35,52,92,${dusk})`;c.fillRect(0,0,this.width,this.height);
   // Gentle edge falloff keeps the centre readable on small screens.
   const vignette=c.createRadialGradient(this.width*.5,this.height*.5,this.height*.15,this.width*.5,this.height*.5,Math.max(this.width,this.height)*.7);vignette.addColorStop(0,'#06121d00');vignette.addColorStop(1,'#06121d44');c.fillStyle=vignette;c.fillRect(0,0,this.width,this.height);
+ }
+ private drawTroopSummaries(c:Ctx,items:RenderItem[],state:GameState,options:RenderOptions){
+  const troops:VisibleTroop[]=[];
+  const landmarks:{x:number;y:number;w:number;h:number}[]=[];
+  for(const item of items){
+   if(item.kind!=='entity')continue;
+   const e=item.value as Entity;
+   const p=this.worldToScreen(item.x,item.y);
+   if(e.kind!=='unit'){
+    const width=(e.kind==='commander'?80:e.type==='keep'?128:86)*this.camera.zoom,height=(e.kind==='commander'?60:90)*this.camera.zoom;
+    landmarks.push({x:p.x-width/2,y:p.y-height,w:width,h:height+12*this.camera.zoom});continue;
+   }
+   if(!this.visible(state,item.x,item.y,false,options))continue;
+   if(p.x<0||p.x>this.width||p.y<0||p.y>this.height)continue;
+   troops.push({team:e.team,type:e.type as UnitId,...p});
+  }
+  const rectangles:{x:number;y:number;w:number;h:number}[]=[];
+  for(const summary of visibleTroopSummaries(troops)){
+   const header=`${(state.players[summary.team]?.name??'Troops').slice(0,14)} · ${summary.count} visible troops`;
+   c.save();c.font='600 12px system-ui, sans-serif';
+   const headerWidth=c.measureText(header).width;
+   c.font='11px system-ui, sans-serif';
+   const width=Math.min(this.width-16,Math.max(headerWidth,c.measureText(summary.types).width)+18),height=39;
+   const overlap=(x:number,y:number,r:{x:number;y:number;w:number;h:number})=>Math.max(0,Math.min(x+width,r.x+r.w)-Math.max(x,r.x))*Math.max(0,Math.min(y+height,r.y+r.h)-Math.max(y,r.y));
+   const candidates=[
+    {x:summary.x-width/2,y:summary.y-92},
+    {x:summary.x-width-45,y:summary.y-50},
+    {x:summary.x+45,y:summary.y-50},
+    {x:summary.x-width/2,y:summary.y-150},
+    {x:summary.x-width/2,y:summary.y+20},
+   ].map(p=>({x:Math.max(8,Math.min(this.width-width-8,p.x)),y:Math.max(8,Math.min(this.height-height-8,p.y))}));
+   // Keep the commander and building silhouettes readable, and never stack labels.
+   const available=candidates.filter(p=>!rectangles.some(r=>overlap(p.x,p.y,{x:r.x-4,y:r.y-4,w:r.w+8,h:r.h+8})>0));
+   available.sort((a,b)=>landmarks.reduce((sum,r)=>sum+overlap(a.x,a.y,r)-overlap(b.x,b.y,r),0));
+   if(!available.length){c.restore();continue;}
+   const {x,y}=available[0];
+   rectangles.push({x,y,w:width,h:height});
+   c.fillStyle='#10252eef';c.strokeStyle=palette(summary.team).main;c.lineWidth=1.5;
+   c.beginPath();c.roundRect(x,y,width,height,6);c.fill();c.stroke();
+   c.textAlign='left';c.fillStyle='#f4ead0';c.font='600 12px system-ui, sans-serif';c.fillText(header,x+9,y+15,width-18);
+   c.fillStyle='#d1dcca';c.font='11px system-ui, sans-serif';c.fillText(summary.types,x+9,y+30,width-18);
+   c.restore();
+  }
  }
  private ensureTerrain(map:GameMap):TerrainCache{
   // Include tile signature so in-place level-editor paint invalidates this immutable visual cache.
