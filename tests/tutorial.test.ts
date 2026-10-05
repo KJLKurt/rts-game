@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createGame } from "../src/sim";
+import { createGame, issueCommand, stepGame } from "../src/sim";
 import { advanceTutorial, restoreTutorial } from "../src/ui/tutorial";
 function fixture() {
   const state = createGame({ seed: "TUTORIAL-SAVE", difficulty: "easy" }),
@@ -35,6 +35,9 @@ describe("saved commander field guide", () => {
     });
     expect(advanceTutorial(state, { step: 0, origin }).step).toBe(1);
     state.players[0].stats.captures = 1;
+    // A relic raises the same counter; only an actual supply capture earns credit.
+    expect(advanceTutorial(state, { step: 0, origin }).step).toBe(1);
+    state.events.push({ id: state.nextEventId++, type: "capture", team: 0, time: state.time, x: hero.x, y: hero.y, subtype: "gold" });
     expect(advanceTutorial(state, { step: 0, origin }).step).toBe(2);
     state.players[0].stats.unitsCreated = 5;
     expect(advanceTutorial(state, { step: 2, origin }).step).toBe(2);
@@ -44,7 +47,7 @@ describe("saved commander field guide", () => {
     });
     expect(advanceTutorial(state, { step: 2, origin }).step).toBe(3);
   });
-  it("recovers an old supply lesson from command and capture history after return home", () => {
+  it("does not infer a supply capture from an old generic capture counter", () => {
     const { state, hero } = fixture();
     state.players[0].stats.captures = 1;
     state.commandLog.push({
@@ -57,7 +60,32 @@ describe("saved commander field guide", () => {
         y: hero.y,
       },
     });
-    expect(restoreTutorial(state, undefined).step).toBe(2);
+    expect(restoreTutorial(state, undefined).step).toBe(1);
+  });
+  it("rejects relic and enemy supply captures even with starting gold and timber held", () => {
+    const { state, hero, origin } = fixture();
+    hero.x += 5;
+    state.commandLog.push({ tick: 0, command: { type: "move", team: 0, x: hero.x, y: hero.y } });
+    state.events.push({ id: state.nextEventId++, type: "capture", team: 0, time: 0, x: hero.x, y: hero.y, subtype: "relic" });
+    state.events.push({ id: state.nextEventId++, type: "capture", team: 1, time: 0, x: hero.x, y: hero.y, subtype: "gold" });
+    expect(advanceTutorial(state, { step: 0, origin })).toEqual({ step: 1, origin });
+  });
+  it("retains a real expansion capture after the event expires and the guide is saved", () => {
+    const { state, hero, origin } = fixture();
+    state.players.forEach((player) => player.ai = false);
+    const node = state.map.nodes.find((candidate) => candidate.kind === "gold" && candidate.owner !== 0)!;
+    hero.x = node.x; hero.y = node.y;
+    expect(issueCommand(state, { type: "capture", team: 0, entityIds: [hero.id], nodeId: node.id }).ok).toBe(true);
+    let progress = { step: 0, origin };
+    for (let i = 0; i < 100 && !state.players[0].stats.captures; i++) {
+      stepGame(state, .1);
+      progress = advanceTutorial(state, progress);
+    }
+    expect(node.owner).toBe(0);
+    expect(progress).toEqual({ step: 2, origin, supplyCaptured: true });
+    state.events = [];
+    hero.x = origin.x; hero.y = origin.y;
+    expect(restoreTutorial(state, JSON.parse(JSON.stringify(progress)))).toEqual(progress);
   });
   it("rejects invalid stages and out-of-bounds or non-finite origins without changing the game", () => {
     const { state } = fixture(),

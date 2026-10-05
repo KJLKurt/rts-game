@@ -1,0 +1,51 @@
+{
+  "note": "Synthetic headless CPU benchmark. Each simulation tick is 100ms game time. No renderer, browser, mobile, power or FPS conclusions. Scaled v4 stress layouts are fixtures, not advertised v5 maps.",
+  "node": "v24.19.0",
+  "ticksPerPhase": 120,
+  "results": [
+    {
+      "width": 160,
+      "players": 2,
+      "populationPerPlayer": 200,
+      "supportedBudget": true,
+      "initialEntities": 406,
+      "finalEntities": 353,
+      "generationMs": {
+        "mean": 11.532,
+        "p50": 14.063,
+        "p95": 14.585,
+        "max": 14.585
+      },
+      "pathMs": {
+        "mean": 0.905,
+        "p50": 0.602,
+        "p95": 3.044,
+        "max": 3.044
+      },
+      "fogMs": {
+        "mean": 2.034,
+        "p50": 1.338,
+        "p95": 8.395,
+        "max": 8.395
+      },
+      "idleTickMs": {
+        "mean": 8.252,
+        "p50": 7.656,
+        "p95": 15.19,
+        "max": 33.573
+      },
+      "marchingTickMs": {
+        "mean": 17.352,
+        "p50": 15.975,
+        "p95": 29.262,
+        "max": 131.955
+      },
+      "combatTickMs": {
+        "mean": 22.397,
+        "p50": 20.813,
+        "p95": 41.747,
+        "max": 45.681
+      }
+    }
+  ]
+}

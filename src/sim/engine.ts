@@ -1,7 +1,12 @@
+import { areAllied, areHostile, allianceRepresentative, allianceMembers, isCompetitivePlayer } from './alliances';
+import { evaluateScriptCondition } from './triggers';
+import { SpatialIndex } from './spatial';
+import { validateMapPlayerSlots, validateMapScenario, validateScenarioGeometry } from './scenarios';
+import { validateScaleSettings, dominationScoreTarget } from './scales';
 import { footprintsOverlap } from './construction';
-import { PRODUCTION_QUEUE_LIMIT, BUILDING_UPGRADES, buildingLevel, buildingPopulation, nextBuildingUpgrade, productionRate, productionRefund, technologyCost, queueItemCost } from './progression';
+import { PRODUCTION_QUEUE_LIMIT, buildingLevel, buildingPopulation, nextBuildingUpgrade, productionRate, productionRefund, technologyCost, queueItemCost } from './progression';
 import { getEconomyRates } from './economy';
-import { validateTriggers, parseBoundedJSON, MAX_SAVE_JSON_BYTES, MAX_MAP_JSON_BYTES } from './validation';
+import { validateTriggers, validateGameModifiers, parseBoundedJSON, MAX_SAVE_JSON_BYTES, MAX_MAP_JSON_BYTES } from './validation';
 import type { GameMap, GameState, GameSettings, GameCommand, CommandResult, Entity, Point, Player, PlayerStats, UnitId, BuildingId, TechId, GameEvent, CommanderId, ScriptAction, RushUpgradeId } from './types';
 import { DEFAULT_SETTINGS, UNITS, BUILDINGS, COMMANDERS, FACTIONS, TECHNOLOGIES, BIOMES, FIXED_STEP, TEAM_COLORS, TEAM_SYMBOLS, MAP_DIMENSIONS, RUSH_UPGRADES } from './content';
 import { generateMap, validateMap, hashSeed, distance, isWalkable, isBuildable, terrainAt, tileIndex, findPath } from './maps';
@@ -25,34 +30,62 @@ export function createGame(partial: Partial<GameSettings> = {}): GameState {
         settings.duration = 4;
         settings.aiPlayers = 1;
         settings.mapSize = 'small';
+        settings.neutralCamps = 0;
+        delete settings.slots; delete settings.customMap;
     }
+    if (settings.learning) settings.neutralCamps = 0;
+    if (settings.scriptedVictory !== undefined && typeof settings.scriptedVictory !== 'boolean') throw new Error('Scripted victory must be a boolean.');
     settings.aiPlayers = clamp(Math.floor(settings.aiPlayers), 1, 5);
-    settings.duration = clamp(settings.duration, 4, 90);
+    settings.duration = clamp(settings.duration, 4, 180);
     settings.populationCap = clamp(settings.populationCap, 12, 200);
     if (!knownId(BIOMES, settings.biome) || !knownId(FACTIONS, settings.faction) || !knownId(COMMANDERS, settings.commander))
         throw new Error('Unknown biome, faction or commander.');
+    const initialErrors = [...validateScaleSettings(settings), ...validateGameModifiers(settings.modifiers), ...(settings.slots ? validateMapPlayerSlots(settings.slots) : [])];
+    if (initialErrors.length) throw new Error(initialErrors.join(' '));
+    if (settings.slots) settings.aiPlayers = settings.slots.length - 1;
     const map: GameMap = settings.customMap ? parseBoundedJSON(JSON.stringify(settings.customMap), MAX_MAP_JSON_BYTES) as GameMap : generateMap(settings);
-    if (settings.customMap && (map.version === 3 || map.version === 4))
+    if (settings.mode === 'rush') delete map.scenario;
+    if (settings.customMap && (map.version === 3 || map.version === 4 || map.version === 5))
         settings.mapGenerationVersion = map.version;
     map.validation = validateMap(map, settings.preset === 'competitive');
     if (!map.validation.valid)
         throw new Error(`Invalid map: ${map.validation.errors.join(' ')}`);
-    const state: GameState = { version: 1, settings, map, entities: [], players: [], time: 0, tick: 0, accumulator: 0, winner: null, victoryReason: '', paused: false, pendingCommands: [], events: [], fog: { visible: [], explored: [] }, nextId: 1, nextEventId: 1, rng: hashSeed(settings.seed + ':simulation'), scoreTarget: Math.round(settings.duration * 80), escalation: 1, objectiveText: settings.mode === 'conquest' ? 'Destroy enemy keeps. Held relics fund your siege; supplies grow with escalation.' : 'Capture relics to earn victory points, or destroy enemy keeps.', triggers: [], commandLog: [], lastFogTick: -10, navigationVersion: 0 };
+    if (map.scenario) {
+        const errors = [...validateMapScenario(map.scenario, map.width, map.height, map.spawns.length), ...validateScenarioGeometry(map)];
+        if (errors.length) throw new Error(`Invalid scenario: ${errors.join(' ')}`);
+        const { startingForces: _forces, scoreTarget: _target, ...rules } = map.scenario.rules;
+        Object.assign(settings, rules, { slots: structuredClone(map.scenario.slots), aiPlayers: map.scenario.slots.length - 1 });
+    }
+    const finalErrors = [...validateScaleSettings(settings), ...validateGameModifiers(settings.modifiers, map.spawns.length)];
+    if (finalErrors.length) throw new Error(finalErrors.join(' '));
+    if (settings.slots && settings.slots.length !== map.spawns.length) throw new Error('Player slots must match map spawns.');
+    if (settings.slots) Object.assign(settings, { commander: settings.slots[0].commander, faction: settings.slots[0].faction, difficulty: settings.slots[0].difficulty });
+    const state: GameState = { version: 1, settings, map, entities: [], players: [], time: 0, tick: 0, accumulator: 0, winner: null, victoryReason: '', paused: false, pendingCommands: [], events: [], fog: { visible: [], explored: [] }, nextId: 1, nextEventId: 1, rng: hashSeed(settings.seed + ':simulation'), scoreTarget: map.scenario?.rules.scoreTarget ?? (map.version === 5 ? dominationScoreTarget(settings, map.nodes.filter(n => n.kind === 'relic').length) : Math.round(settings.duration * 80)), escalation: 1, objectiveText: settings.mode === 'conquest' ? 'Destroy enemy keeps. Held relics fund your siege; supplies grow with escalation.' : 'Capture relics to earn victory points, or destroy enemy keeps.', triggers: [], commandLog: [], lastFogTick: -10, navigationVersion: 0 };
     const factions = ['ironhold', 'wildborn', 'arcanists'] as const, commanders = ['warlord', 'ranger', 'engineer'] as const;
     map.spawns.forEach((spawn, team) => {
+        const slot = settings.slots?.[team], bonuses = settings.modifiers?.players?.[team];
         const p: Player = { team, name: team === 0 ? 'You' : `Rival ${team}`, faction: team === 0 ? settings.faction : factions[team % 3], commander: team === 0 ? settings.commander : commanders[team % 3], color: TEAM_COLORS[team], symbol: TEAM_SYMBOLS[team], gold: settings.startingGold, wood: settings.startingWood, population: 0, populationCap: 12, maxPopulation: settings.populationCap, research: {}, score: 0, defeated: false, ai: team > 0 || settings.aiControlPlayer, personality: settings.aiPersonality, stats: stats(), aiNextThink: 1 + team * .2, aiPhase: 'Establishing a foothold', lastKnownEnemies: [] };
+        if (slot) Object.assign(p, { name: slot.name, faction: slot.faction, commander: slot.commander, alliance: slot.alliance, difficulty: slot.difficulty, personality: slot.personality, ai: slot.controller === 'ai' || slot.controller === 'human' && team === 0 && settings.aiControlPlayer, closed: slot.controller === 'closed', defeated: slot.controller === 'closed' });
+        p.gold += bonuses?.startingGold ?? 0; p.wood += bonuses?.startingWood ?? 0;
         state.players.push(p);
         state.fog.visible.push(Array(map.width * map.height).fill(0));
         state.fog.explored.push(Array(map.width * map.height).fill(0));
+        if (p.closed || map.scenario?.rules.startingForces === 'authored') return;
         spawnEntity(state, team, 'building', 'keep', spawn.x, spawn.y, true);
         const inward = direction(spawn, { x: map.width / 2 + .5, y: map.height / 2 + .5 }), side = { x: -inward.y, y: inward.x };
         spawnEntity(state, team, 'building', 'barracks', spawn.x - inward.x * 3 + side.x * 3, spawn.y - inward.y * 3 + side.y * 3, true);
         spawnEntity(state, team, 'commander', p.commander, spawn.x + inward.x * 3, spawn.y + inward.y * 3, true);
         ['swordsman', 'swordsman', 'spearman', 'archer'].forEach((id, i) => spawnEntity(state, team, 'unit', id as UnitId, spawn.x + inward.x * (3 + (i % 2)) - side.x * (1.7 + Math.floor(i / 2) * .9), spawn.y + inward.y * (3 + (i % 2)) - side.y * (1.7 + Math.floor(i / 2) * .9), true));
     });
+    for (const node of map.nodes) {
+        if (node.owner !== null && state.players[node.owner]?.closed) node.owner = null;
+        if (node.captureTeam !== null && state.players[node.captureTeam]?.closed) { node.captureTeam = null; node.captureProgress = 0; }
+    }
+    hydrateScenarioEntities(state);
     if (settings.learning) {
-        state.entities = state.entities.filter(e => e.type === 'keep' || e.team === 0 && e.kind === 'commander');
-        state.players.forEach(p => { p.ai = false; p.stats.unitsCreated = 0; p.stats.buildingsCreated = 1; });
+        // Practice has no rivals anywhere on the map, including stationary keeps.
+        state.entities = state.entities.filter(e => e.team === 0 && (e.type === 'keep' || e.kind === 'commander'));
+        state.players.forEach(p => { p.ai = false; p.stats.unitsCreated = 0; p.stats.buildingsCreated = state.entities.filter(e => e.team === p.team && e.kind === 'building').length; });
         state.map.nodes.forEach(n => n.owner = null);
         state.navigationVersion++;
         state.objectiveText = 'Learn to command: capture supplies, grow your settlement, and claim a relic.';
@@ -62,6 +95,82 @@ export function createGame(partial: Partial<GameSettings> = {}): GameState {
     updatePopulation(state);
     updateFog(state);
     return state;
+}
+/** Hydrate validated placements once, after player and fog rows exist.
+ * Editor previews may render incomplete drafts without ticking them. */
+export function hydrateScenarioEntities(state: GameState, options: { preview?: boolean } = {}) {
+    const scenario = state.map.scenario;
+    if (!scenario) return;
+    for (const placed of scenario.startingEntities) {
+        const entity = spawnEntity(state, placed.team, placed.kind, placed.type, placed.x, placed.y);
+        const generatedId = entity.id;
+        entity.id = placed.id; entity.x = placed.x; entity.y = placed.y;
+        if (placed.kind !== 'building') entity.guardAnchor = { x: placed.x, y: placed.y };
+        if (placed.kind === 'commander') {
+            state.players[placed.team].commander = placed.type;
+            if (placed.team === 0) state.settings.commander = placed.type;
+        }
+        for (const event of state.events) if (event.entityId === generatedId) event.entityId = entity.id;
+        if (placed.kind === 'building')
+            for (let level = 1; level < (placed.buildingLevel ?? 1); level++) applyBuildingUpgrade(state, entity);
+    }
+    if (!scenario.camps.length) return;
+    const team = state.players.length;
+    state.players.push({ team, neutral: true, name: 'Neutral defenders', faction: 'ironhold', commander: 'warlord', color: '#a7a7a7', symbol: '◆', gold: 0, wood: 0, population: 0, populationCap: 0, maxPopulation: 200, research: {}, score: 0, defeated: false, ai: false, personality: 'defensive', stats: stats(), aiNextThink: 0, aiPhase: 'Guarding the camp', lastKnownEnemies: [] });
+    state.fog.visible.push(Array(state.map.width * state.map.height).fill(0));
+    state.fog.explored.push(Array(state.map.width * state.map.height).fill(0));
+    state.camps = [];
+    for (const camp of scenario.camps) {
+        const record = { id: camp.id, entityIds: [] as string[], rewardGold: camp.rewardGold, rewardWood: camp.rewardWood, cleared: false, defeatedBy: null };
+        state.camps.push(record);
+        const radius = camp.unit === 'cavalry' ? .42 : camp.unit === 'siege' ? .48 : .27;
+        const positions: Point[] = [];
+        for (let y = Math.floor(camp.y - camp.radius); y <= Math.ceil(camp.y + camp.radius); y++)
+            for (let x = Math.floor(camp.x - camp.radius); x <= Math.ceil(camp.x + camp.radius); x++) {
+                const point = { x: x + .5, y: y + .5 };
+                if (distance(point, camp) <= camp.radius && isWalkable(state.map, point.x, point.y) && !blockers(state).has(tileIndex(state.map, point.x, point.y)) && !state.entities.some(entity => entity.kind === 'building' && living(entity) && distance(entity, point) < entity.radius + radius)) positions.push(point);
+            }
+        if (positions.length < camp.count && !options.preview) throw new Error(`Neutral camp ${camp.id} has insufficient clear defender positions.`);
+        for (let i = 0; i < camp.count; i++) {
+            const angle = i * Math.PI * 2 / camp.count, spread = Math.min(camp.radius * .35, 1.5);
+            const desired = { x: camp.x + Math.cos(angle) * spread, y: camp.y + Math.sin(angle) * spread };
+            positions.sort((a, b) => distance(a, desired) - distance(b, desired));
+            const point = positions.shift() ?? { x: clamp(desired.x, 0, state.map.width - .01), y: clamp(desired.y, 0, state.map.height - .01) };
+            const entity = spawnEntity(state, team, 'unit', camp.unit, point.x, point.y);
+            if (options.preview) { entity.x = point.x; entity.y = point.y; }
+            entity.campId = camp.id; entity.campRadius = camp.radius; entity.guardAnchor = { x: camp.x, y: camp.y };
+            record.entityIds.push(entity.id);
+        }
+    }
+}
+function applyBuildingUpgrade(state: GameState, building: Entity) {
+    const upgrade = nextBuildingUpgrade(building);
+    if (!upgrade || building.kind !== 'building' || building.type === 'turret') return false;
+    const definition = BUILDINGS[building.type as BuildingId];
+    const hpAdded = definition.hp * FACTIONS[state.players[building.team].faction].buildingHealth * upgrade.health
+        * (building.team === 0 ? state.settings.modifiers?.playerHealth ?? 1 : 1) * (state.settings.modifiers?.players?.[building.team]?.health ?? 1);
+    building.buildingLevel = buildingLevel(building) + 1;
+    building.maxHp += hpAdded; building.hp = Math.min(building.maxHp, building.hp + hpAdded);
+    building.damage += (definition.damage ?? 0) * upgrade.damage; building.range += upgrade.range;
+    return true;
+}
+function defeatPlayer(state: GameState, team: number) {
+    const player = state.players[team];
+    if (!isCompetitivePlayer(player) || player.defeated) return;
+    player.defeated = true;
+    for (const entity of state.entities) if (entity.team === team) { entity.queue = []; entity.targetId = null; }
+    state.pendingCommands = state.pendingCommands.filter(command => command.team !== team);
+    for (const node of state.map.nodes) {
+        if (node.owner === team) node.owner = null;
+        if (node.captureTeam === team) { node.captureTeam = null; node.captureProgress = 0; }
+    }
+}
+function rewardClearedCamp(state: GameState, defeated: Entity, source: Entity) {
+    const camp = state.camps?.find(camp => camp.id === defeated.campId);
+    if (!camp || camp.cleared || !isCompetitivePlayer(state.players[source.team]) || state.entities.some(entity => entity.campId === camp.id && living(entity))) return;
+    camp.cleared = true; camp.defeatedBy = source.team;
+    state.players[source.team].gold += camp.rewardGold; state.players[source.team].wood += camp.rewardWood;
+    emit(state, { type: 'alert', x: defeated.x, y: defeated.y, team: source.team, subtype: 'campCleared', text: `Neutral camp cleared: +${camp.rewardGold} gold, +${camp.rewardWood} wood.` });
 }
 export function getCommander(state: GameState, team = 0): Entity | undefined { return state.entities.find(e => e.team === team && e.kind === 'commander'); }
 export function getPlayerStats(state: GameState, team = 0) { const p = state.players[team]; return { ...p.stats, gold: p.gold, wood: p.wood, population: p.population, populationCap: p.populationCap, score: p.score, research: { ...p.research }, time: state.time }; }
@@ -126,6 +235,9 @@ export function spawnEntity(s: GameState, team: number, kind: Entity['kind'], ty
         hp *= s.settings.modifiers?.playerHealth ?? 1;
         damage *= s.settings.modifiers?.playerDamage ?? 1;
     }
+    hp *= s.settings.modifiers?.players?.[team]?.health ?? 1;
+    damage *= s.settings.modifiers?.players?.[team]?.damage ?? 1;
+    while (s.entities.some(entity => entity.id === `e${s.nextId}`) || s.map.scenario?.startingEntities.some(entity => entity.id === `e${s.nextId}`)) s.nextId++;
     const pos = kind === 'building' ? { x, y } : freePosition(s, x, y, radius);
     const e: Entity = { id: `e${s.nextId++}`, team, kind, type, ...pos, hp: complete ? hp : hp * .12, maxHp: hp, damage, armor, range, speed, vision, attackCooldown: 0, attackPeriod: period, radius, facing: 0, order: { type: 'idle' }, path: [], pathTarget: null, pathTimer: 0, targetId: null, buildProgress: complete ? 1 : 0, buildTime, queue: [], rally: null, abilityCooldowns: {}, buffUntil: 0, slowUntil: 0, invulnerableUntil: 0, respawnAt: null, lifetime: type === 'turret' ? 30 : null, lastHitAt: -100 };
     if (kind !== 'building')
@@ -192,7 +304,7 @@ export function issueCommand(s: GameState, c: GameCommand): CommandResult {
     if (s.winner !== null)
         return { ok: false, error: 'The battle has ended.' };
     const p = s.players[c.team];
-    if (!p || p.defeated)
+    if (!isCompetitivePlayer(p) || p.defeated && c.type !== 'pause')
         return { ok: false, error: 'Player is not active.' };
     if (c.type === 'pause') {
         if (s.settings.difficulty === 'brutal' && c.paused)
@@ -271,7 +383,7 @@ function executeCommand(s: GameState, c: Exclude<GameCommand, {
     }
     if (c.type === 'attack') {
         const target = s.entities.find(e => e.id === c.targetId && living(e));
-        if (!target || target.team === c.team)
+        if (!target || !areHostile(s, target.team, c.team))
             return { ok: false, error: 'Choose an enemy target.' };
         if (!isVisible(s, c.team, target.x, target.y))
             return { ok: false, error: 'Target is outside your vision.' };
@@ -320,8 +432,10 @@ function executeCommand(s: GameState, c: Exclude<GameCommand, {
         if (!affordable(p, cost))
             return { ok: false, error: `Need ${cost.gold} gold and ${cost.wood} wood.` };
         updatePopulation(s);
-        if (p.population + d.population * count > p.populationCap)
-            return { ok: false, error: 'Population limit reached. Build a house.' };
+        if (p.population + d.population * count > p.populationCap) {
+            const free = Math.max(0, p.populationCap - p.population), needed = d.population * count;
+            return { ok: false, error: `Population capacity: need ${needed} free; ${free} available. ${p.populationCap >= p.maxPopulation ? `Match ceiling ${p.maxPopulation} reached. Houses cannot raise it.` : `Build or upgrade a House for more capacity (match ceiling ${p.maxPopulation}).`}` };
+        }
         pay(p, cost);
         const total = d.trainTime * (p.research.logistics ? .85 : 1);
         for (let i = 0; i < count; i++)
@@ -403,14 +517,14 @@ function useAbility(s: GameState, team: number, id: string, x?: number, y?: numb
             e.invulnerableUntil = s.time + 1.3;
         if (id === 'charge')
             for (const enemy of s.entities)
-                if (enemy.team !== team && living(enemy) && distance(enemy, e) < 3) {
+                if (areHostile(s, enemy.team, team) && living(enemy) && distance(enemy, e) < 3) {
                     dealDamage(s, e, enemy, 70);
                     enemy.slowUntil = s.time + 3;
                 }
     }
     else if (id === 'rally' || id === 'repair') {
         for (const ally of s.entities)
-            if (ally.team === team && living(ally) && distance(ally, e) < 7) {
+            if (areAllied(s, ally.team, team) && living(ally) && distance(ally, e) < 7) {
                 const heal = id === 'repair' ? (ally.kind === 'building' ? 260 : 110) : 75;
                 ally.hp = Math.min(ally.maxHp, ally.hp + heal);
                 if (id === 'rally')
@@ -425,7 +539,7 @@ function useAbility(s: GameState, team: number, id: string, x?: number, y?: numb
             target.y = e.y + (target.y - e.y) * 8 / d;
         }
         for (const enemy of s.entities)
-            if (enemy.team !== team && living(enemy) && distance(enemy, target) < 3.6) {
+            if (areHostile(s, enemy.team, team) && living(enemy) && distance(enemy, target) < 3.6) {
                 dealDamage(s, e, enemy, 75);
                 enemy.slowUntil = s.time + 6;
             }
@@ -454,7 +568,7 @@ export function combatDamage(s: GameState, attacker: Entity, target: Entity): nu
     return Math.max(2, amount - (target.armor + (op.research.armor ?? 0) * 2));
 }
 function dealDamage(s: GameState, source: Entity, target: Entity, amount: number) {
-    if (target.invulnerableUntil > s.time || target.hp <= 0)
+    if (target.invulnerableUntil > s.time || target.hp <= 0 || !areHostile(s, source.team, target.team))
         return;
     const dealt = Math.min(target.hp, amount);
     target.hp = Math.max(0, target.hp - amount);
@@ -479,11 +593,9 @@ function dealDamage(s: GameState, source: Entity, target: Entity, amount: number
         emit(s, { type: 'death', x: target.x, y: target.y, team: target.team, entityId: target.id, subtype: target.type });
         if (s.rush && target.kind === 'commander' && target.team === 0)
             endGame(s, 1, 'Your commander fell in Rush Arena');
-        if (target.type === 'keep') {
-            loser.defeated = true;
-            for (const n of s.map.nodes)
-                if (n.owner === target.team)
-                    n.owner = null;
+        if (target.campId) rewardClearedCamp(s, target, source);
+        if (target.type === 'keep' && isCompetitivePlayer(loser) && !s.entities.some(e => e.team === target.team && e.type === 'keep' && living(e))) {
+            defeatPlayer(s, target.team);
             emit(s, { type: 'alert', x: target.x, y: target.y, team: target.team, text: target.team === 0 ? 'Your Command Keep has fallen!' : `${loser.name}'s Command Keep has fallen!` });
         }
     }
@@ -601,6 +713,9 @@ function steerEntity(s: GameState, e: Entity, dt: number) {
 function attackRange(s: GameState, e: Entity) { return e.range + (e.type === 'archer' ? (s.players[e.team].research.fletching ?? 0) : 0); }
 function updateEntities(s: GameState, dt: number) {
     const alive = s.entities.filter(living);
+    const spatial = new SpatialIndex(alive), byId = new Map(alive.map(entity => [entity.id, entity]));
+    const maximumRadius = Math.max(0, ...alive.map(entity => entity.radius));
+    const movementPadding = 2 * dt * Math.max(0, ...alive.map(entity => entity.speed * BIOMES[s.map.biome].speed * 1.12 * (1 + (s.players[entity.team].research.logistics ?? 0) * .15)));
     // Read the serialized, recent damage facts once per tick. Old unattributed
     // events do not imply an attacker, and shots dealing no damage do not count.
     const recentDamage = new Map<string, GameEvent[]>();
@@ -661,10 +776,7 @@ function updateEntities(s: GameState, dt: number) {
                 else if (q.type === 'buildingUpgrade') {
                     const upgrade = nextBuildingUpgrade(e);
                     if (upgrade) {
-                        e.buildingLevel = buildingLevel(e) + 1;
-                        const hpAdded = BUILDINGS[e.type as BuildingId].hp * FACTIONS[s.players[e.team].faction].buildingHealth * upgrade.health;
-                        e.maxHp += hpAdded; e.hp = Math.min(e.maxHp, e.hp + hpAdded);
-                        e.damage += (BUILDINGS[e.type as BuildingId].damage ?? 0) * upgrade.damage; e.range += upgrade.range;
+                        applyBuildingUpgrade(s, e);
                         updatePopulation(s);
                         emit(s, { type: 'research', x: e.x, y: e.y, team: e.team, entityId: e.id, subtype: 'buildingUpgrade', text: `${upgrade.name} complete · level ${e.buildingLevel}` });
                     }
@@ -685,12 +797,12 @@ function updateEntities(s: GameState, dt: number) {
         }
         e.attackCooldown = Math.max(0, e.attackCooldown - dt);
         if (e.kind === 'commander' && s.time - e.lastHitAt > 7) {
-            const nearKeep = s.entities.some(b => b.team === e.team && b.type === 'keep' && active(b) && distance(b, e) < 7);
+            const nearKeep = s.entities.some(b => areAllied(s, b.team, e.team) && b.type === 'keep' && active(b) && distance(b, e) < 7);
             e.hp = Math.min(e.maxHp, e.hp + dt * (nearKeep ? 10 : 3));
         }
         // Fortifications retain siege damage; the Engineer's repair is intentionally valuable.
         if (e.type === 'support' && e.attackCooldown <= 0) {
-            const ally = alive.filter(a => a.team === e.team && a.kind !== 'building' && a.hp < a.maxHp * .96 && distance(a, e) < 5).sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0];
+            const ally = spatial.query(e, 5, movementPadding).filter(a => areAllied(s, a.team, e.team) && a.kind !== 'building' && a.hp < a.maxHp * .96 && distance(a, e) < 5).sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0];
             if (ally) {
                 const heal = s.players[e.team].faction === 'arcanists' ? 20 : 16;
                 ally.hp = Math.min(ally.maxHp, ally.hp + heal);
@@ -700,26 +812,26 @@ function updateEntities(s: GameState, dt: number) {
         }
         if (e.directControl) steerEntity(s, e, dt);
         let target: Entity | undefined;
-        if (!s.rush && e.order.type === 'capture' && !e.guardAnchor && (distance(e, e.order) <= 2.2 || s.map.nodes.some(n => n.id === (e.order as { nodeId?: string }).nodeId && n.owner === e.team)))
+        if (!s.rush && e.order.type === 'capture' && !e.guardAnchor && (distance(e, e.order) <= 2.2 || s.map.nodes.some(n => n.id === (e.order as { nodeId?: string }).nodeId && n.owner !== null && areAllied(s, n.owner, e.team))))
             e.guardAnchor = { x: e.order.x, y: e.order.y };
         const guard = !s.rush && e.order.type === 'capture' ? e.guardAnchor : !s.rush && e.kind !== 'building' && e.order.type === 'idle' ? (e.guardAnchor ??= { x: e.x, y: e.y }) : undefined;
         const activeAttackers = new Set<string>();
         if (guard && recentDamage.size)
-            for (const enemy of alive)
-                if (recentDamage.has(enemy.id) && enemy.team !== e.team && enemy.kind !== 'building' && enemy.hp > 0 && !s.players[enemy.team].defeated && distance(enemy, guard) <= ACTIVE_ATTACKER_RADIUS && isVisible(s, e.team, enemy.x, enemy.y) && recentDamage.get(enemy.id)?.some(hit => hit.team === enemy.team && hit.targetTeam === e.team && (hit.entityId === e.id || distance(hit, guard) <= GUARD_CLUSTER_RADIUS)))
+            for (const enemy of spatial.query(guard, ACTIVE_ATTACKER_RADIUS, movementPadding))
+                if (recentDamage.has(enemy.id) && areHostile(s, enemy.team, e.team) && enemy.kind !== 'building' && enemy.hp > 0 && !s.players[enemy.team].defeated && distance(enemy, guard) <= ACTIVE_ATTACKER_RADIUS && isVisible(s, e.team, enemy.x, enemy.y) && recentDamage.get(enemy.id)?.some(hit => hit.team === enemy.team && hit.targetTeam !== undefined && areAllied(s, hit.targetTeam, e.team) && (hit.entityId === e.id || distance(hit, guard) <= GUARD_CLUSTER_RADIUS)))
                     activeAttackers.add(enemy.id);
-        let guardRadius = IDLE_GUARD_RADIUS;
-        const returningToObjective = guard && distance(e, guard) > (activeAttackers.size ? ACTIVE_GUARD_RADIUS : IDLE_GUARD_RADIUS) + .2;
+        let guardRadius = e.campRadius ?? IDLE_GUARD_RADIUS;
+        const returningToObjective = guard && distance(e, guard) > (e.campRadius ?? (activeAttackers.size ? ACTIVE_GUARD_RADIUS : IDLE_GUARD_RADIUS)) + .2;
         const range = attackRange(s, e);
-        if (e.order.type === 'attack')
-            target = alive.find(a => a.id === (e.order as {
-                targetId: string;
-            }).targetId && a.hp > 0 && isVisible(s, e.team, a.x, a.y));
+        if (e.order.type === 'attack') {
+            const candidate = byId.get(e.order.targetId);
+            if (candidate && candidate.hp > 0 && !s.players[candidate.team].defeated && areHostile(s, candidate.team, e.team) && isVisible(s, e.team, candidate.x, candidate.y)) target = candidate;
+        }
         if (!target && !returningToObjective && (e.order.type !== 'move' || e.kind === 'commander')) {
             const sight = e.kind === 'building' || (e.kind === 'commander' && (e.order.type === 'move' || e.order.type === 'idle')) ? range : e.order.type === 'hold' ? range : e.order.type === 'capture' ? Math.min(e.vision, 5) : e.vision;
             let best = Infinity;
-            for (const enemy of alive) {
-                if (enemy.team === e.team || enemy.hp <= 0 || s.players[enemy.team].defeated || !isVisible(s, e.team, enemy.x, enemy.y))
+            for (const enemy of spatial.query(e, Math.max(sight + maximumRadius, guard ? distance(e, guard) + ACTIVE_ATTACKER_RADIUS : 0), movementPadding)) {
+                if (!areHostile(s, enemy.team, e.team) || enemy.hp <= 0 || s.players[enemy.team].defeated || !isVisible(s, e.team, enemy.x, enemy.y))
                     continue;
                 const responding = activeAttackers.has(enemy.id);
                 const d = distance(e, enemy) - enemy.radius;
@@ -727,7 +839,7 @@ function updateEntities(s: GameState, dt: number) {
                     continue;
                 if (!responding && e.order.type === 'capture' && distance(enemy, e.order) > 6.5)
                     continue;
-                if (guard && distance(enemy, guard) - enemy.radius > (responding ? ACTIVE_GUARD_RADIUS : IDLE_GUARD_RADIUS) + range)
+                if (guard && distance(enemy, guard) - enemy.radius > (e.campRadius ?? (responding ? ACTIVE_GUARD_RADIUS : IDLE_GUARD_RADIUS)) + range)
                     continue;
                 const priority = d + (responding ? -20 : 0) + (e.type === 'siege' ? (enemy.kind === 'building' ? -4 : 6) : (enemy.kind === 'building' ? 3 : 0));
                 if (priority < best) {
@@ -738,11 +850,11 @@ function updateEntities(s: GameState, dt: number) {
         }
         if (target && e.damage > 0) {
             if (activeAttackers.has(target.id))
-                guardRadius = ACTIVE_GUARD_RADIUS;
+                guardRadius = e.campRadius ?? ACTIVE_GUARD_RADIUS;
             e.targetId = target.id;
             const d = distance(e, target);
             e.facing = Math.atan2(target.y - e.y, target.x - e.x);
-            if (s.players[e.team].ai && s.settings.difficulty !== 'easy' && e.kind !== 'building' && e.type !== 'siege' && range > 3 && target.range < 3 && d < range * .65 && d > .1 && e.attackCooldown > .25 && e.order.type !== 'hold' && e.order.type !== 'move') {
+            if (s.players[e.team].ai && (s.players[e.team].difficulty ?? s.settings.difficulty) !== 'easy' && !s.players[e.team].neutral && e.kind !== 'building' && e.type !== 'siege' && range > 3 && target.range < 3 && d < range * .65 && d > .1 && e.attackCooldown > .25 && e.order.type !== 'hold' && e.order.type !== 'move') {
                 moveToward(s, e, { x: clamp(e.x + (e.x - target.x) / d * 2.2, 1, s.map.width - 2), y: clamp(e.y + (e.y - target.y) / d * 2.2, 1, s.map.height - 2) }, dt, guardRadius);
             }
             if (d <= range + target.radius) {
@@ -783,8 +895,12 @@ function updateEntities(s: GameState, dt: number) {
                 const b = alive[j];
                 if (b.kind === 'building' || b.hp <= 0)
                     continue;
-                let dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy);
+                let dx = b.x - a.x, dy = b.y - a.y;
                 const min = (a.radius + b.radius) * .8;
+                // A pair outside either axis cannot overlap. Keep the exact
+                // distance and original pair order for all close neighbors.
+                if (Math.abs(dx) >= min || Math.abs(dy) >= min) continue;
+                let d = Math.hypot(dx, dy);
                 if (d < .001) {
                     dx = Math.cos((i + j) * 2.39996) * .001;
                     dy = Math.sin((i + j) * 2.39996) * .001;
@@ -825,7 +941,7 @@ function updatePopulation(s: GameState) {
 }
 function updateEconomy(s: GameState, dt: number) {
     for (const p of s.players)
-        if (!p.defeated) {
+        if (isCompetitivePlayer(p) && !p.defeated) {
             const { goldPerSecond: gold, woodPerSecond: wood, withdrawals } = getEconomyRates(s, p.team, dt);
             for (const { nodeIndex, amount } of withdrawals) {
                 const node = s.map.nodes[nodeIndex];
@@ -843,39 +959,35 @@ function updateCapture(s: GameState, dt: number) {
     for (const node of s.map.nodes) {
         const pressure = new Map<number, number>();
         for (const e of s.entities)
-            if (living(e) && e.kind !== 'building' && !s.players[e.team].defeated && distance(e, node) < node.radius)
+            if (living(e) && e.kind !== 'building' && !s.players[e.team].defeated && !s.players[e.team].closed && distance(e, node) < node.radius)
                 pressure.set(e.team, (pressure.get(e.team) ?? 0) + (e.kind === 'commander' ? 2 : 1));
-        if (pressure.size !== 1) {
-            if (pressure.size === 0)
-                node.captureProgress = Math.max(0, node.captureProgress - dt * .03);
-            continue;
-        }
-        const [team, count] = [...pressure][0];
-        if (node.owner === team) {
+        const teams = [...pressure.keys()];
+        if (!teams.length) { node.captureProgress = Math.max(0, node.captureProgress - dt * .03); continue; }
+        const first = teams[0];
+        if (teams.some(team => !areAllied(s, first, team)) || !isCompetitivePlayer(s.players[first])) continue;
+        if (node.owner !== null && areAllied(s, node.owner, first)) {
             node.captureProgress = Math.max(0, node.captureProgress - dt * .15);
-            if (node.captureProgress === 0)
-                node.captureTeam = null;
+            if (node.captureProgress === 0) node.captureTeam = null;
             continue;
         }
-        if (node.captureTeam !== team) {
-            node.captureTeam = team;
-            node.captureProgress = 0;
-        }
-        node.captureProgress += dt * Math.min(3, count) / 18 * (s.settings.modifiers?.captureSpeed ?? 1);
+        const team = node.captureTeam !== null && pressure.has(node.captureTeam) && areAllied(s, node.captureTeam, first) ? node.captureTeam : first;
+        const count = [...pressure.values()].reduce((total, value) => total + value, 0);
+        if (node.captureTeam !== team) { node.captureTeam = team; node.captureProgress = 0; }
+        node.captureProgress += dt * Math.min(3, count) / 18 * (s.settings.modifiers?.captureSpeed ?? 1) * (s.settings.modifiers?.players?.[team]?.captureSpeed ?? 1);
         if (node.captureProgress >= 1) {
-            node.owner = team;
-            node.captureProgress = 0;
-            node.captureTeam = null;
+            node.owner = team; node.captureProgress = 0; node.captureTeam = null;
             s.players[team].stats.captures++;
             emit(s, { type: 'capture', x: node.x, y: node.y, team, subtype: node.kind, text: node.kind === 'relic' ? 'Relic secured' : 'Resource point secured' });
         }
     }
     if (s.settings.mode !== 'conquest')
         for (const p of s.players)
-            if (!p.defeated) {
-                const count = s.map.nodes.filter(n => n.kind === 'relic' && n.owner === p.team).length;
+            if (isCompetitivePlayer(p) && !p.defeated) {
+                const count = s.map.nodes.filter(n => n.kind === 'relic' && n.owner !== null && areAllied(s, n.owner, p.team)).length;
+                const ownCount = s.map.nodes.filter(n => n.kind === 'relic' && n.owner === p.team).length;
                 const controlRate = count === 0 ? 0 : count === 1 ? .5 : count === 2 ? 1 : 1.4 + (count - 3) * .3;
-                p.score += controlRate * dt * s.escalation * (s.settings.mode === 'relic' ? 1.15 : 1);
+                // Partition the alliance total rather than multiplying score per ally.
+                p.score += controlRate * (ownCount / Math.max(1, count)) * dt * s.escalation * (s.settings.mode === 'relic' ? 1.15 : 1);
             }
 }
 export function updateFog(s: GameState) {
@@ -884,7 +996,7 @@ export function updateFog(s: GameState) {
         const visible = s.fog.visible[p.team];
         visible.fill(0);
         for (const e of s.entities)
-            if (e.team === p.team && active(e)) {
+            if (areAllied(s, e.team, p.team) && !s.players[e.team].defeated && active(e)) {
                 const r = e.vision * BIOMES[s.map.biome].vision, minX = Math.max(0, Math.floor(e.x - r)), maxX = Math.min(width - 1, Math.ceil(e.x + r)), minY = Math.max(0, Math.floor(e.y - r)), maxY = Math.min(height - 1, Math.ceil(e.y + r));
                 for (let y = minY; y <= maxY; y++)
                     for (let x = minX; x <= maxX; x++)
@@ -895,13 +1007,20 @@ export function updateFog(s: GameState) {
                         }
             }
         for (const n of s.map.nodes)
-            if (n.owner === p.team)
+            if (n.owner !== null && areAllied(s, n.owner, p.team))
                 for (let y = Math.max(0, Math.floor(n.y - 3)); y < Math.min(height, n.y + 3); y++)
                     for (let x = Math.max(0, Math.floor(n.x - 3)); x < Math.min(width, n.x + 3); x++) {
                         const i = y * width + x;
                         visible[i] = 1;
                         s.fog.explored[p.team][i] = 1;
                     }
+    }
+    // Allies share their exploration history, including newly formed alliances.
+    for (const p of s.players) {
+        const allies = allianceMembers(s, p.team).filter(ally => ally.team > p.team);
+        for (const ally of allies)
+            for (let i = 0; i < width * height; i++)
+                if (s.fog.explored[p.team][i] || s.fog.explored[ally.team][i]) s.fog.explored[p.team][i] = s.fog.explored[ally.team][i] = 1;
     }
     if (s.rush) {
         for (const row of s.fog.visible)
@@ -912,58 +1031,49 @@ export function updateFog(s: GameState) {
     s.lastFogTick = s.tick;
 }
 function endGame(s: GameState, team: number, reason: string) {
-    if (s.winner !== null)
-        return;
-    s.winner = team;
-    s.victoryReason = reason;
+    if (s.winner !== null || !isCompetitivePlayer(s.players[team])) return;
+    team = allianceRepresentative(s, team);
+    s.winner = team; s.victoryReason = reason;
     emit(s, { type: 'victory', x: s.map.spawns[team].x, y: s.map.spawns[team].y, team, text: reason });
 }
 function checkVictory(s: GameState) {
     if (s.settings.learning) return;
-    const remaining = s.players.filter(p => !p.defeated);
-    if (remaining.length === 1) {
-        endGame(s, remaining[0].team, 'All enemy Command Keeps destroyed');
+    const remaining = s.players.filter(p => isCompetitivePlayer(p) && !p.defeated);
+    if (s.settings.scriptedVictory) {
+        if (s.players[0].defeated) {
+            const rival = s.players.find(p => isCompetitivePlayer(p) && areHostile(s, p.team, 0)) ?? s.players.find(p => isCompetitivePlayer(p) && p.team !== 0);
+            if (rival && s.winner === null) {
+                s.winner = rival.team; s.victoryReason = 'Your Command Keep has fallen';
+                emit(s, { type: 'victory', x: s.map.spawns[rival.team].x, y: s.map.spawns[rival.team].y, team: rival.team, text: s.victoryReason });
+            }
+        }
         return;
     }
+    if (remaining.length && remaining.every(p => areAllied(s, p.team, remaining[0].team))) {
+        endGame(s, remaining[0].team, 'All enemy Command Keeps destroyed'); return;
+    }
     for (const p of remaining)
-        if (p.score >= s.scoreTarget) {
-            endGame(s, p.team, 'Relic domination');
-            return;
+        if (allianceMembers(s, p.team).reduce((score, ally) => score + ally.score, 0) >= s.scoreTarget) {
+            endGame(s, p.team, 'Relic domination'); return;
         }
-    // In conquest only, the late frontier storm damages all keeps after twice the target duration.
-    // Leading armies must commit; tied fortresses cannot keep a headless match alive forever.
     if (s.settings.mode === 'conquest' && s.time > s.settings.duration * 120) {
         for (const p of remaining) {
             const keep = s.entities.find(e => e.team === p.team && e.type === 'keep' && living(e));
-            if (keep)
-                keep.hp = Math.max(1, keep.hp - FIXED_STEP * (2 + (s.time - s.settings.duration * 120) / 60));
+            if (keep) keep.hp = Math.max(1, keep.hp - FIXED_STEP * (2 + (s.time - s.settings.duration * 120) / 60));
         }
-        if (s.time > s.settings.duration * 180) {
-            const ranked = [...remaining].sort((a, b) => { const score = (p: Player) => s.entities.filter(e => e.team === p.team && living(e)).reduce((sum, e) => sum + e.hp, 0) + p.stats.damageDealt * .1; return score(b) - score(a) || a.team - b.team; });
+        if (s.time > s.settings.duration * 180 && remaining.length) {
+            const strength = (p: Player) => s.entities.filter(e => areAllied(s, e.team, p.team) && !s.players[e.team].defeated && living(e)).reduce((sum, e) => sum + e.hp, 0) + allianceMembers(s, p.team).reduce((sum, ally) => sum + ally.stats.damageDealt * .1, 0);
+            const ranked = [...remaining].sort((a, b) => strength(b) - strength(a) || a.team - b.team);
             endGame(s, ranked[0].team, 'Frontier storm: strongest surviving army');
         }
     }
 }
 function updateScripts(s: GameState) {
     for (const trigger of s.triggers) {
-        if (trigger.fired)
-            continue;
-        const w = trigger.when;
-        let fire = false;
-        if (w.type === 'time')
-            fire = s.time >= w.seconds;
-        if (w.type === 'captured')
-            fire = s.map.nodes.some(n => n.id === w.nodeId && n.owner === w.team);
-        if (w.type === 'resource')
-            fire = (s.players[w.team]?.[w.resource] ?? 0) >= w.amount;
-        if (w.type === 'destroyed')
-            fire = !s.entities.some(e => e.id === w.entityId && living(e));
-        if (w.type === 'region')
-            fire = s.entities.some(e => e.team === w.team && living(e) && distance(e, w) <= w.radius);
-        if (fire) {
+        if (s.winner !== null) break;
+        if (!trigger.fired && evaluateScriptCondition(s, trigger.when)) {
             trigger.fired = true;
-            for (const action of trigger.actions)
-                applyScriptAction(s, action);
+            for (const action of trigger.actions) applyScriptAction(s, action);
         }
     }
 }
@@ -983,8 +1093,23 @@ function applyScriptAction(s: GameState, a: ScriptAction) {
         s.fog.explored[a.team].fill(1);
         s.fog.visible[a.team].fill(1);
     }
-    if (a.type === 'objective')
-        s.objectiveText = a.text;
+    if (a.type === 'objective') s.objectiveText = a.text;
+    if (a.type === 'defeat') {
+        defeatPlayer(s, a.team);
+        emit(s, { type: 'alert', x: s.map.spawns[a.team].x, y: s.map.spawns[a.team].y, team: a.team, text: `${s.players[a.team].name} was defeated.` });
+        if (s.settings.scriptedVictory && a.team === 0) checkVictory(s);
+    }
+    if (a.type === 'alliance') {
+        s.players[a.team].alliance = a.alliance;
+        for (const entity of s.entities) {
+            if (entity.order.type === 'attack') {
+                const target = s.entities.find(target => target.id === (entity.order as {targetId:string}).targetId);
+                if (target && areAllied(s, entity.team, target.team)) setOrder(entity, { type: 'idle' });
+            }
+            entity.targetId = null;
+        }
+        updateFog(s);
+    }
 }
 export function stepGame(s: GameState, elapsedSeconds: number): void {
     if (s.paused || s.winner !== null || !Number.isFinite(elapsedSeconds) || elapsedSeconds <= 0)
@@ -1010,9 +1135,10 @@ export function stepGame(s: GameState, elapsedSeconds: number): void {
             updateEntities(s, FIXED_STEP);
             updateCapture(s, FIXED_STEP);
             updatePopulation(s);
+            if (s.settings.scriptedVictory && s.players[0].defeated) checkVictory(s);
             updateScripts(s);
             for (const p of s.players)
-                if (p.ai && !p.defeated && s.time >= p.aiNextThink)
+                if (isCompetitivePlayer(p) && p.ai && !p.defeated && s.time >= p.aiNextThink)
                     thinkAI(s, p);
             checkVictory(s);
         }
@@ -1050,11 +1176,12 @@ function assignSiegeEscorts(entities: Entity[]) {
                 unit.escortId = siege.id;
 }
 function thinkAI(s: GameState, p: Player) {
-    const interval = { easy: 4.2, normal: 2.5, hard: 1.5, brutal: .8 }[s.settings.difficulty];
+    const difficulty = p.difficulty ?? s.settings.difficulty;
+    const interval = { easy: 4.2, normal: 2.5, hard: 1.5, brutal: .8 }[difficulty];
     p.aiNextThink = s.time + interval;
     const mine = s.entities.filter(e => e.team === p.team && living(e)), buildings = mine.filter(e => e.kind === 'building'), army = mine.filter(e => e.kind === 'unit'), commander = mine.find(e => e.kind === 'commander'), spawn = s.map.spawns[p.team];
     const has = (id: BuildingId) => buildings.some(e => e.type === id), ready = (id: BuildingId) => buildings.some(e => e.type === id && active(e));
-    const visibleEnemies = s.entities.filter(e => e.team !== p.team && living(e) && !s.players[e.team].defeated && isVisible(s, p.team, e.x, e.y));
+    const visibleEnemies = s.entities.filter(e => areHostile(s, e.team, p.team) && living(e) && !s.players[e.team].defeated && isVisible(s, p.team, e.x, e.y));
     p.lastKnownEnemies = visibleEnemies.slice(0, 12).map(e => ({ x: e.x, y: e.y }));
     if (p.population >= p.populationCap - 3 && p.populationCap < p.maxPopulation && !buildings.some(e => e.type === 'house' && e.buildProgress < 1))
         tryAIBuild(s, p, 'house');
@@ -1105,6 +1232,18 @@ function thinkAI(s: GameState, p: Player) {
     const savingForExpansion = (!has('range') && s.time > 20) || (s.time > 160 && !has('blacksmith')) || (s.time > 260 && ready('blacksmith') && !has('workshop'));
     const economyPending = buildings.some(e => e.queue.some(q => q.type === 'research' && q.id === 'economy'));
     const savingForEconomy = s.time > 115 && (p.research.economy ?? 0) < 1 && !economyPending && !savingForExpansion;
+    // Spend only surplus, through the same paid production command as the player.
+    if (s.time > 240 && army.length >= 6 && !savingForExpansion && !savingForEconomy) {
+        const priorities: BuildingId[] = p.personality === 'economic' ? ['depot', 'house', 'barracks', 'range', 'keep'] : p.personality === 'defensive' ? ['tower', 'keep', 'house', 'barracks', 'range'] : ['house', 'barracks', 'range', 'workshop', 'stable', 'keep'];
+        for (const id of priorities) {
+            const building = buildings.find(building => building.type === id && active(building) && !building.queue.length && nextBuildingUpgrade(building));
+            const upgrade = building && nextBuildingUpgrade(building);
+            if (!building || !upgrade || id === 'house' && (p.populationCap >= p.maxPopulation || p.population < p.populationCap - 6) || id === 'depot' && !s.map.nodes.some(node => node.owner === p.team && node.kind !== 'relic' && node.amount > 100 && distance(node, building) < 7)) continue;
+            if (p.gold >= upgrade.cost.gold + 220 && p.wood >= upgrade.cost.wood + 140) {
+                if (issueCommand(s, { type: 'upgradeBuilding', team: p.team, buildingId: building.id }).ok) break;
+            }
+        }
+    }
     if (savingForEconomy)
         issueCommand(s, { type: 'research', team: p.team, technology: 'economy' });
     const canProduce = (id: UnitId) => buildings.some(e => active(e) && e.type !== 'turret' && BUILDINGS[e.type as BuildingId].recruits.includes(id));
@@ -1115,7 +1254,7 @@ function thinkAI(s: GameState, p: Player) {
     if (!savingForExpansion && !savingForEconomy && issueCommand(s, { type: 'recruit', team: p.team, unit: p.aiRecruitPlan }).ok)
         p.aiRecruitPlan = undefined;
     const threats = visibleEnemies.filter(e => e.kind !== 'building' && distance(e, spawn) < 11);
-    const easyOpening = s.settings.difficulty === 'easy' && s.time < EASY_OPENING_SECONDS;
+    const easyOpening = difficulty === 'easy' && s.time < EASY_OPENING_SECONDS;
     let goal: Point | undefined, nodeId: string | undefined;
     if (threats.length >= (easyOpening ? 1 : 2)) {
         goal = threats[0];
@@ -1125,8 +1264,8 @@ function thinkAI(s: GameState, p: Player) {
         // Spend the first minute consolidating the home side, rather than racing
         // through neutral camps into a beginner's starter army. Costs and combat
         // remain unchanged, and a genuine home attack still triggers defense.
-        const homeSide = (point: Point) => s.map.spawns.every((other, team) => team === p.team || distance(point, spawn) + 4 < distance(point, other));
-        const local = s.map.nodes.filter(n => n.kind !== 'relic' && n.amount > 100 && n.owner !== p.team && homeSide(n)).sort((a, b) => distance(a, commander ?? spawn) - distance(b, commander ?? spawn))[0];
+        const homeSide = (point: Point) => s.map.spawns.every((other, team) => !isCompetitivePlayer(s.players[team]) || areAllied(s, team, p.team) || distance(point, spawn) + 4 < distance(point, other));
+        const local = s.map.nodes.filter(n => n.kind !== 'relic' && n.amount > 100 && (n.owner === null || !areAllied(s, n.owner, p.team)) && homeSide(n)).sort((a, b) => distance(a, commander ?? spawn) - distance(b, commander ?? spawn))[0];
         if (local) {
             goal = local;
             nodeId = local.id;
@@ -1141,8 +1280,8 @@ function thinkAI(s: GameState, p: Player) {
     else {
         const ownedGold = s.map.nodes.filter(n => n.kind === 'gold' && n.owner === p.team && n.amount > 100).length, ownedWood = s.map.nodes.filter(n => n.kind === 'wood' && n.owner === p.team && n.amount > 100).length;
         const scarce = ownedGold === 0 ? 'gold' : ownedWood === 0 ? 'wood' : p.gold < 110 && p.wood > 180 ? 'gold' : p.wood < 100 && p.gold > 180 ? 'wood' : null;
-        const deposits = s.map.nodes.filter(n => n.kind !== 'relic' && n.owner !== p.team && n.amount > 100 && (n.owner === null || s.fog.explored[p.team][tileIndex(s.map, n.x, n.y)] === 1)).sort((a, b) => { const score = (n: typeof a) => distance(n, commander ?? spawn) + (scarce && n.kind !== scarce ? 24 : 0) + (n.owner !== null && distance(n, s.map.spawns[n.owner]) < 9 ? 10 : 0); return score(a) - score(b); });
-        const relics = s.map.nodes.filter(n => n.kind === 'relic' && n.owner !== p.team).sort((a, b) => distance(a, commander ?? spawn) - distance(b, commander ?? spawn));
+        const deposits = s.map.nodes.filter(n => n.kind !== 'relic' && (n.owner === null || !areAllied(s, n.owner, p.team)) && n.amount > 100 && (n.owner === null || s.fog.explored[p.team][tileIndex(s.map, n.x, n.y)] === 1)).sort((a, b) => { const score = (n: typeof a) => distance(n, commander ?? spawn) + (scarce && n.kind !== scarce ? 24 : 0) + (n.owner !== null && distance(n, s.map.spawns[n.owner]) < 9 ? 10 : 0); return score(a) - score(b); });
+        const relics = s.map.nodes.filter(n => n.kind === 'relic' && (n.owner === null || !areAllied(s, n.owner, p.team))).sort((a, b) => distance(a, commander ?? spawn) - distance(b, commander ?? spawn));
         const owned = s.map.nodes.filter(n => n.kind !== 'relic' && n.owner === p.team && n.amount > 100).length;
         if (deposits.length && (s.time < 90 || ownedGold === 0 || ownedWood === 0 || (scarce === 'gold' && ownedGold < 2) || (scarce === 'wood' && ownedWood < 2) || ((p.personality === 'economic' || p.personality === 'expansionist') && s.time < 160))) {
             goal = deposits[0];
@@ -1163,7 +1302,7 @@ function thinkAI(s: GameState, p: Player) {
             }
         }
         else {
-            const enemy = s.players.filter(q => q.team !== p.team && !q.defeated).sort((a, b) => b.score - a.score)[0];
+            const enemy = s.players.filter(q => isCompetitivePlayer(q) && areHostile(s, q.team, p.team) && !q.defeated).sort((a, b) => b.score - a.score)[0];
             if (enemy) {
                 goal = s.map.spawns[enemy.team];
                 p.aiPhase = 'Assaulting the enemy keep';
@@ -1180,7 +1319,7 @@ function thinkAI(s: GameState, p: Player) {
             p.aiAttackUntil = s.time + 100;
             p.aiStageSince = undefined;
         }
-        const enemy = s.players.filter(q => q.team !== p.team && !q.defeated).sort((a, b) => distance(s.map.spawns[a.team], spawn) - distance(s.map.spawns[b.team], spawn))[0];
+        const enemy = s.players.filter(q => isCompetitivePlayer(q) && areHostile(s, q.team, p.team) && !q.defeated).sort((a, b) => distance(s.map.spawns[a.team], spawn) - distance(s.map.spawns[b.team], spawn))[0];
         if ((p.aiAttackUntil ?? 0) > s.time && enemy) {
             goal = s.map.spawns[enemy.team];
             nodeId = undefined;
@@ -1197,7 +1336,7 @@ function thinkAI(s: GameState, p: Player) {
         const fighters = [...army, ...(commander ? [commander] : [])];
         // A small detached patrol captures a second point while the commander leads the main force.
         if (!easyOpening && s.settings.mode !== 'conquest' && army.length >= 8 && threats.length === 0) {
-            const secondary = s.map.nodes.filter(n => n.owner !== p.team && n.id !== nodeId && (p.personality === 'raider' ? n.kind !== 'relic' && n.amount > 100 : n.kind === 'relic' || n.amount > 100)).sort((a, b) => distance(a, spawn) - distance(b, spawn))[0];
+            const secondary = s.map.nodes.filter(n => (n.owner === null || !areAllied(s, n.owner, p.team)) && n.id !== nodeId && (p.personality === 'raider' ? n.kind !== 'relic' && n.amount > 100 : n.kind === 'relic' || n.amount > 100)).sort((a, b) => distance(a, spawn) - distance(b, spawn))[0];
             if (secondary) {
                 const patrol = army.filter(e => e.type === 'cavalry' || e.type === 'spearman').slice(-2);
                 aiOrder(s, p, patrol, secondary, secondary.id);
@@ -1221,7 +1360,7 @@ function thinkAI(s: GameState, p: Player) {
     }
     if (commander) {
         const enemies = visibleEnemies.filter(e => distance(e, commander) < 8), hurt = mine.filter(e => e.hp < e.maxHp * .7 && distance(e, commander) < 7);
-        if (s.settings.difficulty !== 'easy')
+        if (difficulty !== 'easy')
             for (const ability of COMMANDERS[commander.type as CommanderId].abilities) {
                 const offensive = ['charge', 'trap', 'turret'].includes(ability.id), defensive = ['repair', 'rally'].includes(ability.id);
                 if ((offensive && enemies.length >= 2) || (defensive && hurt.length >= 2) || (ability.id === 'dodge' && commander.hp < commander.maxHp * .4 && enemies.length)) {
@@ -1233,7 +1372,7 @@ function thinkAI(s: GameState, p: Player) {
             p.aiCommanderRetreat = true;
         if (commander.hp > commander.maxHp * .7)
             p.aiCommanderRetreat = false;
-        if (p.aiCommanderRetreat && s.settings.difficulty !== 'easy') {
+        if (p.aiCommanderRetreat && difficulty !== 'easy') {
             const inward = direction(spawn, { x: s.map.width / 2 + .5, y: s.map.height / 2 + .5 }), refuge = freePosition(s, spawn.x + inward.x * 3, spawn.y + inward.y * 3);
             setOrder(commander, { type: 'move', ...refuge });
             p.aiPhase = 'Recovering the commander at the keep';
@@ -1241,6 +1380,23 @@ function thinkAI(s: GameState, p: Player) {
     }
 }
 export function serializeGame(state: GameState): string { return JSON.stringify(state); }
+function validateSavedCamps(state: GameState, fail: (message: string) => never) {
+    const definitions = state.map.scenario?.camps ?? [];
+    if (!definitions.length) {
+        if (state.camps !== undefined && (!Array.isArray(state.camps) || state.camps.length)) fail('unexpected neutral camp state.');
+        return;
+    }
+    if (!Array.isArray(state.camps) || state.camps.length !== definitions.length) fail('neutral camp state is missing.');
+    const ids = new Set<string>(), entityIds = new Set<string>();
+    for (const camp of state.camps!) {
+        const definition = definitions.find(definition => definition.id === camp?.id);
+        if (!definition || ids.has(camp.id) || Object.keys(camp).some(key => !['id', 'entityIds', 'rewardGold', 'rewardWood', 'cleared', 'defeatedBy'].includes(key)) || !Array.isArray(camp.entityIds) || camp.entityIds.length !== definition.count || camp.entityIds.some(id => typeof id !== 'string' || !id.length || entityIds.has(id)) || new Set(camp.entityIds).size !== camp.entityIds.length || camp.rewardGold !== definition.rewardGold || camp.rewardWood !== definition.rewardWood || typeof camp.cleared !== 'boolean') fail('neutral camp records are invalid.');
+        ids.add(camp.id); camp.entityIds.forEach(id => entityIds.add(id));
+        if (camp.cleared ? !Number.isInteger(camp.defeatedBy) || !isCompetitivePlayer(state.players[camp.defeatedBy!]) : camp.defeatedBy !== null) fail('neutral camp reward attribution is invalid.');
+        const defenders = state.entities.filter(entity => entity.campId === camp.id);
+        if (defenders.some(entity => !camp.entityIds.includes(entity.id)) || camp.cleared && defenders.some(living) || !camp.cleared && !defenders.some(living)) fail('neutral camp defenders do not match their record.');
+    }
+}
 export function restoreGame(input: string | object): GameState {
     let data: GameState;
     try {
@@ -1258,17 +1414,14 @@ export function restoreGame(input: string | object): GameState {
         fail('world state is incomplete.');
     if (!data.settings || typeof data.settings !== 'object')
         fail('match settings are missing.');
-    data.settings = { ...DEFAULT_SETTINGS, ...data.settings, mapGenerationVersion: data.settings.mapGenerationVersion ?? (data.map.version === 3 ? 3 : 4) };
+    data.settings = { ...DEFAULT_SETTINGS, ...data.settings, mapGenerationVersion: data.settings.mapGenerationVersion ?? (data.map.version === 3 ? 3 : data.map.version === 5 ? 5 : 4) };
     const settings = data.settings;
-    if (![3, 4].includes(settings.mapGenerationVersion ?? 4) || !knownId(COMMANDERS, settings.commander) || !knownId(FACTIONS, settings.faction) || !knownId(BIOMES, settings.biome) || !knownId(MAP_DIMENSIONS, settings.mapSize) || !['easy', 'normal', 'hard', 'brutal'].includes(settings.difficulty) || !['domination', 'conquest', 'relic', 'rush'].includes(settings.mode) || !['competitive', 'balanced', 'wild', 'chaotic'].includes(settings.preset) || typeof settings.seed !== 'string' || !number(settings.duration, 1, 120) || !number(settings.populationCap, 1, 500))
+    if (![3, 4, 5].includes(settings.mapGenerationVersion ?? 4) || !knownId(COMMANDERS, settings.commander) || !knownId(FACTIONS, settings.faction) || !knownId(BIOMES, settings.biome) || !knownId(MAP_DIMENSIONS, settings.mapSize) || !['easy', 'normal', 'hard', 'brutal'].includes(settings.difficulty) || !['domination', 'conquest', 'relic', 'rush'].includes(settings.mode) || !['competitive', 'balanced', 'wild', 'chaotic'].includes(settings.preset) || typeof settings.seed !== 'string' || !number(settings.duration, 1, 180) || !number(settings.populationCap, 1, 500))
         fail('match settings contain unknown content or invalid values.');
-    if (settings.modifiers !== undefined) {
-        if (!settings.modifiers || typeof settings.modifiers !== 'object' || Array.isArray(settings.modifiers))
-            fail('match modifiers must be numeric multipliers.');
-        for (const [key, value] of Object.entries(settings.modifiers))
-            if (!['income', 'playerDamage', 'playerHealth', 'captureSpeed'].includes(key) || !number(value, key === 'playerHealth' ? .001 : 0, 1000))
-                fail('match modifiers contain invalid multipliers.');
-    }
+    const legacyPopulationBudget = (data.map.version === 3 || data.map.version === 4) && settings.slots === undefined;
+    const settingsErrors = [...validateScaleSettings(settings, { allowLegacyPopulationBudget: legacyPopulationBudget }), ...validateGameModifiers(settings.modifiers, data.map.spawns?.length ?? 6), ...(settings.slots ? validateMapPlayerSlots(settings.slots) : [])];
+    if (settingsErrors.length) fail(settingsErrors.join(' '));
+    if (settings.scriptedVictory !== undefined && typeof settings.scriptedVictory !== 'boolean') fail('scripted victory must be a boolean.');
     if (!Array.isArray(data.map.tiles) || !Array.isArray(data.map.spawns) || !Array.isArray(data.map.nodes) || !knownId(BIOMES, data.map.biome))
         fail('map data is incomplete.');
     if (!number(data.map.width, 16, 160) || !number(data.map.height, 16, 160) || !data.map.spawns.every(point))
@@ -1286,9 +1439,21 @@ export function restoreGame(input: string | object): GameState {
     const validation = validateMap(data.map);
     if (!validation.valid)
         fail(`map is invalid: ${validation.errors.join(' ')}`);
+    if (data.map.scenario) {
+        const scenarioErrors = [...validateMapScenario(data.map.scenario, data.map.width, data.map.height, data.map.spawns.length), ...validateScenarioGeometry(data.map)];
+        if (scenarioErrors.length) fail(`scenario is invalid: ${scenarioErrors.join(' ')}`);
+    }
+    const spawnCount = data.map.spawns.length;
+    const hasCamps = !!data.map.scenario?.camps.length;
+    if (data.players.length !== spawnCount + (hasCamps ? 1 : 0)) fail('player slots and neutral owner do not match the map.');
+    if (settings.slots && settings.slots.length !== spawnCount) fail('player slots must match map spawns.');
     for (const [team, p] of data.players.entries()) {
         if (!p || p.team !== team || !knownId(FACTIONS, p.faction) || !knownId(COMMANDERS, p.commander) || !number(p.gold, 0) || !number(p.wood, 0) || !number(p.score, 0) || !number(p.maxPopulation, 1, 500) || !p.stats || !p.research)
             fail('player data is invalid.');
+        if ((p.alliance !== undefined && (!Number.isInteger(p.alliance) || !number(p.alliance, 0, 5))) || (p.neutral !== undefined && typeof p.neutral !== 'boolean') || (p.closed !== undefined && typeof p.closed !== 'boolean') || (p.difficulty !== undefined && !['easy', 'normal', 'hard', 'brutal'].includes(p.difficulty))) fail('player alliance, controller, or difficulty is invalid.');
+        if (typeof p.defeated !== 'boolean' || typeof p.ai !== 'boolean') fail('player activity flags are invalid.');
+        if (team === spawnCount ? !p.neutral || p.closed || p.ai || p.defeated || p.gold !== 0 || p.wood !== 0 || p.score !== 0 : p.neutral === true) fail('neutral defenders must use the separate noncompetitive owner.');
+        if (p.closed && (!p.defeated || p.ai) || settings.slots && team < spawnCount && !!p.closed !== (settings.slots[team].controller === 'closed')) fail('closed player slots are invalid.');
         for (const [id, value] of Object.entries(p.research))
             if (!knownId(TECHNOLOGIES, id as TechId) || !Number.isInteger(value) || !number(value, 0, TECHNOLOGIES[id as TechId].maxLevel))
                 fail('research values are invalid.');
@@ -1300,10 +1465,16 @@ export function restoreGame(input: string | object): GameState {
     for (const e of data.entities) {
         if (!e || typeof e.id !== 'string' || entityIds.has(e.id) || !point(e) || !Number.isInteger(e.team) || !data.players[e.team] || !['unit', 'commander', 'building'].includes(e.kind) || (e.kind === 'unit' && !knownId(UNITS, e.type as UnitId)) || (e.kind === 'building' && e.type !== 'turret' && !knownId(BUILDINGS, e.type as BuildingId)) || (e.kind === 'commander' && !knownId(COMMANDERS, e.type as CommanderId)))
             fail('entities have unknown types, IDs, teams, or locations.');
+        if (data.players[e.team].closed) fail(`entity ${e.id} belongs to a closed slot.`);
+        if (e.campId !== undefined || e.campRadius !== undefined || data.players[e.team].neutral) {
+            const camp = data.map.scenario?.camps.find(camp => camp.id === e.campId);
+            if (!data.players[e.team].neutral || !camp || e.kind !== 'unit' || e.type !== camp.unit || e.campRadius !== camp.radius || e.order?.type !== 'idle' || e.guardAnchor?.x !== camp.x || e.guardAnchor?.y !== camp.y || e.queue?.length || e.buildProgress !== 1 || e.lifetime !== null || e.respawnAt !== null || e.directControl !== undefined) fail(`entity ${e.id} has invalid neutral camp ownership.`);
+        }
         entityIds.add(e.id);
         for (const key of ['hp', 'maxHp', 'damage', 'armor', 'range', 'speed', 'vision', 'attackCooldown', 'attackPeriod', 'radius', 'buildProgress', 'buildTime', 'buffUntil', 'slowUntil', 'invulnerableUntil'] as const)
             if (!number(e[key], 0))
                 fail(`entity ${e.id} has invalid ${key}.`);
+        if (!number(e.speed, 0, 160) || !number(e.range, 0, 160) || !number(e.vision, 0, 160) || !number(e.radius, 0, 20)) fail(`entity ${e.id} exceeds supported movement or sight bounds.`);
         if (e.maxHp <= 0 || e.hp > e.maxHp + .001 || e.buildProgress > 1 || !number(e.facing) || !number(e.lastHitAt) || !Array.isArray(e.queue) || !e.abilityCooldowns || Object.values(e.abilityCooldowns).some(v => !number(v, 0)))
             fail(`entity ${e.id} has invalid health, production, or timers.`);
         if (!e.order || !['idle', 'hold', 'move', 'attackMove', 'capture', 'attack'].includes(e.order.type))
@@ -1343,6 +1514,7 @@ export function restoreGame(input: string | object): GameState {
             q.paidCost ??= queueItemCost(data, e, q);
         }
     }
+    validateSavedCamps(data, fail);
     data.pendingCommands ??= [];
     if (!Array.isArray(data.pendingCommands) || data.pendingCommands.length > 60)
         fail('tactical orders are invalid.');
@@ -1354,7 +1526,7 @@ export function restoreGame(input: string | object): GameState {
     data.accumulator ??= 0;
     if (!number(data.accumulator, 0) || !number(data.nextId, 1) || !number(data.nextEventId, 1) || !number(data.rng, 0) || !number(data.scoreTarget, 1) || !number(data.escalation, 0))
         fail('simulation counters are invalid.');
-    if (!(data.winner === null || Number.isInteger(data.winner) && number(data.winner, 0, data.players.length - 1)))
+    if (!(data.winner === null || Number.isInteger(data.winner) && number(data.winner, 0, data.map.spawns.length - 1) && isCompetitivePlayer(data.players[data.winner])))
         fail('winner is invalid.');
     if (!Array.isArray(data.events) || data.events.some(e => !e || !number(e.x) || !number(e.y) || !number(e.time, 0)))
         data.events = [];
@@ -1362,7 +1534,7 @@ export function restoreGame(input: string | object): GameState {
     if (!Array.isArray(data.commandLog))
         fail('command history is invalid.');
     data.triggers ??= [];
-    const triggerErrors = validateTriggers(data.triggers, { teamCount: data.players.length, width: data.map.width, height: data.map.height });
+    const triggerErrors = validateTriggers(data.triggers, { teamCount: data.map.spawns.length, width: data.map.width, height: data.map.height });
     if (triggerErrors.length)
         fail(`mission triggers are invalid: ${triggerErrors.join(' ')}`);
     data.lastFogTick ??= data.tick - 5;
@@ -1394,7 +1566,7 @@ export function restoreGame(input: string | object): GameState {
     return data;
 }
 function validateStoredCommand(s: GameState, c: GameCommand): string | null {
-    if (!c || typeof c !== 'object' || !Number.isInteger(c.team) || !s.players[c.team])
+    if (!c || typeof c !== 'object' || !Number.isInteger(c.team) || !isCompetitivePlayer(s.players[c.team]))
         return 'has an invalid player.';
     const position = (o: {
         x?: number;

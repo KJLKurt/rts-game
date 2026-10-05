@@ -1,0 +1,27 @@
+FRONTIER COMMAND ORIGINAL MUSIC — RECOVERY PROVENANCE
+Created 2026-10-04 for Kurt's Frontier Command game.
+
+Composition/arrangement: original AI-assisted project work. Synthesis: entirely
+mathematical oscillators and deterministic noise. No copyrighted recordings,
+samples, soundfonts, paid music APIs, third-party music services or external
+accounts were used. No existing song or artist was a compositional target.
+
+The verified 242b6df recovery preserved exploration/combat Ogg and MP3 bytes.
+The source generator was reconstructed from retained source excerpts; regenerated
+exploration/combat decoded PCM matches all four preserved codec files exactly.
+Menu (40 s), tension (40 s), victory (7.5 s) and defeat (10 s) were reconstructed
+from retained original score/synthesis definitions because their files were lost.
+Their prior encoded-byte identity is unproven and is not claimed. New artifact
+identities and baseline checks are recorded in docs/AUDIO_RECOVERY.json.
+
+This project provenance statement adds no attribution requirement or usage
+restriction to the user's use, modification, replacement or distribution of
+these original generated tracks and source. It does not guarantee that generated
+material is copyright-protectable in every jurisdiction.
+
+Build-time tools: Python, NumPy, SciPy, FFmpeg/libvorbis/libmp3lame. These tools
+are not bundled into the game. The source exports editable MIDI/score JSON and
+WAV masters; the game includes only encoded audio and the state manifest.
+
+Technical measurements: docs/AUDIO_VALIDATION.json. No subjective listening,
+physical-device audio audition or commercial sound-quality review is claimed.

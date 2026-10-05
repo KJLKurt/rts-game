@@ -1,3 +1,4 @@
+import { learningActionAvailable } from "./learning";
 import {
   BUILDINGS,
   COMMANDERS,
@@ -25,6 +26,7 @@ import type {
 } from "../sim";
 import { escapeText as esc } from "./escape";
 import { icon } from "./icons";
+import { rallyDestination, orderDescription, selectedOrderDescription } from "./command-guidance";
 
 const money = (cost: Cost) =>
   `<span class="cost"><span>${icon("gold")}${cost.gold}</span><span>${icon("wood")}${cost.wood}</span></span>`;
@@ -38,14 +40,92 @@ export function productionName(item: ProductionItem, building: Entity): string {
       : (nextBuildingUpgrade(building)?.name ?? "Building upgrade");
 }
 
+/** Mirror the engine's selected-producer / shortest-queue routing for UI estimates. */
+export function recruitProducer(
+  state: GameState,
+  unit: UnitId,
+  selectedId?: string,
+  team = 0,
+) {
+  const selected = state.entities.find(
+    (e) => e.id === selectedId && e.team === team && e.hp > 0,
+  );
+  const specific =
+    selected &&
+    selected.kind === "building" &&
+    BUILDINGS[selected.type as BuildingId]?.recruits.includes(unit)
+      ? selected.id
+      : undefined;
+  return state.entities
+    .filter(
+      (e) =>
+        e.team === team &&
+        e.kind === "building" &&
+        e.hp > 0 &&
+        e.buildProgress >= 1 &&
+        BUILDINGS[e.type as BuildingId]?.recruits.includes(unit) &&
+        (!specific || e.id === specific),
+    )
+    .sort((a, b) => a.queue.length - b.queue.length)[0];
+}
+export function trainingSeconds(
+  state: GameState,
+  unit: UnitId,
+  producer: Entity,
+) {
+  return (
+    (UNITS[unit].trainTime *
+      (state.players[producer.team].research.logistics ? 0.85 : 1)) /
+    productionRate(producer)
+  );
+}
+export function capacityGainText(
+  state: GameState,
+  amount: number,
+  team = 0,
+): string {
+  const player = state.players[team];
+  const gain = Math.max(
+    0,
+    Math.min(amount, player.maxPopulation - player.populationCap),
+  );
+  return gain === 0
+    ? "Match ceiling reached; no additional capacity"
+    : gain < amount
+      ? `+${gain} capacity now (match ceiling ${player.maxPopulation})`
+      : `+${gain} capacity`;
+}
+export function constructionProgressText(entity: Entity): string {
+  return `Under construction · ${Math.round(entity.buildProgress * 100)}% · ${Math.ceil((1 - entity.buildProgress) * entity.buildTime)}s remaining`;
+}
+/** Only changing readouts update during construction/combat; action controls stay put. */
+export function refreshInspection(
+  root: HTMLElement,
+  state: GameState,
+  selection: Iterable<string>,
+) {
+  const chosen = new Set(selection);
+  const entities = state.entities.filter((e) => chosen.has(e.id) && e.hp > 0);
+  const order = root.querySelector("[data-inspect-order]");
+  if (order) order.textContent = selectedOrderDescription(state, chosen);
+  if (entities.length !== 1) return;
+  const entity = entities[0];
+  const health = root.querySelector("[data-inspect-health]");
+  if (health)
+    health.textContent = `${Math.ceil(entity.hp)} / ${Math.ceil(entity.maxHp)}`;
+  const construction = root.querySelector("[data-construction-progress]");
+  if (construction) construction.textContent = constructionProgressText(entity);
+}
+
 export function inspectionHTML(
   state: GameState,
   selection: Iterable<string>,
+  learningStep?: number | null,
 ): string {
   const chosen = new Set(selection),
     entities = state.entities.filter((e) => chosen.has(e.id) && e.hp > 0);
   if (entities.length !== 1)
-    return `<div class="inspection"><h3>${entities.length} units selected</h3><p>Tap ground to move this group. Tap an enemy to focus attacks, or a deposit to capture it. Hold keeps the group still; Move lets it follow a safe route.</p><p>Select one soldier or building to inspect its role, statistics, and upgrades.</p></div>`;
+    return `<div class="inspection"><h3>${entities.length} units selected</h3><p data-inspect-order>${esc(selectedOrderDescription(state, chosen))}</p><p>Tap ground to move this group. Tap an enemy to focus attacks, or a deposit to capture it. Capture engages nearby enemies around its target. Hold does not pursue; Move prioritizes its destination.</p><p>Select one soldier or building to inspect its role, statistics, and upgrades.</p></div>`;
   const e = entities[0];
   if (e.kind === "building" && e.type !== "turret") {
     const definition = BUILDINGS[e.type as BuildingId],
@@ -54,13 +134,18 @@ export function inspectionHTML(
       max = 1 + BUILDING_UPGRADES[e.type as BuildingId].length;
     const construction = e.buildProgress < 1;
     const recruits = definition.recruits
+      .filter((id) => learningActionAvailable(learningStep, "recruit", id))
       .map((id) => {
         const u = UNITS[id];
-        return `<div class="inspect-action"><span><b>${u.name}</b><small>${u.population} population · ${Math.ceil(u.trainTime / productionRate(e))}s</small>${money(getUnitCost(state, e.team, id))}</span>${action("Train", "recruit", id, construction ? "disabled" : `aria-label="Train ${u.name} here"`)}</div>`;
+        return `<div class="inspect-action"><span><b>${u.name}</b><small>${u.population} population · ${Math.ceil(trainingSeconds(state, id, e))}s</small>${money(getUnitCost(state, e.team, id))}</span>${action("Train", "recruit", id, construction ? "disabled" : `aria-label="Train ${u.name} here"`)}</div>`;
       })
       .join("");
     const tech = Object.values(TECHNOLOGIES)
-      .filter((t) => t.building === e.type)
+      .filter(
+        (t) =>
+          t.building === e.type &&
+          learningActionAvailable(learningStep, "research", t.id),
+      )
       .map((t) => {
         const current = state.players[e.team].research[t.id] ?? 0,
           queued = state.entities.some(
@@ -72,7 +157,12 @@ export function inspectionHTML(
       })
       .join("");
     const queuedUpgrade = e.queue.some((q) => q.type === "buildingUpgrade");
-    return `<div class="inspection"><div class="inspect-heading"><div><h3>${definition.name}</h3><p>${esc(definition.description)}</p></div><span class="level-badge">Level ${level}/${max}</span></div><div class="inspect-stats"><span><b>${Math.ceil(e.hp)} / ${Math.ceil(e.maxHp)}</b> health</span>${definition.population ? `<span><b>+${buildingPopulation(e)}</b> population</span>` : ""}${e.damage ? `<span><b>${Math.round(e.damage)}</b> damage · ${e.range.toFixed(1)} range</span>` : ""}</div>${construction ? `<p class="construction-progress">Under construction · ${Math.round(e.buildProgress * 100)}% · ${Math.ceil((1 - e.buildProgress) * e.buildTime)}s remaining</p>` : ""}${e.type === "house" ? "<p>Houses give your army room to grow. Troops in training reserve population immediately. Houses do not produce workers.</p>" : e.type === "keep" ? "<p>Your keep provides a small steady supply of gold and wood. Capture deposits for most of your income. Losing this keep ends your battle.</p>" : e.type === "depot" ? `<p>Captured deposits within 7 tiles gain ${35 + (level - 1) * 15}% income. Depot bonuses do not stack; the best nearby depot applies.</p>` : ""}${recruits ? `<h4>Train here</h4><div class="inspect-actions">${recruits}</div><p class="inspect-rally">New troops ${e.rally ? `rally at ${Math.round(e.rally.x)}, ${Math.round(e.rally.y)}` : "join your commander"}. ${action("Set rally point", "set-rally", e.id, construction ? "disabled" : "")}</p>` : ""}${tech ? `<h4>Research for your army</h4><div class="inspect-actions">${tech}</div>` : ""}<h4>Building development</h4><div class="inspect-action"><span><b>${next ? `${next.name} · level ${level + 1}/${max}` : "Fully upgraded"}</b><small>${next ? esc(next.description) : "This building has reached its maximum level."}</small>${next ? money(next.cost) : ""}</span>${next ? action(queuedUpgrade ? "Upgrade queued" : `Upgrade · ${next.time}s`, "upgrade-building", e.id, construction || queuedUpgrade ? "disabled" : "") : ""}</div></div>`;
+    const upgradeUnlocked = learningActionAvailable(
+      learningStep,
+      "upgradeBuilding",
+      e.type,
+    );
+    return `<div class="inspection"><div class="inspect-heading"><div><h3>${definition.name}</h3><p>${e.type === "house" ? `Provides up to ${buildingPopulation(e)} population capacity. Match ceiling: ${state.players[e.team].maxPopulation}.` : esc(definition.description)}</p></div><span class="level-badge">Level ${level}/${max}</span></div><div class="inspect-stats"><span><b data-inspect-health>${Math.ceil(e.hp)} / ${Math.ceil(e.maxHp)}</b> health</span>${definition.population ? `<span><b>${buildingPopulation(e)}</b> capacity before match ceiling</span>` : ""}${e.damage ? `<span><b>${Math.round(e.damage)}</b> damage · ${e.range.toFixed(1)} range</span>` : ""}</div>${construction ? `<p class="construction-progress" data-construction-progress>${constructionProgressText(e)}</p>` : ""}${e.type === "house" ? "<p>Houses give your army room to grow. Troops in training reserve population immediately. Houses do not produce workers.</p>" : e.type === "keep" ? "<p>Your keep provides a small steady supply of gold and wood. Capture deposits for most of your income. Losing this keep ends your battle.</p>" : e.type === "depot" ? `<p>Captured deposits within 7 tiles gain ${35 + (level - 1) * 15}% income. Depot bonuses do not stack; the best nearby depot applies.</p>` : ""}${recruits ? `<h4>Train here</h4><div class="inspect-actions">${recruits}</div><p class="inspect-rally">${esc(rallyDestination(e))} ${action("Set rally point", "set-rally", e.id, construction ? "disabled" : "")}</p>` : ""}${tech ? `<h4>Research for your army</h4><div class="inspect-actions">${tech}</div>` : ""}<h4>Building development</h4><div class="inspect-action"><span><b>${next ? `${next.name} · level ${level + 1}/${max}` : "Fully upgraded"}</b><small>${next ? (next.population ? `${capacityGainText(state, next.population, e.team)}. +${Math.round(next.health * 100)}% durability.` : esc(next.description)) : "This building has reached its maximum level."}</small>${next ? money(next.cost) : ""}</span>${next && upgradeUnlocked ? action(queuedUpgrade ? "Upgrade queued" : `Upgrade · ${next.time}s`, "upgrade-building", e.id, construction || queuedUpgrade ? "disabled" : "") : next ? "<small>Building upgrades open later in the guide.</small>" : ""}</div></div>`;
   }
   const definition =
     e.kind === "commander"
@@ -89,7 +179,7 @@ export function inspectionHTML(
           )
           .join(", ")
       : "";
-  return `<div class="inspection"><div class="inspect-heading"><div><h3>${definition?.name ?? "Runic Turret"}</h3><p>${esc(definition?.description ?? "Temporary automatic defense.")}</p></div></div><div class="inspect-stats"><span><b>${Math.ceil(e.hp)} / ${Math.ceil(e.maxHp)}</b> health</span><span><b>${Math.round(e.damage)}</b> base damage</span><span><b>${e.range.toFixed(1)}</b> base range</span><span><b>${e.armor}</b> base armor</span></div>${counters ? `<p>Strong against ${counters}. Protect vulnerable ranged and support troops with a frontline.</p>` : ""}${e.kind === "commander" ? `<div class="inspect-actions">${COMMANDERS[state.settings.commander].abilities.map((a) => `<article><b>${a.name} · ${a.cooldown}s cooldown</b><p>${esc(a.description)}</p></article>`).join("")}</div><p>Move with the thumbstick or WASD. Tap ground for a pathfinding move order. Nearby enemies are attacked automatically. Commander Mastery research at the keep improves health and cooldowns.</p>` : "<p>Army-wide upgrades are shown in Research. Select this soldier and tap a destination, enemy, or resource to give a specific order.</p>"}</div>`;
+  return `<div class="inspection"><div class="inspect-heading"><div><h3>${definition?.name ?? "Runic Turret"}</h3><p>${esc(definition?.description ?? "Temporary automatic defense.")}</p></div></div><p data-inspect-order>${esc(orderDescription(state, e))}</p><div class="inspect-stats"><span><b data-inspect-health>${Math.ceil(e.hp)} / ${Math.ceil(e.maxHp)}</b> health</span><span><b>${Math.round(e.damage)}</b> base damage</span><span><b>${e.range.toFixed(1)}</b> base range</span><span><b>${e.armor}</b> base armor</span></div>${counters ? `<p>Strong against ${counters}. Protect vulnerable ranged and support troops with a frontline.</p>` : ""}${e.kind === "commander" ? `<div class="inspect-actions">${COMMANDERS[state.settings.commander].abilities.map((a) => `<article><b>${a.name} · ${a.cooldown}s cooldown</b><p>${esc(a.description)}</p></article>`).join("")}</div><p>Move with the thumbstick or WASD. Tap ground for a pathfinding move order. Nearby enemies are attacked automatically. Commander Mastery research at the keep improves health and cooldowns.</p>` : "<p>Army-wide upgrades are shown in Research. Select this soldier and tap a destination, enemy, or resource to give a specific order.</p>"}</div>`;
 }
 
 export function productionHTML(state: GameState, selected?: string): string {
@@ -103,13 +193,13 @@ export function productionHTML(state: GameState, selected?: string): string {
   return `<div class="production-list"><h4>Production queues <small>Paid jobs reserve population</small></h4>${buildings
     .map(
       (b) =>
-        `<div class="producer"><button class="producer-name" data-action="inspect-building" data-id="${esc(b.id)}">${BUILDINGS[b.type as BuildingId]?.name ?? "Building"} · ${b.queue.length}/12</button><ol>${b.queue
+        `<div class="producer" data-live-key="${esc(b.id)}"><button class="producer-name" data-action="inspect-building" data-id="${esc(b.id)}">${BUILDINGS[b.type as BuildingId]?.name ?? "Building"} · ${b.queue.length}/12</button>${b.queue.some((job) => job.type === "unit") ? `<p class="deck-tip producer-rally">${esc(rallyDestination(b))}</p>` : ""}<ol data-live-key="queue-${esc(b.id)}">${b.queue
           .map((q, i) => {
             const refund = productionRefund(state, b, q),
               seconds =
                 q.remaining /
                 (q.type === "buildingUpgrade" ? 1 : productionRate(b));
-            return `<li><span class="job-number">${i + 1}</span><div><b>${esc(productionName(q, b))}</b><small>${i === 0 ? `${Math.ceil(seconds)}s remaining` : `${Math.ceil(seconds)}s · waiting`}</small>${i === 0 ? `<progress max="${q.total}" value="${q.total - q.remaining}" aria-label="Production progress"></progress>` : ""}</div>${action("Cancel", "cancel-production", `${b.id}|${q.queueId}`, `aria-label="Cancel ${esc(productionName(q, b))}; refund ${refund.gold} gold and ${refund.wood} wood" title="Refund ${refund.gold} gold and ${refund.wood} wood"`)}</li>`;
+            return `<li data-live-key="${esc(q.queueId ?? String(i))}"><span class="job-number">${i + 1}</span><div><b>${esc(productionName(q, b))}</b><small>${i === 0 ? `${Math.ceil(seconds)}s remaining` : `${Math.ceil(seconds)}s · waiting`}</small><small class="refund-amount">Cancel refund: ${refund.gold} gold · ${refund.wood} wood</small>${i === 0 ? `<progress max="${q.total}" value="${q.total - q.remaining}" aria-label="Production progress"></progress>` : ""}</div>${action("Cancel", "cancel-production", `${b.id}|${q.queueId}`, `aria-label="Cancel ${esc(productionName(q, b))}; refund ${refund.gold} gold and ${refund.wood} wood" title="Refund ${refund.gold} gold and ${refund.wood} wood"`)}</li>`;
           })
           .join("")}</ol></div>`,
     )

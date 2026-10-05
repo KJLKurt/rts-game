@@ -1,0 +1,106 @@
+.profile-title {
+  font-size: 1.1rem;
+  color: var(--gold);
+}
+.record-details {
+  border: 1px solid var(--line);
+  border-radius: 0.7rem;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  background: var(--panel);
+}
+.record-details summary {
+  min-height: 44px;
+  color: var(--gold);
+  cursor: pointer;
+}
+.record-details li {
+  padding: 0.3rem 0;
+  color: var(--muted);
+}
+.achievement-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+.achievement-filters .active {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.achievement > div {
+  width: 100%;
+  min-width: 0;
+}
+.achievement progress {
+  display: block;
+  width: 100%;
+  height: 0.45rem;
+  margin: 0.7rem 0 0.4rem;
+  accent-color: var(--gold);
+}
+.achievement small {
+  display: block;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.achievement .achievement-date {
+  margin-top: 0.5rem;
+  color: var(--teal);
+}
+.achievement .eyebrow {
+  font-size: 0.62rem;
+}
+.content-page .achievement {
+  opacity: 1;
+}
+.content-page .achievement h3 {
+  font-size: 1rem;
+}
+.content-page .achievement p {
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+.content-page .achievement small {
+  font-size: 0.75rem;
+}
+.achievement button {
+  margin-top: 0.8rem;
+  width: 100%;
+}
+.match-history {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+.match-history li {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 0.6rem;
+  padding: 1rem;
+  overflow-wrap: anywhere;
+}
+.match-history strong,
+.match-history span,
+.match-history small {
+  display: block;
+}
+.match-history strong {
+  color: var(--gold);
+  margin-bottom: 0.35rem;
+}
+.match-history span,
+.match-history small {
+  color: var(--muted);
+  line-height: 1.5;
+}
+.match-history p {
+  margin: 0.5rem 0;
+}
+@media (max-width: 600px) {
+  .achievement-filters {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

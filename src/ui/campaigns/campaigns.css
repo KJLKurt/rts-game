@@ -1,0 +1,178 @@
+.mission-reward {
+  color: var(--gold);
+  margin: 0.6rem 0 0;
+}
+.mission-objectives {
+  padding-left: 1.4rem;
+  text-align: left;
+}
+.mission-objectives li {
+  padding: 0.35rem 0;
+}
+.mission-objectives p {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0.3rem 0 0.6rem;
+}
+.mission-checklist {
+  display: grid;
+  gap: 0.75rem;
+  text-align: left;
+}
+.mission-objective {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.3rem 0.6rem;
+  padding: 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+}
+.mission-objective.complete {
+  border-color: #77d6c180;
+}
+.mission-objective.complete strong {
+  color: var(--teal);
+}
+.mission-objective small,
+.mission-objective progress {
+  grid-column: 1 / -1;
+}
+.mission-objective small {
+  color: var(--muted);
+  line-height: 1.5;
+}
+.mission-objective progress {
+  width: 100%;
+  height: 0.4rem;
+  accent-color: var(--teal);
+}
+.expedition-summary {
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  margin-bottom: 1.4rem;
+  background: var(--panel);
+}
+.expedition-summary p {
+  color: var(--gold);
+}
+.expedition-summary small {
+  color: var(--muted);
+  line-height: 1.5;
+  display: block;
+}
+.route-choice {
+  flex: 1 1 14rem;
+  padding: 1.25rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  text-align: left;
+}
+.route-choice p {
+  color: var(--muted);
+  flex: 1;
+  line-height: 1.55;
+}
+.route-choice button {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+.content-page .route-choices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  align-items: stretch;
+  gap: 1rem;
+}
+.expedition-route-details {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: var(--panel);
+  border-radius: 0.65rem;
+}
+.expedition-route-details summary {
+  min-height: 44px;
+  cursor: pointer;
+  color: var(--gold);
+}
+.expedition-map {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+.expedition-map li {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+  gap: 0.75rem;
+  align-items: start;
+}
+.expedition-map li > span {
+  color: var(--muted);
+  padding-top: 0.6rem;
+}
+.expedition-map li > div {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.expedition-stop {
+  border: 1px solid var(--line);
+  color: var(--muted);
+  border-radius: 0.5rem;
+  padding: 0.65rem;
+  flex: 1 1 8rem;
+}
+.expedition-stop small {
+  display: block;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  margin-top: 0.4rem;
+}
+.expedition-stop.available {
+  color: var(--gold);
+  border-color: var(--gold);
+}
+.expedition-stop.visited {
+  color: var(--teal);
+  border-color: #77d6c180;
+}
+@media (max-width: 600px) {
+  .route-choices {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .expedition-map li {
+    grid-template-columns: 1fr;
+  }
+  .mission-objective {
+    grid-template-columns: 1fr;
+  }
+  .mission-objective span {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+}
+/* Keep chapter objectives a 44px touch target in the compact HUD. */
+.objective-bar .chapter-objective-button {
+  width: 100%;
+  min-height: 44px;
+  padding: 7px 10px;
+  font-size: 12px;
+  line-height: 1.3;
+  white-space: normal;
+}
+.objective-bar:has(.chapter-objective-button) > .objective-description {
+  width: 100%;
+  max-width: 100%;
+  font-size: 11px;
+}
+@media (max-width: 600px), (max-height: 500px) {
+  .objective-bar:has(.chapter-objective-button) > .objective-description {
+    display: none;
+  }
+}

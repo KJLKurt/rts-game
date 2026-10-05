@@ -1,4 +1,10 @@
 import type { GameMap, Point } from "../sim";
+import { validateWorkshopStructure } from "./workshop";
+export interface EditorHistorySnapshot {
+  version: 1;
+  undo: GameMap[];
+  redo: GameMap[];
+}
 
 /** Includes every crossed grid cell, even when touch events arrive far apart. */
 export function strokeTiles(
@@ -50,6 +56,29 @@ export class EditorHistory {
     const next = this.redoMaps.pop();
     if (next) this.undoMaps.push(structuredClone(current));
     return next;
+  }
+  export(): EditorHistorySnapshot {
+    return {
+      version: 1,
+      undo: structuredClone(this.undoMaps),
+      redo: structuredClone(this.redoMaps),
+    };
+  }
+  resume(input: unknown) {
+    const data = input as EditorHistorySnapshot;
+    if (
+      !data ||
+      data.version !== 1 ||
+      !Array.isArray(data.undo) ||
+      !Array.isArray(data.redo) ||
+      data.undo.length + data.redo.length > 24 ||
+      [...data.undo, ...data.redo].some(
+        (map) => validateWorkshopStructure(map).length,
+      )
+    )
+      throw new Error("The workshop undo history is invalid.");
+    this.undoMaps = structuredClone(data.undo);
+    this.redoMaps = structuredClone(data.redo);
   }
   get canUndo() {
     return this.undoMaps.length > 0;

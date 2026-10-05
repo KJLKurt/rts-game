@@ -26,3 +26,14 @@ describe("objective clarity", () => {
     expect(relicSummary(s).owned).toBe(1);
   });
 });
+
+it("counts allied relics and targets a non-allied relic", () => {
+  const state = createGame({ aiPlayers: 2 });
+  state.players[0].alliance = 0;
+  state.players[2].alliance = 0;
+  const relics = state.map.nodes.filter((n) => n.kind === "relic");
+  relics[0].owner = 2;
+  relics[1].owner = 0;
+  expect(relicSummary(state)).toMatchObject({ owned: 2, pointsPerSecond: 1 });
+  expect(nearestRelic(state, relics[0])?.id).toBe(relics[2].id);
+});

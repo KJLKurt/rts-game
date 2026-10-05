@@ -1,0 +1,98 @@
+{
+  "note": "Finite deterministic AI policy samples; pacing targets are not guarantees. Headless CPU timing excludes rendering.",
+  "results": [
+    {
+      "scale": "custom",
+      "personality": "economic",
+      "seed": "PACING-epic-economic",
+      "targetMinutes": 90,
+      "mapTiles": 160,
+      "activePlayers": 6,
+      "minutes": 79.28,
+      "terminated": true,
+      "winner": 3,
+      "reason": "Relic domination",
+      "cpuSeconds": 208.55,
+      "players": [
+        {
+          "name": "You",
+          "personality": "economic",
+          "peakPopulation": 100,
+          "score": 3367,
+          "recruited": 1310,
+          "kills": 862,
+          "losses": 1325,
+          "captures": 306,
+          "buildings": 16,
+          "goldCollected": 69468,
+          "woodCollected": 67153
+        },
+        {
+          "name": "Rival 1",
+          "personality": "economic",
+          "peakPopulation": 36,
+          "score": 2067,
+          "recruited": 1128,
+          "kills": 555,
+          "losses": 1132,
+          "captures": 186,
+          "buildings": 11,
+          "goldCollected": 51679,
+          "woodCollected": 48722
+        },
+        {
+          "name": "Rival 2",
+          "personality": "economic",
+          "peakPopulation": 35,
+          "score": 2222,
+          "recruited": 837,
+          "kills": 454,
+          "losses": 835,
+          "captures": 194,
+          "buildings": 108,
+          "goldCollected": 44754,
+          "woodCollected": 54877
+        },
+        {
+          "name": "Rival 3",
+          "personality": "economic",
+          "peakPopulation": 100,
+          "score": 7200,
+          "recruited": 565,
+          "kills": 2893,
+          "losses": 497,
+          "captures": 640,
+          "buildings": 18,
+          "goldCollected": 77159,
+          "woodCollected": 82278
+        },
+        {
+          "name": "Rival 4",
+          "personality": "economic",
+          "peakPopulation": 56,
+          "score": 4534,
+          "recruited": 1233,
+          "kills": 653,
+          "losses": 1250,
+          "captures": 376,
+          "buildings": 13,
+          "goldCollected": 57688,
+          "woodCollected": 63938
+        },
+        {
+          "name": "Rival 5",
+          "personality": "economic",
+          "peakPopulation": 40,
+          "score": 2293,
+          "recruited": 754,
+          "kills": 388,
+          "losses": 754,
+          "captures": 240,
+          "buildings": 110,
+          "goldCollected": 40683,
+          "woodCollected": 44201
+        }
+      ]
+    }
+  ]
+}

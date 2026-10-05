@@ -44,9 +44,9 @@ export const BIOMES: Record<BiomeId, BiomeDefinition> = {
     snow: { id: 'snow', name: 'Frostveil', description: 'Snow slows armies; marked roads make fast attack corridors.', vision: 1.05, speed: .88, income: 1, primary: 'snow', colors: { ...palette, forest: '#648784', rock: '#a4afae', road: '#9fa99d', water: '#5a91a6' } }
 };
 export const DEFAULT_SETTINGS: GameSettings = { seed: 'FRONTIER-492817', mapGenerationVersion: 4, biome: 'grasslands', mapSize: 'medium', difficulty: 'normal', commander: 'warlord', faction: 'ironhold', mode: 'domination', duration: 18, aiPlayers: 1, aiControlPlayer: false, aiPersonality: 'adaptive', populationCap: 80, startingGold: 230, startingWood: 260, resourceAbundance: 1, terrainRoughness: .45, water: .12, objectiveDensity: 1, weirdness: 0, preset: 'balanced' };
-export const MAP_DIMENSIONS = { tiny: 32, small: 42, medium: 54, large: 68, huge: 84 } as const;
+export const MAP_DIMENSIONS = { tiny: 32, small: 42, medium: 54, large: 68, huge: 84, giant: 120, colossal: 160 } as const;
 export const TEAM_COLORS = ['#56c5ff', '#ff9169', '#ce93ff', '#f5d46a', '#7de0ab', '#fa8bc9'];
-export const TEAM_SYMBOLS = ['◆', '▲', '●', '■', '✦', '✚'];
+export const TEAM_SYMBOLS = ['✚', '◆', '●', '■', '▲', '✕'];
 export const FIXED_STEP = .1;
 export function validateContent(): string[] {
     const errors: string[] = [];

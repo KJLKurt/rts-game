@@ -1,8 +1,9 @@
 import type { Entity, GameEvent, GameMap, GameState, Point, ResourceNode, RushSupply, TerrainType } from '../sim/types';
-import { TILE_W, TILE_H, building, diamond, ellipse, flag, hash, line, palette, poly, rock, shadow, tree, unit, type Ctx } from './art';
+import { TILE_W, TILE_H, building, diamond, drawTeamGlyph, ellipse, flag, hash, line, palette, poly, rock, shadow, tree, unit, type Ctx } from './art';
 import { SpriteAtlas } from './SpriteAtlas';
 import { AnimationAtlas } from './AnimationAtlas';
 import { nodeVisual } from './nodeVisual';
+import { drawFactionAdornment } from './factionIdentity';
 import { CombatFeedback, type Casualty } from './CombatFeedback';
 
 export interface RenderOptions {
@@ -232,9 +233,9 @@ export class Battlefield {
   const travel=(locomotion?.distance??0)+(locomotion?.speed??0)*Math.max(0,this.combat.time-state.time);
   const phase=hash(e.id.length,e.id.charCodeAt(e.id.length-1))*TAU;
   const rw=buildingEntity?e.radius*TILE_W/2+12:commander?29:e.type==='siege'||e.type==='cavalry'?20:15;
-  // Team identity combines a blue cross / coral diamond and a thick two-tone ground marker.
+  // Team identity combines six independent glyphs with colored, two-tone ground markers.
   if(selected||commander){ellipse(c,0,2,rw+4,(rw+4)*.48,`${p.main}12`,selected?p.light:`${p.main}b0`,selected?1.8:1.1);}
-  if(!buildingEntity){ellipse(c,0,2,rw,rw*.43,`${p.dark}b0`,p.main,1.3);if(e.team===1)diamond(c,0,4,4,2.8,p.light);else{line(c,[-3,4,3,4],p.light,1.3);line(c,[0,2,0,6],p.light,1.3);}}
+  if(!buildingEntity){ellipse(c,0,2,rw,rw*.43,`${p.dark}b0`,p.main,1.3);drawTeamGlyph(c,e.team,0,4,4,p.light);}
   if(e.buffUntil>state.time){ellipse(c,0,1,rw+8+Math.sin(t*2)*2,(rw+8)*.48,'#ffdd7a10','#ffe0a777',1.1);}
   if(e.invulnerableUntil>state.time){ellipse(c,0,-20,rw+6,32,'#b6f6ff15','#b6f6ff77',1);}
   if(buildingEntity){
@@ -268,6 +269,8 @@ export class Battlefield {
    // Narrow pennants render beyond dense ranks and remain distinct from the supplied costume palette.
    if(commander){flag(c,-19,-14,e.team,t,true);c.font='bold 10px system-ui';c.textAlign='center';c.fillStyle='#efd990';c.fillText('★',0,-73);}
   }
+  const faction=state.players[e.team]?.faction;
+  if(faction&&!state.players[e.team]?.neutral)drawFactionAdornment(c,faction,e.team,e.kind==='building'?'building':commander?'commander':'unit',e.type==='keep');
   if(hit>0){c.save();c.globalAlpha=hit*(options.reducedMotion?.38:.62);c.globalCompositeOperation='screen';ellipse(c,0,buildingEntity?-28:-24,buildingEntity?26:14,buildingEntity?20:18,'#ffe4b577');c.restore();}
   if(selected||commander||damaged||options.showHealth||options.hoverId===e.id){
    const y=buildingEntity?e.type==='keep'?-133:e.type==='tower'?-107:-98:commander?-82:-58;

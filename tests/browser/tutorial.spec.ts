@@ -37,10 +37,11 @@ test('guide stage survives real save/reload/continue, stays readable while pause
   const wood=s.map.nodes.find(n=>n.kind==='wood'&&n.owner===0)!;
   gold.owner=0;gold.captureTeam=null;gold.captureProgress=0;wood.owner=0;
   s.players[0].stats.captures=Math.max(1,s.players[0].stats.captures);
+  s.events.push({id:s.nextEventId++,type:'capture',team:0,time:s.time,x:gold.x,y:gold.y,subtype:'gold'});
  });
  await expect(stage).toHaveText('COMMANDER’S FIELD GUIDE · 3/4');
  await expect(guide.locator('b')).toHaveText('Raise your army');
- await expect(guide.locator('p')).toHaveText('Tap Recruit below, then Swordsman. New soldiers join your commander.');
+ await expect(guide.locator('p')).toHaveText('Tap Recruit, then Swordsman. New troops move to your commander’s position when training finishes; set a safe rally point in building Details.');
  await expectPausedGuideReadable(page);
  const frozen=await page.evaluate(()=>({seed:window.__FRONTIER__.state.settings.seed,time:window.__FRONTIER__.state.time}));
  await action(page,'pause-menu').click();await action(page,'save-leave').click();
@@ -49,7 +50,7 @@ test('guide stage survives real save/reload/continue, stays readable while pause
  expect(await page.evaluate(()=>({seed:window.__FRONTIER__.state.settings.seed,time:window.__FRONTIER__.state.time}))).toEqual(frozen);
  await expect(stage).toHaveText('COMMANDER’S FIELD GUIDE · 3/4');
  await expect(guide.locator('b')).toHaveText('Raise your army');
- await expect(guide.locator('p')).toHaveText('Tap Recruit below, then Swordsman. New soldiers join your commander.');
+ await expect(guide.locator('p')).toHaveText('Tap Recruit, then Swordsman. New troops move to your commander’s position when training finishes; set a safe rally point in building Details.');
  await expectPausedGuideReadable(page);
  await action(page,'pause-menu').click();await action(page,'save-leave').click();await expect(action(page,'continue')).toBeVisible();
  await action(page,'skirmish').click();await action(page,'launch').click();

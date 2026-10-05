@@ -10,7 +10,7 @@ describe('siege planning regression', () => {
             expect(s.time).toBeLessThan(1440);
             expect(s.commandLog.some(c => c.command.type === 'recruit' && c.command.unit === 'siege')).toBe(true);
         }, 10000);
-    it('the authored Ironwatch campaign mission can end through a real siege', () => { const mission = CAMPAIGN.missions.find(m => m.id === 'ironwatch')!; const s = createGame({ ...mission.settings, aiControlPlayer: true }); s.triggers = structuredClone(mission.triggers); stepGame(s, 3241); expect(s.victoryReason).toBe('All enemy Command Keeps destroyed'); expect(s.time).toBeLessThan(2160); }, 10000);
+    it('the authored Ironwatch campaign mission can end through a real siege', () => { const mission = CAMPAIGN.missions.find(m => m.id === 'ironwatch')!; const s = createGame({ ...mission.settings, aiControlPlayer: true }); s.triggers = structuredClone(mission.triggers); stepGame(s, 3241); expect(s.winner).toBe(0); expect(s.players[1].defeated).toBe(true); expect(s.entities.some(e => e.team === 1 && e.type === 'keep' && e.hp > 0)).toBe(false); expect(s.triggers.find(t => t.id === 'mission-complete')?.fired).toBe(true); expect(s.victoryReason).toBe('Mission objectives complete'); expect(s.time).toBeLessThan(2160); }, 10000);
     it('player-issued combined arms orders can destroy a fortified keep', () => {
         const s = createGame({ seed: 'siege-probe', mapGenerationVersion: 3, mapSize: 'small', mode: 'conquest', duration: 8 });
         const start = s.map.spawns[0];

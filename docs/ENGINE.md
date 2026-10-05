@@ -62,11 +62,11 @@ Fog updates twice per simulation second and distinguishes explored terrain from 
 
 `GameState.triggers` accepts serializable `ScriptTrigger[]`:
 
-- Conditions: elapsed time, captured point, resource threshold, destroyed entity, or friendly entity inside a region.
-- Actions: dialogue, resources, spawn a troop group, update objective text, reveal explored terrain, or mission victory.
+- Conditions: elapsed time, captured points, owned gold/wood/relic counts, resource thresholds, destroyed entities, living entities inside a region, an exact entity location, completed unit/building counts, player-stat thresholds, research levels, and defeated players. `all` and `any` compose predicates to six nested levels, with at most 128 predicates per trigger. `evaluateScriptCondition` is shared by simulation and objective presentation.
+- Actions: dialogue, resources, spawn a troop group, update objective text, reveal explored terrain, victory, defeat a player, and change a player’s alliance. An alliance change clears now-friendly attack orders and refreshes shared vision.
 - Each trigger has a stable ID and a persisted fired bit; save/load does not repeat a reward.
 
-Campaign content never executes arbitrary JavaScript. Story missions in `src/ui/content.ts` combine regular map settings with these triggers. Richer campaign graphs, alliances, escort targeting, survival wave logic, and run rewards can be added as explicit schema additions. The current action surface deliberately stays small and auditable.
+Campaign content never executes arbitrary JavaScript. `scriptedVictory` disables automatic score, enemy-elimination and storm success; authored triggers decide success. Losing player zero’s own keep still ends a scripted mission, even during a temporary alliance, and takes precedence over success in the same tick. Ordinary skirmishes use alliance survival instead.
 
 ## Save, replay, and multiplayer boundaries
 
@@ -120,3 +120,22 @@ Ordinary Outpost play exposed a consequence of the original anti-chase fix: a fu
 - Hit events have optional source/victim attribution. Older saves without it never invent an attacker. No new damage or duplicate hit event is introduced. A revived commander starts with a fresh anchor at the keep.
 
 Nineteen dedicated regressions cover these boundaries and serialized continuation. The original non-incursion opening and exact reported joystick regressions remain strict. Only forward or historical-save guards with actual attributed local damage may use the wider response bound; the quiet home-retreat case additionally requires full health and less than0.01-tile drift.
+
+
+## Authored scenarios, alliances and neutral camps
+
+`GameMap.scenario` is optional version-1 declarative data defined in `scenario-types.ts`. Legacy terrain-only v3/v4 maps and saves retain their behavior. A scenario records stable player slots, separate alliance IDs, match rules, authored entity placements and neutral camps. Closed slots keep their indices, produce no forces and release their deposits to neutral ownership. Only slot zero can have human control. Authored-only starting forces require one keep per active slot; standard forces supply the normal settlement and permit placed extras. Authored IDs and exact coordinates survive hydration and save/resume. Building levels use the same effects as paid progression.
+
+Alliance membership never grants control of another player's orders, money or production. Allies share current vision and exploration history, receive friendly healing/buffs, do not attack each other, combine capture pressure and preserve allied deposit ownership. Each owner receives its own deposit income. Relics produce one alliance score rate partitioned across owners; victory sums the members' scores, preventing duplicate points from extra allies. AI excludes allied targets, uses slot difficulty and spends the same costs as humans, including occasional surplus-funded building upgrades.
+
+`alliances.ts` exports `areAllied`, `areHostile`, `competitivePlayers`, `playerAllianceWon`, `playerAllianceDefeated`, `canPlayerContinue` and `playerOutcomeStatus`. In ordinary team matches a destroyed personal keep enters spectator mode while surviving allies can still win. Save/Continue and tactical pause remain available; the defeated slot cannot issue gameplay orders. The lowest player index in the winning alliance is its result representative. Scripted missions retain personal keep survival.
+
+Neutral camps use one appended, noncompetitive player. Guards spawn on distinct legal cells within their authored radius, may contest nearby captures, and never gather income, capture, score, produce units or enter keep-elimination victory. The final defender's actual attacker receives the configured reward exactly once, with a `campCleared` feedback event. Restore validates neutral ownership, defender membership, anchored orders, reward attribution and cleared state. Neutral guards are hostile combat targets but are excluded from rival-player UI and victory counts.
+
+`modifiers.players[team]` supports income, capture speed, health, damage and additive starting gold/wood for one player. Expedition rewards use this form. Legacy global income/captureSpeed and player-zero playerHealth/playerDamage retain their meaning. `incomeRate` affects all players' deposits equally. Modifiers and recipients are validated before play or restore.
+
+Scenario structural validation runs before allocation. Playing additionally checks terrain, legal footprints, initial forces, camp room and routes around combined buildings. An editor may call `hydrateScenarioEntities(state, {preview:true})` with a structurally valid prepared state to display an incomplete draft without ticking it. Invalid draft previews are never saved as live battles. New setups have a 600-total configured population budget; restore preserves legal pre-budget v3/v4 scalar-only saves without changing their existing ceilings.
+
+## Spatial simulation checks
+
+Combat acquisition, guard retaliation and support searches use an order-preserving spatial broad phase. Queries retain the exact target filters and pad snapshot buckets for possible movement during a tick. Huge finite query bounds fall back to a bounded snapshot scan. Local separation remains unchanged. Concentrated armies can still require quadratic work because every unit is nearby. Headless measurements do not establish browser frame rates or physical-device performance; the reconstructed source requires fresh verification rather than inheriting prior test counts.

@@ -34,9 +34,9 @@ export function getEconomyRates(state: GameState, team = 0, stepSeconds = FIXED_
         throw new RangeError('Economy interval must be a positive number of game-seconds.');
     const result: EconomyRates = { goldPerSecond: 0, woodPerSecond: 0, goldDeposits: 0, woodDeposits: 0, withdrawals: [] };
     const player = state.players[team];
-    if (!player || player.defeated || state.rush || state.settings.mode === 'rush')
+    if (!player || player.neutral || player.closed || player.defeated || state.rush || state.settings.mode === 'rush')
         return result;
-    const modifier = (1 + (player.research.economy ?? 0) * .25) * BIOMES[state.map.biome].income * (state.settings.modifiers?.income ?? 1);
+    const modifier = (1 + (player.research.economy ?? 0) * .25) * BIOMES[state.map.biome].income * (state.settings.modifiers?.income ?? 1) * (state.settings.incomeRate ?? 1) * (state.settings.modifiers?.players?.[team]?.income ?? 1);
     const lateRelics = state.settings.mode === 'conquest' ? state.map.nodes.filter(n => n.kind === 'relic' && n.owner === player.team).length : 0;
     result.goldPerSecond = (.45 + lateRelics * .6) * state.escalation;
     result.woodPerSecond = (.45 + lateRelics * .35) * state.escalation;

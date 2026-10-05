@@ -54,3 +54,33 @@ test('an update waits for consent, saves the battle, then restarts safely',async
  expect(await page.evaluate(()=>navigator.serviceWorker.controller?.scriptURL)).toBe(oldWorker);
  await expect(page.locator('#apply-update')).toHaveCount(0);
 });
+
+test('an update waits for a finished result commit and reloads its command record once',async({page,request})=>{
+ test.skip(!!process.env.FRONTIER_TEST_URL,'Needs the local test-only release endpoint.');
+ await launch(page);await pause(page);await ready(page);
+ await request.post('/__qa/release');
+ await page.evaluate(async()=>{const registration=await navigator.serviceWorker.getRegistration();await registration!.update();});
+ await expect(page.locator('#apply-update')).toBeVisible();
+ await page.evaluate(()=>{
+  const originalOpen=indexedDB.open.bind(indexedDB),deferred:(()=>void)[]=[];let held=true;
+  (window as any).__RELEASE_RESULT_DB__=()=>{held=false;for(const callback of deferred.splice(0))callback();};
+  indexedDB.open=((name:string,version?:number)=>{
+   const request=version===undefined?originalOpen(name):originalOpen(name,version);
+   return new Proxy(request,{
+    get(target,key){const value=Reflect.get(target,key,target);return typeof value==='function'?value.bind(target):value;},
+    set(target,key,value){if(key==='onsuccess'){target.onsuccess=event=>{const invoke=()=>value?.call(target,event);if(held)deferred.push(invoke);else invoke();};return true;}return Reflect.set(target,key,value,target);},
+   });
+  }) as typeof indexedDB.open;
+  const state=window.__FRONTIER__.state;state.winner=0;state.victoryReason='Result/update durability fixture';
+ });
+ await expect(page.locator('.result-dialog')).toBeVisible();
+ await page.locator('#apply-update').click();
+ await page.waitForTimeout(300);
+ await expect(page.locator('#result-save-status')).toContainText('Saving your result');
+ expect(await page.evaluate(()=>window.__FRONTIER__.profile.games)).toBe(0);
+ await Promise.all([page.waitForEvent('load'),page.evaluate(()=>{(window as any).__RELEASE_RESULT_DB__();})]);
+ await expect(action(page,'skirmish')).toBeVisible();
+ expect(await page.evaluate(()=>window.__FRONTIER__.profile.games)).toBe(1);
+ await expect(action(page,'continue')).toHaveCount(0);
+ await expect(page.locator('#apply-update')).toHaveCount(0);
+});

@@ -1,7 +1,10 @@
+import { areAllied } from "../sim/alliances";
 import type { GameState, Point, ResourceNode } from "../sim/types";
 export function relicSummary(state: GameState, team = 0) {
   const relics = state.map.nodes.filter((n) => n.kind === "relic");
-  const owned = relics.filter((n) => n.owner === team).length;
+  const owned = relics.filter(
+    (n) => n.owner !== null && areAllied(state, team, n.owner),
+  ).length;
   const base =
     owned === 0
       ? 0
@@ -28,8 +31,10 @@ export function nearestRelic(
   team = 0,
 ): ResourceNode | undefined {
   const relics = state.map.nodes.filter((n) => n.kind === "relic");
-  const targets = relics.some((n) => n.owner !== team)
-    ? relics.filter((n) => n.owner !== team)
+  const targets = relics.some(
+    (n) => n.owner === null || !areAllied(state, team, n.owner),
+  )
+    ? relics.filter((n) => n.owner === null || !areAllied(state, team, n.owner))
     : relics;
   return targets.sort(
     (a, b) =>

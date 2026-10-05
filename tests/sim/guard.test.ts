@@ -165,8 +165,8 @@ describe('deployed Outpost opening and legacy-save regressions', () => {
             }
             expect(s.triggers.find(t => t.id === 'welcome')!.fired).toBe(true);
             const player = s.players[0], gold = player.gold, collected = player.stats.goldCollected;
-            stepGame(s, 5);
-            expect(s.triggers.find(t => t.id === 'reinforcements')!.fired).toBe(true);
+            stepGame(s, 15);
+            expect(s.triggers.find(t => t.id === 'wagon')!.fired).toBe(true);
             expect(player.gold - gold - (player.stats.goldCollected - collected)).toBeCloseTo(120);
             stepGame(s, 55);
             expect(s.players[1].stats.damageDealt).toBeGreaterThan(0);

@@ -1,3 +1,4 @@
+import type { MapScenario } from './scenario-types';
 /** Serializable, presentation-free simulation contract. Coordinates are tile units. */
 export type TeamId = number;
 export interface Point {
@@ -14,13 +15,21 @@ export type TechId = 'steel' | 'armor' | 'fletching' | 'economy' | 'logistics' |
 export type Difficulty = 'easy' | 'normal' | 'hard' | 'brutal';
 export type AIPersonality = 'aggressive' | 'defensive' | 'economic' | 'raider' | 'expansionist' | 'adaptive';
 export type GameMode = 'domination' | 'conquest' | 'relic' | 'rush';
-export type MapSize = 'tiny' | 'small' | 'medium' | 'large' | 'huge';
+export type MapSize = 'tiny' | 'small' | 'medium' | 'large' | 'huge' | 'giant' | 'colossal';
 export type MapPreset = 'competitive' | 'balanced' | 'wild' | 'chaotic';
 export interface GameSettings {
     seed: string;
     learning?: boolean;
     /** Preserve this together with the seed to reproduce generated layouts. */
-    mapGenerationVersion?: 3 | 4;
+    mapGenerationVersion?: 3 | 4 | 5;
+    matchScale?: 'quick' | 'standard' | 'epic' | 'custom';
+    /** Wall-clock playback rate; simulation commands use game-seconds. */
+    gameSpeed?: number;
+    /** Deposit income multiplier shared equally by every player. */
+    incomeRate?: number;
+    /** Density from zero (off) to two (many); generated only by v5. */
+    neutralCamps?: number;
+    slots?: import('./scenario-types').MapPlayerSlot[];
     biome: BiomeId;
     mapSize: MapSize;
     difficulty: Difficulty;
@@ -42,12 +51,24 @@ export interface GameSettings {
     preset: MapPreset; /** Optional authored map. */
     customMap?: GameMap;
     modifiers?: GameModifiers;
+    /** Mission triggers decide success; losing player zero's keep ends the mission. */
+    scriptedVictory?: boolean;
+}
+export interface PlayerModifiers {
+    income?: number;
+    captureSpeed?: number;
+    damage?: number;
+    health?: number;
+    startingGold?: number;
+    startingWood?: number;
 }
 export interface GameModifiers {
     income?: number;
     playerDamage?: number;
     playerHealth?: number;
     captureSpeed?: number;
+    /** Indexed bonuses; legacy income/captureSpeed remain global. */
+    players?: Record<number, PlayerModifiers>;
 }
 export interface ResourceNode extends Point {
     id: string;
@@ -61,6 +82,8 @@ export interface ResourceNode extends Point {
     maxAmount: number;
 }
 export interface GameMap {
+    name?: string;
+    scenario?: MapScenario;
     purpose?: 'arena';
     version: number;
     seed: string;
@@ -188,6 +211,9 @@ export interface ProductionItem {
 export interface Entity extends Point {
     id: string;
     team: TeamId;
+    campId?: string;
+    /** Authored neutral camp leash; ordinary guards keep their normal radius. */
+    campRadius?: number;
     kind: 'commander' | 'unit' | 'building';
     type: CommanderId | UnitId | BuildingId | 'turret';
     hp: number;
@@ -239,6 +265,10 @@ export interface PlayerStats {
 }
 export interface Player {
     team: TeamId;
+    alliance?: number;
+    neutral?: boolean;
+    closed?: boolean;
+    difficulty?: Difficulty;
     name: string;
     faction: FactionId;
     commander: CommanderId;
@@ -282,9 +312,7 @@ export interface FogState {
     visible: number[][];
     explored: number[][];
 }
-export interface ScriptTrigger {
-    id: string;
-    when: {
+export type ScriptCondition = {
         type: 'time';
         seconds: number;
     } | {
@@ -305,7 +333,27 @@ export interface ScriptTrigger {
         x: number;
         y: number;
         radius: number;
+    } | {
+        type: 'all' | 'any';
+        conditions: ScriptCondition[];
+    } | {
+        type: 'owned'; team: number; kind: ResourceNode['kind']; count: number;
+    } | {
+        type: 'units'; team: number; unit?: UnitId; count: number;
+    } | {
+        type: 'buildings'; team: number; building?: BuildingId; count: number;
+    } | {
+        type: 'stat'; team: number; stat: keyof PlayerStats; amount: number;
+    } | {
+        type: 'teamDefeated'; team: number;
+    } | {
+        type: 'research'; team: number; technology: TechId; level: number;
+    } | {
+        type: 'entityLocation'; entityId: string; x: number; y: number; radius: number;
     };
+export interface ScriptTrigger {
+    id: string;
+    when: ScriptCondition;
     actions: ScriptAction[];
     fired?: boolean;
 }
@@ -334,12 +382,25 @@ export type ScriptAction = {
 } | {
     type: 'objective';
     text: string;
+} | {
+    type: 'defeat'; team: number;
+} | {
+    type: 'alliance'; team: number; alliance: number;
 };
+export interface NeutralCampState {
+    id: string;
+    entityIds: string[];
+    rewardGold: number;
+    rewardWood: number;
+    cleared: boolean;
+    defeatedBy: number | null;
+}
 export interface GameState {
     version: number;
     settings: GameSettings;
     map: GameMap;
     rush?: RushState;
+    camps?: NeutralCampState[];
     entities: Entity[];
     players: Player[];
     time: number;

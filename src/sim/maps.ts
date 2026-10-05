@@ -1,6 +1,8 @@
 import type { GameMap, GameSettings, MapValidation, Point, TerrainType, ResourceNode } from './types';
 import { BIOMES, MAP_DIMENSIONS } from './content';
 import { validateMapStructure } from './validation';
+import { defaultMatchSlots, validateScaleSettings } from './scales';
+import type { MapNeutralCamp, MapScenario } from './scenario-types';
 export function hashSeed(seed: string): number {
     let h = 2166136261;
     for (let i = 0; i < seed.length; i++) {
@@ -18,13 +20,15 @@ export function isBuildable(map: GameMap, x: number, y: number): boolean { retur
 const emptyValidation = (): MapValidation => ({ valid: true, errors: [], warnings: [], reachablePercent: 1, fairness: 1 });
 export function generateMap(settings: GameSettings): GameMap {
     const version = settings.mapGenerationVersion ?? 4;
-    if (version !== 3 && version !== 4)
-        throw new Error('Unsupported map generation version. Choose version 3 or 4.');
+    if (version !== 3 && version !== 4 && version !== 5)
+        throw new Error('Unsupported map generation version. Choose version 3, 4 or 5.');
+    const scaleErrors = validateScaleSettings(settings);
+    if (scaleErrors.length) throw new Error(scaleErrors.join(' '));
     const width = MAP_DIMENSIONS[settings.mapSize], height = width, center = { x: width / 2 + .5, y: height / 2 + .5 };
     const rand = seededRandom(`${settings.seed}:v${version}:${settings.biome}:${settings.mapSize}:${settings.aiPlayers}:${settings.preset}`);
     const primary = BIOMES[settings.biome].primary;
     const map: GameMap = { version, seed: settings.seed, biome: settings.biome, width, height, tiles: Array(width * height).fill(primary), spawns: [], nodes: [], validation: emptyValidation() };
-    const players = Math.min(6, Math.max(2, settings.aiPlayers + 1));
+    const players = Math.min(6, Math.max(2, version === 5 && settings.slots ? settings.slots.length : settings.aiPlayers + 1));
     if (players === 2) {
         map.spawns = [{ x: 6.5, y: height / 2 + .5 }, { x: width - 6.5, y: height / 2 + .5 }];
     }
@@ -40,7 +44,7 @@ export function generateMap(settings: GameSettings): GameMap {
                     map.tiles[y * width + x] = type;
             }
     }
-    const clusters = Math.floor(width * settings.terrainRoughness * .8);
+    const clusters = Math.floor(width * settings.terrainRoughness * .8 * (version === 5 ? width / 54 : 1));
     for (let n = 0; n < clusters; n++) {
         const x = Math.floor(3 + rand() * (width - 6)), y = Math.floor(3 + rand() * (height - 6)), r = 1 + rand() * 2.7;
         let type: TerrainType = rand() < settings.water ? 'water' : rand() < .18 ? 'rock' : 'forest';
@@ -49,6 +53,14 @@ export function generateMap(settings: GameSettings): GameMap {
         paint(x, y, r, type);
         if (settings.preset === 'competitive' || settings.preset === 'balanced')
             paint(width - 1 - x, height - 1 - y, r, type);
+    }
+    if (version === 5 && settings.weirdness > 0) {
+        for (let i = 0; i < Math.ceil(width * settings.weirdness * .15); i++) {
+            const x = 4 + rand() * (width - 8), y = 4 + rand() * (height - 8), r = 1.5 + rand() * 3;
+            const type: TerrainType = rand() < .65 ? 'marsh' : settings.biome === 'snow' ? 'sand' : 'snow';
+            paint(x, y, r, type);
+            if (settings.preset === 'competitive' || settings.preset === 'balanced') paint(width - 1 - x, height - 1 - y, r, type);
+        }
     }
     // Deterministic guaranteed corridors: keeps/resources/objectives never become isolated.
     function clear(p: Point, r: number) { paint(Math.floor(p.x), Math.floor(p.y), r, primary); }
@@ -64,7 +76,7 @@ export function generateMap(settings: GameSettings): GameMap {
     for (let i = 0; i < players; i++)
         road(map.spawns[i], map.spawns[(i + 1) % players], 1.2);
     function node(p: Point, kind: ResourceNode['kind'], owner: number | null, amount: number) { clear(p, 2); map.nodes.push({ id: `node-${map.nodes.length}`, x: Math.floor(p.x) + .5, y: Math.floor(p.y) + .5, kind, owner, captureTeam: null, captureProgress: 0, radius: 2.2, income: kind === 'relic' ? 0 : kind === 'gold' ? 2.1 : 2.35, amount, maxAmount: amount }); }
-    const resourceAmount = Math.round(1450 * Math.max(.3, settings.resourceAbundance) * Math.sqrt(settings.duration / 18));
+    const resourceAmount = Math.round(1450 * Math.max(.3, settings.resourceAbundance) * (version === 5 ? Math.max(.55, settings.duration / 18) : Math.sqrt(settings.duration / 18)));
     map.spawns.forEach((s, i) => {
         const vx = (center.x - s.x) / distance(center, s), vy = (center.y - s.y) / distance(center, s), perp = { x: -vy, y: vx };
         node({ x: s.x + perp.x * 4, y: s.y + perp.y * 4 }, 'gold', i, resourceAmount);
@@ -77,8 +89,17 @@ export function generateMap(settings: GameSettings): GameMap {
     node(center, 'relic', null, 0);
     const relics = settings.objectiveDensity >= 1 ? 3 : 1;
     if (relics === 3) {
-        node({ x: center.x, y: center.y - Math.min(11, width * .21) }, 'relic', null, 0);
-        node({ x: center.x, y: center.y + Math.min(11, width * .21) }, 'relic', null, 0);
+        if (version === 5 && players > 2) {
+            // Equal approaches, unlike the legacy north/south objective line.
+            for (const spawn of map.spawns) {
+                const length = distance(spawn, center), radius = Math.min(11, width * .21, Math.min(...map.spawns.map(s => distance(s, center))) * .45);
+                node({ x: center.x + (spawn.x - center.x) / length * radius, y: center.y + (spawn.y - center.y) / length * radius }, 'relic', null, 0);
+            }
+        }
+        else {
+            node({ x: center.x, y: center.y - Math.min(11, width * .21) }, 'relic', null, 0);
+            node({ x: center.x, y: center.y + Math.min(11, width * .21) }, 'relic', null, 0);
+        }
     }
     for (const n of map.nodes) {
         road(n, center, n.kind === 'relic' ? 1.2 : .7);
@@ -104,6 +125,46 @@ export function generateMap(settings: GameSettings): GameMap {
                 node({ x, y }, kind, null, resourceAmount * 1.8);
             }
         }
+    }
+    if (version === 5) {
+        // Long frontiers need economic stepping stones rather than an empty march.
+        for (const spawn of map.spawns) {
+            const length = distance(spawn, center), vx = (center.x - spawn.x) / length, vy = (center.y - spawn.y) / length;
+            for (let advance = 25; advance < length - 14; advance += 18) {
+                for (const [side, kind] of [[-1, 'gold'], [1, 'wood']] as const) {
+                    const point = { x: spawn.x + vx * advance - vy * side * 5, y: spawn.y + vy * advance + vx * side * 5 };
+                    road(point, center, 1.1);
+                    node(point, kind, null, resourceAmount * 1.4);
+                }
+            }
+        }
+        if (settings.objectiveDensity >= 1.5) {
+            for (const side of [-1, 1]) {
+                const point = players > 2 ? { x: center.x + side * 3, y: center.y + side * 3 } : { x: center.x + side * Math.min(18, width * .2), y: center.y };
+                road(point, center, 1.2);
+                node(point, 'relic', null, 0);
+            }
+        }
+        const camps: MapNeutralCamp[] = [];
+        const density = settings.neutralCamps ?? 0;
+        if (density > 0) {
+            const count = Math.min(12, Math.max(2, Math.round(players * density)));
+            for (let i = 0; i < count; i++) {
+                let point: Point | undefined;
+                for (let attempt = 0; attempt < 24; attempt++) {
+                    const angle = (i + .35) * Math.PI * 2 / count + attempt * Math.PI / 12;
+                    const radius = Math.min(width * (.28 + Math.floor(attempt / 8) * .05), 32);
+                    const candidate = { x: Math.floor(center.x + Math.cos(angle) * radius) + .5, y: Math.floor(center.y + Math.sin(angle) * radius) + .5 };
+                    if (candidate.x < 4 || candidate.y < 4 || candidate.x > width - 4 || candidate.y > height - 4 || map.spawns.some(s => distance(s, candidate) < 17) || map.nodes.some(n => distance(n, candidate) < 5) || camps.some(c => distance(c, candidate) < 8)) continue;
+                    point = candidate; break;
+                }
+                if (!point) continue;
+                clear(point, 3); road(point, center, 1.1);
+                camps.push({ id: `camp-${i}`, ...point, unit: i % 2 ? 'spearman' : 'swordsman', count: Math.min(5, 2 + Math.floor(density)), radius: 3, rewardGold: 70 + Math.round(density * 30), rewardWood: 55 + Math.round(density * 25) });
+            }
+        }
+        const scenario: MapScenario = { version: 1, slots: settings.slots ? structuredClone(settings.slots) : defaultMatchSlots(settings), rules: { mode: settings.mode === 'rush' ? 'domination' : settings.mode, duration: settings.duration, populationCap: settings.populationCap, startingGold: settings.startingGold, startingWood: settings.startingWood, startingForces: 'standard', gameSpeed: settings.gameSpeed ?? 1, incomeRate: settings.incomeRate ?? 1 }, startingEntities: [], camps };
+        map.scenario = scenario;
     }
     // Borders remain blocked for visual and navigation consistency.
     for (let x = 0; x < width; x++) {
@@ -158,6 +219,7 @@ export function validateMap(map: GameMap, competitive = false): MapValidation {
         errors.push('Map includes unknown terrain.');
     const reach = reachableTiles(map, map.spawns[0]);
     for (let i = 0; i < map.spawns.length; i++) {
+        if (map.scenario?.slots[i]?.controller === 'closed') continue;
         const p = map.spawns[i];
         if (!isBuildable(map, p.x, p.y))
             errors.push(`Player ${i + 1} has an invalid spawn terrain.`);
@@ -178,14 +240,218 @@ export function validateMap(map: GameMap, competitive = false): MapValidation {
     if (map.purpose !== 'arena' && !map.nodes.some(n => n.kind !== 'relic' && n.owner === null))
         warnings.push('There are no neutral economic expansion locations.');
     const available = map.tiles.filter(t => t !== 'water' && t !== 'rock').length;
-    const distances = map.spawns.map(s => Math.min(...map.nodes.filter(n => n.kind === 'relic').map(n => distance(n, s))));
+    const distances = map.spawns.filter((_, i) => map.scenario?.slots[i]?.controller !== 'closed').map(s => Math.min(...map.nodes.filter(n => n.kind === 'relic').map(n => distance(n, s))));
     const fairness = Math.min(...distances) / Math.max(...distances);
     if (map.purpose !== 'arena' && competitive && fairness < .75)
         errors.push('Competitive objective distances are too uneven.');
     return { valid: errors.length === 0, errors, warnings, reachablePercent: reach.size / Math.max(1, available), fairness: Number.isFinite(fairness) ? fairness : 0 };
 }
-/** Cached by caller; A* runs only when an order changes or an obstruction is met. */
+const PATH_DIRECTIONS = [
+    [1, 0],
+    [-1, 0],
+    [0, 1],
+    [0, -1],
+    [1, 1],
+    [1, -1],
+    [-1, 1],
+    [-1, -1],
+] as const;
+// Map-owned buffers are collected with the map; searches never cache terrain across calls.
+const pathWorkspace = new WeakMap<
+    GameMap,
+    {
+        scores: Float64Array;
+        heuristics: Float64Array;
+        walkSeen: Uint32Array;
+        walkable: Uint8Array;
+        seen: Uint32Array;
+        closed: Uint32Array;
+        came: Int32Array;
+        epoch: number;
+        heapIds: Int32Array;
+        heapScores: Float64Array;
+    }
+>();
+/** Reuse scratch storage; all semantic caches expire at the end of each search.
+ * Neighbor order, heap ties, costs and visited limits remain legacy-compatible. */
 export function findPath(map: GameMap, start: Point, goal: Point, blocked?: Set<number>): Point[] {
+    // Preserve behavior for unusual exported-API inputs outside the supported map bounds.
+    const size = map.width * map.height;
+    if (
+        !Number.isFinite(start.x) ||
+        !Number.isFinite(start.y) ||
+        !Number.isFinite(goal.x) ||
+        !Number.isFinite(goal.y) ||
+        !Number.isInteger(map.width) ||
+        !Number.isInteger(map.height) ||
+        size > 25600 ||
+        size < 1 ||
+        start.x < 0 ||
+        start.y < 0 ||
+        start.x >= map.width ||
+        start.y >= map.height
+    )
+        return findPathLegacy(map, start, goal, blocked);
+    let workspace = pathWorkspace.get(map);
+    if (!workspace || workspace.scores.length !== size) {
+        workspace = {
+            scores: new Float64Array(size),
+            heuristics: new Float64Array(size),
+            walkSeen: new Uint32Array(size),
+            walkable: new Uint8Array(size),
+            seen: new Uint32Array(size),
+            closed: new Uint32Array(size),
+            came: new Int32Array(size),
+            epoch: 0,
+            heapIds: new Int32Array(128),
+            heapScores: new Float64Array(128),
+        };
+        pathWorkspace.set(map, workspace);
+    }
+    if (workspace.epoch === 0xffffffff) {
+        workspace.seen.fill(0);
+        workspace.closed.fill(0);
+        workspace.walkSeen.fill(0);
+        workspace.epoch = 0;
+    }
+    const epoch = ++workspace.epoch,
+        { scores, seen, closed, came, heuristics, walkSeen, walkable } = workspace;
+    const sx = Math.floor(start.x),
+        sy = Math.floor(start.y);
+    let gx = Math.floor(goal.x),
+        gy = Math.floor(goal.y);
+    const walk = (x: number, y: number) => {
+        if (x < 0 || y < 0 || x >= map.width || y >= map.height) return false;
+        const id = y * map.width + x;
+        // This cache includes this search's start-cell blocker exception.
+        if (walkSeen[id] === epoch) return walkable[id] === 1;
+        const terrain = map.tiles[id] ?? 'rock',
+            answer =
+                terrain !== 'water' && terrain !== 'rock' && (!blocked?.has(id) || (x === sx && y === sy));
+        walkSeen[id] = epoch;
+        walkable[id] = answer ? 1 : 0;
+        return answer;
+    };
+    if (!walk(gx, gy)) {
+        let found = false;
+        for (let r = 1; r <= 6 && !found; r++) {
+            let best: {
+                x: number;
+                y: number;
+                d: number;
+            } | null = null;
+            for (let dy = -r; dy <= r; dy++)
+                for (let dx = -r; dx <= r; dx++) {
+                    if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
+                    if (walk(gx + dx, gy + dy)) {
+                        const d = Math.hypot(gx + dx - start.x, gy + dy - start.y);
+                        if (!best || d < best.d) best = { x: gx + dx, y: gy + dy, d };
+                    }
+                }
+            if (best) {
+                gx = best.x;
+                gy = best.y;
+                found = true;
+            }
+        }
+        if (!found) return [];
+    }
+    const first = sy * map.width + sx,
+        last = gy * map.width + gx;
+    if (first === last) return [{ x: gx + 0.5, y: gy + 0.5 }];
+    scores[first] = 0;
+    seen[first] = epoch;
+    // Preserve the legacy heap's exact strict/non-strict tie rules.
+    let heapIds = workspace.heapIds,
+        heapScores = workspace.heapScores,
+        heapLength = 0;
+    function push(id: number, f: number) {
+        if (heapLength === heapIds.length) {
+            const ids = new Int32Array(heapLength * 2),
+                fs = new Float64Array(heapLength * 2);
+            ids.set(heapIds);
+            fs.set(heapScores);
+            heapIds = workspace!.heapIds = ids;
+            heapScores = workspace!.heapScores = fs;
+        }
+        let i = heapLength++;
+        heapIds[i] = id;
+        heapScores[i] = f;
+        while (i > 0) {
+            const p = (i - 1) >> 1;
+            if (heapScores[p] <= f) break;
+            const parentId = heapIds[p],
+                parentScore = heapScores[p];
+            heapIds[p] = heapIds[i];
+            heapScores[p] = heapScores[i];
+            heapIds[i] = parentId;
+            heapScores[i] = parentScore;
+            i = p;
+        }
+    }
+    function pop() {
+        const top = heapIds[0];
+        --heapLength;
+        if (heapLength) {
+            heapIds[0] = heapIds[heapLength];
+            heapScores[0] = heapScores[heapLength];
+            let i = 0;
+            while (true) {
+                let c = i * 2 + 1;
+                if (c >= heapLength) break;
+                if (c + 1 < heapLength && heapScores[c + 1] < heapScores[c]) c++;
+                if (heapScores[i] <= heapScores[c]) break;
+                const childId = heapIds[c],
+                    childScore = heapScores[c];
+                heapIds[c] = heapIds[i];
+                heapScores[c] = heapScores[i];
+                heapIds[i] = childId;
+                heapScores[i] = childScore;
+                i = c;
+            }
+        }
+        return top;
+    }
+    push(first, Math.hypot(gx - sx, gy - sy));
+    let visited = 0;
+    while (heapLength && visited++ < map.width * map.height) {
+        const id = pop();
+        if (closed[id] === epoch) continue;
+        if (id === last) {
+            const path: Point[] = [];
+            let cur = last;
+            while (cur !== first) {
+                path.push({ x: (cur % map.width) + 0.5, y: Math.floor(cur / map.width) + 0.5 });
+                cur = came[cur];
+            }
+            return path.reverse();
+        }
+        closed[id] = epoch;
+        const x = id % map.width,
+            y = Math.floor(id / map.width);
+        for (const [dx, dy] of PATH_DIRECTIONS) {
+            const nx = x + dx,
+                ny = y + dy,
+                nid = ny * map.width + nx;
+            if (!walk(nx, ny) || closed[nid] === epoch) continue;
+            if (dx && dy && (!walk(x + dx, y) || !walk(x, y + dy))) continue;
+            const terrain = map.tiles[nid],
+                cost = (dx && dy ? 1.4142 : 1) * (terrain === 'forest' ? 1.3 : terrain === 'marsh' ? 1.6 : 1),
+                g = scores[id] + cost;
+            if (g < (seen[nid] === epoch ? scores[nid] : Infinity)) {
+                if (seen[nid] !== epoch) heuristics[nid] = Math.hypot(gx - nx, gy - ny);
+                scores[nid] = g;
+                seen[nid] = epoch;
+                came[nid] = id;
+                push(nid, g + heuristics[nid]);
+            }
+        }
+    }
+    return [];
+}
+
+// Compatibility fallback for out-of-map starts and unusual map shapes.
+function findPathLegacy(map: GameMap, start: Point, goal: Point, blocked?: Set<number>): Point[] {
     const sx = Math.floor(start.x), sy = Math.floor(start.y);
     let gx = Math.floor(goal.x), gy = Math.floor(goal.y);
     const walk = (x: number, y: number) => isWalkable(map, x, y) && (!blocked?.has(y * map.width + x) || (x === sx && y === sy));

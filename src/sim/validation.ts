@@ -1,4 +1,5 @@
-import { BIOMES, UNITS } from './content';
+import { BIOMES, UNITS, BUILDINGS, TECHNOLOGIES } from './content';
+import { validateMapScenario } from './scenarios';
 
 export const MAX_MAP_JSON_BYTES = 2 * 1024 * 1024;
 export const MAX_SAVE_JSON_BYTES = 16 * 1024 * 1024;
@@ -73,7 +74,7 @@ export function validateMapStructure(input: unknown): string[] {
     const safety = validateDataSafety(input, 100_000);
     if (safety.length)
         return safety;
-    if (!record(input) || !fields(input, ['version', 'seed', 'name', 'biome', 'width', 'height', 'tiles', 'spawns', 'nodes', 'purpose', 'validation']))
+    if (!record(input) || !fields(input, ['version', 'seed', 'name', 'biome', 'width', 'height', 'tiles', 'spawns', 'nodes', 'purpose', 'validation', 'scenario']))
         return ['Map contains an unsupported structure or field.'];
     const map = input;
     if (!Number.isInteger(map.width) || !Number.isInteger(map.height) || !finite(map.width, 16, 160) || !finite(map.height, 16, 160))
@@ -84,7 +85,7 @@ export function validateMapStructure(input: unknown): string[] {
         return ['Map must contain between two and six spawn locations.'];
     if (!Array.isArray(map.nodes) || map.nodes.length > 512)
         return ['Map must contain at most 512 resource points.'];
-    if (![3, 4].includes(map.version as number) || !nonempty(map.seed, 80)
+    if (![3, 4, 5].includes(map.version as number) || !nonempty(map.seed, 80)
         || (map.name !== undefined && !nonempty(map.name, 120))
         || typeof map.biome !== 'string' || !Object.hasOwn(BIOMES, map.biome)
         || (map.purpose !== undefined && map.purpose !== 'arena'))
@@ -107,7 +108,7 @@ export function validateMapStructure(input: unknown): string[] {
             return ['Resource points contain invalid IDs, coordinates, ownership, amounts, or fields.'];
         ids.add(node.id);
     }
-    return [];
+    return map.scenario === undefined ? [] : validateMapScenario(map.scenario, map.width, map.height, map.spawns.length, false);
 }
 
 export interface TriggerValidationOptions {
@@ -144,32 +145,31 @@ export function validateTriggers(input: unknown, options: TriggerValidationOptio
             ids.add(trigger.id);
         if (trigger.fired !== undefined && typeof trigger.fired !== 'boolean')
             errors.push(`${label}: fired must be a boolean.`);
-        const when = trigger.when;
-        if (!record(when))
-            errors.push(`${label}: missing trigger condition.`);
-        else {
-            let valid = false;
+        let conditionCount = 0;
+        const validCondition = (when: unknown, depth = 0): boolean => {
+            if (!record(when) || depth > 6 || ++conditionCount > 128) return false;
             switch (when.type) {
-                case 'time':
-                    valid = fields(when, ['type', 'seconds']) && finite(when.seconds);
-                    break;
-                case 'captured':
-                    valid = fields(when, ['type', 'team', 'nodeId']) && team(when.team) && nonempty(when.nodeId);
-                    break;
-                case 'resource':
-                    valid = fields(when, ['type', 'team', 'resource', 'amount']) && team(when.team)
-                        && typeof when.resource === 'string' && ['gold', 'wood'].includes(when.resource) && finite(when.amount, 0, 1_000_000_000);
-                    break;
-                case 'destroyed':
-                    valid = fields(when, ['type', 'entityId']) && nonempty(when.entityId);
-                    break;
-                case 'region':
-                    valid = fields(when, ['type', 'team', 'x', 'y', 'radius']) && team(when.team) && point(when) && finite(when.radius, .001, 160);
-                    break;
+                case 'all':
+                case 'any':
+                    return fields(when, ['type', 'conditions']) && Array.isArray(when.conditions) && when.conditions.length > 0
+                        && when.conditions.length <= 32 && when.conditions.every(child => validCondition(child, depth + 1));
+                case 'time': return fields(when, ['type', 'seconds']) && finite(when.seconds, 0, 1_000_000);
+                case 'captured': return fields(when, ['type', 'team', 'nodeId']) && team(when.team) && nonempty(when.nodeId);
+                case 'resource': return fields(when, ['type', 'team', 'resource', 'amount']) && team(when.team)
+                    && ['gold', 'wood'].includes(when.resource as string) && finite(when.amount, 0, 1_000_000_000);
+                case 'destroyed': return fields(when, ['type', 'entityId']) && nonempty(when.entityId);
+                case 'region': return fields(when, ['type', 'team', 'x', 'y', 'radius']) && team(when.team) && point(when) && finite(when.radius, .001, 160);
+                case 'entityLocation': return fields(when, ['type', 'entityId', 'x', 'y', 'radius']) && nonempty(when.entityId) && point(when) && finite(when.radius, .001, 160);
+                case 'owned': return fields(when, ['type', 'team', 'kind', 'count']) && team(when.team) && ['gold', 'wood', 'relic'].includes(when.kind as string) && Number.isInteger(when.count) && finite(when.count, 1, 512);
+                case 'units': return fields(when, ['type', 'team', 'unit', 'count']) && team(when.team) && (when.unit === undefined || typeof when.unit === 'string' && Object.hasOwn(UNITS, when.unit)) && Number.isInteger(when.count) && finite(when.count, 1, 2000);
+                case 'buildings': return fields(when, ['type', 'team', 'building', 'count']) && team(when.team) && (when.building === undefined || typeof when.building === 'string' && Object.hasOwn(BUILDINGS, when.building)) && Number.isInteger(when.count) && finite(when.count, 1, 512);
+                case 'stat': return fields(when, ['type', 'team', 'stat', 'amount']) && team(when.team) && ['unitsCreated', 'unitsLost', 'kills', 'buildingsCreated', 'buildingsDestroyed', 'goldCollected', 'woodCollected', 'captures', 'commanderDeaths', 'damageDealt', 'pauses'].includes(when.stat as string) && finite(when.amount, 0, 1_000_000_000);
+                case 'teamDefeated': return fields(when, ['type', 'team']) && team(when.team);
+                case 'research': return fields(when, ['type', 'team', 'technology', 'level']) && team(when.team) && typeof when.technology === 'string' && Object.hasOwn(TECHNOLOGIES, when.technology) && Number.isInteger(when.level) && finite(when.level, 1, TECHNOLOGIES[when.technology as keyof typeof TECHNOLOGIES].maxLevel);
+                default: return false;
             }
-            if (!valid)
-                errors.push(`${label}: unknown or invalid trigger condition.`);
-        }
+        };
+        if (!validCondition(trigger.when)) errors.push(`${label}: unknown or invalid trigger condition.`);
         if (!Array.isArray(trigger.actions) || trigger.actions.length === 0 || trigger.actions.length > 32) {
             errors.push(`${label}: between one and 32 actions are required.`);
             return;
@@ -193,8 +193,12 @@ export function validateTriggers(input: unknown, options: TriggerValidationOptio
                             totalSpawns += action.count as number;
                         break;
                     case 'victory':
+                    case 'defeat':
                     case 'reveal':
                         valid = fields(action, ['type', 'team']) && team(action.team);
+                        break;
+                    case 'alliance':
+                        valid = fields(action, ['type', 'team', 'alliance']) && team(action.team) && Number.isInteger(action.alliance) && finite(action.alliance, 0, 5);
                         break;
                     case 'objective':
                         valid = fields(action, ['type', 'text']) && nonempty(action.text, 4000);
@@ -207,4 +211,22 @@ export function validateTriggers(input: unknown, options: TriggerValidationOptio
     if (totalActions > 512 || totalSpawns > 2000)
         errors.push('Mission exceeds the supported action or spawned-unit budget.');
     return errors;
+}
+
+/** Indexed rewards cannot leak into another player's economy. */
+export function validateGameModifiers(input: unknown, teamCount = 6): string[] {
+    if (input === undefined) return [];
+    const invalid = ['Match modifiers contain invalid multipliers or player bonuses.'];
+    if (!record(input) || !fields(input, ['income', 'playerDamage', 'playerHealth', 'captureSpeed', 'players'])) return invalid;
+    for (const [key, value] of Object.entries(input)) {
+        if (key === 'players') {
+            if (!record(value)) return invalid;
+            for (const [team, modifiers] of Object.entries(value)) {
+                if (!/^[0-5]$/.test(team) || Number(team) >= teamCount || !record(modifiers) || !fields(modifiers, ['income', 'captureSpeed', 'damage', 'health', 'startingGold', 'startingWood'])) return invalid;
+                for (const [field, multiplier] of Object.entries(modifiers))
+                    if (!finite(multiplier, field === 'health' ? .001 : 0, field.startsWith('starting') ? 100_000 : 1000)) return invalid;
+            }
+        } else if (!finite(value, key === 'playerHealth' ? .001 : 0, 1000)) return invalid;
+    }
+    return [];
 }

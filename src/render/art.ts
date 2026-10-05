@@ -7,6 +7,8 @@ export const TEAM = [
   { main: '#ff8e70', dark: '#8b3836', light: '#ffe2ba', banner: '#b44d3d' },
   { main: '#d8afff', dark: '#704686', light: '#f3e3ff', banner: '#7e50ac' },
   { main: '#f5d96c', dark: '#927126', light: '#fff6c9', banner: '#ad8730' },
+  { main: '#7de0ab', dark: '#32694e', light: '#e0ffec', banner: '#3d8060' },
+  { main: '#fa8bc9', dark: '#873c6a', light: '#ffe1f3', banner: '#a4467f' },
 ];
 export function palette(team: number) { return team < 0 ? {main:'#d8b874',dark:'#76634b',light:'#fff1c9',banner:'#837152'} : TEAM[team % TEAM.length]; }
 export function hash(x: number, y = 0, salt = 0): number { let h = Math.imul(x + salt * 91 + 173, 374761393) + Math.imul(y + 71, 668265263); h = Math.imul(h ^ h >>> 13, 1274126177); return ((h ^ h >>> 16) >>> 0) / 4294967295; }
@@ -47,7 +49,7 @@ export function rock(c:Ctx,seed:number,scale=1,gold=false){
 export function flag(c:Ctx,x:number,y:number,team:number,time=0,small=false){const p=palette(team);const s=small?.65:1;
  c.save();c.translate(x,y);c.scale(s,s);line(c,[0,0,0,-31],'#514a38',2);line(c,[1,-29,1,-1],'#d7c6a0',.75);const flutter=Math.sin(time*4+x)*1.8;
  poly(c,[1,-30,18,-27+flutter,15,-18+flutter,1,-21],p.banner,p.main,.6);
- if(team===1)poly(c,[7,-26,11,-23+flutter/2,7,-21+flutter/2,4,-24],p.light);else {line(c,[7,-27,7,-22],p.light,1.7);line(c,[5,-25,10,-25],p.light,1.7);}
+ drawTeamGlyph(c,team,8,-24+flutter/2,4,p.light);
  ellipse(c,0,-32,2,2,'#e9ce80');c.restore();
 }
 export function building(c:Ctx,type:string,team:number,time=0){
@@ -109,4 +111,17 @@ export function unit(c:Ctx,type:string,team:number,time:number,moving:boolean,at
  else {c.save();c.translate(8,-22);c.rotate(swing*.035);line(c,[0,4,3,-17],'#d8e5de',2.7);poly(c,[1,-17,4,-23,5,-17],'#f1f5df');line(c,[-2,-1,5,0],'#d9b272',2);c.restore();ellipse(c,-8,-20,5,8,p.banner,'#d8c78a',1.8);line(c,[-8,-23,-8,-17],p.light,1.5);}
  if(facing<0){/* Silhouette remains screen-readable; directional movement is shown by cadence. */}
  c.restore();
+}
+
+/** Shape is the allegiance signal; faction crests are an additional, independent signal. */
+export function drawTeamGlyph(c: Ctx, team: number, x: number, y: number, size: number, color: string) {
+  c.save(); c.translate(x, y); c.scale(size / 5, size / 5);
+  const shape = ((team % 6) + 6) % 6;
+  if (shape === 0) { line(c, [-3,0,3,0], color, 1.8); line(c, [0,-3,0,3], color, 1.8); }
+  else if (shape === 1) poly(c, [0,-4,4,0,0,4,-4,0], color);
+  else if (shape === 2) ellipse(c, 0, 0, 3, 3, color);
+  else if (shape === 3) poly(c, [-3,-3,3,-3,3,3,-3,3], color);
+  else if (shape === 4) poly(c, [0,-4,4,3,-4,3], color);
+  else { line(c, [-3,-3,3,3], color, 1.8); line(c, [-3,3,3,-3], color, 1.8); }
+  c.restore();
 }

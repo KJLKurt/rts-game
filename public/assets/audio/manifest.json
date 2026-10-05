@@ -1,4 +1,21 @@
 {
+  "menu": {
+    "src": "assets/audio/menu.ogg",
+    "fallback": "assets/audio/menu.mp3",
+    "bpm": 96,
+    "duration": 40,
+    "loop": true,
+    "volume": 0.8,
+    "title": "Welcome to the Winter Workshop",
+    "key": "D major",
+    "bars": 16.0,
+    "timeSignature": [
+      4,
+      4
+    ],
+    "loopStart": 0,
+    "loopEnd": 40
+  },
   "exploration": {
     "src": "assets/audio/exploration.ogg",
     "fallback": "assets/audio/exploration.mp3",
@@ -10,7 +27,28 @@
     "title": "Lanterns in the Pines",
     "key": "D major",
     "bars": 32,
-    "timeSignature": [4, 4]
+    "timeSignature": [
+      4,
+      4
+    ],
+    "loop": true
+  },
+  "tension": {
+    "src": "assets/audio/tension.ogg",
+    "fallback": "assets/audio/tension.mp3",
+    "bpm": 96,
+    "duration": 40,
+    "loop": true,
+    "volume": 0.71,
+    "title": "Lanterns on Watch",
+    "key": "B minor",
+    "bars": 16.0,
+    "timeSignature": [
+      4,
+      4
+    ],
+    "loopStart": 0,
+    "loopEnd": 40
   },
   "combat": {
     "src": "assets/audio/combat.ogg",
@@ -23,6 +61,40 @@
     "title": "Clockwork Brigade",
     "key": "B minor",
     "bars": 32,
-    "timeSignature": [4, 4]
+    "timeSignature": [
+      4,
+      4
+    ],
+    "loop": true
+  },
+  "victory": {
+    "src": "assets/audio/victory.ogg",
+    "fallback": "assets/audio/victory.mp3",
+    "bpm": 96,
+    "duration": 7.5,
+    "loop": false,
+    "volume": 0.68,
+    "title": "A Banner in the Snow",
+    "key": "D major",
+    "bars": 3.0,
+    "timeSignature": [
+      4,
+      4
+    ]
+  },
+  "defeat": {
+    "src": "assets/audio/defeat.ogg",
+    "fallback": "assets/audio/defeat.mp3",
+    "bpm": 96,
+    "duration": 10,
+    "loop": false,
+    "volume": 0.73,
+    "title": "Gather the Fallen Banners",
+    "key": "B minor",
+    "bars": 4.0,
+    "timeSignature": [
+      4,
+      4
+    ]
   }
 }

@@ -1,5 +1,23 @@
 # QA and reproducible verification
 
+## Current local release receipt — 5 October 2026
+
+**516 tests in 54 files passed**, TypeScript checks and the production build passed (eight story missions validated). The final local production browser run accounted for **262 cases: 244 passed, 18 intentional input/layout-specific skips, zero failures or flakes**. The run used sandbox-enabled Linux Chromium 151 and Playwright 1.63.0 with desktop 1440×900, emulated touch 390×844 and 844×390, plus four actual offline/update PWA cases. No new Actions or deployments were run.
+
+Production fingerprints: `index-DJ5oCh_8.js` / `index-BLaajxx7.css`; service-worker cache `c8affbd450ca`; 24 precached files; `/rts-game/` base. Held portrait objective checks additionally passed six repeated executions. The main run is a fresh complete run after all product and fixture corrections.
+
+Native input earned The Outpost at 43.8 game seconds: nine surviving troops, one troop loss, one commander death, four kills and two captures. The terminal HUD showed 5/5 and capacity 20; one win saved, the retry-saving control hid after success, and Next chapter opened Hold the Line at time 0. A fresh Balanced expedition captured extra gold and timber by 46.1 seconds, raised both incomes, and resumed at the exact saved time. Its retained supply credit survives expired capture events and tips disabled. The current expedition remains unfinished; no earned later branch is claimed.
+
+The runnable gate covers movement/selection/stick/rotation, recruiting/refunds/reservations, construction/inspection/research, capture/fog/AI-facing commands, pause/orders, learning, win/loss/retry, Rush, editor, interruption, result durability, save/reload, audio controls and local PWA/subpath/update flows. All eight peaceful lessons use actual input; result, raid, affordability, branch and storage-failure fixtures are explicitly labeled. Those fixtures do not establish a natural win or subjective fun/balance.
+
+Observed defects corrected: live objective-control replacement; stale terminal objectives/capacity; tutorial advancement/preferences after results; incorrect supply credit from starting ownership/relic counters; unclear recruitment/rally/capture destinations; short-landscape joystick interception of the learning action; and a saved-result retry button whose hidden attribute was overridden by CSS. The terrain/camera move fixture now uses the real battlefield Focus control; learning verifies the hit target directly. No assertions were replaced with forced input or arbitrary sleeps. All 15 simulation source files are unchanged from the supplied clarity input; no AI/economy/unit/map balance adjustments were made in this final pass.
+
+Linux Chromium and emulated phone touch were tested; physical iPhone/Safari, installed-device lifecycle/performance, subjective soundtrack listening, full natural campaign/expedition routes, broad balance and exact deployed-release checks remain open. Asset provenance and distribution licensing still need commercial review. Publication of the final source and hosted validation are coordinated separately. See [CLARITY_VERIFICATION.md](CLARITY_VERIFICATION.md) and [REQUIREMENTS_STATUS.md](REQUIREMENTS_STATUS.md).
+
+## Historical receipts
+
+Everything below retains dated earlier checkpoints. Their test totals and words such as “current” or “pending” describe those checkpoints, not the 5 October local release above.
+
 ## What has actually been checked
 
 Local verification on 2026-10-04 (latest aggregate: 06:14 UTC):

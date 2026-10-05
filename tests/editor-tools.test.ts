@@ -29,3 +29,34 @@ describe("paint strokes and map history", () => {
     expect(history.canRedo).toBe(false);
   });
 });
+
+it("restores independent undo and redo history after a draft reload", () => {
+  const before = createGame({ mapSize: "tiny" }).map,
+    after = structuredClone(before),
+    history = new EditorHistory();
+  after.tiles[300] = before.tiles[300] === "water" ? "grass" : "water";
+  history.record(before, after);
+  const undone = history.undo(after)!,
+    snapshot = history.export(),
+    restored = new EditorHistory();
+  restored.resume(snapshot);
+  snapshot.redo[0].tiles[300] = "rock";
+  expect(restored.redo(undone)).toEqual(after);
+  expect(restored.undo(after)).toEqual(before);
+});
+it("rejects corrupt or excessive history without replacing existing edits", () => {
+  const before = createGame({ mapSize: "tiny" }).map,
+    after = structuredClone(before),
+    history = new EditorHistory();
+  after.tiles[300] = "road";
+  after.tiles[301] = "road";
+  history.record(before, after);
+  for (const bad of [
+    null,
+    { version: 2, undo: [], redo: [] },
+    { version: 1, undo: [{}], redo: [] },
+    { version: 1, undo: Array(25).fill(before), redo: [] },
+  ])
+    expect(() => history.resume(bad)).toThrow("undo history");
+  expect(history.undo(after)).toEqual(before);
+});

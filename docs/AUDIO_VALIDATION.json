@@ -1,0 +1,228 @@
+{
+  "method": "FFmpeg decoded PCM and EBU R128; no subjective listening",
+  "cues": {
+    "menu": {
+      "title": "Welcome to the Winter Workshop",
+      "loop": true,
+      "durationSeconds": 40,
+      "codecs": {
+        "ogg": {
+          "bytes": 265961,
+          "sha256": "589021d9a054293b6d9463e2f1c6f91dcfadc12d5b877e74e75c45eacc3e858d",
+          "sampleRate": 44100,
+          "frames": 1764000,
+          "durationExact": true,
+          "integratedLUFS": -20.23,
+          "truePeakDbTP": -9.06,
+          "clippedSamples": 0,
+          "dcOffsetMax": 1.5722801506020953e-05,
+          "stereoCorrelation": 0.99,
+          "boundaryDelta": 0.0006237826310098171,
+          "maxSampleStep": 0.03222920000553131,
+          "seamStepBelowTrackMax": true
+        },
+        "mp3": {
+          "bytes": 561049,
+          "sha256": "810dd7008beab18a16a4a284b32b9ea79dac02eba7ec323e524e74689bfff44b",
+          "sampleRate": 44100,
+          "frames": 1764000,
+          "durationExact": true,
+          "integratedLUFS": -20.67,
+          "truePeakDbTP": -9.52,
+          "clippedSamples": 0,
+          "dcOffsetMax": 1.8323447718483112e-06,
+          "stereoCorrelation": 0.9917,
+          "boundaryDelta": 0.0029807621613144875,
+          "maxSampleStep": 0.031112506985664368,
+          "seamStepBelowTrackMax": true
+        }
+      }
+    },
+    "exploration": {
+      "title": "Lanterns in the Pines",
+      "loop": true,
+      "durationSeconds": 80,
+      "codecs": {
+        "ogg": {
+          "bytes": 709558,
+          "sha256": "33c7b6aea2699abb489fb888c95bc41b74f60dd57fc31864f40bee7e00ce7f5b",
+          "sampleRate": 44100,
+          "frames": 3528000,
+          "durationExact": true,
+          "integratedLUFS": -19.08,
+          "truePeakDbTP": -6.86,
+          "clippedSamples": 0,
+          "dcOffsetMax": 6.544800217441379e-06,
+          "stereoCorrelation": 0.9846,
+          "boundaryDelta": 0.0027640778571367264,
+          "maxSampleStep": 0.05921250209212303,
+          "seamStepBelowTrackMax": true
+        },
+        "mp3": {
+          "bytes": 1120957,
+          "sha256": "0b713e32e6bc6807091c9c19c2ab359b8cc93494bc0445d7f7bffe3fb921b3b0",
+          "sampleRate": 44100,
+          "frames": 3528000,
+          "durationExact": true,
+          "integratedLUFS": -19.53,
+          "truePeakDbTP": -7.21,
+          "clippedSamples": 0,
+          "dcOffsetMax": 3.614313607164557e-06,
+          "stereoCorrelation": 0.9861,
+          "boundaryDelta": 0.00536471139639616,
+          "maxSampleStep": 0.06136094033718109,
+          "seamStepBelowTrackMax": true
+        }
+      }
+    },
+    "tension": {
+      "title": "Lanterns on Watch",
+      "loop": true,
+      "durationSeconds": 40,
+      "codecs": {
+        "ogg": {
+          "bytes": 344426,
+          "sha256": "005df17b7fe178e6008641c6daea0b727891eab14706cf5b465c62218c124e67",
+          "sampleRate": 44100,
+          "frames": 1764000,
+          "durationExact": true,
+          "integratedLUFS": -20.05,
+          "truePeakDbTP": -6.06,
+          "clippedSamples": 0,
+          "dcOffsetMax": 2.8954921126856828e-05,
+          "stereoCorrelation": 0.9879,
+          "boundaryDelta": 0.006654270458966494,
+          "maxSampleStep": 0.06098884344100952,
+          "seamStepBelowTrackMax": true
+        },
+        "mp3": {
+          "bytes": 561049,
+          "sha256": "cb02147dc906806c570cb7f458e9dcfe68ba4c8e02f86a18943cb90a3141e277",
+          "sampleRate": 44100,
+          "frames": 1764000,
+          "durationExact": true,
+          "integratedLUFS": -20.48,
+          "truePeakDbTP": -6.51,
+          "clippedSamples": 0,
+          "dcOffsetMax": 7.095589230382013e-06,
+          "stereoCorrelation": 0.9898,
+          "boundaryDelta": 0.00461509870365262,
+          "maxSampleStep": 0.0610346794128418,
+          "seamStepBelowTrackMax": true
+        }
+      }
+    },
+    "combat": {
+      "title": "Clockwork Brigade",
+      "loop": true,
+      "durationSeconds": 80,
+      "codecs": {
+        "ogg": {
+          "bytes": 848631,
+          "sha256": "b8d6e56287eaf00d73382de666a9a527cd4af43303cd7169d87ff2a887a2fb73",
+          "sampleRate": 44100,
+          "frames": 3528000,
+          "durationExact": true,
+          "integratedLUFS": -18.58,
+          "truePeakDbTP": -4.71,
+          "clippedSamples": 0,
+          "dcOffsetMax": 9.960425735264282e-06,
+          "stereoCorrelation": 0.9928,
+          "boundaryDelta": 0.0016636205837130547,
+          "maxSampleStep": 0.11919815838336945,
+          "seamStepBelowTrackMax": true
+        },
+        "mp3": {
+          "bytes": 1120957,
+          "sha256": "1ab45433aa75c9515cf3761629158475b8f62e6e6fd825b6f0733fcff9878161",
+          "sampleRate": 44100,
+          "frames": 3528000,
+          "durationExact": true,
+          "integratedLUFS": -19.03,
+          "truePeakDbTP": -5.06,
+          "clippedSamples": 0,
+          "dcOffsetMax": 6.8894755358387716e-06,
+          "stereoCorrelation": 0.994,
+          "boundaryDelta": 0.004218744114041328,
+          "maxSampleStep": 0.11751776188611984,
+          "seamStepBelowTrackMax": true
+        }
+      }
+    },
+    "victory": {
+      "title": "A Banner in the Snow",
+      "loop": false,
+      "durationSeconds": 7.5,
+      "codecs": {
+        "ogg": {
+          "bytes": 45516,
+          "sha256": "ded78d1ec668e04eb0de047b56687f5bbbe8d890eab9fa36cad95ad6d6eb7fc0",
+          "sampleRate": 44100,
+          "frames": 330750,
+          "durationExact": true,
+          "integratedLUFS": -15.89,
+          "truePeakDbTP": -3.23,
+          "clippedSamples": 0,
+          "dcOffsetMax": 9.759559062797656e-05,
+          "stereoCorrelation": 0.9935,
+          "boundaryDelta": 0.0008551141945645213,
+          "maxSampleStep": 0.06559139490127563,
+          "seamStepBelowTrackMax": true
+        },
+        "mp3": {
+          "bytes": 106100,
+          "sha256": "5af3c0625e83d7148e884eed5a353b890e422ca1dcdcb71e3f813ebd0788249f",
+          "sampleRate": 44100,
+          "frames": 330750,
+          "durationExact": true,
+          "integratedLUFS": -16.34,
+          "truePeakDbTP": -3.59,
+          "clippedSamples": 0,
+          "dcOffsetMax": 8.364094351748228e-06,
+          "stereoCorrelation": 0.9949,
+          "boundaryDelta": 0.0011527459137141705,
+          "maxSampleStep": 0.06400752067565918,
+          "seamStepBelowTrackMax": true
+        }
+      }
+    },
+    "defeat": {
+      "title": "Gather the Fallen Banners",
+      "loop": false,
+      "durationSeconds": 10,
+      "codecs": {
+        "ogg": {
+          "bytes": 123812,
+          "sha256": "e04ef704de0033b9e9907885540b785214e319573a9b1d2f5951dcd8c3aaa089",
+          "sampleRate": 44100,
+          "frames": 441000,
+          "durationExact": true,
+          "integratedLUFS": -19.28,
+          "truePeakDbTP": -8.0,
+          "clippedSamples": 0,
+          "dcOffsetMax": 4.1324029145732295e-05,
+          "stereoCorrelation": 0.9909,
+          "boundaryDelta": 6.757892697351053e-05,
+          "maxSampleStep": 0.03307725861668587,
+          "seamStepBelowTrackMax": true
+        },
+        "mp3": {
+          "bytes": 140843,
+          "sha256": "028c032a4ddc26a481c203948a0693406e1f8eaf28dada55f8797149d56ad334",
+          "sampleRate": 44100,
+          "frames": 441000,
+          "durationExact": true,
+          "integratedLUFS": -19.74,
+          "truePeakDbTP": -8.34,
+          "clippedSamples": 0,
+          "dcOffsetMax": 5.532643767328278e-06,
+          "stereoCorrelation": 0.9917,
+          "boundaryDelta": 0.0001565794664202258,
+          "maxSampleStep": 0.031318940222263336,
+          "seamStepBelowTrackMax": true
+        }
+      }
+    }
+  },
+  "totalEncodedBytes": 5948859
+}

@@ -69,7 +69,7 @@ describe('namespaced offline storage',()=>{
  it('record deletion is limited to the requested game key',async()=>{
   const local=localStore(),db=mockIDB();local.values.set(prefix+'battle','{}');local.values.set('sibling:save','keep');db.values.set('battle',{});db.values.set('editor-map',{seed:'keep'});
   vi.stubGlobal('localStorage',local);vi.stubGlobal('indexedDB',db.indexedDB);const storage=await import('../src/platform/storage');await storage.removeRecord('battle');
-  expect(local.values.get('sibling:save')).toBe('keep');expect(db.values.get('editor-map')).toEqual({seed:'keep'});expect(db.values.has('battle')).toBe(false);
+  expect(local.values.get('sibling:save')).toBe('keep');expect(db.values.get('editor-map')).toEqual({seed:'keep'});expect(await storage.loadRecord('battle')).toBeNull();
  });
 });
 

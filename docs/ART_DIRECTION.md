@@ -21,3 +21,9 @@ Reduced-motion mode removes decorative motion while retaining warnings, health, 
 ## Replacement
 
 To reskin, provide the same semantic frame IDs (see the JSON and `SpriteAtlas.ts`) and compatible ground anchors. Replace the manifest/image together and include both in the precache. A new themed terrain palette and audio manifest can be added independently. Do not mix disparate sprite styles without checking silhouette scale and small-screen readability.
+
+## Faction identity overlay pass
+
+Ironhold uses a tower crest and riveted square steel trim; Wildborn uses branching antlers, carved timber and forked standards; Arcanists uses a faceted rune crystal and geometric brass/crystal motifs. These original Canvas/SVG overlays are defined in `src/render/factionIdentity.ts` and repeat in the setup legend and Credits / About. They preserve the existing atlas, role silhouettes, team-colored ground plates and health bars. They are a coherent shared-atlas treatment, not three independent animated sprite sets.
+
+Six team glyphs (cross, diamond, circle, square, triangle and saltire) and six colors identify allegiance independently of the faction motifs. The crest paths are cached. This pass has renderer contract tests, but new actual-browser pixel review is still required; see `docs/PRESENTATION_GAPS_QA.md`.

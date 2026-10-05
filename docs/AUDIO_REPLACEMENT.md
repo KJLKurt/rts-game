@@ -1,49 +1,60 @@
 # Frontier Command: original music and replacement guide
 
-Four original, sample-free cues are included. The core runtime manifest exposes only the two requested gameplay tracks; menu and victory are optional additions.
+The runtime manifest exposes six original, sample-free cues. No third-party music service, copyrighted recording, sample pack, soundfont or external account was used. Celesta, flute, harp, soft pads, rounded bass and restrained percussion tie the states together.
 
-| Cue | Title | Meter / tempo | Key | Exact decoded duration | Behavior |
+| State | Title | Key | Meter / tempo | Decoded duration | Behavior |
 | --- | --- | --- | --- | --- | --- |
-| Exploration | Lanterns in the Pines | 4/4, 96 BPM | D major | 80.000 s / 32 bars | Loop |
-| Combat | Clockwork Brigade | 4/4, 96 BPM | B minor | 80.000 s / 32 bars | Loop |
-| Menu | Welcome to the Winter Workshop | 4/4, 96 BPM | D major | 40.000 s / 16 bars | Loop |
-| Victory | A Banner in the Snow | 4/4, 96 BPM | D major | 7.500 s | Play once |
+| Menu | Welcome to the Winter Workshop | D major | 4/4, 96 BPM | 40.000 s / 16 bars | Loop |
+| Exploration / peace | Lanterns in the Pines | D major | 4/4, 96 BPM | 80.000 s / 32 bars | Loop |
+| Tension | Lanterns on Watch | B minor | 4/4, 96 BPM | 40.000 s / 16 bars | Loop |
+| Combat | Clockwork Brigade | B minor | 4/4, 96 BPM | 80.000 s / 32 bars | Loop |
+| Victory | A Banner in the Snow | D major | 4/4, 96 BPM | 7.500 s | Once, then silence |
+| Defeat | Gather the Fallen Banners | B minor | 4/4, 96 BPM | 10.000 s | Once, then silence |
 
-## Sound and musical structure
+## Arrangement
 
-Exploration alternates a warm celesta melody with a breathy flute answer, supported by unhurried harp arpeggios, soft sustained harmony, and a round bass. The second 16-bar phrase changes the lead and adds answering notes instead of repeating the first half unchanged.
+Exploration alternates celesta melody with a breathy flute answer above unhurried harp, sustained harmony and round bass; the second half changes the lead and adds answering notes. Combat develops a related motif with wooden eighth-note patterns, rounded horn, quiet drums and flute answers. Menu is the quieter, percussion-free exploration statement. Victory rises into a complete D-major arrival.
 
-Combat keeps the same tempo and related key while increasing movement through wooden eighth-note figures, rounded horn phrases, restrained drums, and a flute/horn development in its second half. It is intended to feel like a determined toy brigade rather than frightening or aggressive horror music. There are small synthesized sleigh-bell accents, without quoting an existing Christmas song.
+Tension develops combat-motif fragments across 16 bars with spacious flute/horn answers, marimba figures, B-minor-related harmony and sparse low tom/shaker rhythm. Defeat is a reflective descending phrase that settles on B minor with harp replies and a natural release. These are full musical arrangements, not short placeholder outcome beeps.
 
-Menu is a quieter, percussion-free version of the exploration theme. Victory is a short rising statement ending on D major, with a natural fade.
+## Runtime contract and gesture gating
 
-## Runtime integration
+- `start(state = "exploration")` arms active music without creating or resuming an AudioContext. It is safe during initial rendering. `start("peace")` aliases exploration. If no context exists, the pending state stays silent and no assets or scheduler start yet.
+- Call `unlock()` only from a real pointer or keyboard gesture. It creates/resumes the context and begins an armed score. Either `start("menu"); unlock()` or `unlock(); start("menu")` works in a gesture. Repeated unlock calls do not restart music. If autoplay resume is rejected, a later genuine gesture can retry it.
+- `setState(state)` changes active or pending music without activating a stopped director. Use it for menu, match and result navigation after starting the director. `stop()` fades music and clears its scheduler; use `start(state)` to reactivate afterward.
+- `setCombat(intensity)` accepts the existing 0–1 engagement signal during gameplay states. At 0.04 it selects tension; at 0.22 it selects combat. Combat holds for 10 seconds after the last qualifying signal, then passes through tension until 14 seconds. Continued low-intensity activity renews a four-second tension hold. Menu and outcomes ignore this signal. These timers use audio time and never affect the simulation.
+- Use `setState("victory")` / `setState("defeat")` once for the result screen. Legacy `play("victory")` / `play("defeat")` selects the full coda too. Repeated calls do not restart it; after it finishes, the result screen remains quiet. Explicitly select menu or exploration for the next flow.
+- Normal state changes crossfade over approximately two seconds; outcomes fade faster for prompt feedback. Cues start from their beginnings and transitions are not quantized to a bar. The outgoing track continues while the requested cue decodes. Older asynchronous loads cannot override newer navigation or restart stopped music.
 
-1. Copy the contents of `assets/` to the game's `public/assets/audio/` folder. The main `manifest.json` contains `exploration` and `combat` entries with the exact requested fields. Optional fields add title/key/bar metadata.
-2. Resolve each `src` relative to the application's document/base URL. The paths deliberately have no leading slash, so subpath hosting can work too.
-3. Prefer the `.ogg` file when it decodes successfully. Use `.mp3` as a fallback. Do not download both formats on a normal playback path. Both have been independently decoded and checked for exact sample counts.
-4. Unlock audio only after a user gesture. Keep existing master/music/effects controls. Multiply the music bus level by the entry's `volume`; these are conservative starting values, not a replacement for the user's slider.
-5. For the most precise loop, decode once into an AudioBuffer and use `AudioBufferSourceNode.loop = true`, `loopStart = 0`, and the supplied `loopEnd`. The loop boundary includes wrapped release/reverb, with no intro silence or fade-out hole. HTML audio looping can add device-specific scheduling gaps, so use decoded Web Audio if a gap is noticed.
-6. Crossfade exploration/combat over about 1.5–2 seconds. For musical transitions, queue the new cue on the next bar boundary (one bar = 2.5 seconds); an immediate short crossfade is acceptable when urgency matters. Do not retrigger music for every attack: hold combat mode for roughly 8–12 seconds after the last engagement, using the game's existing state policy.
-7. Preserve source gain headroom for overlapping event SFX. Avoid normalizing each asset separately at runtime.
-8. Core files total approximately 3.8 MB including both codecs. The optional menu/victory pair keeps the entire set below 5 MB. Cache only one supported codec per cue if the service worker supports conditional precaching. Do not precache WAV masters.
+## Volume, loading and offline behavior
 
-The optional entries are in `optional-manifest.json`. To add another visual theme, keep the same state IDs and resolve them through a theme-specific manifest. The music/UI contract need not change.
+Master, Music, Effects and mute retain the existing persisted preference contract. Their separate buses affect sounds already playing. Each manifest volume multiplies the Music level exactly once, while Master/mute applies to both music and effects. AudioDirector does not write storage; the application saves the existing preferences.
 
-## Replacing these tracks later
+The director loads only the requested cue, trying Ogg first and MP3 only if Ogg fails to fetch or decode. It retains at most three cached cue promises after load completion and at most two connected track sources during a crossfade. Rapid navigation may retire the oldest fading source early. Missing or undecodable assets use a restrained, state-aware procedural score with finite outcome phrases.
 
-Keep filenames and manifest entry IDs, or change only the paths in `manifest.json`. The source of truth for loop timing is the finished audio itself: update `duration`, `loopStart`, and `loopEnd` after measuring the replacement. Never assume a music generator obeyed the exact requested duration or BPM.
+Paths remain under `assets/audio/`, resolved against Vite's base URL, including `/rts-game/`. Remote URLs and parent-directory paths are ignored. Loop bounds are checked against decoded duration. The existing recursive service-worker precache includes all codecs and the manifest, about 6 MB total. WAV masters are not shipped. Source synthesis performs no network calls and requires no accounts.
 
-Delivery requirements for a replacement:
+## Interaction feedback and accessibility
 
-- Instrumental, no voice, no spoken countdown, no copyrighted melody quotation.
-- 96 BPM, 4/4; preferably D major for exploration and B minor for combat, with a shared motif and compatible timbral palette.
-- A musical phrase length of 16 bars (40.000 s) or 32 bars (80.000 s); these originals use 32.
-- Loop begins on the first downbeat; no count-in, dramatic one-shot intro, fade-in, end fade, or forced final sting.
-- Supply a stereo WAV master, preferably 44.1 or 48 kHz / 24-bit, plus a version with the final reverb tail available separately or baked across the start for seamless looping.
-- Target roughly -19 LUFS integrated for background music with true peak at or below -3 dBTP. Keep a controlled low end and clear midrange for small speakers; avoid fatiguing high-frequency bells.
-- Encode Ogg Vorbis around quality 3–4 and MP3 at 112–128 kbps. Check decoded duration and the actual loop join after encoding.
-- Retain the music generator's applicable output license/terms with the replacement. No third-party music service was used for the initial assets.
+Effects include select, click, order, error, build, recruit, capture, ability, hit, upgrade, research, repair, resource, destroy and alert. Rising approval/completion cues differ from lower falling denial/destruction contours; alert has a separate repeating contour. They use the independent Effects bus and contain no samples.
+
+The director caps effects at 12 oscillator notes and procedural music at 32. Hit repeats are throttled to 90 ms, click/select to 60 ms and other effects to 180 ms. Error/alert can displace older incidental effects at the cap. Finished nodes disconnect.
+
+Pair each cue with visible selection, status, warning text, construction progress or a result screen. Audio is never the only way to discover a denied order, threat or outcome. Do not imply that an accepted/queued action has completed: trigger completion cues at the relevant completion event. The application owns visual/live-region feedback and event wiring; the director owns sound.
+
+## Replacing music later
+
+Change `public/assets/audio/manifest.json` and its encoded assets while retaining all six state IDs. `peace` is an API alias, not a seventh manifest entry. The director reads `src`, optional `fallback`, `volume`, `loop`, `loopStart` and `loopEnd`; `duration`, `bpm`, `title`, `key`, `bars` and `timeSignature` describe the delivery. Menu/exploration/tension/combat should loop; outcome states always play once. Do not normalize tracks at runtime or alter user preference values to compensate for new music.
+
+Replacement requirements:
+
+- Original instrumental music with no voice, existing song quotation or named-artist imitation.
+- A compatible palette and harmony. This suite uses 96 BPM, 4/4, D major / B minor. Prefer 16-bar / 40-second or 32-bar / 80-second gameplay phrases.
+- Loops begin on a downbeat with no count-in, end sting, fade-out gap or one-shot intro. Wrap release/reverb through the join. Outcome cues may end and fade naturally.
+- Keep a stereo WAV master and deliver both Ogg and MP3. Future authored masters may use 44.1/48 kHz, 24-bit; these originals use dithered 44.1 kHz, 16-bit PCM.
+- Aim near -19 LUFS for background music and below -3 dBTP true peak. Control low end and high bells. Short codas can have different integrated loudness, with conservative manifest gain and actual transition review.
+- Encode Ogg Vorbis around quality 3–5 and MP3 at 112–128 kbps. Measure finished-codec duration, clipping, DC and loop joins; never assume requested duration/BPM were achieved.
+- Preserve applicable service licenses and provenance if replacements use another service. This initial suite uses no third-party music service.
 
 ## Optional Google music-generation prompts
 
@@ -57,19 +68,24 @@ Create an original instrumental seamless-loop game soundtrack called “Lanterns
 
 Create an original instrumental seamless-loop battle soundtrack called “Clockwork Brigade” for the same warm toy-fantasy Christmas strategy game. 96 BPM, 4/4, B minor with occasional D-major lift, exactly 32 bars / 80 seconds if supported. Determined, engaging, playful tactical momentum; suitable for a toy army, without horror or overwhelming aggression. Use rounded short brass/horn phrases and wooden marimba or pizzicato eighth-note patterns, lyrical flute answers, soft orchestral strings, restrained low drums and brushed snare, round bass, and only a few quiet sleigh-bell accents. Related sonic palette to a celesta/flute/harp exploration theme. Strong original melodic identity with four 8-bar phrases and meaningful orchestration development; leave room for game sound effects. No vocals, no narration, no existing melody, no named-artist imitation, no piercing brass, distorted synth, heavy trailer impacts, constant cymbal wash, or harsh beeps. Begin on a downbeat, avoid a one-shot opening flourish, and make the final bar turn back to B minor at the first bar without a finale or fade. Export a stereo master with the loop-tail material available.
 
-## Source, regeneration, and provenance
+## Source and regeneration
 
-- `compose_frontier.py`: complete deterministic score, instruments, arrangement, room processing, mastering and codec commands.
-- `masters/*.score.json`: machine-readable note/percussion events.
-- `masters/*.mid`: editable Standard MIDI score using approximate GM instrument labels. The supplied WAVs use the original synthesizer, not GM soundfonts.
-- `masters/*.wav`: 44.1 kHz stereo PCM masters.
-- `verify_audio.py`: encoded-duration, level, DC, clipping and seam checks.
-- `validation.json`: resulting technical measurements.
-- `browser-validation.json`: browser-verification status and any environment limitation.
-- Seed: `20261004`, plus the sum of character codes in each track ID. No copyrighted recordings or third-party sample packs are used.
+`scripts/audio/compose_frontier.py` contains all six score tables, sample-free instrument synthesis, room processing, mastering, MIDI/JSON score export and codec commands. The seed is `20261004` plus the sum of character codes in each cue ID.
 
-Regenerate with `python3 compose_frontier.py`, then `python3 verify_audio.py`. Python requires NumPy and SciPy, plus the installed FFmpeg command. No internet or account is involved.
+Run `python3 scripts/audio/compose_frontier.py --output /tmp/frontier-command-audio-recovered` with NumPy, SciPy and FFmpeg installed. `--track tension` (or another state) generates only one cue. Output includes encoded assets and editable MIDI, score JSON and WAV masters. Copy chosen Ogg/MP3 files to `public/assets/audio/`, retaining measured manifest metadata. Do not ship masters.
 
-## Verification limitation
+Defeat uses Vorbis quality 5 because quality 3 showed low-level decoded DC bias in the earlier technical pass; other cues use quality 3. MP3 uses 112 kbps. Synthesis is deterministic within the toolchain; Ogg container serial numbers may vary across encoding runs.
 
-Audio output was attempted through the available audio interface, but this agent session explicitly reported that it does not support audio input. Therefore subjective listening quality has not been claimed as verified. The composition, waveform continuity, clipping/headroom, stereo/mono compatibility and encoded duration are checked separately. Browser verification was attempted, but local Chromium could not create its runtime socket and the supported cloud browser blocked the local audition URL; no successful browser-playback claim is made. Please audition in the actual game before calling the mix artistically final; the included originals are designed to be replaceable.
+Run `python3 scripts/audio/verify_audio.py` on shipped files. `docs/AUDIO_VALIDATION.json` records fresh SHA-256, exact frame counts, EBU R128 loudness, true peak, clipping, DC, stereo correlation and sample discontinuity measurements for all twelve encoded files. A small loop boundary step is a technical check, not proof of a satisfying musical transition.
+
+## Recovery provenance
+
+The working-directory recovery restored exploration/combat Ogg and MP3 from the verified `242b6df` checkpoint without modifying those binaries. Their original composition/synthesis source was reconstructed from retained source excerpts. Regenerating both cues produced identical decoded PCM SHA-256 for all four codec files, supporting faithful reconstruction of the shared synth/arrangement pipeline.
+
+Menu, tension, victory and defeat were missing from the recovered checkpoint. Their original score and synthesis definitions were reconstructed from the same retained task source excerpts, then regenerated locally. Prior encoded-file byte identity for those eight missing files is unproven and is not claimed. `docs/AUDIO_RECOVERY.json` records retained/reconstructed identities and the decoded baseline comparisons. No new music service, sample pack or account was involved. `scripts/audio/PROVENANCE.txt` records the same distinction.
+
+## Validation and remaining listening gate
+
+The recovery pass runs fresh mocked Web Audio state/gesture/routing/concurrency tests and technical checks of all shipped codecs. The restored `tests/browser/audio.spec.ts` checks actual decoding of all codecs when run against the integrated candidate; it is not counted as passed by a unit/codec-only recovery pass. Existing candidate results do not validate recovered code automatically.
+
+No subjective listening is verified. The earlier task's direct Chromium launch failed at runtime socket creation; no successful browser playback or listening result is inherited. Before claiming commercial sound polish, audition every full loop and both codas in the actual game on headphones and a small phone speaker, including one loop join, menu→match, quiet→tension→combat→quiet, results, repeated navigation, mute/unmute and simultaneous effects. Check continuity, fatigue and readable event feedback at low volume. Musical quality and physical-device listening remain open.

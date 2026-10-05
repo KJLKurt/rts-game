@@ -1387,6 +1387,9 @@ footer {
 .result-dialog > header > .square {
   display: none;
 }
+.result-dialog [data-action="result-save"][hidden] {
+  display: none;
+}
 .result-emblem > .icon {
   width: 84px;
   height: 84px;
@@ -2597,15 +2600,6 @@ footer {
     font-size: 9px;
     padding: 9px;
   }
-  .rush-mode .ability-dock {
-    bottom: calc(170px + var(--safe-bottom));
-  }
-  .rush-mode #joystick {
-    bottom: calc(155px + var(--safe-bottom));
-  }
-  .rush-mode .commander-strip {
-    bottom: calc(266px + var(--safe-bottom));
-  }
   .rush-commanders {
     gap: 7px;
   }
@@ -2724,8 +2718,10 @@ footer {
   font-size: 8px;
 }
 @media (max-width: 600px) {
-  .battle-hint {
-    width: calc(100% - 116px);
+  /* Ordinary tips reserve the expanded map (116px), margins and a 10px gap.
+     The separate eight-lesson guide keeps its own narrower layout below. */
+  .battle-hint:not(.learning-guide) {
+    width: calc(100% - 148px);
   }
   .action-card strong {
     font-size: 10px;
@@ -3531,4 +3527,363 @@ footer {
   border: 1px solid #abc4b266;
   border-radius: 6px;
   padding: 8px;
+}
+
+/* Full setup/workshop controls. Large army budgets remain device-dependent. */
+.scale-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+.scale-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 16px;
+  text-align: left;
+}
+.scale-card b {
+  font-size: 20px;
+  color: #e4edde;
+}
+.scale-card span {
+  color: var(--gold);
+}
+.scale-card small {
+  line-height: 1.5;
+  color: var(--muted);
+}
+.scale-card.chosen {
+  border-color: var(--gold);
+  background: #233d40;
+}
+.setup-summary {
+  padding: 18px;
+  background: #102b35;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  margin: 20px 0;
+  overflow-wrap: anywhere;
+}
+.setup-summary li {
+  margin: 8px 0;
+  line-height: 1.5;
+}
+.setup-errors,
+.setup-warning,
+#workshop-settings-error {
+  color: #f4ac86;
+}
+.setup-valid {
+  color: var(--teal);
+}
+.setup-minimap {
+  display: block;
+  width: min(100%, 480px);
+  height: auto;
+  margin: 16px auto;
+  background: #0b1b22;
+}
+.setup-slot,
+.workshop-slot {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin: 12px 0;
+}
+.setup-slot legend,
+.workshop-slot legend {
+  color: var(--gold);
+  padding: 0 8px;
+}
+.setup-code-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0;
+}
+.setup-slots,
+.setup-camp-control {
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+.setup-camp-control .field {
+  margin: 0;
+}
+.workshop-library-intro {
+  max-width: 700px;
+  line-height: 1.6;
+}
+.workshop-library-entry {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin: 12px 0;
+}
+.workshop-library-entry > div {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.workshop-library-entry h3,
+.workshop-library-entry p {
+  margin: 4px 0;
+}
+.workshop-library-entry p {
+  color: var(--muted);
+  font-size: 12px;
+}
+.in-editor .editor-tools {
+  width: 280px;
+}
+.in-editor .editor-tools.collapsed {
+  display: none;
+}
+.in-editor .editor-tools .field {
+  margin: 10px 0;
+  gap: 5px;
+}
+.in-editor .editor-tools .field span {
+  font-size: 12px;
+}
+.in-editor .editor-tools select,
+.in-editor .editor-tools input {
+  width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  padding: 8px;
+}
+.in-editor .editor-tools p {
+  font-size: 12px;
+  line-height: 1.5;
+}
+.in-editor .editor-tools button {
+  min-height: 44px;
+  font-size: 12px;
+}
+.in-editor .editor-tools details {
+  border-top: 1px solid var(--line);
+  padding: 12px 0 6px;
+}
+.in-editor .editor-tools summary {
+  cursor: pointer;
+  min-height: 28px;
+  font-size: 13px;
+  color: #e3eddf;
+}
+.in-editor .editor-map-controls {
+  position: absolute;
+  top: 86px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.workshop-test-return {
+  position: absolute;
+  top: 118px;
+  right: 18px;
+  z-index: 12;
+}
+.workshop-test-return button {
+  min-height: 44px;
+  background: #183441f2;
+}
+@media (max-width: 600px) {
+  .in-editor .editor-tools {
+    width: min(240px, calc(100vw - 100px));
+    left: 8px;
+    padding: 12px;
+  }
+  .in-editor .editor-header {
+    gap: 5px;
+  }
+  .in-editor .editor-header button {
+    min-height: 44px;
+    padding: 7px;
+    font-size: 11px;
+  }
+  .in-editor .editor-map-controls {
+    top: 77px;
+    right: 8px;
+  }
+  .in-editor .editor-map-controls button {
+    width: 44px;
+    min-height: 44px;
+  }
+  .workshop-test-return {
+    top: 105px;
+    right: 8px;
+  }
+  .workshop-test-return button {
+    font-size: 11px;
+    padding: 8px;
+  }
+  .workshop-library-entry {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .workshop-library-entry > div {
+    flex-basis: 100%;
+  }
+}
+.setup-warning {
+  border-left: 3px solid #e5ad69;
+  padding: 10px 12px;
+  background: #4e38294d;
+  line-height: 1.5;
+}
+
+/* Beginner lessons stay available even in short landscape, where ordinary tips hide. */
+.battle-hint.learning-guide:not(:empty) {
+  display: block;
+  max-height: calc(100dvh - 220px);
+  overflow-y: auto;
+}
+.battle-hint.learning-guide p {
+  display: block;
+}
+@media (max-height: 500px) and (min-width: 601px) {
+  .battle-hint.learning-guide:not(:empty) {
+    /* Expanded lessons share the joystick's space on short touch screens.
+       Keep the guide's scrollable action reachable; minimizing frees movement. */
+    z-index: 2;
+    top: 65px;
+    left: 10px;
+    width: 178px;
+    max-width: 178px;
+    max-height: calc(100dvh - 215px);
+    padding: 8px;
+  }
+  .battle-hint.learning-guide > span {
+    padding-right: 20px;
+  }
+}
+
+/* Readable, independent faction and allegiance identities. No costume recoloring. */
+.faction-legend { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; margin: 16px 0; }
+.faction-identity { display: flex; align-items: flex-start; gap: 10px; padding: 14px; border: 1px solid var(--line); border-radius: 9px; background: #112732; }
+.faction-identity.ironhold { border-top: 3px solid #c8d4d9; }
+.faction-identity.wildborn { border-top: 3px double #e9d2a2; }
+.faction-identity.arcanists { border-top: 3px solid #ded3ff; background-image: linear-gradient(135deg,#ded3ff0a 25%,transparent 25%); }
+.faction-crest { width: 32px; height: 32px; flex: none; color: #e8dfc1; }
+.faction-identity h3 { margin: 0 0 8px; font-size: calc(15px * var(--ui-scale,1)); }
+.faction-identity p { margin: 0 0 8px; font-size: calc(12px * var(--ui-scale,1)); }
+.faction-identity small,.faction-key { color: #afc2c4; font-size: calc(11px * var(--ui-scale,1)); line-height: 1.5; }
+
+/* Dependencies mirror content data: construction path → independent, sequential levels. */
+.research-intro,.research-footnote { margin: 2px 0 12px; color: #b6cace; font-size: calc(12px * var(--ui-scale,1)); line-height: 1.5; }
+.research-footnote { margin: 12px 0 0; }
+.research-branches { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(220px,100%),1fr)); gap: 12px; }
+.research-branch { min-width: 0; padding: 10px; border: 1px solid #729c9f55; border-radius: 8px; background: #0d222c; }
+.research-path { min-height: 50px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0 0 10px; font: 650 calc(12px * var(--ui-scale,1)) system-ui; }
+.research-path > span:not(.research-arrow) { border: 1px solid #adc7c63b; border-radius: 6px; padding: 6px 8px; flex: 1; }
+.research-path .ready { color: #c8f0db; background: #244638; }
+.research-path .missing { color: #d5c1a4; border-style: dashed !important; }
+.research-path small { display: block; font-size: calc(10px * var(--ui-scale,1)); font-weight: 400; margin-top: 3px; }
+.research-nodes { display: grid; gap: 9px; }
+.research-node { display: flex; flex-direction: column; align-items: stretch; gap: 8px; padding: 12px; text-align: left; min-width: 0; border-left: 3px solid #698489; }
+.research-node.available { border-left-color: var(--gold); }
+.research-node.completed { border-left-color: #8ac4a3; }
+.research-node.queued { border-left-color: #9dc5ed; }
+.research-node:disabled { opacity: 1; cursor: default; background: #172d36; }
+.research-node.locked { color: #bfcbca; }
+.research-node-title { display: flex; align-items: center; gap: 8px; }
+.research-node strong { font-size: calc(13px * var(--ui-scale,1)); }
+.research-node .research-effect { font-size: calc(12px * var(--ui-scale,1)); line-height: 1.5; font-weight: 400; }
+.research-levels { display: flex; align-items: center; gap: 6px; }
+.research-levels > span { display: grid; place-items: center; width: 26px; height: 26px; border: 1px solid #789794; border-radius: 50%; font-size: 12px; }
+.research-levels .done { background: #8ac4a3; color: #122a23; border-color: #c8f0d7; }
+.research-levels .pending { border-style: dashed; border-color: #afd0f2; }
+.research-levels small { margin-left: auto; color: #bacccb; font-size: calc(11px * var(--ui-scale,1)); }
+.research-status { font-size: calc(11px * var(--ui-scale,1)); color: #edd399; }
+.research-price { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; color: #bdd0cc; font-size: calc(11px * var(--ui-scale,1)); }
+.research-price .icon { width: 14px; height: 14px; }
+
+.about-dialog { width: min(850px,100%); }
+.about-content section { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--line); }
+.about-content h3 { color: var(--gold); }
+.about-version { color: var(--gold); font-weight: 700; }
+.about-controls { padding-left: 22px; line-height: 1.6; }
+.about-controls li { margin-bottom: 9px; }
+.soundtrack-credits { padding: 0; list-style: none; }
+.soundtrack-credits li { display: flex; justify-content: space-between; gap: 16px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.soundtrack-credits li span { color: var(--muted); }
+
+/* UI text preference extends to menus as well as the battlefield command deck. */
+.home button,.content-page button,.setup-page button,.dialog button { font-size: calc(13px * var(--ui-scale,1)); }
+.home .home-lede { font-size: calc(16px * var(--ui-scale,1)); }
+.home .home-links button,.home footer { font-size: calc(12px * var(--ui-scale,1)); }
+.setup-page .field > span,.setup-page .field input,.setup-page .field select,.setup-page .muted,
+.content-page p,.content-page label,.dialog p,.dialog li,.dialog .settings-fields label,.dialog select { font-size: calc(13px * var(--ui-scale,1)); }
+.dialog h3,.dialog .help-grid h3 { font-size: calc(15px * var(--ui-scale,1)); }
+.dialog .help-grid p,.scale-card small,.setup-summary,.setup-slot legend { font-size: calc(12px * var(--ui-scale,1)); }
+.dialog .settings-fields label,.dialog .settings-fields input[type="range"] { min-height: 44px; }
+.minimap-toggle,.command-deck .selection-tools button.deck-toggle,.recruit-controls button { min-width: 44px; min-height: 44px; }
+.home { justify-content: safe center; }
+@media(max-width: 800px) {
+  .faction-legend,.research-branches { grid-template-columns: minmax(0,1fr); }
+  .research-path { min-height: 0; }
+  .research-nodes { grid-template-columns: repeat(auto-fit,minmax(min(210px,100%),1fr)); }
+}
+@media(max-width: 600px) {
+  .faction-identity { padding: 12px; }
+  .soundtrack-credits li { flex-direction: column; gap: 3px; }
+  .home .home-lede { font-size: calc(13px * var(--ui-scale,1)); }
+}
+
+/* Keep the ordinary tip's close target within its own panel, away from the map. */
+.battle-hint > button[data-action="dismiss-tips"] {
+  width: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  top: 0;
+  right: 0;
+  padding: 10px;
+}
+.battle-hint:not(.learning-guide) > span,
+.battle-hint:not(.learning-guide) > b {
+  display: block;
+  padding-right: 32px;
+}
+
+/* Short landscape: one compact placement row, not a second tall panel over the map.
+   Keep the selection row and its Cancel; hide only redundant navigation/content. */
+@media (max-height: 500px) and (min-width: 601px) {
+  .placing-building .command-deck .deck-tabs,
+  .placing-building .command-deck .deck-content,
+  .placing-building .paused-ribbon {
+    display: none;
+  }
+  .placement-toolbar {
+    width: min(780px, calc(100% - 20px));
+    bottom: calc(var(--deck-height, 52px) + 8px);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    border-radius: 8px;
+  }
+  .placement-toolbar > div:first-child { min-width: 0; }
+  .placement-toolbar b { font-size: calc(13px * var(--ui-scale, 1)); }
+  .placement-toolbar small {
+    margin: 3px 0 0;
+    font-size: calc(11px * var(--ui-scale, 1));
+    line-height: 1.35;
+  }
+  .placement-toolbar button {
+    min-width: 44px;
+    min-height: 44px;
+    white-space: nowrap;
+  }
+  .placing-building .selection-info .cancel { min-width: 44px; min-height: 44px; }
 }

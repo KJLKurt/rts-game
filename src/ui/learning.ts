@@ -1,4 +1,5 @@
 import type { GameState, Point } from "../sim";
+import { BUILDING_CLEARANCE } from "../sim/construction";
 export interface LearningProgress {
   step: number;
   origin: Point;
@@ -32,20 +33,69 @@ export const LESSONS = [
   },
   {
     title: "Make room to grow",
-    text: "Open Build and choose House. Drag the preview onto a clear site, then Build here. Each House adds 8 army capacity. Nearby houses are allowed when their footprints fit.",
+    text: "Open Build and place two Houses side by side, leaving a small gap. Each completed House adds 8 population capacity for troops, not workers. Watch your capacity rise by 16, up to the match ceiling. Wait for both to finish.",
     action: "Open Build",
   },
   {
     title: "Improve a building",
-    text: "Tap your completed House and choose its Townhouse upgrade. It adds 4 more capacity. Details always shows current and maximum level, cost, and benefit.",
+    text: "Tap either completed House and choose its Townhouse upgrade. It adds 4 more population capacity without another footprint. Details shows the cost, benefit, and current and maximum level. Wait for the upgrade to finish.",
     action: "Show your house",
   },
   {
     title: "Claim the frontier",
-    text: "Select Army, then tap the marked relic. Relics earn victory points in real battles; gold and wood fund your army. Your force will hold the captured site.",
+    text: "Select Army, then tap the marked relic. Relics earn victory points in real battles; gold and wood fund your army. Your force will hold the captured site. Finish this lesson to open every practice option.",
     action: "Show relic",
   },
 ];
+
+/** Small gaps between non-overlapping footprints count as a compact settlement. */
+export function hasNeighboringHouses(state: GameState): boolean {
+  const houses = state.entities.filter(
+    (e) =>
+      e.team === 0 && e.type === "house" && e.hp > 0 && e.buildProgress >= 1,
+  );
+  return houses.some((a, index) =>
+    houses.slice(index + 1).some((b) => {
+      const gap = Math.hypot(a.x - b.x, a.y - b.y) - a.radius - b.radius;
+      return gap >= BUILDING_CLEARANCE - 0.001 && gap <= 1;
+    }),
+  );
+}
+
+export type LearningAction =
+  | "build"
+  | "recruit"
+  | "research"
+  | "upgradeBuilding";
+/** Presentation/input gate only. Normal matches and completed practice stay unrestricted. */
+export function learningActionAvailable(
+  step: number | null | undefined,
+  action: LearningAction,
+  id: string,
+): boolean {
+  if (step == null || step >= LESSONS.length) return true;
+  if (action === "recruit") return step >= 4 && id === "swordsman";
+  if (action === "build") return step >= 5 && id === "house";
+  if (action === "upgradeBuilding") return step >= 6 && id === "house";
+  return false;
+}
+
+export function learningPanelHint(
+  step: number | null | undefined,
+  panel: "army" | "build" | "research",
+): string {
+  if (step == null || step >= LESSONS.length) return "";
+  if (panel === "army")
+    return step < 4
+      ? "Recruit opens after you capture gold and timber and inspect your keep. Follow the guide above."
+      : "Start with Swordsmen from your keep. More troops open after the final lesson.";
+  if (panel === "build")
+    return step < 5
+      ? "Build opens after your first three soldiers finish training. Follow the guide above."
+      : "Place two neighboring Houses with a small gap. Each adds 8 population capacity; other buildings open after the final lesson.";
+  return "Research opens after the final lesson. First learn to capture income, recruit, build Houses, and upgrade one in Details.";
+}
+
 export function advanceLearning(
   state: GameState,
   progress: LearningProgress,
@@ -67,10 +117,7 @@ export function advanceLearning(
     progress.inspectedKeep,
     state.entities.filter((e) => e.team === 0 && e.kind === "unit" && e.hp > 0)
       .length >= 3,
-    state.entities.some(
-      (e) =>
-        e.team === 0 && e.type === "house" && e.hp > 0 && e.buildProgress >= 1,
-    ),
+    hasNeighboringHouses(state),
     state.entities.some(
       (e) =>
         e.team === 0 &&

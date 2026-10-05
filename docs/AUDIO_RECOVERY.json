@@ -1,0 +1,77 @@
+{
+  "recovery": "Four missing cues reconstructed from retained composition/synthesis source excerpts; lost file byte identity is unproven. Existing exploration/combat codecs preserved.",
+  "preserved": {
+    "exploration.ogg": {
+      "sha256": "33c7b6aea2699abb489fb888c95bc41b74f60dd57fc31864f40bee7e00ce7f5b",
+      "matchesRecoveredCommit": true
+    },
+    "exploration.mp3": {
+      "sha256": "0b713e32e6bc6807091c9c19c2ab359b8cc93494bc0445d7f7bffe3fb921b3b0",
+      "matchesRecoveredCommit": true
+    },
+    "combat.ogg": {
+      "sha256": "b8d6e56287eaf00d73382de666a9a527cd4af43303cd7169d87ff2a887a2fb73",
+      "matchesRecoveredCommit": true
+    },
+    "combat.mp3": {
+      "sha256": "1ab45433aa75c9515cf3761629158475b8f62e6e6fd825b6f0733fcff9878161",
+      "matchesRecoveredCommit": true
+    }
+  },
+  "reconstructed": {
+    "menu.ogg": {
+      "sha256": "589021d9a054293b6d9463e2f1c6f91dcfadc12d5b877e74e75c45eacc3e858d",
+      "priorEncodedByteIdentity": "unproven"
+    },
+    "menu.mp3": {
+      "sha256": "810dd7008beab18a16a4a284b32b9ea79dac02eba7ec323e524e74689bfff44b",
+      "priorEncodedByteIdentity": "unproven"
+    },
+    "tension.ogg": {
+      "sha256": "005df17b7fe178e6008641c6daea0b727891eab14706cf5b465c62218c124e67",
+      "priorEncodedByteIdentity": "unproven"
+    },
+    "tension.mp3": {
+      "sha256": "cb02147dc906806c570cb7f458e9dcfe68ba4c8e02f86a18943cb90a3141e277",
+      "priorEncodedByteIdentity": "unproven"
+    },
+    "victory.ogg": {
+      "sha256": "ded78d1ec668e04eb0de047b56687f5bbbe8d890eab9fa36cad95ad6d6eb7fc0",
+      "priorEncodedByteIdentity": "unproven"
+    },
+    "victory.mp3": {
+      "sha256": "5af3c0625e83d7148e884eed5a353b890e422ca1dcdcb71e3f813ebd0788249f",
+      "priorEncodedByteIdentity": "unproven"
+    },
+    "defeat.ogg": {
+      "sha256": "e04ef704de0033b9e9907885540b785214e319573a9b1d2f5951dcd8c3aaa089",
+      "priorEncodedByteIdentity": "unproven"
+    },
+    "defeat.mp3": {
+      "sha256": "028c032a4ddc26a481c203948a0693406e1f8eaf28dada55f8797149d56ad334",
+      "priorEncodedByteIdentity": "unproven"
+    }
+  },
+  "decodedBaselineComparison": {
+    "exploration.ogg": {
+      "decodedPCMMatchesReconstruction": true,
+      "preservedDecodedSHA256": "fac4a5606ef61ee073ef668f00030d92205a62859ca95ab31ee4a5465974efff",
+      "reconstructedDecodedSHA256": "fac4a5606ef61ee073ef668f00030d92205a62859ca95ab31ee4a5465974efff"
+    },
+    "exploration.mp3": {
+      "decodedPCMMatchesReconstruction": true,
+      "preservedDecodedSHA256": "9bde3a577cc1d913c432b5be5c2eeacd08b4ce764fba3d9d73f7e6f55fd53680",
+      "reconstructedDecodedSHA256": "9bde3a577cc1d913c432b5be5c2eeacd08b4ce764fba3d9d73f7e6f55fd53680"
+    },
+    "combat.ogg": {
+      "decodedPCMMatchesReconstruction": true,
+      "preservedDecodedSHA256": "7116fe621f626096c9e18bfff895f6b72cb5deb4a861d9eae5407d0029f78839",
+      "reconstructedDecodedSHA256": "7116fe621f626096c9e18bfff895f6b72cb5deb4a861d9eae5407d0029f78839"
+    },
+    "combat.mp3": {
+      "decodedPCMMatchesReconstruction": true,
+      "preservedDecodedSHA256": "5e881618553cc9e5afd8f8a0003e856cc6b6103622176e3548d88837e12696f2",
+      "reconstructedDecodedSHA256": "5e881618553cc9e5afd8f8a0003e856cc6b6103622176e3548d88837e12696f2"
+    }
+  }
+}

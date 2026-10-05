@@ -1,87 +1,110 @@
-# Commercial-readiness work plan
+# Commercial-readiness work plan and scope
 
-Reopened 4 October 2026 following hands-on player feedback. The prior release is a tested foundation, not the completion target for this pass. A mechanic existing in the engine is not evidence that a new player can discover or use it. The release must pass both implementation checks and ordinary, uncoached play.
+Updated 5 October 2026 after final local browser and native-play verification. **The local candidate passes its runnable browser gate; it remains a testing preview and is not declared commercially ready.** Linux Chromium and emulated phone touch were tested; physical iPhone/Safari, installed-device lifecycle/performance, subjective soundtrack listening, full natural campaign/expedition routes, broad balance and exact deployed-release checks remain open. Asset provenance and distribution licensing still need commercial review.
 
-The original brief starts with **gold and wood earned by capturing deposits**, without worker micromanagement. Stone is not a spendable resource. The game must teach and show that rule. Repository and production paths are `KJLKurt/rts-game` and `/rts-game/`.
+## Authority and scope
+
+1. **Original requirement:** the 56-section Frontier Command brief asks for a polished, replayable proof-of-concept/vertical slice, with real systems and final execution checks. Its section 53 explicitly permits extensible architecture plus a useful working subset and documented expansion when the full system cannot reasonably reach useful quality. It does not authorize fake actions, broken advertised flows or replacing final verification with documentation.
+2. **Later owner feedback:** progressive first-time learning, reliable direct controls, clear building purposes/actions/upgrades, visible capture income/queues/population, easier neighboring placement, collapsible HUD, larger/configurable matches and editor pan/drag-paint are current acceptance goals. A two-house practice lesson and preview/confirm placement are concrete responses to that feedback, not verbatim clauses from the original.
+3. **Conditional/future ideas:** preserve the original qualifiers rather than converting every example into a mandatory feature. Named battle slots/backups were not required; formation/grouping is “where practical”; a graphics-quality setting is “if helpful”; keyboard navigation is “where reasonable.” Full online multiplayer, all eventual biomes and naval expansion are future architecture.
+4. **Supplemental visual requests:** theme/style packs and full directional frames come from later discussions and remain separately tracked below. Their absence must not be silently treated as cancellation, nor incorrectly attributed to the original brief.
+5. **Repository override:** the owner's later instruction selects [KJLKurt/rts-game](https://github.com/KJLKurt/rts-game). The production base is `/rts-game/`. This supersedes the copied original brief's `kjljon/frontier-command` destination; preserve current hosting paths.
+
+Gold and wood come from captured deposits and the keep stipend; no worker micromanagement is required. Stone is scenery, not a spendable resource.
+
+## Current evidence boundary
+
+- Current local receipt: **516 tests in 54 files passed**, TypeScript checks and the production build passed (eight story missions validated). The final local production browser run accounted for **262 cases: 244 passed, 18 intentional input/layout-specific skips, zero failures or flakes**. Runtime `index-DJ5oCh_8.js` / `index-BLaajxx7.css`; worker cache `c8affbd450ca`, 24 precached files.
+- Real desktop input earned an Outpost win and opened Hold the Line at time 0. Native expedition opening expansion and exact save/resume passed. Full eight-lesson practice completed with actual input in desktop and both emulated phone views. Result/branch/storage fixtures stay distinguished from earned playthroughs.
+- Earlier 441/493/494/505-test receipts and historical deployed runs are retained as history, not current verification. The fresh cloud environment ran sandbox-enabled Chromium; the prior Linux socket/infrastructure block was not bypassed.
+- Performance evidence: the archived 4 October investigation (`frontier-profiling-2026-10-04.tar.gz`, SHA256 `66a7674b2cdc70fb1d1a5c133a28fd0d7349c129a57607b2558d1ac3f28946d5`, `frontier-profiling/REPORT.md` and `applied.json`) measures an applied dense-combat p95 of **65.75ms**, versus baseline repeats **77.0–96.3ms**. Cold mass movement still peaks at **223.63ms wall / 221.503ms main-thread CPU** for a 100ms simulation tick. These synthetic headless figures exclude rendering, phone thermals and input; the 600-population ceiling is not a smooth-play guarantee.
+- [REQUIREMENTS_STATUS.md](REQUIREMENTS_STATUS.md) is the current implementation/verification summary. [MATCH_SCALES.md](MATCH_SCALES.md), [BEGINNER_FLOW_QA.md](BEGINNER_FLOW_QA.md) and [JOURNEY_INTEGRATION_QA.md](JOURNEY_INTEGRATION_QA.md) retain their dated, bounded evidence.
 
 ## Release sequence and gates
 
-1. **Understand, inspect, and control.** A guided learning scenario starts with a commander and a small settlement, introduces one action at a time, then unlocks the wider loop. Selecting a building exposes its purpose, production, current/max upgrade level, health, progress, and rally action. Gold/wood income sources and population used/reserved/cap/ceiling are inspectable. The command panel, guide, and minimap can be collapsed independently. Direct controls respond consistently and stop on release. Gate: a fresh player captures both supplies, recruits a queue, builds two neighboring houses, explains the victory condition, and finds the map without outside instructions on phone and desktop.
-2. **Build and grow.** Preview-first touch placement with an explicit confirm action, snapped footprints, immediate reason text, access-preserving adjacency, repeat placement, and cancel. Production lists show each job, progress, time, producer, batch quantity, cancellation/refund, and population reservation. Data-driven building upgrades are useful and visible. Gate: repeated paused/unpaused placements and queues survive cancellation, destruction, reload, and orientation changes without lost inputs/resources.
-3. **Play at the desired scale.** Quick/Standard/Epic/custom durations and map/population/economy settings have concrete summaries; larger maps remain navigable and perform acceptably. AI, travel distance, resource reserves, escalation, and victory targets are evaluated together. Gate: contrasting economic/defensive/aggressive policies and real matches establish short, 15–20 minute, and substantially longer play; finite samples are reported honestly.
-4. **Create complete battlefields.** Distinct Pan/Paint tools, held-drag interpolated brush strokes, brush size, undo/redo, editable dimensions/biome/settings, unit/building/camp/objective/team placement, save/load/clone/import/export/test-return, and actionable validation. Gate: author and replay a custom scenario through UI, touch paint and pan remain distinct, and all content survives a round trip.
-5. **Complete replayable content and progression.** Authored missions teach progressively and have meaningful distinct objectives; typed triggers cover all required actions. Expedition gains genuine route/node/reward choices. Upgrade trees, achievement progress/categories/timestamps, persistent choice unlocks, and detailed local stats become visible. Gate: every advertised campaign chapter, expedition node class, win/loss/retry/unlock route, and save boundary is exercised.
-6. **Finish presentation and accessibility.** Readable faction identity, coherent animation/feedback, environmental life, adaptive audio states, scalable UI, graphics settings, keyboard/touch alternatives, and clear help/reference. Supplemental theme/style packs are tracked below and must have complete terrain/unit/building/resource/audio coverage before appearing as selectable themes. Gate: visual and auditory review, input continuity, reduced-motion, and small-screen checks.
-7. **Harden the complete game.** Clean dependency install, full local/seed/simulation tests, bounded browser acceptance, save migrations, offline/update/install lifecycle, larger-army profiling, hostile imports, and recovery checks. Gate: no known blocking defects in advertised flows; distinguish physical-device evidence from emulation.
-8. **Release and verify.** Meaningful source commits and pushes; batch Actions and deployment near tested checkpoints. Verify exact remote source, build, Pages assets, update/Continue, and public gameplay. Publish accurate how-to guides, credits, complete status matrix, and remaining platform/quality evidence gaps. An intermediate deploy is a release candidate, not project completion.
+| Stage | Current implementation | Remaining acceptance gate |
+|---|---|---|
+| 1. Understand, inspect and control | Peaceful eight-step practice with progressive choices; two neighboring completed houses and upgrade; explicit Outpost transition; building Details and economy/population inspection; independently collapsible deck/map/guide | Uncoached desktop/touch completion, accurate resource/victory understanding, useful playfield and consistent movement/stop. Actual-input learning passes all three viewports; uncoached human understanding remains open |
+| 2. Build and grow | Snapped preview/confirm/repeat/cancel placement; compact access-preserving footprints; production jobs, progress, producer routing, batches, refunds and reservations; visible building levels | Browser placement/queue/cancel/reload/rotation checks pass. Continue broader natural combat/resource stress and physical-device input review |
+| 3. Play at the desired scale | Quick/Standard/Epic/custom settings, 32–160 maps, 4–180-minute targets, slots/alliances/economy/population summaries; fresh finite headless pacing samples; bounded dense-combat optimization | Ordinary real-time short/standard/long matches; final-source cold group movement and renderer/device profiling. Do not turn a finite sample into a duration or FPS guarantee |
+| 4. Create battlefields | Pan/Paint, interpolated drag brush, sizes, undo/redo; dimensions/biome/entities/camps/teams/rules; named map library, clone/import/export and test-return | Actual UI author/save/import/export/test-return and touch pan/paint/draft-recovery checks pass; custom-scenario quality remains a human review task |
+| 5. Replayable content/progression | Two authored campaigns/eight chapters, typed triggers/objectives; branching seven-stop expedition; persistent choices, 30 achievements and statistics; real research paths/level progression | Outpost natural win and local research/persistence checks pass; branch/node-class outcomes were fixture-driven. Later earned campaign/expedition routes and broad balance remain open |
+| 6. Presentation/accessibility | Independent faction crests/material adornments and team shapes; Credits/About; six-state audio; scalable text on key surfaces, 44px HUD disclosure targets and reduced motion | Pixel inspection on small/large viewports, dense-battle faction readability, long-dialog/focus continuity, scaled text and subjective audio review. Full theme/frame packs remain separate |
+| 7. Harden the candidate | Versioned newest-record recovery, abort settlement/tombstones; staged result save with retry and update/navigation blocking; independent app suspension with explicit resume and unchanged tactical-pause quota | Actual local storage failures/retries, result/update races, foreground recovery and offline checks pass. Physical installed-device and deployed-update lifecycle remain open |
+| 8. Release and verify | Correct authorized repository/base and extension documents; local candidate and private QA bundle available | Fix acceptance failures, establish asset distribution rights, publish only through authorized flow, and verify exact remote/build/deployment/assets/update/Continue/public play. An intermediate deployment is not completion |
 
-## Original brief audit
+## Original brief coverage, sections 1–56
 
-Status describes the prior `85dc40b` runtime as inspected in code. **Present** still requires regression checking after changes. **Partial** identifies real missing behavior or discoverability, not a promise inferred from a button.
+This audits the **current recovered/hardened source**, not the old `85dc40b` implementation. “Present” means implemented in source, with local checks where stated; it does not close the browser, play or rights gates above.
 
-| Brief | Prior implementation / gap | Required completion and gate | Stage |
-|---|---|---|---|
-| 1 Browser/mobile/PWA | Present; phone UX confusing despite flow passes | Intentional touch controls, usable playfield, production subpath | 1,7 |
-| 2 Offline first | Present scoped cache/storage and offline play | Exercise all expanded menus/content/editor/audio offline | 7 |
-| 3 Safe updates | Present consent/save-before-restart | Migrate expanded state, old version offline, interrupted save/update | 7 |
-| 4 Isometric rendering | Present custom Canvas2D; technology decision documented | Profile larger worlds; maintain readability and art consistency | 3,6 |
-| 5 Simulation separation | Present deterministic commands; main UI monolithic | Extract input/editor/presentation contracts without simulation DOM coupling | 1–5 |
-| 6 Commanders | Three archetypes/six abilities present | Reliable direct movement, targeting/ability explanation and visible upgrade paths | 1,5 |
-| 7 Tactical pause | Present queued commands; limited Hard/no Brutal | Visible reserved costs and queued actions; cancellation; preserve modal pause | 2,7 |
-| 8 Resources | Gold/wood, finite capture income, depot/research present | Teach capture-without-workers; show sources/depletion/rates; no false stone UI | 1,2 |
-| 9 Buildings | Nine types; useful functions hidden; large spacing; no individual upgrades | Selected-building actions, compact valid adjacency, upgrade levels, construction feedback | 1,2 |
-| 10 Units/counters | Six types with counter multipliers present | Inspect stats, role, counters, prerequisites, upgrade effects and population | 1,5 |
-| 11 Commands | Select/Army/move/attack/hold/rally present; weak grouping | Direct-control contract, selectable groups/formation, explicit modes/feedback | 1,3 |
-| 12 Factions | Three numerical identities; shared silhouettes | Clear faction mechanics/choices and visual identity; team symbols remain accessible | 5,6 |
-| 13 Scale/duration | 32–84 tile maps, duration8/18/25/40, caps40–120 exposed | Larger/custom scales, short/standard/epic presets with paired settings; visible limits | 3 |
-| 14 Escalation | Score escalation and conquest storm present | Explain timeline and verify late-game endings across durations | 3 |
-| 15 Biomes | Four, with movement/vision/income differences | Inspect biome effects; extend full terrain set where useful and verify playability | 3,6 |
-| 16 Generation | Deterministic v3/v4, many settings internal | Expose resource/terrain/water/camps/objective/symmetry/weirdness settings and share codes | 3,4 |
-| 17 Validation | Reachability/fairness checks, hundreds of seeds | Expanded-map/entity/footprint/team checks, deterministic recovery and explanations | 3,4,7 |
-| 18 Skirmish setup | Common subset; no teams/slot editing; resource sliders absent | Human/AI/closed slots, teams, settings summary, starting economy/speed/caps | 3 |
-| 19 AI | Six personalities, same costs/resources, bounded vision | Account for all new construction/upgrades/scales, test scouting and actual strategic play | 2,3,5 |
-| 20 Campaigns | Five data missions; simple linear unlocks; 3 battle expedition | Distinct teaching missions/objectives; proper branching expedition with non-battle choices | 5 |
-| 21 Campaign authoring | Typed data and docs present | Connections/rewards/unlocks/modifiers/maps examples and build-time validation | 5 |
-| 22 Triggers | Time/capture/resource/destroyed/region; actions missing alliance/defeat | Typed unit-location/kill/building conditions; alliance/defeat and objective actions | 5 |
-| 23 Editor | Terrain/resources/spawns only; tap paint; one save | Pan/Paint drag, dimensions/biome/entities/teams/victory/camps, undo/clone/library/test-return | 4 |
-| 24 Progression | Six research techs, chapter unlocks/achievements | Visible commander/unit/economy progression and persistent choice/cosmetic unlocks | 5 |
-| 25 Upgrades | Six techs, one/two levels; no tree; cost display wrong above level1 | Correct next-level costs, dependencies, current/max levels, building and commander choices | 1,2,5 |
-| 26 Achievements | 22 boolean unlocks | Progress counters, categories, hidden state, timestamps, accessible detail | 5 |
-| 27 Statistics | Wins/games/kills/time/streak/campaign only | Faction/commander usage, recruited/lost/destroyed/resources, fastest wins, local match history | 5 |
-| 28 Modes | Conquest/domination/relic/Rush present; no teams | Distinct objectives explained; AI team/free-for-all support, complete special mission conditions | 3,5 |
-| 29 Multiplayer boundary | Command/state architecture and docs | Keep network-ready boundary; original brief explicitly does not require online backend | 7,8 |
-| 30 Saves | One Continue slot, autosave/manual, migrations | Named slots/backups and clear recovery; expanded campaign/editor/progression compatibility | 5,7 |
-| 31 Music | Exploration/combat loops; no full state suite | Menu/tension/victory/defeat cues, transitions, persisted controls, replaceable manifest | 6 |
-| 32 SFX | Synthesized capped event SFX | Coverage/readability for every new action; subjective listening review | 6 |
-| 33 Effects | Attacks/projectiles/capture/death/abilities present | Quality control/adaptive visual load; building upgrades/construction/resource work feedback | 6,7 |
-| 34 Fog | Real visible/explored, tactical AI visibility | Team-shared vision/alliance rules; no UI or AI information leakage | 3,5,7 |
-| 35 Minimap | Terrain/friend/visible enemy/base/relic/camera present | Expand/collapse, alerts, touch destinations, large-world navigation | 1,3 |
-| 36 UI | Major screens present; building inspection, queues, limits absent | Contextual useful selection, collapsible panels, coherent menus/reference, no fake actions | 1,2,5 |
-| 37 Accessibility | Focus/team shapes/audio/reduced-motion present; uiScale stored unused | Actual scalable UI, readable sizes, touch targets, alternative input, keyboard paths | 1,6 |
-| 38 Manifest | Correct `/rts-game/` scope/icons/start | Install/launch and sibling-app isolation across release | 7 |
-| 39 Worker | Scoped full cache and consent update present | Expanded assets cached; storage quota/recovery; no unnecessary debug assets | 7 |
-| 40 Tests | 226 local/101 browser passes on prior release | Meaningful new regressions plus full final suite; first-time behavior validated separately | All |
-| 41 Bot play | Headless AI metrics present | Broaden realistic economy/defense/offense policies, duration/faction/scale comparisons | 3,7 |
-| 42 Debug | Reveal/resources/spawn/speed/seed/FPS subset | Entity/AI/path inspection and team testing kept out of normal play | 3,7 |
-| 43 Performance | Headless profile only; renderer texture bounded | Large-world render/path/fog/AI/particle profiles and dynamic visual quality | 3,6,7 |
-| 44 Pathfinding | Cached-grid A*, groups and access checks | Building adjacency and direct-control sliding, chokepoints and larger-map budgets | 1–3 |
-| 45 Assets | Generated/user-reference assets and attribution present | Full used-asset provenance and distributability; no unsupported license claims | 6,8 |
-| 46 Data definitions | Units/buildings/techs/maps typed; much UI data inline | Typed upgrades, themes, objectives, achievement rules, campaign node/reward definitions | 2,5,6 |
-| 47 Documentation | Required documents present | Reflect complete final behavior and actual player help, not stale implementation claims | All,8 |
-| 48 Pages | Works at correct Kurt repo base | Verify exact final release, minimize Actions, preserve tested main | 7,8 |
-| 49 Content breadth | Approximate numeric targets met | Depth/discoverability/quality across that content, not numeric box checking | All |
-| 50 Campaign example | Five named chapters, only first played to win | Rebuild progressive lesson content and play every chapter to an ending | 1,5,7 |
-| 51 Game feel | Some attractive effects; novice confusion confirmed | First-time control/build/economy loop must feel intuitive; repeated independent matches | All |
-| 52 Iteration | Local tests + independent/browser play in prior pass | Iterate bounded working batches; fix observed problems before adding breadth | All |
-| 53 Real features | No knowingly inert main button; partial systems documented | Remove undiscoverable/ambiguous mechanics and incomplete advertised flows | All |
-| 54 Autonomous decisions | Existing authorization covers normal design | Continue reasonable decisions, raise only concrete blockers | All |
-| 55 Final verification | Prior gate covered foundation, not expanded scope | Clean full validation, complete advertised modes, offline/save/editor/mobile/desktop | 7,8 |
-| 56 Delivery | Prior docs/summary exist | Full final status, verified play link, extension guides, candid evidence limits | 8 |
+| Section | Current coverage / explicit limitation | Gate |
+|---|---|---|
+| 1 Browser/mobile/PWA | Present responsive browser/PWA implementation at the later-authorized `/rts-game/` base | 1, 7–8 |
+| 2 Offline first | Scoped cached shell/content/art/audio and local persistence; expanded local offline flows passed | 7 |
+| 3 Safe updates | Explicit consent; versioned storage; staged result/retry and pending-save update protection now implemented | 7–8 |
+| 4 Isometric rendering | Canvas2D implementation and documented Phaser/PixiJS comparison; simple/procedural animation plus three attack strips | 3, 6 |
+| 5 Simulation separation | Typed commands/fixed simulation separated from rendering, persistence and UI; main orchestration remains substantial | 7 |
+| 6 Commanders | Warlord/Ranger/Engineer, six abilities, direct steering, targeted orders and inspection; current Engineer toolkit is turret/repair | 1, 6 |
+| 7 Tactical pause | Queues and limited-difficulty rules; app interruption now separate from tactical-pause accounting | 2, 7 |
+| 8 Resources | Capture-based gold/wood, finite reserves, rates, depletion, keep/depot/research effects | 1–3 |
+| 9 Buildings | Nine meaningful types, prerequisites/build times/population and level 1–3 upgrades; preview/confirm adjacency | 2 |
+| 10 Units/counters | Six core types, moderate counters and visible roles/stats | 1–3 |
+| 11 Commands | Individual/commander/whole-army selection and move/attack/attack-move/hold/rally; arbitrary saved groups/formations not implemented and conditional in original | 1, 3 |
+| 12 Factions | Three mechanical identities plus new distinct faction crests/material overlays independent of team signals; shared base sprites remain | 6 |
+| 13 Scale/duration | Quick/Standard/Epic/custom, 32–160-tile worlds and 4–180-minute pacing targets; not guaranteed endings | 3 |
+| 14 Escalation | Objective escalation and Conquest storm endings; Rush has shrinking territory | 3 |
+| 15 Biomes | Four gameplay-affecting biomes meet the several-biome slice target; remaining listed environments are eventual examples | 3, 6 |
+| 16 Generation | Deterministic versioned maps; exposed resources/terrain/water/camps/objectives/symmetry/weirdness and portable codes | 3–4 |
+| 17 Validation | Reachability/fairness/forces/footprints/teams with deterministic seed regressions and actionable editor errors | 4, 7 |
+| 18 Setup | Dimensions/seed/biome/slots/alliances/difficulty/personality/economy/caps/speed/mode exposed; one human command surface | 3 |
+| 19 AI | Six personalities, same economic rules, bounded vision, recruitment/build/research/attack and headless metrics | 3, 5 |
+| 20 Campaigns | Two authored campaigns/eight chapters plus a genuine branching expedition with seven node classes/rewards | 5 |
+| 21 Authoring | Typed definitions, build validation and campaign guide with missions/objectives/rewards/triggers/unlocks | 5, 8 |
+| 22 Triggers | Structured conditions/actions including unit/region/resource/objective/building cases, alliance and defeat; no arbitrary-script execution | 5, 7 |
+| 23 Editor | Dimensions/biome/terrain/resources/spawns/forces/objectives/camps/teams/victory plus save/load/clone/import/export/validation | 4 |
+| 24 Progression | Per-match technologies/buildings; persistent titles, campaign options, expedition charters and challenge choices | 5 |
+| 25 Upgrades | Data-driven effects; new research construction-path and sequential-level tree with real costs/queue/lock states; no invented cross-tech dependencies | 2, 5–6 |
+| 26 Achievements | 30 with counters/categories/hidden state/timestamps/persistence and command-record UI | 5, 7 |
+| 27 Statistics | Usage, army/resources, wins/losses, campaign progress, fastest wins, time and bounded local history | 5, 7 |
+| 28 Modes | Conquest/Domination/relic/Rush and scripted objectives exceed the required initial subset; allied/FFA AI supported | 3, 5 |
+| 29 Multiplayer boundary | Command/state separation and future-network guide; online backend, invite codes and multiple human clients deliberately not implemented | 8 |
+| 30 Saves | Autosave/manual/Continue, migrations/errors, independent expedition checkpoint and staged result recovery. Named battle slots/backups were not required | 7 |
+| 31 Music | Six state tracks, transitions and independent persisted Master/Music/Effects/mute | 6–7 |
+| 32 SFX | Synthesized capped event/action audio; final audibility and repetition review pending | 6 |
+| 33 Effects | Combat/capture/building/ability/selection feedback, adaptive quality and reduced motion; manual quality setting is optional in original | 6–7 |
+| 34 Fog | Real visible/explored state and vision-limited tactical AI, including allied vision rules | 3, 7 |
+| 35 Minimap | Terrain/forces/bases/objectives/alerts/camera; collapse and touch navigation | 1, 3, 6 |
+| 36 UI | Main modes, editor, record/achievements/statistics, settings, help and new Credits/About; complete contextual HUD | 1, 6 |
+| 37 Accessibility | Actual scaled text on key surfaces, keyboard menu paths/focus, six team shapes, sound controls/reduced motion; final target/overflow review pending | 6 |
+| 38 Manifest | Scoped start/scope/icons/standalone at current owner-authorized base; installed launch still needs candidate evidence | 7–8 |
+| 39 Worker | Scoped cache/consent update; source maps excluded; local offline and scope-isolation assertions passed; deployed/installed-device checks remain open | 7–8 |
+| 40 Tests | 516 local tests in 54 files pass; 262 browser cases accounted for: 244 passed, 18 intentional skips, zero failures/flakes | All |
+| 41 Bot play | Headless/accelerated AI matches and metrics; finite policy/scale comparisons; perfect balance was explicitly not requested | 3 |
+| 42 Debug | Nonintrusive reveal/resources/spawn/speed/seed/FPS subset; the listed debug tools were suggestions, not every-item mandates | 3, 7 |
+| 43 Performance | Dense-query/separation optimization with exact-equivalence checks; cold 223.63ms movement spike and renderer/mobile evidence remain open | 3, 6–7 |
+| 44 Pathfinding | Cached-grid A*, blocked terrain/buildings/groups/chokepoints, footprint access and steering slide; larger-world profiling continues | 2–3 |
+| 45 Assets | Provenance documented in source and Credits/About; underlying reference rights and distribution license unverified | 6, 8 |
+| 46 Data definitions | Typed units/buildings/techs/commanders/factions/biomes/campaigns/objectives/achievements/upgrades; build validation | 5, 7 |
+| 47 Documentation | Required developer/authoring guides exist; current status and plan reconciled here; final release evidence still to append | 8 |
+| 48 Pages | Current owner-selected repo/base implemented; final hardened source/deployment/public checks not yet verified | 7–8 |
+| 49 Content breadth | Current counts meet/exceed approximate slice targets; quality and usable depth matter more than further count growth | All |
+| 50 Teaching campaign | Rise of the Frontier's five progressive chapters plus standalone eight-step practice and second campaign; current ordinary route review pending | 1, 5 |
+| 51 Game feel | Responsiveness/feedback/placement/control work implemented; novice feedback remains an ordinary-play acceptance gate | All |
+| 52 Iteration | Bounded fixes/tests/profiling with failures tracked; final browser findings must drive the next corrections | All |
+| 53 Working subsets | Original expressly permits useful extensible subsets with documented expansion; no broken or misleading advertised feature is excused | All |
+| 54 Autonomy | Reasonable engineering/design choices remain authorized; only actual blocking ambiguity needs owner input | All |
+| 55 Final verification | Clean final install/checks/build, production base/assets/manifest/worker/offline/save/modes/desktop/mobile execution remain release gates | 7–8 |
+| 56 Delivery | Final concise summary, verified play destination, extension instructions and candid limits follow actual acceptance | 8 |
 
 ## Supplemental visual/content requests
 
-The source discussions also request multiple themes (space, mythic, old-time, Christmas, Halloween, Street Kids), styles (toon/realistic/sticker), themed music, directional movement/attack frames, day/night, reusable faction recoloring, finite visibly depleted resources, and a real Rush Arena. Current production has one coherent theme, four biomes, three authored attack strips, procedural locomotion/effects, day/night tint, finite resources and a working Rush loop. Complete theme/style variants require terrain, resources, every building/unit, consistent animation and audio, not a character sheet alone. These remain tracked stage6 work; none may appear as a selectable unfinished pack.
+Later source discussions request space, mythic, old-time, Christmas, Halloween and Street Kids themes; toon/realistic/sticker styles; themed music; directional movement/attack frames; day/night; reusable faction recoloring; visible finite resources; and a real Rush Arena. These are **separate later scope**, not additional clauses in the recovered original.
 
-## Evidence and closure rule
+Current code has one coherent sprite theme, four biome palettes, three authored attack strips, procedural locomotion/effects, day/night tint, finite resources, Rush survival, six-state music and new faction adornments. Complete theme/style variants and full directional frame coverage remain unimplemented. No unfinished pack should appear as a selectable finished feature. Keep any later explicit commitment open until delivered or its scope is explicitly changed; the original section 53 cannot silently cancel newer promises.
 
-Code and test evidence is recorded per candidate SHA in `QA.md`; ordinary match findings in `PLAYTESTS.md`. Physical-device installation/performance and subjective audio review are separate from desktop Chromium emulation. A successful test suite alone cannot close the user’s learning, control, or game-feel feedback. Any remaining promised front stays open in this matrix until implemented and checked, or until the user explicitly changes its scope.
+## Remaining decisions and closure
+
+- No new decision is needed to execute the current QA bundle, fix observed defects or improve the documented cold-movement bottleneck within the authorized game work.
+- Asset rights/licensing require evidence before redistribution can be represented as commercially cleared. Generated or owner-supplied references alone are not proof of rights; do not invent a license grant.
+- Physical-device lifecycle/performance and subjective listening are distinct evidence categories. Original section 55 explicitly requires representative desktop/mobile viewport testing; do not call that a physical-device certification requirement, or claim emulation proves hardware performance.
+- Record final checks against the exact candidate/revision. A local test pass, a production build, a prepared QA bundle or a deployed preview alone cannot close first-time usability or commercial readiness. Resolve verified blocking failures, then provide the section 56 handoff with remaining limits stated precisely.

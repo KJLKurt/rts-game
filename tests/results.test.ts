@@ -34,3 +34,16 @@ describe("local battle result wording", () => {
     expect(JSON.stringify(state)).toBe(before);
   });
 });
+
+it("retains allied victory after local elimination, while scripted missions still require the local keep", () => {
+  const state = createGame({ aiPlayers: 2 });
+  state.players[0].alliance = 0;
+  state.players[2].alliance = 0;
+  state.players[0].defeated = true;
+  expect(battleResultReason(state)).toContain("allies are still fighting");
+  state.winner = 2;
+  state.victoryReason = "Allied frontier victory";
+  expect(battleResultReason(state)).toBe(state.victoryReason);
+  state.settings.scriptedVictory = true;
+  expect(battleResultReason(state)).toBe("Your Command Keep has fallen.");
+});
