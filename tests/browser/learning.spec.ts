@@ -38,6 +38,7 @@ async function pointAtLessonTarget(
     exact: true,
   });
   if (await minimize.count()) await minimize.click();
+  await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
   const point = await page.evaluate((kind) => {
     const { state, renderer } = window.__FRONTIER__;
     const spawn = state.map.spawns[0];
@@ -53,10 +54,32 @@ async function pointAtLessonTarget(
                 Math.hypot(a.x - spawn.x, a.y - spawn.y) -
                 Math.hypot(b.x - spawn.x, b.y - spawn.y),
             )[0];
-    const point = renderer.worldToScreen(target.x, target.y);
-    return { ...point, hit: document.elementFromPoint(point.x, point.y)?.id };
+    const ground = renderer.worldToScreen(target.x, target.y);
+    if (kind === "house") {
+      const view = renderer as any, z = renderer.camera.zoom;
+      const bounds = view.atlas.bounds("house", 87);
+      const candidates: {x:number;y:number;score:number}[] = [];
+      if (bounds) for (let y=bounds.y+4;y<bounds.y+bounds.height-4;y+=4) for (let x=bounds.x+4;x<bounds.x+bounds.width-4;x+=4) {
+        if (!view.atlas.hitTest("house",87,undefined,x,y)) continue;
+        const p={x:ground.x+x*z,y:ground.y+y*z};
+        // Tap visible artwork that the real picker identifies, with room for touch rounding.
+        if ([[0,0],[-2,0],[2,0],[0,-2],[0,2]].every(([dx,dy]) => document.elementFromPoint(p.x+dx,p.y+dy)?.id==="world" && (renderer.pick(state,p.x+dx,p.y+dy) as any)?.id===target.id)) candidates.push({...p,score:Math.hypot(x,y+bounds.height*.5)});
+      }
+      candidates.sort((a,b)=>a.score-b.score);
+      if (!candidates.length) throw new Error("Focused House has no uncovered opaque selectable artwork");
+      const point=candidates[0];
+      return {...point,hit:document.elementFromPoint(point.x,point.y)?.id,targetId:target.id,pickedId:(renderer.pick(state,point.x,point.y) as any)?.id,ground,groundPickedId:(renderer.pick(state,ground.x,ground.y) as any)?.id,candidateCount:candidates.length};
+    }
+    return { ...ground, hit: document.elementFromPoint(ground.x, ground.y)?.id };
+
   }, kind);
   expect(point.hit, `${kind} target must be on uncovered canvas`).toBe("world");
+  if ("targetId" in point) {
+    expect(point.pickedId, "Visible House tap must select the intended House").toBe(point.targetId);
+    const fs=await import("node:fs/promises");
+    await fs.writeFile(test.info().outputPath("native-house-target-proof.json"),JSON.stringify(point,null,2));
+    await page.screenshot({path:test.info().outputPath("native-house-before-verified-tap.png")});
+  }
   await tap(page, point);
 }
 async function startLearning(page: Page) {

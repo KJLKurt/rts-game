@@ -1,0 +1,377 @@
+{
+  "version": 1,
+  "image": "atlas.png",
+  "width": 1254,
+  "height": 1254,
+  "format": "RGBA",
+  "theme": "mythic",
+  "style": "toy-3d",
+  "frames": {
+    "gold-full": {
+      "x": 38,
+      "y": 56,
+      "w": 149,
+      "h": 142,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "resource",
+      "suggestedHeight": 64
+    },
+    "gold-half": {
+      "x": 252,
+      "y": 56,
+      "w": 142,
+      "h": 143,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "resource",
+      "suggestedHeight": 64
+    },
+    "gold-sparse": {
+      "x": 455,
+      "y": 57,
+      "w": 144,
+      "h": 144,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "resource",
+      "suggestedHeight": 64
+    },
+    "gold-empty": {
+      "x": 657,
+      "y": 57,
+      "w": 140,
+      "h": 144,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "resource",
+      "suggestedHeight": 64
+    },
+    "wood-full": {
+      "x": 864,
+      "y": 52,
+      "w": 149,
+      "h": 152,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "resource",
+      "suggestedHeight": 64
+    },
+    "wood-half": {
+      "x": 1071,
+      "y": 61,
+      "w": 145,
+      "h": 143,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "resource",
+      "suggestedHeight": 64
+    },
+    "wood-sparse": {
+      "x": 41,
+      "y": 260,
+      "w": 142,
+      "h": 150,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "resource",
+      "suggestedHeight": 64
+    },
+    "wood-empty": {
+      "x": 241,
+      "y": 296,
+      "w": 165,
+      "h": 113,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "resource",
+      "suggestedHeight": 64
+    },
+    "relic-neutral": {
+      "x": 465,
+      "y": 253,
+      "w": 126,
+      "h": 156,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "relic",
+      "suggestedHeight": 66
+    },
+    "relic-contested": {
+      "x": 664,
+      "y": 253,
+      "w": 131,
+      "h": 158,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "relic",
+      "suggestedHeight": 66
+    },
+    "relic-captured": {
+      "x": 871,
+      "y": 253,
+      "w": 130,
+      "h": 157,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "relic",
+      "suggestedHeight": 66
+    },
+    "relic-inactive": {
+      "x": 1080,
+      "y": 256,
+      "w": 127,
+      "h": 154,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "relic",
+      "suggestedHeight": 66
+    },
+    "camp-guarded": {
+      "x": 36,
+      "y": 464,
+      "w": 155,
+      "h": 142,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "building",
+      "suggestedHeight": 90
+    },
+    "camp-cleared": {
+      "x": 249,
+      "y": 465,
+      "w": 150,
+      "h": 135,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "building",
+      "suggestedHeight": 90
+    },
+    "mining-cue": {
+      "x": 455,
+      "y": 485,
+      "w": 145,
+      "h": 126,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "building",
+      "suggestedHeight": 90
+    },
+    "chopping-cue": {
+      "x": 658,
+      "y": 490,
+      "w": 146,
+      "h": 121,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "building",
+      "suggestedHeight": 90
+    },
+    "swordsman": {
+      "x": 861,
+      "y": 469,
+      "w": 142,
+      "h": 142,
+      "anchorX": 0.5,
+      "anchorY": 0.96,
+      "category": "unit",
+      "suggestedHeight": 44
+    },
+    "spearman": {
+      "x": 1074,
+      "y": 470,
+      "w": 142,
+      "h": 140,
+      "anchorX": 0.5,
+      "anchorY": 0.96,
+      "category": "unit",
+      "suggestedHeight": 44
+    },
+    "archer": {
+      "x": 45,
+      "y": 662,
+      "w": 145,
+      "h": 158,
+      "anchorX": 0.5,
+      "anchorY": 0.96,
+      "category": "unit",
+      "suggestedHeight": 44
+    },
+    "cavalry": {
+      "x": 245,
+      "y": 652,
+      "w": 158,
+      "h": 170,
+      "anchorX": 0.5,
+      "anchorY": 0.91,
+      "category": "unit",
+      "suggestedHeight": 44
+    },
+    "siege": {
+      "x": 448,
+      "y": 683,
+      "w": 155,
+      "h": 136,
+      "anchorX": 0.5,
+      "anchorY": 0.91,
+      "category": "unit",
+      "suggestedHeight": 44
+    },
+    "support": {
+      "x": 660,
+      "y": 662,
+      "w": 128,
+      "h": 160,
+      "anchorX": 0.5,
+      "anchorY": 0.96,
+      "category": "unit",
+      "suggestedHeight": 44
+    },
+    "warlord": {
+      "x": 849,
+      "y": 670,
+      "w": 170,
+      "h": 150,
+      "anchorX": 0.5,
+      "anchorY": 0.96,
+      "category": "unit",
+      "suggestedHeight": 57
+    },
+    "ranger": {
+      "x": 1077,
+      "y": 676,
+      "w": 137,
+      "h": 143,
+      "anchorX": 0.5,
+      "anchorY": 0.96,
+      "category": "unit",
+      "suggestedHeight": 57
+    },
+    "engineer": {
+      "x": 46,
+      "y": 884,
+      "w": 141,
+      "h": 123,
+      "anchorX": 0.5,
+      "anchorY": 0.96,
+      "category": "unit",
+      "suggestedHeight": 57
+    },
+    "keep": {
+      "x": 242,
+      "y": 861,
+      "w": 168,
+      "h": 147,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "building",
+      "suggestedHeight": 90
+    },
+    "house": {
+      "x": 453,
+      "y": 865,
+      "w": 150,
+      "h": 142,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "building",
+      "suggestedHeight": 90
+    },
+    "barracks": {
+      "x": 655,
+      "y": 871,
+      "w": 154,
+      "h": 137,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "building",
+      "suggestedHeight": 90
+    },
+    "range": {
+      "x": 862,
+      "y": 883,
+      "w": 157,
+      "h": 126,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "building",
+      "suggestedHeight": 90
+    },
+    "stable": {
+      "x": 1073,
+      "y": 870,
+      "w": 148,
+      "h": 131,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "building",
+      "suggestedHeight": 90
+    },
+    "workshop": {
+      "x": 44,
+      "y": 1075,
+      "w": 151,
+      "h": 128,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "building",
+      "suggestedHeight": 90
+    },
+    "tower": {
+      "x": 266,
+      "y": 1049,
+      "w": 105,
+      "h": 162,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "building",
+      "suggestedHeight": 90
+    },
+    "depot": {
+      "x": 443,
+      "y": 1074,
+      "w": 154,
+      "h": 129,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "building",
+      "suggestedHeight": 90
+    },
+    "blacksmith": {
+      "x": 657,
+      "y": 1054,
+      "w": 144,
+      "h": 149,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "building",
+      "suggestedHeight": 90
+    },
+    "arcane": {
+      "x": 853,
+      "y": 1056,
+      "w": 165,
+      "h": 151,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "building",
+      "suggestedHeight": 90
+    },
+    "wall": {
+      "x": 1066,
+      "y": 1070,
+      "w": 158,
+      "h": 136,
+      "anchorX": 0.5,
+      "anchorY": 0.87,
+      "category": "building",
+      "suggestedHeight": 90
+    }
+  },
+  "provenance": {
+    "tool": "image_gen.imagegen",
+    "date": "2026-10-05",
+    "pixelEdits": "none; generated RGBA copied unchanged",
+    "sha256": "096192f35c19ef1d4cae47147fb3340548c017311d205c11fa374781fcd3a257"
+  }
+}

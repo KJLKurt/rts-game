@@ -1,0 +1,39 @@
+# Mythic visual-content batch — verified local handoff
+
+Candidate **`fc-1841e3eed878`** ships the complete 36-role Mythic toy-3D static set beside preserved Christmas, plus **80 accepted Ranger idle/walk frames across sixteen authored heading slots**. Settings persists the choice, loads an entire set before swapping, updates portraits/cards and retains the working set after a failed or superseded request. Four generated directional bow sheets failed aiming review; none of those 64 attack cells is shipped. [VISUAL_CONTENT_INVENTORY_20261005.md](VISUAL_CONTENT_INVENTORY_20261005.md) records exact original mandatory/qualified scope and later active unfinished commitments.
+
+## Exact candidate and gate
+
+- Runtime `index-Bxeacl8s.js`, CSS `index-CtTVqhIs.css`, worker cache `eca6dfe40bda`; `/rts-game/` base; 30 precached files and 32 distribution files. Repeat build reproduces all 32 outputs byte for byte.
+- TypeScript, production build and eight authored mission validations pass. **564 unit/contract tests in 60 files pass.** Sixteen new cases check projected heading choice, frame coverage, travel-driven gait, measured roots/scale, reduced motion, invalid manifests/decode, cross-actor rejection and atomic/failure/superseded theme loading.
+- The full run reaches terminal across **346 distinct browser cases**. Its raw receipt has **323 passes, 21 intentional skips, one static-test-host failure and one subsequent serial PWA case not run** (JSON stats classify that last case as another skip). The GET-only preview lacked `POST /__qa/release`, so the consent-update test could not create an update. This is a retained harness failure, not a passing raw full run.
+- All **four PWA cases then pass on the owned controlled-release host**, including the two interrupted update/result cases. Reconciliation by project/file/title gives **325 verified passes and 21 intentional skips within the same 346 cases**, with zero unresolved failures. Three actual upgrades from the prior published cache pass and fulfill three of those skips: **328 verified / 18 remaining skips within those same 346 cases**. Focused/repeated tests are not added to this count. No corrected check is hidden or silently substituted in the raw report.
+- All fifteen new actual-browser theme cases pass at desktop1440×900, touch portrait390×844 and landscape844×390. Native movement samples at least three authored walk phases in each view; reduced motion uses idle frames. Offline reload loads both complete sets, including the directional PNG. Deliberately missing its image preserves Christmas and reports recovery.
+
+Sandbox-enabled Chromium151.0.7922.173 on Debian13, Playwright1.63.0 and Node24.19.0 ran owned localhost builds. No sandbox/security control was disabled. No Mac, paid service, new account/secret, unrelated repository edit, Git write/push, Actions or deployment was used. Physical Safari/device thermals and installed-device lifecycle remain unverified.
+
+## Actual pixel inspection and asset budgets
+
+The static 1254×1254 RGBA PNG has all36 semantic roles with valid tight rectangles and transparent cell borders. Generated navy/teal/brass/oak/turquoise costumes and buildings were inspected on terrain-colored panels at real unit/commander/building sizes, then in native setup and live battlefield screenshots in all three widths. Clean compositing, distinct building roles and independent faction/team overlays remain visible. Those gallery fixtures are pixel evidence, not naturally played matches.
+
+The packed Ranger atlas is2048×2048, **6,101,050 PNG bytes /16 MiB decoded RGBA**. The static set is1,644,299 PNG bytes /6,290,064 decoded bytes; the complete Mythic image set is approximately22 MiB decoded. Each source rectangle's RGBA hash equals its packed rectangle hash. Pixels are copied unchanged, with per-frame measured hood centre, boot contact and body height registering the figure at59px. Adjacent authored headings can look similar at that scale; no exact 3D angular calibration is claimed. Two clipped walk layouts were rejected/regenerated before acceptance. Byte budgets do not establish phone FPS or thermal performance.
+
+Production `themes/mythic-toon/provenance.json` contains prompts, selected source/frame hashes and production hashes. Raw accepted/rejected outputs, packing script, pixel analysis and prompts remain in the private evidence handoff. Existing Christmas PNGs/manifests, audio and all15 simulation files are byte-identical to the frozen ranged-stance source.
+
+## Fresh native campaign and complete save equality
+
+The owned eight-game/three-win profile starts a **fresh normal Broken Alliance** through native phone campaign controls. No result, currency, unlock, player AI or simulation state is injected. Play reaches **212.1seconds**: initial gold/wood capture, completed Range and three Houses, paid mixed recruitment, actual combat/casualties/projectiles, manual regroup and Mender healing, the real3:00 alliance reversal and a post-truce relic push. Ranger recovers from11 to389.5/390 health after regrouping. The Keep remains5600/5600; at the preserved save, gold220.327, wood330.622, population18/36,14 kills and five captures. One required chapter objective is complete. No new chapter win or full-route completion is claimed.
+
+Save & leave preserves a playable212.1-second continuation. **Entire game JSON and entire browser storage** match that actual save online and offline in desktop, portrait and landscape; runtime/selected Mythic set remain exact. Full earned profile/history remains eight games/three wins, with Outpost/Hold the Line/Forager preserved and later chapters locked. Browser errors are zero. The fresh input lineage differs from the previous owned storage only by localhost origin before play.
+
+The route also retains driver mistakes: initial missing page initialization; misreading “Rally current producers here” as an armed map destination; a later off-screen tap after Commander recentered the camera was rejected before input. Separate browser drivers had ambiguous close-dialog/missing Return-to-battle selectors and an unopened collapsed Recruit panel; corrected native assertions are retained. The forward rally affected reinforcement routing. No fair A/B balance, unwinnability or novice-fun conclusion follows from this attempt.
+
+## Readability issue and continuing scope
+
+In fresh Mythic play, selecting Ranger and capturing the extra gold mine at(16.5,31.5) leaves the figure near(16.36,31.36), just behind the tall mine in depth sorting. The deposit can obscure the body. Native screenshot004 and reproduction steps preserve this issue; Commander selection and the health strip remain usable. A separate follow-up can improve occlusion/selection presentation without changing capture rules.
+
+Space, old-time, Halloween and Street Kids themes; independently selectable realistic/sticker styles; alternate themed scores; other actor directional locomotion and complete directional attacks remain active unfinished scope. Underlying supplied-reference commercial source records, broad natural campaign/expedition/balance, uncoached enjoyment, subjective soundtrack listening and exact hosted play/update remain separate open evidence. This tested visual batch advances production content; it does not declare the entire commercial scope complete.
+
+## Handoff evidence
+
+The final Library index identifies a checked patch, complete source/dist, all-entry SHA manifest, separate evidence parts, native saved storage and accepted/rejected generation receipts. `complete-gate-reconciliation.json` retains both the raw full run and the corrected PWA/prior-cache cases keyed to the same346 identities. Preview PNGs are separately saved to Library for direct inspection. The lead owns integration/publication; preserve its extra publication document and any later work when applying this batch onto the prior240-file frozen cloud source.

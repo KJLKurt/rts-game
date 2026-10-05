@@ -5,6 +5,7 @@ import {
 } from "../ui/progression/profile";
 import { parseBoundedJSON, MAX_SAVE_JSON_BYTES } from "../sim/validation";
 import { SaveQueue } from "./save-queue";
+import type { VisualThemeId } from "../render/visualThemes";
 const PREFIX = "frontier-command:rts-game:v1:";
 const DB = "frontier-command-rts-game";
 export interface Preferences {
@@ -17,6 +18,7 @@ export interface Preferences {
   tutorialSeen: boolean;
   learningComplete: boolean;
   uiScale: number;
+  visualTheme: VisualThemeId;
 }
 export type Profile = ProfileV2;
 export const defaultPreferences: Preferences = {
@@ -29,6 +31,7 @@ export const defaultPreferences: Preferences = {
   tutorialSeen: false,
   learningComplete: false,
   uiScale: 1,
+  visualTheme: 'christmas',
 };
 export const defaultProfile: Profile = createProfile();
 /** Read raw profile data before migration so nullable and nested v2 fields survive. */

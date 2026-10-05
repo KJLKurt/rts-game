@@ -38,6 +38,7 @@ import {
 } from "./ui/learning";
 import { snapConstruction } from "./sim/construction";
 import "./style.css";
+import { VISUAL_THEMES, normalizeVisualTheme, type VisualThemeId } from "./render/visualThemes";
 import {
   inspectionHTML,
   productionHTML,
@@ -170,6 +171,12 @@ let suspensionFocus: HTMLElement | null = null;
 let audioInterrupted = false;
 let preferences = readLocal("preferences", defaultPreferences),
   profile = loadProfile();
+preferences.visualTheme = normalizeVisualTheme(preferences.visualTheme);
+const initialVisualTheme = preferences.visualTheme;
+void applyVisualTheme(initialVisualTheme).then(ready => {
+  if (!ready && preferences.visualTheme === initialVisualTheme)
+    preferences.visualTheme = renderer.visualTheme;
+});
 document.documentElement.style.setProperty(
   "--ui-scale",
   String(Math.max(1, Math.min(1.3, preferences.uiScale))),
@@ -577,7 +584,7 @@ function cardArt(type: string) {
   const frame = renderer.atlas.frames[type];
   if (!renderer.atlas.ready || !frame) return icon(unitIcons[type]);
   const scale = Math.min(32 / frame.w, 36 / frame.h);
-  return `<span class="sprite-icon" aria-hidden="true" style="width:${frame.w * scale}px;height:${frame.h * scale}px;background-image:url('${import.meta.env.BASE_URL}assets/render/frontier-atlas.png');background-size:${renderer.atlas.image!.naturalWidth * scale}px ${renderer.atlas.image!.naturalHeight * scale}px;background-position:${-frame.x * scale}px ${-frame.y * scale}px"></span>`;
+  return `<span class="sprite-icon" aria-hidden="true" style="width:${frame.w * scale}px;height:${frame.h * scale}px;background-image:url('${esc(renderer.atlas.image!.src)}');background-size:${renderer.atlas.image!.naturalWidth * scale}px ${renderer.atlas.image!.naturalHeight * scale}px;background-position:${-frame.x * scale}px ${-frame.y * scale}px"></span>`;
 }
 function currentDeckSignature(): string {
   const player = planningState().players[0];
@@ -592,6 +599,7 @@ function currentDeckSignature(): string {
     player.rangedSpacing,
     state.pendingCommands.length,
     renderer.atlas.ready,
+    renderer.atlas.image?.src,
     state.entities
       .filter((e) => e.team === 0 && e.kind === "building" && e.hp > 0)
       .map((e) => [
@@ -1143,10 +1151,20 @@ function showHelp() {
 function showAbout() {
   showDialog("Credits / About", aboutHTML() + button("Done", "close-dialog", "primary", "check"), "about-dialog");
 }
+async function applyVisualTheme(id: VisualThemeId, remember = false): Promise<boolean> {
+  const ready = await renderer.setVisualTheme(id);
+  if (!ready || renderer.visualTheme !== id) return false;
+  preferences.visualTheme = id;
+  if (remember) writeLocal("preferences", preferences);
+  document.querySelectorAll<HTMLCanvasElement>("[data-portrait]")
+    .forEach(c => void renderer.renderPortrait(c, c.dataset.portrait!));
+  if (playing) refreshDeckState();
+  return true;
+}
 function showSettings() {
   showDialog(
     "Settings",
-    `<div class="settings-fields"><label>Interface text size <select id="ui-scale" aria-label="Interface text size"><option value="1" ${preferences.uiScale === 1 ? "selected" : ""}>Standard</option><option value="1.15" ${preferences.uiScale === 1.15 ? "selected" : ""}>Larger · 115%</option><option value="1.3" ${preferences.uiScale === 1.3 ? "selected" : ""}>Largest · 130%</option></select></label><label>Master volume <output id="master-value">${Math.round(preferences.master * 100)}%</output><input id="master-slider" aria-label="Master volume" type="range" min="0" max="1" step=".05" value="${preferences.master}"></label><label class="check-field"><input id="mute-audio" type="checkbox" ${preferences.muted ? "checked" : ""}> Mute all audio</label><label>Music <output id="music-value">${Math.round(preferences.music * 100)}%</output><input id="music-slider" aria-label="Music" type="range" min="0" max="1" step=".05" value="${preferences.music}"></label><label>Sound effects <output id="sfx-value">${Math.round(preferences.sfx * 100)}%</output><input id="sfx-slider" aria-label="Sound effects" type="range" min="0" max="1" step=".05" value="${preferences.sfx}"></label><label class="check-field"><input id="reduced-motion" type="checkbox" ${preferences.reducedMotion ? "checked" : ""}> Reduced motion and effects</label><label class="check-field"><input id="show-tips" type="checkbox" ${preferences.showTips ? "checked" : ""}> Commander’s field guide</label><p class="muted">Teams use six distinct banner and ground shapes alongside their colors. Faction crests add a separate identity; Credits / About explains the symbols. Music and effects work offline. The soundtrack can be replaced later through the repository’s audio manifest; see docs/AUDIO_REPLACEMENT.md for file names and loop settings.</p></div>${button("Done", "close-dialog", "primary", "check")}`,
+    `<div class="settings-fields"><label>Visual theme <select id="visual-theme" aria-label="Visual theme">${Object.entries(VISUAL_THEMES).map(([id, theme]) => `<option value="${id}" ${preferences.visualTheme === id ? "selected" : ""}>${esc(theme.name)}</option>`).join("")}</select></label><p id="theme-status" class="muted" aria-live="polite">Choose the look of your units, strongholds and deposits. Artwork choices work offline and are saved on this device.</p><label>Interface text size <select id="ui-scale" aria-label="Interface text size"><option value="1" ${preferences.uiScale === 1 ? "selected" : ""}>Standard</option><option value="1.15" ${preferences.uiScale === 1.15 ? "selected" : ""}>Larger · 115%</option><option value="1.3" ${preferences.uiScale === 1.3 ? "selected" : ""}>Largest · 130%</option></select></label><label>Master volume <output id="master-value">${Math.round(preferences.master * 100)}%</output><input id="master-slider" aria-label="Master volume" type="range" min="0" max="1" step=".05" value="${preferences.master}"></label><label class="check-field"><input id="mute-audio" type="checkbox" ${preferences.muted ? "checked" : ""}> Mute all audio</label><label>Music <output id="music-value">${Math.round(preferences.music * 100)}%</output><input id="music-slider" aria-label="Music" type="range" min="0" max="1" step=".05" value="${preferences.music}"></label><label>Sound effects <output id="sfx-value">${Math.round(preferences.sfx * 100)}%</output><input id="sfx-slider" aria-label="Sound effects" type="range" min="0" max="1" step=".05" value="${preferences.sfx}"></label><label class="check-field"><input id="reduced-motion" type="checkbox" ${preferences.reducedMotion ? "checked" : ""}> Reduced motion and effects</label><label class="check-field"><input id="show-tips" type="checkbox" ${preferences.showTips ? "checked" : ""}> Commander’s field guide</label><p class="muted">Teams use six distinct banner and ground shapes alongside their colors. Faction crests add a separate identity; Credits / About explains the symbols. Music and effects work offline. The soundtrack can be replaced later through the repository’s audio manifest; see docs/AUDIO_REPLACEMENT.md for file names and loop settings.</p></div>${button("Done", "close-dialog", "primary", "check")}`,
   );
 }
 function showPauseMenu() {
@@ -2847,6 +2865,16 @@ app.addEventListener("input", (e) => {
 });
 app.addEventListener("change", async (e) => {
   const input = e.target as HTMLInputElement;
+  if (input.id === "visual-theme") {
+    const id = normalizeVisualTheme(input.value), status = document.querySelector("#theme-status");
+    input.disabled = true;
+    if (status) status.textContent = "Loading artwork…";
+    const ready = await applyVisualTheme(id, true);
+    input.disabled = false;
+    if (!ready) input.value = renderer.visualTheme;
+    if (status) status.textContent = ready ? "Artwork ready." : "Could not load this artwork. Your current set is still available.";
+    return;
+  }
   if (input.closest("#setup-form")) {
     if (
       readSetup(false) &&

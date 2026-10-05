@@ -1,0 +1,1172 @@
+{
+  "version": 1,
+  "tool": "image_gen.imagegen, built-in authorized image generation",
+  "direction": "Original nonseasonal navy/teal/brass/oak/turquoise mythic toy-3D miniatures derived from the authorized project atlas. No external asset download or commercial-game copy.",
+  "sourceProjectAtlasSha256": "7a6c1f79fece96ce65464831cb161b6a4fb60c098afaf3717b271812b20f87ed",
+  "assets": {
+    "atlas.png": {
+      "sha256": "096192f35c19ef1d4cae47147fb3340548c017311d205c11fa374781fcd3a257",
+      "bytes": 1644299,
+      "width": 1254,
+      "height": 1254,
+      "decodedRgbaBytes": 6290064
+    },
+    "atlas.json": {
+      "sha256": "d245d826e4874266ede4a1a29dec95ab33eac739f9baea1c95b13e54200b921d",
+      "bytes": 7266
+    },
+    "ranger-directional.png": {
+      "sha256": "99f55aed1f28b233a8cd6229972d73b80643ccf63e128dbeb10ac064a23fcddd",
+      "bytes": 6101050,
+      "width": 2048,
+      "height": 2048,
+      "decodedRgbaBytes": 16777216
+    },
+    "ranger-directional.json": {
+      "sha256": "faeffc9718216d43689c72b7fc70196dbe440a52f31811c1f522029939059598",
+      "bytes": 21355
+    }
+  },
+  "directional": {
+    "packing": "RGBA pixels copied unchanged, no semantic edits/resampling; 2px gutter",
+    "registration": "Per-frame teal hood centre and brown ground-contact boot measured; body height keeps scale independent of bow extents. Native browser review required.",
+    "acceptedFrames": 80,
+    "rejectedAttackFrames": 64,
+    "atlasDimensions": [
+      2048,
+      2048
+    ],
+    "decodedBytes": 16777216,
+    "pngBytes": 6101050,
+    "pngSha256": "99f55aed1f28b233a8cd6229972d73b80643ccf63e128dbeb10ac064a23fcddd",
+    "allPackedPixelsExact": true
+  },
+  "generationPrompts": [
+    {
+      "tool": "image_gen.imagegen",
+      "date": "2026-10-05",
+      "prompt": "Create a production isometric 2.5D RTS sprite atlas for Frontier Command. Use the attached approved atlas only as a camera, silhouette, toy-3D material-quality and role/layout reference. Reimagine every asset as a coherent NON-SEASONAL MYTHIC MEDIEVAL FANTASY set: steel, navy/teal cloth, warm oak, aged brass, softly glowing amber/gold ore and turquoise runestones. Polished chunky hand-painted 3D miniature rendering with crisp readable silhouettes, rich restrained material highlights, soft consistent upper-left lighting. No Christmas decorations, Santa hats, snow, gift wrap, candy canes, holiday stars, real-world logos or recognizable copyrighted characters.\n\nDeliver one square true transparent RGBA PNG sprite sheet, exactly SIX columns and SIX rows of separated sprites. Prefer 1536x1536 so each cell is 256x256. Exactly 36 complete objects. Every object must fit wholly inside its cell, with at least 20 pixels of transparent gutter; no overlap across rows/columns. The midpoint of the ground footprint is centered horizontally at x=128 and near y=220 within each 256 cell. Camera is the same elevated three-quarter isometric view throughout. No text, labels, numbers, grid lines, scenery backgrounds, team rings, cast shadows outside sprites or detached particles.\n\nUse exactly this reading order (left-to-right, then next row):\nRow1: (1) full gold mine with luminous amber crystal veins, stone portal and filled ore cart; (2) same half-depleted mine and partly filled cart; (3) same sparse mine with almost empty cart; (4) same empty mine and empty cart, no ore glow; (5) full timber grove, three leafy trees with timber stack and saw; (6) half-depleted grove, two trees and smaller stack.\nRow2: (1) sparse timber grove, one tree with stumps and small stack; (2) depleted timber site, stumps and empty sawing stand, no standing trees; (3) neutral brass-and-stone relic obelisk with amber crystal; (4) same contested relic with visibly flickering amber/turquoise runes but no detached FX; (5) same captured/active relic with bright turquoise rune core; (6) same inactive relic with dark unlit crystal; all four relic forms have matching base and scale.\nRow3: (1) guarded neutral mercenary tent and two tiny armored sentries; (2) same cleared tent with sentries removed; (3) small mining tool/ore-cart prop; (4) small axe/timber prop; (5) Swordsman: stout royal infantry in navy/teal steel-and-brass armor, crested closed helmet, short steel sword and round steel shield; (6) Spearman: agile hooded woodland warrior with long spear and narrow shield, ochre/teal clothes.\nRow4: (1) Archer: slim young woodland scout in teal hood and warm leather, recurved oak bow and quiver, clearly separate from spear; (2) Cavalry: navy-armored rider on a strong brown horse with teal saddle blanket and lance; (3) Siege: compact oak-and-brass wheeled ballista with a prominent tensioned bow; (4) Support/Mender: robed teal-and-ivory healer holding a brass staff with softly luminous turquoise crystal, no religious logo; (5) Warlord commander: broad bearded king in dark navy plated armor, brass circlet/crown and heavy square warhammer, heroic but distinct from infantry; (6) Ranger commander: taller athletic teal-cloaked woodland huntress with long oak bow, quiver, brown boots, copper hair and confident stance, distinct from the basic Archer.\nRow5: (1) Engineer commander: sturdy auburn-bearded artisan in leather apron and teal scarf, brass goggles, wrench and compact brass toolkit; (2) Command Keep: magnificent compact medieval stone fortress with navy conical roofs, brass crest plate and warm windows; (3) House: inviting oak-and-stone cottage with navy shingles and chimney; (4) Barracks: fortified stone training hall with sword motifs and navy roof; (5) Archery Range: timber training lodge with archery target and bow rack; (6) Stable: oak stable with open stall and horse tack.\nRow6: (1) Rune Workshop: oak-and-brass siege workshop with ballista parts and a runed chimney; (2) Tower: tall slender stone defense tower with navy roof; (3) Resource Depot: timber warehouse with crates, stacked planks and brass scales; (4) Blacksmith: stone forge with anvil, orange forge window and chimney; (5) Arcane Hall: elegant stone-and-brass hall with turquoise crystals and navy roof; (6) Wall segment with gate: clear compact stone battlement and reinforced oak gate.\n\nUnits/commanders are full-body, including weapons and feet, in a stable ready/idle stance facing southeast/screen-right. Buildings are visually different by role and each is a complete compact freestanding structure. Small props may be smaller but main characters should have consistent body scale. Preserve native aspect ratios; do not stretch. Resource depletion states must visibly reduce the actual resource, not just change hue. The entire atlas must look like one finished premium mobile strategy game art set, not sketch icons or placeholder geometry.",
+      "reference": "/workspace/rts-browser-qa/earned-stance-play-20261005/public/assets/render/frontier-atlas.png",
+      "transparent_background": true,
+      "externalAssetOrAccount": false
+    },
+    {
+      "tool": "image_gen.imagegen",
+      "date": "2026-10-05",
+      "prompt": "Edit only the spacing/layout of the attached newly generated MYTHIC sprite atlas. Preserve all 36 exact object/character identities, design details, materials, colors, poses, reading order and true transparency. Do not redesign. The actual target canvas is 1254x1254 pixels, exactly 6x6 square cells of 209x209 pixels. The current objects extend across cell boundaries. Correct this for production:\nShrink each entire individual object uniformly to 70% of its present size, and reposition it into the SAME row and column. Each complete object including its weapon, tree crown, roof, staff or cart must fit inside x=20..189 and y=18..189 relative to its 209-pixel cell. No nontransparent pixel crosses a cell boundary. There must be a clearly empty transparent gutter at least 20 pixels wide on every side of all 36 objects. The common ground midpoint is x=104.5 and y=181 within each cell. Main units have stable body scale relative to one another. Objects should be small miniature THUMBNAILS surrounded by ample empty transparent negative space, not enlarged to fill tiles. All 36 objects stay complete, no clipping. Exact original same six rows, same six columns, no additions or removals.\nKeep true RGBA transparency, opaque object interiors and clean antialiased edges; no backgrounds, text, labels, grid, shadow discs, halos or exported checkerboard. Absolutely preserve the accepted coherent navy/teal/brass/oak mythic miniature art and semantic depletion differences.",
+      "transparent_background": true
+    },
+    {
+      "tool": "image_gen.imagegen",
+      "transparent_background": true,
+      "prompts": [
+        [
+          "ranger-idle-registered",
+          "Edit the attached RANGER 16-direction sheet into production frames. Preserve the exact same 16 Ranger identities, navy-teal cloak, copper hair, leather boots, brass accents, LEFT-hand oak bow, back quiver, lighting, fixed elevated isometric camera and same 4x4 reading-order headings. Every cell remains the same direction as before: N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. This is one synchronized animation phase in all sixteen directions, not different phases assigned to columns. No duplicating/mirroring the southeast view into other headings.\nActual canvas is 1254x1254 pixels, FOUR columns x FOUR rows, each cell313.5x313.5. Make the figures SMALLER with generous transparent negative space: fixed head-to-ground body height195px for every frame, whole figure/weapon within local x=35..279,y=40..285; root midpoint x=156.75,y=277. No object crosses any cell border. Feet remain registered, the root does not travel across the cell. Do not shrink torso scale when a weapon changes pose. Same proportions/outfit and weapon hands across ALL 16 cells. True transparent RGBA, opaque bodies and clean antialiased edges; no cast shadow outside figure, backgrounds, grid, labels, text, decorative effects, arrows in flight or motion trails. Polished crisp toy-3D miniature game art matching the provided sheet.\nKeep the existing calm idle stance and low-carried bow. Correct only size, spacing and ground registration. Exactly16 sprites."
+        ],
+        [
+          "ranger-walk-0",
+          "Edit the attached RANGER 16-direction sheet into production frames. Preserve the exact same 16 Ranger identities, navy-teal cloak, copper hair, leather boots, brass accents, LEFT-hand oak bow, back quiver, lighting, fixed elevated isometric camera and same 4x4 reading-order headings. Every cell remains the same direction as before: N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. This is one synchronized animation phase in all sixteen directions, not different phases assigned to columns. No duplicating/mirroring the southeast view into other headings.\nActual canvas is 1254x1254 pixels, FOUR columns x FOUR rows, each cell313.5x313.5. Make the figures SMALLER with generous transparent negative space: fixed head-to-ground body height195px for every frame, whole figure/weapon within local x=35..279,y=40..285; root midpoint x=156.75,y=277. No object crosses any cell border. Feet remain registered, the root does not travel across the cell. Do not shrink torso scale when a weapon changes pose. Same proportions/outfit and weapon hands across ALL 16 cells. True transparent RGBA, opaque bodies and clean antialiased edges; no cast shadow outside figure, backgrounds, grid, labels, text, decorative effects, arrows in flight or motion trails. Polished crisp toy-3D miniature game art matching the provided sheet.\nWALK PHASE0: Anatomical LEFT leg extends FORWARD in the character's facing direction, RIGHT leg extends BACK. This is the left-contact step. Forward boot has planted heel/toe, rear heel raised. Torso stable, left bow arm carried low, right arm counter-swings forward. Cloak and quiver follow body. Make the gait clear while preserving each rotated heading."
+        ],
+        [
+          "ranger-walk-1",
+          "Edit the attached RANGER 16-direction sheet into production frames. Preserve the exact same 16 Ranger identities, navy-teal cloak, copper hair, leather boots, brass accents, LEFT-hand oak bow, back quiver, lighting, fixed elevated isometric camera and same 4x4 reading-order headings. Every cell remains the same direction as before: N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. This is one synchronized animation phase in all sixteen directions, not different phases assigned to columns. No duplicating/mirroring the southeast view into other headings.\nActual canvas is 1254x1254 pixels, FOUR columns x FOUR rows, each cell313.5x313.5. Make the figures SMALLER with generous transparent negative space: fixed head-to-ground body height195px for every frame, whole figure/weapon within local x=35..279,y=40..285; root midpoint x=156.75,y=277. No object crosses any cell border. Feet remain registered, the root does not travel across the cell. Do not shrink torso scale when a weapon changes pose. Same proportions/outfit and weapon hands across ALL 16 cells. True transparent RGBA, opaque bodies and clean antialiased edges; no cast shadow outside figure, backgrounds, grid, labels, text, decorative effects, arrows in flight or motion trails. Polished crisp toy-3D miniature game art matching the provided sheet.\nWALK PHASE1: LEFT leg is planted under body supporting weight. RIGHT knee is visibly raised and moving FORWARD through the passing position, right boot lifted clear of ground. Torso stays at the same scale/root, arms counter-swing naturally, left bow carried low. A clearly different passing pose, not the previous contact pose."
+        ],
+        [
+          "ranger-walk-2",
+          "Edit the attached RANGER 16-direction sheet into production frames. Preserve the exact same 16 Ranger identities, navy-teal cloak, copper hair, leather boots, brass accents, LEFT-hand oak bow, back quiver, lighting, fixed elevated isometric camera and same 4x4 reading-order headings. Every cell remains the same direction as before: N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. This is one synchronized animation phase in all sixteen directions, not different phases assigned to columns. No duplicating/mirroring the southeast view into other headings.\nActual canvas is 1254x1254 pixels, FOUR columns x FOUR rows, each cell313.5x313.5. Make the figures SMALLER with generous transparent negative space: fixed head-to-ground body height195px for every frame, whole figure/weapon within local x=35..279,y=40..285; root midpoint x=156.75,y=277. No object crosses any cell border. Feet remain registered, the root does not travel across the cell. Do not shrink torso scale when a weapon changes pose. Same proportions/outfit and weapon hands across ALL 16 cells. True transparent RGBA, opaque bodies and clean antialiased edges; no cast shadow outside figure, backgrounds, grid, labels, text, decorative effects, arrows in flight or motion trails. Polished crisp toy-3D miniature game art matching the provided sheet.\nWALK PHASE2: Anatomical RIGHT leg extends FORWARD in the character's facing direction, LEFT leg extends BACK. This is right-contact step, opposite leg-leading to phase0. Forward right boot planted, rear left heel raised. Torso stable, right arm swings back, left bow arm gently forward with bow carried low. Keep exact same actor and each rotated heading."
+        ],
+        [
+          "ranger-walk-3",
+          "Edit the attached RANGER 16-direction sheet into production frames. Preserve the exact same 16 Ranger identities, navy-teal cloak, copper hair, leather boots, brass accents, LEFT-hand oak bow, back quiver, lighting, fixed elevated isometric camera and same 4x4 reading-order headings. Every cell remains the same direction as before: N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. This is one synchronized animation phase in all sixteen directions, not different phases assigned to columns. No duplicating/mirroring the southeast view into other headings.\nActual canvas is 1254x1254 pixels, FOUR columns x FOUR rows, each cell313.5x313.5. Make the figures SMALLER with generous transparent negative space: fixed head-to-ground body height195px for every frame, whole figure/weapon within local x=35..279,y=40..285; root midpoint x=156.75,y=277. No object crosses any cell border. Feet remain registered, the root does not travel across the cell. Do not shrink torso scale when a weapon changes pose. Same proportions/outfit and weapon hands across ALL 16 cells. True transparent RGBA, opaque bodies and clean antialiased edges; no cast shadow outside figure, backgrounds, grid, labels, text, decorative effects, arrows in flight or motion trails. Polished crisp toy-3D miniature game art matching the provided sheet.\nWALK PHASE3: RIGHT leg is planted under body supporting weight. LEFT knee is visibly raised and moving FORWARD through the passing position, left boot lifted clear of ground. Arms naturally counter-swing, bow stays in LEFT hand carried low. Clearly opposite passing leg to phase1, same stable registered body."
+        ]
+      ]
+    },
+    [
+      {
+        "state": "walk-0",
+        "path": "/workspace/generated_images/exec-63449776-9c46-4c9e-8849-827425a6f036.png",
+        "prompt": "Edit the supplied walk-0 4x4 Ranger sprite sheet ONLY to correct production layout. Preserve all sixteen figures, their direction, exact outfit and gait/contact pose. Every figure must become 70% of its current size and remain centered inside ITS OWN existing cell. Actual image is 1254x1254, 4 columns x4 rows, boundaries at x/y=0,313.5,627,940.5,1254. Each COMPLETE figure, boots, quiver and bow stays within cell-local x=48..265 and y=45..273. Restore any cut-off boot toe or bow tip naturally. At least40px transparent empty space on ALL FOUR sides of EVERY cell; nothing touches/crosses a cell boundary. Maintain true RGBA transparency, original toy-3D polished teal cloak/copper hair/brass/oak art, same front/back/side orientations, no added shadows, background, marks, labels, grid, effects or new sprites. No pose changes. This is one walk phase in 16 headings, not 16 different walk phases."
+      },
+      {
+        "state": "walk-2",
+        "path": "/workspace/generated_images/exec-e306c255-e713-4904-b448-b1dc2bcb40bc.png",
+        "prompt": "Edit the supplied walk-2 4x4 Ranger sprite sheet ONLY to correct production layout. Preserve all sixteen figures, their direction, exact outfit and gait/contact pose. Every figure must become 70% of its current size and remain centered inside ITS OWN existing cell. Actual image is 1254x1254, 4 columns x4 rows, boundaries at x/y=0,313.5,627,940.5,1254. Each COMPLETE figure, boots, quiver and bow stays within cell-local x=48..265 and y=45..273. Restore any cut-off boot toe or bow tip naturally. At least40px transparent empty space on ALL FOUR sides of EVERY cell; nothing touches/crosses a cell boundary. Maintain true RGBA transparency, original toy-3D polished teal cloak/copper hair/brass/oak art, same front/back/side orientations, no added shadows, background, marks, labels, grid, effects or new sprites. No pose changes. This is one walk phase in 16 headings, not 16 different walk phases."
+      }
+    ]
+  ],
+  "selectedGeneratedInputs": [
+    {
+      "state": "idle-registered",
+      "sha256": "6a40256b55b91f3944f2aad4683146ea6e80ebc708d9a71f63eb77ca658052c0",
+      "frames": [
+        {
+          "id": "ranger-N-idle",
+          "sourceRect": [
+            75,
+            62,
+            194,
+            239
+          ],
+          "rgbaSha256": "1fd229390235a50cf1031093f5be1d06e65a52b20305514ddd6715ec2d0da74c",
+          "sourceHoodY": 65,
+          "sourceFootY": 297,
+          "sourceRootX": 173.0
+        },
+        {
+          "id": "ranger-NNE-idle",
+          "sourceRect": [
+            383,
+            60,
+            195,
+            243
+          ],
+          "rgbaSha256": "636567855b6ae02fc7ee27baf13cdc681a184e98222568550cc9ac6252c815ad",
+          "sourceHoodY": 63,
+          "sourceFootY": 299,
+          "sourceRootX": 174.0
+        },
+        {
+          "id": "ranger-NE-idle",
+          "sourceRect": [
+            691,
+            61,
+            179,
+            243
+          ],
+          "rgbaSha256": "cbb31883ac844f72af6953a456f470e102bcdaf9f635fafac0f2f8b3e3cf6927",
+          "sourceHoodY": 64,
+          "sourceFootY": 300,
+          "sourceRootX": 161.0
+        },
+        {
+          "id": "ranger-ENE-idle",
+          "sourceRect": [
+            1009,
+            60,
+            155,
+            245
+          ],
+          "rgbaSha256": "4f8927f2d7042063b44f31bf4ff00b0dfed3dd8d2dbfc51f1b1412b60ce5be49",
+          "sourceHoodY": 63,
+          "sourceFootY": 301,
+          "sourceRootX": 161.0
+        },
+        {
+          "id": "ranger-E-idle",
+          "sourceRect": [
+            86,
+            359,
+            148,
+            248
+          ],
+          "rgbaSha256": "b330a3c2e5dd8127c073d3aee630894da720711a5ff47013ddc28e15a40a8b17",
+          "sourceHoodY": 48,
+          "sourceFootY": 290,
+          "sourceRootX": 173.0
+        },
+        {
+          "id": "ranger-ESE-idle",
+          "sourceRect": [
+            385,
+            361,
+            211,
+            248
+          ],
+          "rgbaSha256": "cf303c8bf7818b6888621f45d2796e1a22551c97862b862cd63f063b4929e9b3",
+          "sourceHoodY": 50,
+          "sourceFootY": 290,
+          "sourceRootX": 163.0
+        },
+        {
+          "id": "ranger-SE-idle",
+          "sourceRect": [
+            680,
+            359,
+            210,
+            250
+          ],
+          "rgbaSha256": "ef609bd05bfaeb477d1c29af50a090f07c82c7822c7da7702313284f140b2922",
+          "sourceHoodY": 48,
+          "sourceFootY": 291,
+          "sourceRootX": 149.0
+        },
+        {
+          "id": "ranger-SSE-idle",
+          "sourceRect": [
+            994,
+            359,
+            208,
+            248
+          ],
+          "rgbaSha256": "193d7926d43ce738404469de06b099a4abe4344b066bb08a232e99e94bfb49ce",
+          "sourceHoodY": 48,
+          "sourceFootY": 290,
+          "sourceRootX": 145.0
+        },
+        {
+          "id": "ranger-S-idle",
+          "sourceRect": [
+            62,
+            657,
+            209,
+            247
+          ],
+          "rgbaSha256": "ead2a3d53c7db76779c331e7a1a7487add7fe7a92230721aae0531b8adc02a53",
+          "sourceHoodY": 33,
+          "sourceFootY": 273,
+          "sourceRootX": 159.0
+        },
+        {
+          "id": "ranger-SSW-idle",
+          "sourceRect": [
+            383,
+            658,
+            209,
+            246
+          ],
+          "rgbaSha256": "57566763b9071068b06845bbfadc748cd61a11ada99963ee3a2294fc55269756",
+          "sourceHoodY": 34,
+          "sourceFootY": 273,
+          "sourceRootX": 185.0
+        },
+        {
+          "id": "ranger-SW-idle",
+          "sourceRect": [
+            684,
+            657,
+            213,
+            249
+          ],
+          "rgbaSha256": "e603334f0666e570ebe9c6241c0f7eeea7df69bcc7d41db43e3ad330ce382960",
+          "sourceHoodY": 33,
+          "sourceFootY": 275,
+          "sourceRootX": 167.0
+        },
+        {
+          "id": "ranger-WSW-idle",
+          "sourceRect": [
+            993,
+            658,
+            214,
+            251
+          ],
+          "rgbaSha256": "433283062b2db8f56a04f786d7ff3c3f0a84da6ebf1a0c2cf64befcc1d086e46",
+          "sourceHoodY": 34,
+          "sourceFootY": 278,
+          "sourceRootX": 161.0
+        },
+        {
+          "id": "ranger-W-idle",
+          "sourceRect": [
+            76,
+            954,
+            197,
+            251
+          ],
+          "rgbaSha256": "83f3f34b9eb45a605c7dbcaba004aa58630e518a1a3c9023065c60cb22330423",
+          "sourceHoodY": 17,
+          "sourceFootY": 261,
+          "sourceRootX": 177.0
+        },
+        {
+          "id": "ranger-WNW-idle",
+          "sourceRect": [
+            384,
+            951,
+            210,
+            240
+          ],
+          "rgbaSha256": "02d32ed1354b33db25952ce06a3b5021ecabeb7dceed9d102fd4cb72d221082e",
+          "sourceHoodY": 14,
+          "sourceFootY": 248,
+          "sourceRootX": 170.0
+        },
+        {
+          "id": "ranger-NW-idle",
+          "sourceRect": [
+            681,
+            950,
+            209,
+            244
+          ],
+          "rgbaSha256": "ca37967ef30a12d32d4d801dba9458a8fa203adf2ebc06a90b2af5025098bbf9",
+          "sourceHoodY": 13,
+          "sourceFootY": 250,
+          "sourceRootX": 155.0
+        },
+        {
+          "id": "ranger-NNW-idle",
+          "sourceRect": [
+            1004,
+            949,
+            195,
+            240
+          ],
+          "rgbaSha256": "bfbe507ebd5a047511fbf35848fb84844bb2f8b7582fef13f68ddd84243f7d3a",
+          "sourceHoodY": 12,
+          "sourceFootY": 245,
+          "sourceRootX": 155.0
+        }
+      ]
+    },
+    {
+      "state": "walk-0",
+      "sha256": "d183de8bef53cdc6ba18c95fe20991b07408684378fe713bbed535d9aabffe88",
+      "frames": [
+        {
+          "id": "ranger-N-walk-0",
+          "sourceRect": [
+            107,
+            71,
+            166,
+            213
+          ],
+          "rgbaSha256": "d82f763558134a84e5574c64cae9ed8fbbd9b2805db8f5c67c7a3eece89c963c",
+          "sourceHoodY": 74,
+          "sourceFootY": 280,
+          "sourceRootX": 188.0
+        },
+        {
+          "id": "ranger-NNE-walk-0",
+          "sourceRect": [
+            415,
+            70,
+            147,
+            223
+          ],
+          "rgbaSha256": "18a2f8c2eb821cbff04058fae36009b6c18ba4019ae15d6256d56b2f7380acee",
+          "sourceHoodY": 73,
+          "sourceFootY": 289,
+          "sourceRootX": 181.0
+        },
+        {
+          "id": "ranger-NE-walk-0",
+          "sourceRect": [
+            719,
+            70,
+            141,
+            220
+          ],
+          "rgbaSha256": "91f2d291231f3219d6e09e0ee2873febca7076425f1be0dbb9f5e7e650cc7303",
+          "sourceHoodY": 73,
+          "sourceFootY": 286,
+          "sourceRootX": 170.0
+        },
+        {
+          "id": "ranger-ENE-walk-0",
+          "sourceRect": [
+            1017,
+            78,
+            143,
+            203
+          ],
+          "rgbaSha256": "c605546967d22a9b42753c70a83389a3355fe3240c33a26ec8a7a55bd538f8a5",
+          "sourceHoodY": 80,
+          "sourceFootY": 277,
+          "sourceRootX": 153.0
+        },
+        {
+          "id": "ranger-E-walk-0",
+          "sourceRect": [
+            92,
+            378,
+            162,
+            216
+          ],
+          "rgbaSha256": "8135475b32194d49d508e0295c4c7dae6b1cfa0cec0aa8de4f89b2bd90af3d94",
+          "sourceHoodY": 67,
+          "sourceFootY": 276,
+          "sourceRootX": 178.5
+        },
+        {
+          "id": "ranger-ESE-walk-0",
+          "sourceRect": [
+            398,
+            377,
+            178,
+            220
+          ],
+          "rgbaSha256": "1327edcd469165dd01335c1b730b0dccc0d78a4c8c291f06efe480ff098bd6a1",
+          "sourceHoodY": 66,
+          "sourceFootY": 279,
+          "sourceRootX": 167.0
+        },
+        {
+          "id": "ranger-SE-walk-0",
+          "sourceRect": [
+            700,
+            378,
+            179,
+            218
+          ],
+          "rgbaSha256": "30aff10877be802229e3c7c1fdfbd66302659cc34af21a47db2f22a4d3171ad1",
+          "sourceHoodY": 67,
+          "sourceFootY": 278,
+          "sourceRootX": 160.0
+        },
+        {
+          "id": "ranger-SSE-walk-0",
+          "sourceRect": [
+            1002,
+            378,
+            188,
+            218
+          ],
+          "rgbaSha256": "9f1d09e547bb55e489f87ee562f6e60c6bdf122bde2634f1e9b5bfdff6683928",
+          "sourceHoodY": 67,
+          "sourceFootY": 278,
+          "sourceRootX": 154.0
+        },
+        {
+          "id": "ranger-S-walk-0",
+          "sourceRect": [
+            86,
+            677,
+            183,
+            222
+          ],
+          "rgbaSha256": "30acff15e2d580ea72aebd331af42005b221c02ced178504044b498dd2da34c7",
+          "sourceHoodY": 53,
+          "sourceFootY": 268,
+          "sourceRootX": 176.0
+        },
+        {
+          "id": "ranger-SSW-walk-0",
+          "sourceRect": [
+            408,
+            675,
+            188,
+            217
+          ],
+          "rgbaSha256": "e1189757198fe7561ad48588ff89a79f4611f5e53f1ec6aa8b7a124dce3a3262",
+          "sourceHoodY": 51,
+          "sourceFootY": 261,
+          "sourceRootX": 190.0
+        },
+        {
+          "id": "ranger-SW-walk-0",
+          "sourceRect": [
+            706,
+            676,
+            183,
+            220
+          ],
+          "rgbaSha256": "aadc92323388920d0fedf8a7931480107af04232d75fa5b47510f866c3c04296",
+          "sourceHoodY": 52,
+          "sourceFootY": 265,
+          "sourceRootX": 169.0
+        },
+        {
+          "id": "ranger-WSW-walk-0",
+          "sourceRect": [
+            1014,
+            678,
+            186,
+            214
+          ],
+          "rgbaSha256": "e44095c50015c0eff8260da6f015504cdd7dab66a66953fb37ab03f49380ed39",
+          "sourceHoodY": 54,
+          "sourceFootY": 261,
+          "sourceRootX": 162.0
+        },
+        {
+          "id": "ranger-W-walk-0",
+          "sourceRect": [
+            98,
+            974,
+            182,
+            206
+          ],
+          "rgbaSha256": "b7597859d41a46c960e0ade007fff1459810c25f33f48b67629cb978a6998c74",
+          "sourceHoodY": 37,
+          "sourceFootY": 236,
+          "sourceRootX": 184.0
+        },
+        {
+          "id": "ranger-WNW-walk-0",
+          "sourceRect": [
+            406,
+            970,
+            178,
+            214
+          ],
+          "rgbaSha256": "30065d6584adb41e2f949bd666d5aa4b642a0cfe60c9499703902c56bea24321",
+          "sourceHoodY": 33,
+          "sourceFootY": 241,
+          "sourceRootX": 175.5
+        },
+        {
+          "id": "ranger-NW-walk-0",
+          "sourceRect": [
+            708,
+            969,
+            180,
+            222
+          ],
+          "rgbaSha256": "639e31e1089782acc84d0d6ae12a458c6d46d33937ec163c9a633fcdebee849d",
+          "sourceHoodY": 32,
+          "sourceFootY": 248,
+          "sourceRootX": 167.0
+        },
+        {
+          "id": "ranger-NNW-walk-0",
+          "sourceRect": [
+            1017,
+            969,
+            173,
+            221
+          ],
+          "rgbaSha256": "4b619e6598fa624d0b6c8dbc04927a1a4809694f183eef429c0b9d5a87f30966",
+          "sourceHoodY": 32,
+          "sourceFootY": 246,
+          "sourceRootX": 161.0
+        }
+      ]
+    },
+    {
+      "state": "walk-1",
+      "sha256": "82abbf61eb43d5d78a2cc9894a4d915719365f27e6f70ce8d4b0e53543295260",
+      "frames": [
+        {
+          "id": "ranger-N-walk-1",
+          "sourceRect": [
+            65,
+            37,
+            219,
+            269
+          ],
+          "rgbaSha256": "a5075899906c4a734fdf752ed4a3ce6794f18a9bb98fe282263f1c50ea81c96a",
+          "sourceHoodY": 40,
+          "sourceFootY": 302,
+          "sourceRootX": 163.0
+        },
+        {
+          "id": "ranger-NNE-walk-1",
+          "sourceRect": [
+            381,
+            35,
+            213,
+            270
+          ],
+          "rgbaSha256": "8ded97c07f01e1498fc5ee9d3b627371706b55fdd2ece9edb7ac6ba5db20b82b",
+          "sourceHoodY": 38,
+          "sourceFootY": 301,
+          "sourceRootX": 169.0
+        },
+        {
+          "id": "ranger-NE-walk-1",
+          "sourceRect": [
+            698,
+            35,
+            195,
+            270
+          ],
+          "rgbaSha256": "fd7be2859f0de68bc6c0000ea27d0c4bd24fab14d9a649002e21f9ddb7e18478",
+          "sourceHoodY": 38,
+          "sourceFootY": 301,
+          "sourceRootX": 170.0
+        },
+        {
+          "id": "ranger-ENE-walk-1",
+          "sourceRect": [
+            1008,
+            36,
+            165,
+            269
+          ],
+          "rgbaSha256": "fc01c9ea5b9507d930dd78327bb903a6f5aba207546148363b09b49626c98383",
+          "sourceHoodY": 39,
+          "sourceFootY": 301,
+          "sourceRootX": 161.0
+        },
+        {
+          "id": "ranger-E-walk-1",
+          "sourceRect": [
+            75,
+            350,
+            161,
+            270
+          ],
+          "rgbaSha256": "3d72bdfabdc0f1658c8878a9e56509c8dbb8f4dd5d089cd5a52d9cc4b8e732cb",
+          "sourceHoodY": 39,
+          "sourceFootY": 302,
+          "sourceRootX": 163.0
+        },
+        {
+          "id": "ranger-ESE-walk-1",
+          "sourceRect": [
+            378,
+            347,
+            215,
+            274
+          ],
+          "rgbaSha256": "bbde0ce3f262fecc7a53d474f350bc80f4ad73d9b3a6a9a2e9b0ee2818bd44e4",
+          "sourceHoodY": 36,
+          "sourceFootY": 303,
+          "sourceRootX": 161.0
+        },
+        {
+          "id": "ranger-SE-walk-1",
+          "sourceRect": [
+            677,
+            347,
+            219,
+            273
+          ],
+          "rgbaSha256": "7419e924b020b3557b8b54c71154152ba147fb1cc7301690521ecb0111e37939",
+          "sourceHoodY": 36,
+          "sourceFootY": 302,
+          "sourceRootX": 156.0
+        },
+        {
+          "id": "ranger-SSE-walk-1",
+          "sourceRect": [
+            993,
+            346,
+            209,
+            274
+          ],
+          "rgbaSha256": "b0e03052a487873505e58b7b6c91e2b799b1c13710f2b1fbf88183162e621155",
+          "sourceHoodY": 35,
+          "sourceFootY": 302,
+          "sourceRootX": 148.0
+        },
+        {
+          "id": "ranger-S-walk-1",
+          "sourceRect": [
+            41,
+            652,
+            206,
+            272
+          ],
+          "rgbaSha256": "430a6a726ce8a4ff637512a26365f0a77e5ac6b6ffd7a26a7ddb94121d186b6a",
+          "sourceHoodY": 28,
+          "sourceFootY": 293,
+          "sourceRootX": 149.0
+        },
+        {
+          "id": "ranger-SSW-walk-1",
+          "sourceRect": [
+            384,
+            649,
+            219,
+            275
+          ],
+          "rgbaSha256": "4a390f51ce0d0bcdeface63aaffe91813630b3fadc8dbfc3bc5831d1ac190b3b",
+          "sourceHoodY": 25,
+          "sourceFootY": 293,
+          "sourceRootX": 188.0
+        },
+        {
+          "id": "ranger-SW-walk-1",
+          "sourceRect": [
+            695,
+            649,
+            212,
+            275
+          ],
+          "rgbaSha256": "5f6f3e55e693d25e06ae6eb855295fcc8148d943e5252a6800b01c730706a236",
+          "sourceHoodY": 25,
+          "sourceFootY": 293,
+          "sourceRootX": 176.0
+        },
+        {
+          "id": "ranger-WSW-walk-1",
+          "sourceRect": [
+            1006,
+            649,
+            205,
+            276
+          ],
+          "rgbaSha256": "81abff7596c88e7be7986c917b128d0e73fa245ad20f870ed0a4ca6c5bf55b6a",
+          "sourceHoodY": 25,
+          "sourceFootY": 294,
+          "sourceRootX": 167.0
+        },
+        {
+          "id": "ranger-W-walk-1",
+          "sourceRect": [
+            65,
+            957,
+            204,
+            269
+          ],
+          "rgbaSha256": "c960efe03d914d29ca41907229c11c672a312fffc0939c5b1a45075682f83b82",
+          "sourceHoodY": 20,
+          "sourceFootY": 282,
+          "sourceRootX": 168.0
+        },
+        {
+          "id": "ranger-WNW-walk-1",
+          "sourceRect": [
+            391,
+            954,
+            206,
+            270
+          ],
+          "rgbaSha256": "26d70d33e6ae9020d961bac5439c8c425cbadc7a24e873f83ccf16bdec17c7b0",
+          "sourceHoodY": 17,
+          "sourceFootY": 281,
+          "sourceRootX": 171.0
+        },
+        {
+          "id": "ranger-NW-walk-1",
+          "sourceRect": [
+            693,
+            955,
+            218,
+            270
+          ],
+          "rgbaSha256": "a1e7f5c7781f8e5df249f03cd37b31c5a7f887e49275d314d9ae33206b9d1a62",
+          "sourceHoodY": 18,
+          "sourceFootY": 282,
+          "sourceRootX": 166.0
+        },
+        {
+          "id": "ranger-NNW-walk-1",
+          "sourceRect": [
+            1011,
+            956,
+            200,
+            270
+          ],
+          "rgbaSha256": "29a8585045250392637f3a524c7353c306b2f37742c62cee397bf9615b10cadb",
+          "sourceHoodY": 19,
+          "sourceFootY": 282,
+          "sourceRootX": 164.0
+        }
+      ]
+    },
+    {
+      "state": "walk-2",
+      "sha256": "de88ec0dffd68419d8a326d7a72039434729f87742d32928508579c2faf28810",
+      "frames": [
+        {
+          "id": "ranger-N-walk-2",
+          "sourceRect": [
+            93,
+            80,
+            152,
+            213
+          ],
+          "rgbaSha256": "597f06712ea66e03453cdfdfb5718ab2bac5b4f03f84482dc33a1fd994697c9f",
+          "sourceHoodY": 82,
+          "sourceFootY": 289,
+          "sourceRootX": 171.0
+        },
+        {
+          "id": "ranger-NNE-walk-2",
+          "sourceRect": [
+            404,
+            79,
+            150,
+            214
+          ],
+          "rgbaSha256": "62b199eab725fc45fb201a199fa460d4b8cb8ce664fcfdf2efe49a7e9367ac1b",
+          "sourceHoodY": 82,
+          "sourceFootY": 289,
+          "sourceRootX": 169.0
+        },
+        {
+          "id": "ranger-NE-walk-2",
+          "sourceRect": [
+            709,
+            79,
+            147,
+            215
+          ],
+          "rgbaSha256": "b3c87b6f72a2f1f4e5f8c29b569d472e6fe899729a0793719f05ef85c06bfc3c",
+          "sourceHoodY": 82,
+          "sourceFootY": 290,
+          "sourceRootX": 161.0
+        },
+        {
+          "id": "ranger-ENE-walk-2",
+          "sourceRect": [
+            1018,
+            80,
+            169,
+            209
+          ],
+          "rgbaSha256": "91db4061ab6e77b385b9ec7646fc8246bf99cf6dc1b7ccecf7c2f2190adbcb4f",
+          "sourceHoodY": 83,
+          "sourceFootY": 285,
+          "sourceRootX": 158.0
+        },
+        {
+          "id": "ranger-E-walk-2",
+          "sourceRect": [
+            80,
+            384,
+            182,
+            214
+          ],
+          "rgbaSha256": "946bcc85715b5bd182984665041d6005e6423d27d3cef71f96eca69d968948b5",
+          "sourceHoodY": 73,
+          "sourceFootY": 280,
+          "sourceRootX": 170.0
+        },
+        {
+          "id": "ranger-ESE-walk-2",
+          "sourceRect": [
+            391,
+            384,
+            188,
+            216
+          ],
+          "rgbaSha256": "c52dba44821b6bfb0192a0010b8f9e0529e5470bf5754cf471406d62eae8d08f",
+          "sourceHoodY": 73,
+          "sourceFootY": 282,
+          "sourceRootX": 167.0
+        },
+        {
+          "id": "ranger-SE-walk-2",
+          "sourceRect": [
+            699,
+            384,
+            183,
+            215
+          ],
+          "rgbaSha256": "52fb21675c5a5ea83f6e8487b88d368cfae30c12215f2f01b75653ed961dc48d",
+          "sourceHoodY": 73,
+          "sourceFootY": 281,
+          "sourceRootX": 158.5
+        },
+        {
+          "id": "ranger-SSE-walk-2",
+          "sourceRect": [
+            1009,
+            380,
+            192,
+            218
+          ],
+          "rgbaSha256": "10a81a725c673833ffb1192cafa9aaac0f37c7406490d90f5d639f9d46f4c63e",
+          "sourceHoodY": 69,
+          "sourceFootY": 281,
+          "sourceRootX": 154.0
+        },
+        {
+          "id": "ranger-S-walk-2",
+          "sourceRect": [
+            86,
+            680,
+            163,
+            219
+          ],
+          "rgbaSha256": "5b4cf5c2354b1b4a73454b0d67a151b06312066c42da80bbde1c5d3df96305f6",
+          "sourceHoodY": 56,
+          "sourceFootY": 268,
+          "sourceRootX": 155.0
+        },
+        {
+          "id": "ranger-SSW-walk-2",
+          "sourceRect": [
+            406,
+            682,
+            174,
+            210
+          ],
+          "rgbaSha256": "143666b0b5531693b71e6ddcb35c5d480e453bbd4b9d4744deb1122a8cc326ba",
+          "sourceHoodY": 58,
+          "sourceFootY": 261,
+          "sourceRootX": 181.0
+        },
+        {
+          "id": "ranger-SW-walk-2",
+          "sourceRect": [
+            701,
+            683,
+            184,
+            213
+          ],
+          "rgbaSha256": "d91833d930aa366e3b3a2d1addd26da4032cf0548004c20909f5243f670d90cb",
+          "sourceHoodY": 58,
+          "sourceFootY": 265,
+          "sourceRootX": 165.0
+        },
+        {
+          "id": "ranger-WSW-walk-2",
+          "sourceRect": [
+            1013,
+            683,
+            180,
+            210
+          ],
+          "rgbaSha256": "9835befc48a786956155f186ef756fe768b11390b983e4516f9f06cae4b31636",
+          "sourceHoodY": 59,
+          "sourceFootY": 262,
+          "sourceRootX": 159.0
+        },
+        {
+          "id": "ranger-W-walk-2",
+          "sourceRect": [
+            89,
+            971,
+            175,
+            207
+          ],
+          "rgbaSha256": "6fc68632d6c33c301b2efd523b6473b73d25266cb88523361449af0cda789354",
+          "sourceHoodY": 34,
+          "sourceFootY": 234,
+          "sourceRootX": 173.0
+        },
+        {
+          "id": "ranger-WNW-walk-2",
+          "sourceRect": [
+            400,
+            971,
+            175,
+            211
+          ],
+          "rgbaSha256": "3f309ce1ff190ec57d8dc23a51f2f3b57256ba4940eb9a2eb82b2018c1ceaf0c",
+          "sourceHoodY": 34,
+          "sourceFootY": 238,
+          "sourceRootX": 164.0
+        },
+        {
+          "id": "ranger-NW-walk-2",
+          "sourceRect": [
+            706,
+            971,
+            169,
+            211
+          ],
+          "rgbaSha256": "b48a25d0320d69ef0c127f89e40110e9d65d45e5cd20db78010af0efd1ae7304",
+          "sourceHoodY": 34,
+          "sourceFootY": 239,
+          "sourceRootX": 153.0
+        },
+        {
+          "id": "ranger-NNW-walk-2",
+          "sourceRect": [
+            1028,
+            971,
+            155,
+            215
+          ],
+          "rgbaSha256": "f8b2af6676c51dde7f6f24efb570808edf7b2f53f43ecc99d96d8000daa86efe",
+          "sourceHoodY": 34,
+          "sourceFootY": 241,
+          "sourceRootX": 163.0
+        }
+      ]
+    },
+    {
+      "state": "walk-3",
+      "sha256": "23faa0da3852511bff53423003af5efbf2ab86708748abc0fa837560dca63ac7",
+      "frames": [
+        {
+          "id": "ranger-N-walk-3",
+          "sourceRect": [
+            74,
+            34,
+            186,
+            271
+          ],
+          "rgbaSha256": "131c4b3b7c026a747132a94e8cfcb06841829a286115911309f75647076b67f0",
+          "sourceHoodY": 37,
+          "sourceFootY": 301,
+          "sourceRootX": 169.0
+        },
+        {
+          "id": "ranger-NNE-walk-3",
+          "sourceRect": [
+            381,
+            34,
+            197,
+            271
+          ],
+          "rgbaSha256": "4ec1edc28026f3dcc6ffd93490325c813e5e1e355500d20b2808bce7d427b017",
+          "sourceHoodY": 37,
+          "sourceFootY": 301,
+          "sourceRootX": 175.0
+        },
+        {
+          "id": "ranger-NE-walk-3",
+          "sourceRect": [
+            698,
+            33,
+            174,
+            272
+          ],
+          "rgbaSha256": "930a662abda9ca9e060122aa0cbfabfea8d519ed79a25a6925652c825698a497",
+          "sourceHoodY": 36,
+          "sourceFootY": 302,
+          "sourceRootX": 164.0
+        },
+        {
+          "id": "ranger-ENE-walk-3",
+          "sourceRect": [
+            1009,
+            33,
+            170,
+            272
+          ],
+          "rgbaSha256": "ea924a9cc86298d3d81fd7c54622885f75751ee2a007428a9ccba3139a4d4637",
+          "sourceHoodY": 36,
+          "sourceFootY": 301,
+          "sourceRootX": 164.0
+        },
+        {
+          "id": "ranger-E-walk-3",
+          "sourceRect": [
+            73,
+            341,
+            170,
+            274
+          ],
+          "rgbaSha256": "2982cac33bac716d647052ccd91289f0bac8679ebdbda8cb8cca0d5ec4f26781",
+          "sourceHoodY": 30,
+          "sourceFootY": 297,
+          "sourceRootX": 169.0
+        },
+        {
+          "id": "ranger-ESE-walk-3",
+          "sourceRect": [
+            382,
+            341,
+            206,
+            277
+          ],
+          "rgbaSha256": "a9ae12acdfd26ebc8a3afae116cd44de11929656d64c30ca4cc71a72b56cb344",
+          "sourceHoodY": 30,
+          "sourceFootY": 300,
+          "sourceRootX": 162.0
+        },
+        {
+          "id": "ranger-SE-walk-3",
+          "sourceRect": [
+            688,
+            340,
+            200,
+            278
+          ],
+          "rgbaSha256": "62d7104b39865be752a658d69e8e97ae418d770afe17263f95ec15faa913016c",
+          "sourceHoodY": 29,
+          "sourceFootY": 300,
+          "sourceRootX": 156.0
+        },
+        {
+          "id": "ranger-SSE-walk-3",
+          "sourceRect": [
+            992,
+            340,
+            216,
+            278
+          ],
+          "rgbaSha256": "fecbdcc0f1974985fce403a6c1f57b19a0351213b494bc4f5106dbb993ea781c",
+          "sourceHoodY": 29,
+          "sourceFootY": 300,
+          "sourceRootX": 151.0
+        },
+        {
+          "id": "ranger-S-walk-3",
+          "sourceRect": [
+            52,
+            643,
+            219,
+            274
+          ],
+          "rgbaSha256": "3e81066143c8d0071bf5273228c26df4c94d39f4443dad8ca498c8b3117ad1a1",
+          "sourceHoodY": 19,
+          "sourceFootY": 286,
+          "sourceRootX": 153.0
+        },
+        {
+          "id": "ranger-SSW-walk-3",
+          "sourceRect": [
+            385,
+            641,
+            205,
+            275
+          ],
+          "rgbaSha256": "f4c39be19bdf37a04473f822e26f13a627c120731d60bdc507d298f2b409439d",
+          "sourceHoodY": 16,
+          "sourceFootY": 285,
+          "sourceRootX": 181.0
+        },
+        {
+          "id": "ranger-SW-walk-3",
+          "sourceRect": [
+            688,
+            640,
+            226,
+            275
+          ],
+          "rgbaSha256": "ba37d85370035e4801b0da8248c18d120f4df3290baf0653472ccd6ebe0f2137",
+          "sourceHoodY": 16,
+          "sourceFootY": 284,
+          "sourceRootX": 176.0
+        },
+        {
+          "id": "ranger-WSW-walk-3",
+          "sourceRect": [
+            1002,
+            639,
+            220,
+            272
+          ],
+          "rgbaSha256": "d26752caac6419dc12f6ebf7f58c77a4f1201040b146ca0c9917680f79bc3949",
+          "sourceHoodY": 15,
+          "sourceFootY": 280,
+          "sourceRootX": 174.0
+        },
+        {
+          "id": "ranger-W-walk-3",
+          "sourceRect": [
+            64,
+            948,
+            216,
+            266
+          ],
+          "rgbaSha256": "ba7ae5a6f24fc79e399666a564831ff3cffab57429e24d140ec0ac01103f7a14",
+          "sourceHoodY": 11,
+          "sourceFootY": 270,
+          "sourceRootX": 164.0
+        },
+        {
+          "id": "ranger-WNW-walk-3",
+          "sourceRect": [
+            370,
+            946,
+            220,
+            271
+          ],
+          "rgbaSha256": "f045ef4722b3ed1c4b39e23ddfb5ed52b7ae6c478fe7d199a766609a22a65026",
+          "sourceHoodY": 9,
+          "sourceFootY": 271,
+          "sourceRootX": 158.0
+        },
+        {
+          "id": "ranger-NW-walk-3",
+          "sourceRect": [
+            691,
+            946,
+            212,
+            269
+          ],
+          "rgbaSha256": "a0cb43d7c43d046c4da321ac2f8e06b2394cb26140f6f6550974b88f1f081c0b",
+          "sourceHoodY": 9,
+          "sourceFootY": 271,
+          "sourceRootX": 163.0
+        },
+        {
+          "id": "ranger-NNW-walk-3",
+          "sourceRect": [
+            1005,
+            946,
+            201,
+            269
+          ],
+          "rgbaSha256": "29b9e621803008cf68baa33180e53428a28e0078c0ee5e136b9a4bc3a78df3eb",
+          "sourceHoodY": 9,
+          "sourceFootY": 271,
+          "sourceRootX": 164.0
+        }
+      ]
+    }
+  ],
+  "rightsBoundary": "Owner-authorized project use and publication; this receipt documents this batch, not a CC0 declaration or a new license grant for underlying supplied references.",
+  "staticSelectedGeneratedSha256": "096192f35c19ef1d4cae47147fb3340548c017311d205c11fa374781fcd3a257"
+}

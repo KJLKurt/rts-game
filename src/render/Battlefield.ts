@@ -2,6 +2,8 @@ import type { Entity, GameEvent, GameMap, GameState, Point, ResourceNode, RushSu
 import { TILE_W, TILE_H, building, diamond, drawTeamGlyph, ellipse, flag, hash, line, palette, poly, rock, shadow, tree, unit, type Ctx } from './art';
 import { SpriteAtlas } from './SpriteAtlas';
 import { AnimationAtlas } from './AnimationAtlas';
+import { DirectionalAtlas } from './DirectionalAtlas';
+import { VISUAL_THEMES, type VisualThemeId } from './visualThemes';
 import { nodeVisual } from './nodeVisual';
 import { drawFactionAdornment } from './factionIdentity';
 import { CombatFeedback, type Casualty } from './CombatFeedback';
@@ -33,9 +35,12 @@ export class Battlefield {
  readonly canvas:HTMLCanvasElement;
  readonly context:Ctx;
  readonly camera={x:8,y:8,zoom:1};
- readonly atlas=new SpriteAtlas();
+ atlas=new SpriteAtlas();
  private attackAtlas=new AnimationAtlas();
+ private directionalAtlas=new DirectionalAtlas();
  private atlasLoad:Promise<boolean>=Promise.resolve(false);
+ visualTheme:VisualThemeId='christmas';
+ private themeRequest=0;
  width=1;height=1;dpr=1;
  private terrain:TerrainCache|null=null;
  private fogCanvas:HTMLCanvasElement;
@@ -50,8 +55,10 @@ export class Battlefield {
  private combat=new CombatFeedback();
  constructor(canvas:HTMLCanvasElement){
   this.canvas=canvas;const c=canvas.getContext('2d',{alpha:false});if(!c)throw new Error('Canvas2D is unavailable');this.context=c;this.fogCanvas=document.createElement('canvas');
-  void this.loadAtlas(`${import.meta.env?.BASE_URL??'./'}assets/render/frontier-atlas.json`);
-  void this.loadAttackAtlas(`${import.meta.env?.BASE_URL??'./'}assets/render/frontier-combat-animation.json`);
+  this.atlasLoad=Promise.all([
+   this.atlas.load(`${import.meta.env?.BASE_URL??'./'}assets/render/frontier-atlas.json`),
+   this.attackAtlas.load(`${import.meta.env?.BASE_URL??'./'}assets/render/frontier-combat-animation.json`),
+  ]).then(([ready])=>ready);
  }
  resize(width:number,height:number,dpr=window.devicePixelRatio||1){
   this.width=Math.max(1,width);this.height=Math.max(1,height);this.dpr=Math.min(2,Math.max(1,dpr));
@@ -61,6 +68,27 @@ export class Battlefield {
  }
  loadAtlas(url:string){this.atlasLoad=this.atlas.load(url);return this.atlasLoad;}
  loadAttackAtlas(url:string){return this.attackAtlas.load(url);}
+ /** Load a whole set before swapping. Failed/superseded requests retain the working set. */
+ setVisualTheme(id:VisualThemeId):Promise<boolean>{
+  const request=++this.themeRequest,previous=this.atlasLoad;
+  const operation=(async()=>{
+   await previous;
+   if(request!==this.themeRequest)return false;
+   if(id===this.visualTheme&&this.atlas.ready)return true;
+   const theme=VISUAL_THEMES[id],next=new SpriteAtlas(),attack=new AnimationAtlas(),directional=new DirectionalAtlas();
+   const base=import.meta.env?.BASE_URL??'./';
+   const [ready,attackReady,directionalReady]=await Promise.all([
+    next.load(`${base}${theme.atlas}`),
+    theme.attackAtlas?attack.load(`${base}${theme.attackAtlas}`):Promise.resolve(true),
+    theme.directionalAtlas?directional.load(`${base}${theme.directionalAtlas}`):Promise.resolve(true),
+   ]);
+   if(!ready||!attackReady||!directionalReady||request!==this.themeRequest)return false;
+   this.atlas=next;this.attackAtlas=attack;this.directionalAtlas=directional;this.visualTheme=id;
+   return true;
+  })();
+  this.atlasLoad=operation;
+  return operation;
+ }
  /** Menu art uses the same original commander asset as the battlefield, at native aspect. */
  async renderPortrait(canvas:HTMLCanvasElement,type:string,team=0):Promise<void>{
   await this.atlasLoad;const c=canvas.getContext('2d');if(!c)return;const width=canvas.width,height=canvas.height,p=palette(team);c.clearRect(0,0,width,height);const glow=c.createRadialGradient(width*.5,height*.57,2,width*.5,height*.57,width*.47);glow.addColorStop(0,`${p.main}2b`);glow.addColorStop(1,`${p.main}00`);c.fillStyle=glow;c.fillRect(0,0,width,height);c.save();c.translate(width/2,height*.88);const f=this.atlas.frames[type];if(f){const h=Math.min(height*.78,width*.84*f.h/f.w);this.atlas.draw(c,type,h*f.w/f.h,h);}else{const scale=Math.min(width/85,height/90);c.scale(scale,scale);unit(c,type,team,0,false,false);}c.restore();
@@ -134,11 +162,13 @@ export class Battlefield {
   }
   for(const id of this.visualPositions.keys())if(!liveIds.has(id))this.visualPositions.delete(id);
   items.sort((a,b)=>a.order-b.order);
+  // Friendly commanders and selected troops should remain readable behind tall deposits.
+  const protectedActors=items.filter(item=>item.kind==='entity'&&(item.value as Entity).team===(options.team??0)&&((item.value as Entity).kind==='commander'||(item.value as Entity).kind==='unit'&&selected.has((item.value as Entity).id)));
   // Ground orders and command markers stay below the silhouettes.
   for(const e of state.entities)if(selected.has(e.id)&&e.hp>0)this.drawOrder(c,e,z);
   for(const item of items){const p=this.worldToScreen(item.x,item.y);c.save();c.translate(p.x,p.y);c.scale(z,z);
    if(item.kind==='decor')this.drawDecoration(c,item.value as Decoration,state.map.biome);
-   else if(item.kind==='node')this.drawNode(c,item.value as ResourceNode,state,selected.has((item.value as ResourceNode).id),t,options);
+   else if(item.kind==='node')this.drawNode(c,item.value as ResourceNode,state,selected.has((item.value as ResourceNode).id),t,options,this.nodeOpacity(item,protectedActors));
    else if(item.kind==='casualty')this.drawCasualty(c,item.value as Casualty,options);
    else if(item.kind==='supply')this.drawSupply(c,item.value as RushSupply,state,t,options);
    else this.drawEntity(c,item.value as Entity,selected.has((item.value as Entity).id),t,state,options);
@@ -237,11 +267,27 @@ export class Battlefield {
    this.spriteCache.set(key,sprite);
   }c.drawImage(sprite,-50*d.size,-99*d.size,100*d.size,110*d.size);
  }
- private drawNode(c:Ctx,n:ResourceNode,state:GameState,selected:boolean,t:number,options:RenderOptions){
+ private nodeOpacity(node:RenderItem,actors:readonly RenderItem[]):number{
+  const art=nodeVisual(node.value as ResourceNode),bounds=this.atlas.bounds(art.frame,art.width,art.height)??art.fallback;
+  for(const actor of actors){
+   if(actor.order>=node.order||Math.abs(actor.x-node.x)>4||Math.abs(actor.y-node.y)>4)continue;
+   const e=actor.value as Entity,height=e.kind==='commander'?59:e.type==='cavalry'?48:e.type==='siege'?44:45;
+   const x=((actor.x-node.x)-(actor.y-node.y))*TILE_W/2,y=((actor.x-node.x)+(actor.y-node.y))*TILE_H/2;
+   let overlap=0;
+   for(const fraction of [.3,.5,.7]){
+    const py=y-height*fraction;
+    const opaque=this.atlas.bounds(art.frame,art.width,art.height)?this.atlas.hitTest(art.frame,art.width,art.height,x,py):x>=bounds.x&&x<=bounds.x+bounds.width&&py>=bounds.y&&py<=bounds.y+bounds.height;
+    if(opaque&&++overlap>=2)return .3;
+   }
+  }
+  return 1;
+ }
+ private drawNode(c:Ctx,n:ResourceNode,state:GameState,selected:boolean,t:number,options:RenderOptions,artOpacity=1){
   const p=palette(n.owner??-1),capturing=n.captureTeam!==null&&n.captureProgress>0,art=nodeVisual(n);
   const finite=n as ResourceNode & {amount?:number;maxAmount?:number};const remaining=finite.amount??1000,max=finite.maxAmount??1000,ratio=remaining/max;
   ellipse(c,0,2,n.kind==='relic'?40:35,n.kind==='relic'?20:17,selected?'#f7d88716':'#223c4314',selected?'#ffe1a1':n.owner===null?'#cdbd7d55':`${p.main}aa`,selected?2:1);
   if(capturing){c.save();c.scale(1,.5);c.beginPath();c.arc(0,2,n.kind==='relic'?42:37,-Math.PI/2,-Math.PI/2+TAU*n.captureProgress);c.strokeStyle=palette(n.captureTeam!).main;c.lineWidth=4;c.stroke();c.restore();}
+  c.save();c.globalAlpha*=artOpacity;
   if(n.kind==='relic'){
    const gl=c.createRadialGradient(0,-30,2,0,-15,64);gl.addColorStop(0,n.owner===null?'#ffdda346':`${p.main}60`);gl.addColorStop(1,'#ffdfa000');c.fillStyle=gl;c.fillRect(-70,-90,140,120);
    const image=this.atlas.draw(c,art.frame,art.width,art.height);
@@ -262,8 +308,9 @@ export class Battlefield {
     if(remaining>0){c.save();c.translate(-10,-6);tree(c,0,state.map.biome,.78);c.restore();if(ratio>.3){c.save();c.translate(14,0);tree(c,1,state.map.biome,.64);c.restore();}}
     for(let i=0;i<3;i++){const xx=-17+i*8;poly(c,[xx,4,xx+15,-3,xx+15,-7,xx,-1],'#7a5d3e');ellipse(c,xx,1,4,4,'#c2a16d','#694f36',1);ellipse(c,xx,1,2,2,'#a98753');}
    }
-   if(n.owner!==null)flag(c,24,-3,n.owner,t,true);
   }
+  c.restore();
+  if(n.kind!=='relic'&&n.owner!==null)flag(c,24,-3,n.owner,t,true);
   // Resource balances are visible only while that point is currently observable.
   if(this.visible(state,n.x,n.y,false,options)){
    const text=n.kind==='relic'?(n.owner===null?'ANCIENT RELIC':n.owner===(options.team??0)?'YOUR RELIC':'RIVAL RELIC'):remaining<=0?'DEPLETED':`${n.kind==='gold'?'◆':'▥'} ${remaining>=1000?`${(remaining/1000).toFixed(1)}k`:Math.round(remaining)}`;
@@ -296,21 +343,25 @@ export class Battlefield {
    if(damaged&&e.hp/e.maxHp<.4&&!options.reducedMotion){for(let i=0;i<3;i++){const rise=(t*15+i*11)%30;ellipse(c,-10+i*12,-50-rise,5+rise*.13,6+rise*.15,`rgba(38,41,40,${.35-rise*.007})`);}}
   }else{
    const authoredFrame=this.attackAtlas.attackFrame(e.type,pose.age,pose.anticipation,!!options.reducedMotion);
+   const facing=attacking||pose.anticipation>0?Math.atan2(pose.direction.y,pose.direction.x):e.facing;
+   const directionalFrame=this.directionalAtlas.frame(e.type,facing,{attackAge:pose.age,anticipation:pose.anticipation,moving:move,travel},!!options.reducedMotion);
+   const directionalAttack=!!this.directionalAtlas.data?.actors[e.type]?.attackFrameMs.length;
+   const authored=!!authoredFrame||!!directionalFrame&&(!attacking&&pose.anticipation<=0||directionalAttack||!!options.reducedMotion);
    const bob=options.reducedMotion?0:move?Math.sin(travel*9+phase)*1.8:Math.sin(t*1.8+phase)*.4;
    c.save();
    const rawX=(pose.direction.x-pose.direction.y),rawY=(pose.direction.x+pose.direction.y)*.5,length=Math.hypot(rawX,rawY)||1;
    const dx=rawX/length,dy=rawY/length;
-   if(!options.reducedMotion&&!authoredFrame){
+   if(!options.reducedMotion&&!authored){
     const distance=pose.ranged?(-pose.release*4+pose.recovery*1.2-pose.anticipation*1.8):(pose.release*(commander?8:5)-pose.anticipation*3);
     c.translate(dx*distance,dy*distance+bob);
     c.rotate((pose.ranged?-pose.release*.025:pose.release*.055-pose.anticipation*.025)*(dx<0?-1:1));
    }
-   if(hit>0&&!options.reducedMotion&&!authoredFrame)c.translate(-dx*Math.sin(hit*Math.PI)*1.5,-hit*.6);
-   if((authoredFrame?pose.direction.x-pose.direction.y:Math.cos(e.facing)-Math.sin(e.facing))<-.05)c.scale(-1,1);
-   if(move&&!options.reducedMotion&&!authoredFrame){const stride=Math.sin(travel*9+phase);c.scale(1+stride*.015,1-stride*.022);}
+   if(hit>0&&!options.reducedMotion&&!authored)c.translate(-dx*Math.sin(hit*Math.PI)*1.5,-hit*.6);
+   if(!directionalFrame&&(authoredFrame?pose.direction.x-pose.direction.y:Math.cos(e.facing)-Math.sin(e.facing))<-.05)c.scale(-1,1);
+   if(move&&!options.reducedMotion&&!authored){const stride=Math.sin(travel*9+phase);c.scale(1+stride*.015,1-stride*.022);}
    const width=e.type==='siege'?55:e.type==='cavalry'?51:commander?47:36;const height=e.type==='siege'?44:e.type==='cavalry'?48:commander?59:45;
 
-   const drewAuthored=authoredFrame?this.attackAtlas.draw(c,e.type,authoredFrame):false;
+   const drewAuthored=directionalFrame?this.directionalAtlas.draw(c,e.type,directionalFrame,height):authoredFrame?this.attackAtlas.draw(c,e.type,authoredFrame):false;
    if(!drewAuthored&&!this.atlas.draw(c,e.type,width,height))unit(c,e.type,e.team,attacking?pose.age*3:t+phase,move,attacking&&!options.reducedMotion,e.facing,pose.age/.3);
    c.restore();
    // Narrow pennants render beyond dense ranks and remain distinct from the supplied costume palette.
@@ -338,8 +389,10 @@ export class Battlefield {
    if(structure){c.translate(0,progress*4);c.scale(1+progress*.06,1-progress*.35);}
    else{const side=Math.cos(fall.facing)-Math.sin(fall.facing)<0?-1:1;c.translate(side*progress*9,progress*4);c.rotate(side*progress*.8);c.scale(1,1-progress*.4);}
   }
-  if(!structure&&Math.cos(fall.facing)-Math.sin(fall.facing)<-.05)c.scale(-1,1);
-  if(!this.atlas.draw(c,fall.type==='turret'?'tower':fall.type,width,structure?undefined:height)){
+  const directionalFrame=structure?undefined:this.directionalAtlas.frame(fall.type,fall.facing,{attackAge:Infinity,anticipation:0,moving:false,travel:0},true);
+  if(!structure&&!directionalFrame&&Math.cos(fall.facing)-Math.sin(fall.facing)<-.05)c.scale(-1,1);
+  const directionalDrawn=directionalFrame?this.directionalAtlas.draw(c,fall.type,directionalFrame,height):false;
+  if(!directionalDrawn&&!this.atlas.draw(c,fall.type==='turret'?'tower':fall.type,width,structure?undefined:height)){
    if(structure)building(c,fall.type,fall.team,0);else unit(c,fall.type,fall.team,0,false,false,fall.facing);
   }c.restore();
   // A crossed-out team crest is readable even when falling sprites overlap a busy battle.
