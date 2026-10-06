@@ -16,30 +16,45 @@
       "bytes": 7266
     },
     "ranger-directional.png": {
-      "sha256": "99f55aed1f28b233a8cd6229972d73b80643ccf63e128dbeb10ac064a23fcddd",
-      "bytes": 6101050,
-      "width": 2048,
-      "height": 2048,
-      "decodedRgbaBytes": 16777216
+      "sha256": "da4153d26107b3edf37aff253dc0001e35d7c887f68a3e2384e29e70a43f1703",
+      "bytes": 11494625,
+      "width": 3584,
+      "height": 2240,
+      "decodedRgbaBytes": 32112640
     },
     "ranger-directional.json": {
-      "sha256": "faeffc9718216d43689c72b7fc70196dbe440a52f31811c1f522029939059598",
-      "bytes": 21355
+      "sha256": "b788699b98e0d4b9cc381e63697cec2add9029dc9108d99acda75a50b7eed1b9",
+      "bytes": 38540
     }
   },
   "directional": {
     "packing": "RGBA pixels copied unchanged, no semantic edits/resampling; 2px gutter",
     "registration": "Per-frame teal hood centre and brown ground-contact boot measured; body height keeps scale independent of bow extents. Native browser review required.",
-    "acceptedFrames": 80,
+    "acceptedFrames": 144,
     "rejectedAttackFrames": 64,
     "atlasDimensions": [
-      2048,
-      2048
+      3584,
+      2240
     ],
-    "decodedBytes": 16777216,
-    "pngBytes": 6101050,
-    "pngSha256": "99f55aed1f28b233a8cd6229972d73b80643ccf63e128dbeb10ac064a23fcddd",
-    "allPackedPixelsExact": true
+    "decodedBytes": 32112640,
+    "pngBytes": 11494625,
+    "pngSha256": "da4153d26107b3edf37aff253dc0001e35d7c887f68a3e2384e29e70a43f1703",
+    "allPackedPixelsExact": true,
+    "acceptedIdleWalkFrames": 80,
+    "acceptedAttackFrames": 64,
+    "original80FrameRGBAUnchanged": true,
+    "rejectedAttackFramesNote": "The prior four16-heading attack sheets remain excluded. Additional rejected aim/re-nock iterations and unused alternate rows are retained in the private handoff.",
+    "attackTiming": {
+      "milliseconds": [
+        100,
+        100,
+        100,
+        250
+      ],
+      "impactFrame": 2,
+      "source": "Existing simulation projectile event; first shots start at release. Existing cooldown supplies anticipation. No simulation changes."
+    },
+    "nnwRecoverySource": "Angle3 row3 nock/draw/release has correct steep up-left shaft. Angle3 recovery erroneously re-nocks an arrow and is rejected. Use unchanged empty-bow recovery from preceding identity-preserving angle2 edit, row3. Both source PNGs and rejected frames retained."
   },
   "generationPrompts": [
     {
@@ -93,7 +108,119 @@
         "path": "/workspace/generated_images/exec-e306c255-e713-4904-b448-b1dc2bcb40bc.png",
         "prompt": "Edit the supplied walk-2 4x4 Ranger sprite sheet ONLY to correct production layout. Preserve all sixteen figures, their direction, exact outfit and gait/contact pose. Every figure must become 70% of its current size and remain centered inside ITS OWN existing cell. Actual image is 1254x1254, 4 columns x4 rows, boundaries at x/y=0,313.5,627,940.5,1254. Each COMPLETE figure, boots, quiver and bow stays within cell-local x=48..265 and y=45..273. Restore any cut-off boot toe or bow tip naturally. At least40px transparent empty space on ALL FOUR sides of EVERY cell; nothing touches/crosses a cell boundary. Maintain true RGBA transparency, original toy-3D polished teal cloak/copper hair/brass/oak art, same front/back/side orientations, no added shadows, background, marks, labels, grid, effects or new sprites. No pose changes. This is one walk phase in 16 headings, not 16 different walk phases."
       }
-    ]
+    ],
+    {
+      "tool": "image_gen.imagegen",
+      "date": "2026-10-05",
+      "sourceOriginal": "exec-cb30b0fb-6914-4c55-aed4-744c6678111e.png",
+      "sourceSha256": "b352303dc573a5d637cdaf1e677bc744c351a6a404d25b8c42a7801e7adf15c8",
+      "prompt": "LAYOUT/SCALE EDIT ONLY of this exact16-sprite Ranger cardinal attack sheet. Preserve all16 character identities, body headings, bow hand, outfits, facial profiles and four action phases exactly as represented. Do not redesign or rotate any pose. Row1East right profile/arrow RIGHT, row2North back/arrow UP, row3West left profile/arrow LEFT, row4South front/arrow DOWN. Eachrow col1nock arrow present, col2full draw arrow present in statedheading, col3release OPEN stringhand NO arrow, col4recovery stringhand lowered NO arrow. Those direction/arrow distinctions must remain intact.\n\nKeep canvas1254x1254, true transparent background, exact4x4 equal cells313.5x313.5. SHRINK ALL FIGURES uniformly to ABOUT70% of their current subject size, while leaving the canvas the SAME SIZE. Current hood-to-boot bodies around240-270px; final body must be180-205px. Full figure+weapon maximum225x245px. Keep the same relative anatomy and proportions; actually scale down the sprite artwork, don't crop it. Each figure wholly within itscell, horizontally centered; ground-foot root aboutx156,y265 inside everycell. The complete bow/arrow tips must stay at least30px from everycell edge. Transparent whitespace is deliberate and must remain; do not zoom the figures back up to fill the cells. Keep body scale consistent across all16 poses. No outside-cell pixels, no clipped bows/feet, no cell crossover, no background matte, shadows or effects/text/lines. Complete crisp small art, same Ranger, same16 heading/phase assignments. For NORTH/SOUTH do NOT replace the up/down arrows with side-pointing arrows, and do NOT restore arrows in release/recovery.",
+      "transparent_background": true
+    },
+    {
+      "tool": "image_gen.imagegen",
+      "date": "2026-10-05",
+      "sourceOriginal": "exec-96ebe7b8-625e-4f1d-8626-ab205b513a96.png",
+      "sourceSha256": "ca91fe457f752274e6d0b3c43862494c15790846f29a93631b1af6bbf85c0523",
+      "prompt": "Create16 separate Ranger archery sprites in an EXACT4x4 grid. Reference1\u20134 are the APPROVED idle character for rows1\u20134 and lock each row's body direction and EXACT character identity. Reference5 is the accepted CARDINAL ATTACK WORKING REFERENCE for phase design, proportions, small sprite SCALE and style only. Do NOT copy reference5's cardinal aim into these intermediate headings.\n\nSame youthful slender orange-haired elf Ranger, teal soft hood/cape/tunic with gold edging, same face/nose/eye proportions, brown bracers/belt/pouches/boots, ornate gold wooden bow and gold-topped quiver. Keep the outfit/head/core body as close to the approved idle in that row as possible. No bulky shoulders/face, no new armor, consistent bow/string hands; do not mirror one pose into another heading. Clean polished toon isometric2.5D, same reference rendering.\n\n1254x1254 PNG TRUE transparent background. Four equal313.5px rows/columns. Small sprites at the SAME SIZE as reference5: hood-to-boot body180\u2013205px; whole figure/weapon maximum225x245px. Ground-foot root aroundx156,y265 INSIDE each cell. >=30px clear gutters around every complete figure and weapon; intentional spacious transparency. Do NOT enlarge to fill cells; no clipping, detached particles, text, labels, grid, shadows, glows, background or flying projectiles.\n\nROW ORIENTATIONS (screen coordinates, x right,y down):\nROW1 NNE: 22.5 degrees clockwise from screen NORTH. Mostly BACK view, hood/cape back visible like ref1. Arrow points mostly UP and slightly RIGHT (vector +0.383,-0.924).\nROW2 NE: 45 degrees clockwise from NORTH. BACK-RIGHT three-quarter view like ref2, target UPPER RIGHT. Arrow points diagonal UP-RIGHT exactly45 degrees (vector +0.707,-0.707).\nROW3 ENE: 67.5 degrees clockwise from NORTH. RIGHT profile with slight BACK view like ref3. Arrow points RIGHT and slightly UP,22.5 degrees above horizontal (vector +0.924,-0.383).\nROW4 ESE: 112.5 degrees clockwise from NORTH. RIGHT profile with slight FRONT view like ref4. Arrow points RIGHT and slightly DOWN,22.5 degrees below horizontal (vector +0.924,+0.383).\nThe hood/head, chest, feet, bow arm and actual nocked arrow must agree with that row's heading. Arrow aiming axis is critical: NO horizontal arrows in near-north/south rows, NO right arrows for westward rows, NO cardinal substitutions for diagonals. Natural foreshortening is fine but the visible arrowhead must point at the described target direction, never the viewer by accident. Preserve each approved idle view, including front/back and quiver position.\n\nFOUR COLUMNS in EVERY ROW: col1NOCK/ANTICIPATION: bow lowered toward that target with arrow nocked/preparing; col2FULL DRAW: bow arm extends toward target, string hand draws to cheek, nocked arrow shaft points exactly along row's target vector; col3RELEASE: bow arm still toward that target, string hand OPEN near cheek, relaxed string, NO arrow anywhere; col4RECOVERY: string hand lowered toward waist, bow relaxing/lowering, distinct from nock and release, relaxed string, NO arrow anywhere. Quiver arrows are allowed; never an arrow on the bow or flying out in release/recovery. Keep four phases clearly different and planted feet registered consistently. Every sprite a genuinely authored view/pose.",
+      "transparent_background": true
+    },
+    {
+      "tool": "image_gen.imagegen",
+      "date": "2026-10-05",
+      "sourceOriginal": "exec-f544e00f-9600-4896-bb94-ca5d8bfec3ad.png",
+      "sourceSha256": "45e6fce5362b22d3a7504b1f43c1ef2ed2315ea07bf7bc0a79c83adffeebfb5e",
+      "prompt": "Create16 separate Ranger archery sprites in an EXACT4x4 grid. Reference1\u20134 are the APPROVED idle character for rows1\u20134 and lock each row's body direction and EXACT character identity. Reference5 is the accepted CARDINAL ATTACK WORKING REFERENCE for phase design, proportions, small sprite SCALE and style only. Do NOT copy reference5's cardinal aim into these intermediate headings.\n\nSame youthful slender orange-haired elf Ranger, teal soft hood/cape/tunic with gold edging, same face/nose/eye proportions, brown bracers/belt/pouches/boots, ornate gold wooden bow and gold-topped quiver. Keep the outfit/head/core body as close to the approved idle in that row as possible. No bulky shoulders/face, no new armor, consistent bow/string hands; do not mirror one pose into another heading. Clean polished toon isometric2.5D, same reference rendering.\n\n1254x1254 PNG TRUE transparent background. Four equal313.5px rows/columns. Small sprites at the SAME SIZE as reference5: hood-to-boot body180\u2013205px; whole figure/weapon maximum225x245px. Ground-foot root aroundx156,y265 INSIDE each cell. >=30px clear gutters around every complete figure and weapon; intentional spacious transparency. Do NOT enlarge to fill cells; no clipping, detached particles, text, labels, grid, shadows, glows, background or flying projectiles.\n\nROW ORIENTATIONS (screen coordinates, x right,y down):\nROW1 SSE: 157.5 degrees clockwise from NORTH. Mostly FRONT with slight RIGHTward heading like ref1. Arrow points mostly DOWN and slightly RIGHT (vector +0.383,+0.924).\nROW2 SSW: 202.5 degrees clockwise from NORTH. Mostly FRONT with slight LEFTward heading like ref2. Arrow points mostly DOWN and slightly LEFT (vector -0.383,+0.924).\nROW3 SW: 225 degrees clockwise from NORTH. FRONT-LEFT three-quarter view like ref3. Arrow points diagonal DOWN-LEFT exactly45 degrees (vector -0.707,+0.707).\nROW4 WSW: 247.5 degrees clockwise from NORTH. LEFT profile with slight FRONT view like ref4. Arrow points LEFT and slightly DOWN,22.5 degrees below horizontal (vector -0.924,+0.383).\nThe hood/head, chest, feet, bow arm and actual nocked arrow must agree with that row's heading. Arrow aiming axis is critical: NO horizontal arrows in near-north/south rows, NO right arrows for westward rows, NO cardinal substitutions for diagonals. Natural foreshortening is fine but the visible arrowhead must point at the described target direction, never the viewer by accident. Preserve each approved idle view, including front/back and quiver position.\n\nFOUR COLUMNS in EVERY ROW: col1NOCK/ANTICIPATION: bow lowered toward that target with arrow nocked/preparing; col2FULL DRAW: bow arm extends toward target, string hand draws to cheek, nocked arrow shaft points exactly along row's target vector; col3RELEASE: bow arm still toward that target, string hand OPEN near cheek, relaxed string, NO arrow anywhere; col4RECOVERY: string hand lowered toward waist, bow relaxing/lowering, distinct from nock and release, relaxed string, NO arrow anywhere. Quiver arrows are allowed; never an arrow on the bow or flying out in release/recovery. Keep four phases clearly different and planted feet registered consistently. Every sprite a genuinely authored view/pose.",
+      "transparent_background": true
+    },
+    {
+      "tool": "image_gen.imagegen",
+      "date": "2026-10-05",
+      "sourceOriginal": "exec-348ee1d9-2939-4f83-aea6-6df814d2b5d2.png",
+      "sourceSha256": "f1c5009a452cb6f654c27091d9ceec2aef570de28f1624fd3e9aabdf854ebf7b",
+      "prompt": "Create16 separate Ranger archery sprites in an EXACT4x4 grid. Reference1\u20134 are the APPROVED idle character for rows1\u20134 and lock each row's body direction and EXACT character identity. Reference5 is the accepted CARDINAL ATTACK WORKING REFERENCE for phase design, proportions, small sprite SCALE and style only. Do NOT copy reference5's cardinal aim into these intermediate headings.\n\nSame youthful slender orange-haired elf Ranger, teal soft hood/cape/tunic with gold edging, same face/nose/eye proportions, brown bracers/belt/pouches/boots, ornate gold wooden bow and gold-topped quiver. Keep the outfit/head/core body as close to the approved idle in that row as possible. No bulky shoulders/face, no new armor, consistent bow/string hands; do not mirror one pose into another heading. Clean polished toon isometric2.5D, same reference rendering.\n\n1254x1254 PNG TRUE transparent background. Four equal313.5px rows/columns. Small sprites at the SAME SIZE as reference5: hood-to-boot body180\u2013205px; whole figure/weapon maximum225x245px. Ground-foot root aroundx156,y265 INSIDE each cell. >=30px clear gutters around every complete figure and weapon; intentional spacious transparency. Do NOT enlarge to fill cells; no clipping, detached particles, text, labels, grid, shadows, glows, background or flying projectiles.\n\nROW ORIENTATIONS (screen coordinates, x right,y down):\nROW1 WNW: 292.5 degrees clockwise from NORTH. LEFT profile with slight BACK view like ref1. Arrow points LEFT and slightly UP,22.5 degrees above horizontal (vector -0.924,-0.383).\nROW2 NW: 315 degrees clockwise from NORTH. BACK-LEFT three-quarter view like ref2. Arrow points diagonal UP-LEFT exactly45 degrees (vector -0.707,-0.707).\nROW3 NNW: 337.5 degrees clockwise from NORTH. Mostly BACK with slight LEFTward heading like ref3. Arrow points mostly UP and slightly LEFT (vector -0.383,-0.924).\nROW4 SE: 135 degrees clockwise from NORTH. FRONT-RIGHT three-quarter view like ref4. Arrow points diagonal DOWN-RIGHT exactly45 degrees (vector +0.707,+0.707).\nThe hood/head, chest, feet, bow arm and actual nocked arrow must agree with that row's heading. Arrow aiming axis is critical: NO horizontal arrows in near-north/south rows, NO right arrows for westward rows, NO cardinal substitutions for diagonals. Natural foreshortening is fine but the visible arrowhead must point at the described target direction, never the viewer by accident. Preserve each approved idle view, including front/back and quiver position.\n\nFOUR COLUMNS in EVERY ROW: col1NOCK/ANTICIPATION: bow lowered toward that target with arrow nocked/preparing; col2FULL DRAW: bow arm extends toward target, string hand draws to cheek, nocked arrow shaft points exactly along row's target vector; col3RELEASE: bow arm still toward that target, string hand OPEN near cheek, relaxed string, NO arrow anywhere; col4RECOVERY: string hand lowered toward waist, bow relaxing/lowering, distinct from nock and release, relaxed string, NO arrow anywhere. Quiver arrows are allowed; never an arrow on the bow or flying out in release/recovery. Keep four phases clearly different and planted feet registered consistently. Every sprite a genuinely authored view/pose.",
+      "transparent_background": true
+    },
+    {
+      "tool": "image_gen.imagegen",
+      "date": "2026-10-05",
+      "sourceOriginal": "exec-03337d77-8de5-4fda-a555-d44bacbf0460.png",
+      "sourceSha256": "2a206b6721addb57517aaf768dea0b010728d942e122a9eb4b5351d34e2d40cc",
+      "prompt": "Generate a16-cell SPRITE SHEET of ONE SINGLE Ranger heading: NNE. All16 cells use ONLY this heading. Four rows are four coherent alternate takes of the same4-phase attack cycle; eachrow is a complete cycle. Reference1 is the exact approved Ranger idle for identity/body view. Reference2 is a four-phase CARDINAL N cycle: use its nearly vertical aiming as the starting point, then tilt the target only22.5degrees RIGHT. The actual SINGLE HEADING is:\nNORTH-NORTH-EAST: mostly AWAY/UP with just a slight RIGHT component. True BACK view with a slight right turn, matching approved idle. Arrow axis is nearly VERTICAL UP, tilted22.5 degrees to the RIGHT: from string hand to arrowhead, move RIGHT35 pixels and UP85 pixels. Arrowhead must be far HIGHER than its tail and only slightly farther RIGHT. A very STEEP upward diagonal,67.5 degrees above horizontal, like a nearly-upright slash. Aim beyond the TOP edge near the right side. Keep back of hood, orange hair, back of cape and quiver visible, front chest/face hidden. Do not turn to a right profile to make a sideward shot.\n\nThis targeting is the main requirement. The FULL-DRAW arrow's actual visible shaft/head must follow the stated very STEEP vector in EVERY row. Do not make a mostly horizontal arrow. The body, head, chest, feet and bow arm should all agree with this near-front/near-back target direction. Natural foreshortening is fine, but keep visible arrowhead position on the correct far UP/DOWN side of its string-hand tail.\n\nExact same slender youthful orange-haired elf Ranger in reference1: teal gold-edged hood/cape/tunic, same hood/face/body proportions, brown bracers/pouches/boots, ornate gold bow and quiver, same anatomical bow hand. No bulky shoulders, big cheeks, new costume or front/back reversal. Clean polished toon isometric2.5D.\n\nTRUE transparent1254x1254 PNG, 4x4 equal313.5px cells. SMALL bodies180\u2013205pixels hood-to-boot, whole silhouette/weapon<=225x245px, plantedfoot root nearcellx156,y265. At least30px margin from EVERYcell edge; do not enlarge to fillcells. No shadows/background/grid/text/glow/particles/cell crossover/clipping. Preserve a stable body/foot registration.\n\nAcross EVERYrow: col1 nock/anticipation: preparing arrow on bow toward the near-vertical target; col2 fully DRAWN: string hand near cheek and visible arrow points EXACTLY along the stated steep near-vertical direction; col3 RELEASE: string hand OPEN near cheek, bow arm still towards the same target, relaxed string, NO arrow on bow or flying anywhere; col4 RECOVERY: string hand lowering towaist, bow relaxing/lowering, distinct from nock and release, NO arrow. Quiver arrows may remain. Keep all four phases distinct, but never change the single NNE heading.",
+      "transparent_background": true
+    },
+    {
+      "tool": "image_gen.imagegen",
+      "date": "2026-10-05",
+      "sourceOriginal": "exec-0a4e2b76-258f-4cd8-8074-110ddbf7cab7.png",
+      "sourceSha256": "123c013a3605950d3554646afb5978c4f80a4bd020db57c8fb80e6007b708ff7",
+      "prompt": "Generate a16-cell SPRITE SHEET of ONE SINGLE Ranger heading: SSE. All16 cells use ONLY this heading. Four rows are four coherent alternate takes of the same4-phase attack cycle; eachrow is a complete cycle. Reference1 is the exact approved Ranger idle for identity/body view. Reference2 is a four-phase CARDINAL S cycle: use its nearly vertical aiming as the starting point, then tilt the target only22.5degrees RIGHT. The actual SINGLE HEADING is:\nSOUTH-SOUTH-EAST: mostly TOWARD CAMERA/DOWN with just a slight RIGHT component. Mostly FRONT view with a slight right turn, matching approved idle. Arrow axis is nearly VERTICAL DOWN, tilted22.5 degrees to the RIGHT: from string hand to arrowhead, move RIGHT35 pixels and DOWN85 pixels. Arrowhead must be far LOWER than its tail and only slightly farther RIGHT. A very STEEP downward diagonal,67.5 degrees below horizontal. Aim toward the FOREGROUND beyond the BOTTOM edge near the right side. Keep FRONT face/chest/tunic visible, not a sideways profile. Do not make a rightward side shot.\n\nThis targeting is the main requirement. The FULL-DRAW arrow's actual visible shaft/head must follow the stated very STEEP vector in EVERY row. Do not make a mostly horizontal arrow. The body, head, chest, feet and bow arm should all agree with this near-front/near-back target direction. Natural foreshortening is fine, but keep visible arrowhead position on the correct far UP/DOWN side of its string-hand tail.\n\nExact same slender youthful orange-haired elf Ranger in reference1: teal gold-edged hood/cape/tunic, same hood/face/body proportions, brown bracers/pouches/boots, ornate gold bow and quiver, same anatomical bow hand. No bulky shoulders, big cheeks, new costume or front/back reversal. Clean polished toon isometric2.5D.\n\nTRUE transparent1254x1254 PNG, 4x4 equal313.5px cells. SMALL bodies180\u2013205pixels hood-to-boot, whole silhouette/weapon<=225x245px, plantedfoot root nearcellx156,y265. At least30px margin from EVERYcell edge; do not enlarge to fillcells. No shadows/background/grid/text/glow/particles/cell crossover/clipping. Preserve a stable body/foot registration.\n\nAcross EVERYrow: col1 nock/anticipation: preparing arrow on bow toward the near-vertical target; col2 fully DRAWN: string hand near cheek and visible arrow points EXACTLY along the stated steep near-vertical direction; col3 RELEASE: string hand OPEN near cheek, bow arm still towards the same target, relaxed string, NO arrow on bow or flying anywhere; col4 RECOVERY: string hand lowering towaist, bow relaxing/lowering, distinct from nock and release, NO arrow. Quiver arrows may remain. Keep all four phases distinct, but never change the single SSE heading.",
+      "transparent_background": true
+    },
+    {
+      "tool": "image_gen.imagegen",
+      "date": "2026-10-05",
+      "sourceOriginal": "exec-383b32b3-579d-4e87-871b-5f9076253131.png",
+      "sourceSha256": "04487ed414202284d3e92943cce4101ad07ad574f60ea84bce3a69c226bf3a58",
+      "prompt": "A16-cell SPRITE SHEET of ONE Ranger heading ONLY: ENE. Every cell aims toward this same heading. Four rows are four coherent alternate takes of a4-phase cycle; each row contains a fullcycle, not new directions. Reference1 is the APPROVED idle and locks EXACT character identity/body view. Reference2 is the CARDINAL E4-phase strip and provides phase design and small scale; adjust its aim to the exact target vector below. Use the SAME slender orange-haired elf Ranger, same teal gold-trimmed hood/cape/tunic, face/hood/head-to-body proportions, brown bracers/pouches/boots, gold ornate bow/quiver, same bow/string hands, polished toon isometric2.5D. Do not enlarge cheeks/shoulders or redesign outfit.\n\nVIEW: RIGHT side profile with a slight BACK turn, matching approved idle. Head/chest/feet/bow arm all agree with this view. In back views show cape/quiver/hair on back, never a front-chest side shot. In front views show face/tunic, not a back view.\n\nCRITICAL FULL-DRAW ARROW: measured on screen from its string-hand tail to its arrowhead, move RIGHT85 and UP35 pixels; a shallow22.5-degree upward RIGHT diagonal; arrowhead visibly ABOVE and far RIGHT of tail; not horizontal. This exact aiming must be obvious in EVERY row's col2. Do not substitute the nearest cardinal or a horizontal side shot. The visible nocked shaft and gray arrowhead point in this direction. The bow arm and release pose retain the same heading, with natural foreshortening. Do not change the vector merely to fit a familiar archery pose.\n\nTrue transparent1254x1254 PNG; EXACT4x4 grid,313.5px cells. SMALL figures at reference2's scale: body180\u2013205source pixels hood-to-BOOT, whole figure/weapon maximum225x245px. Plantedfoot root nearcellx156,y265. >=30px empty gutters around all artwork. Uniform body scale/root across cycle. Do not enlarge to fillcells. No clipping/cell crossover/particles/text/grid/background/shadow/glow/projectile.\n\nFOUR COLUMNS in EACH ROW: col1 nock/anticipation preparing arrow on lowered bow toward the stated target; col2 full DRAW with string-hand near cheek, visible nocked arrow along exact vector above; col3 immediate RELEASE with string-hand clearly OPEN near cheek, bow arm still toward same target, relaxed string, NO arrow on bow or in flight; col4 recovery with string-hand lowering toward waist, bow lowering/relaxing, clearly different from nock and release, relaxed string and NO arrow. Only quiver arrows may remain. Keep each alternate row coherent; all16 share ONLY ENEheading. Maintain target vector and exact actor identity over ornamental detail.",
+      "transparent_background": true
+    },
+    {
+      "tool": "image_gen.imagegen",
+      "date": "2026-10-05",
+      "sourceOriginal": "exec-f3db5192-e96e-4efd-bf06-8e0c0451f85b.png",
+      "sourceSha256": "8c0be0fd4cbc2d303977b3e767f6953048355116fddd2efee801e87acdf41160",
+      "prompt": "A16-cell SPRITE SHEET of ONE Ranger heading ONLY: NW. Every cell aims toward this same heading. Four rows are four coherent alternate takes of a4-phase cycle; each row contains a fullcycle, not new directions. Reference1 is the APPROVED idle and locks EXACT character identity/body view. Reference2 is the CARDINAL N4-phase strip and provides phase design and small scale; adjust its aim to the exact target vector below. Use the SAME slender orange-haired elf Ranger, same teal gold-trimmed hood/cape/tunic, face/hood/head-to-body proportions, brown bracers/pouches/boots, gold ornate bow/quiver, same bow/string hands, polished toon isometric2.5D. Do not enlarge cheeks/shoulders or redesign outfit.\n\nVIEW: BACK-LEFT three-quarter view, matching approved idle. Head/chest/feet/bow arm all agree with this view. In back views show cape/quiver/hair on back, never a front-chest side shot. In front views show face/tunic, not a back view.\n\nCRITICAL FULL-DRAW ARROW: measured on screen from its string-hand tail to its arrowhead, move LEFT70 and UP70 pixels; exactly45-degree diagonal UP-LEFT; horizontal and vertical displacements are EQUAL; arrowhead far above/left of tail. This exact aiming must be obvious in EVERY row's col2. Do not substitute the nearest cardinal or a horizontal side shot. The visible nocked shaft and gray arrowhead point in this direction. The bow arm and release pose retain the same heading, with natural foreshortening. Do not change the vector merely to fit a familiar archery pose.\n\nTrue transparent1254x1254 PNG; EXACT4x4 grid,313.5px cells. SMALL figures at reference2's scale: body180\u2013205source pixels hood-to-BOOT, whole figure/weapon maximum225x245px. Plantedfoot root nearcellx156,y265. >=30px empty gutters around all artwork. Uniform body scale/root across cycle. Do not enlarge to fillcells. No clipping/cell crossover/particles/text/grid/background/shadow/glow/projectile.\n\nFOUR COLUMNS in EACH ROW: col1 nock/anticipation preparing arrow on lowered bow toward the stated target; col2 full DRAW with string-hand near cheek, visible nocked arrow along exact vector above; col3 immediate RELEASE with string-hand clearly OPEN near cheek, bow arm still toward same target, relaxed string, NO arrow on bow or in flight; col4 recovery with string-hand lowering toward waist, bow lowering/relaxing, clearly different from nock and release, relaxed string and NO arrow. Only quiver arrows may remain. Keep each alternate row coherent; all16 share ONLY NWheading. Maintain target vector and exact actor identity over ornamental detail.",
+      "transparent_background": true
+    },
+    {
+      "tool": "image_gen.imagegen",
+      "date": "2026-10-05",
+      "sourceOriginal": "exec-f7bd7bbf-ae22-4910-8c40-ec8a6d729d03.png",
+      "sourceSha256": "837f07a86306e4fb7171cc2096206f361d6869cea8479e47c207fec60eabab1a",
+      "prompt": "A16-cell SPRITE SHEET of ONE Ranger heading ONLY: SE. Every cell aims toward this same heading. Four rows are four coherent alternate takes of a4-phase cycle; each row contains a fullcycle, not new directions. Reference1 is the APPROVED idle and locks EXACT character identity/body view. Reference2 is the CARDINAL S4-phase strip and provides phase design and small scale; adjust its aim to the exact target vector below. Use the SAME slender orange-haired elf Ranger, same teal gold-trimmed hood/cape/tunic, face/hood/head-to-body proportions, brown bracers/pouches/boots, gold ornate bow/quiver, same bow/string hands, polished toon isometric2.5D. Do not enlarge cheeks/shoulders or redesign outfit.\n\nVIEW: FRONT-RIGHT three-quarter view, matching approved idle. Head/chest/feet/bow arm all agree with this view. In back views show cape/quiver/hair on back, never a front-chest side shot. In front views show face/tunic, not a back view.\n\nCRITICAL FULL-DRAW ARROW: measured on screen from its string-hand tail to its arrowhead, move RIGHT70 and DOWN70 pixels; exactly45-degree diagonal DOWN-RIGHT; horizontal and vertical displacements are EQUAL; arrowhead far below/right of tail. This exact aiming must be obvious in EVERY row's col2. Do not substitute the nearest cardinal or a horizontal side shot. The visible nocked shaft and gray arrowhead point in this direction. The bow arm and release pose retain the same heading, with natural foreshortening. Do not change the vector merely to fit a familiar archery pose.\n\nTrue transparent1254x1254 PNG; EXACT4x4 grid,313.5px cells. SMALL figures at reference2's scale: body180\u2013205source pixels hood-to-BOOT, whole figure/weapon maximum225x245px. Plantedfoot root nearcellx156,y265. >=30px empty gutters around all artwork. Uniform body scale/root across cycle. Do not enlarge to fillcells. No clipping/cell crossover/particles/text/grid/background/shadow/glow/projectile.\n\nFOUR COLUMNS in EACH ROW: col1 nock/anticipation preparing arrow on lowered bow toward the stated target; col2 full DRAW with string-hand near cheek, visible nocked arrow along exact vector above; col3 immediate RELEASE with string-hand clearly OPEN near cheek, bow arm still toward same target, relaxed string, NO arrow on bow or in flight; col4 recovery with string-hand lowering toward waist, bow lowering/relaxing, clearly different from nock and release, relaxed string and NO arrow. Only quiver arrows may remain. Keep each alternate row coherent; all16 share ONLY SEheading. Maintain target vector and exact actor identity over ornamental detail.",
+      "transparent_background": true
+    },
+    {
+      "tool": "image_gen.imagegen",
+      "date": "2026-10-05",
+      "sourceOriginal": "exec-7cc8fa9c-0c24-46f4-90c7-e7da8eb25893.png",
+      "sourceSha256": "1bb8308647b3493710fc5ebebdfb3fcc4599e774d6a8ae2d39ac1ae692194e20",
+      "prompt": "Edit this exact transparent sprite sheet. Keep the same Ranger identity, teal gold-trim hood, orange hair, gold bow, brown leather boots, and 4x4 cell arrangement. Every row remains an alternate four-pose cycle for the SAME screen heading NE. Correct the aim direction in all rows. Aim NORTH-EAST: arrow shaft from the pulling hand to the arrowhead must rise exactly as much as it runs RIGHT. A true screen diagonal up-right 45 degrees. Move the drawn bow hand upward so the arrow tip is substantially ABOVE the pulling hand, not a shallow sideways arrow. The released empty bow and extended arm preserve that 45 degree diagonal. Columns are nock, full draw, release, recovery. Nock and draw have a visible arrow aligned along the target vector; release and recovery have no nocked arrow (quiver arrows may remain). Keep the pose at the same ground point and hood-to-boot height within each row. Shrink all artwork to hood-to-boot height 180-205 source pixels on the original 1280x1280 canvas, four equal320px cells; do not crop character, bow, or arrow. Preserve empty transparent margins between every figure. No text, lines, guides, background or new accessories.",
+      "transparent_background": true
+    },
+    {
+      "tool": "image_gen.imagegen",
+      "date": "2026-10-05",
+      "sourceOriginal": "exec-f368ee2d-fe4d-4fd1-927c-f62111b0dac9.png",
+      "sourceSha256": "476fd45a3650b6df1b0749aa4a1c01030cbe08b34d4e778c6789868f755fb64d",
+      "prompt": "Edit this exact transparent sprite sheet. Keep the same Ranger identity, teal gold-trim hood, orange hair, gold bow, brown leather boots, and 4x4 cell arrangement. Every row remains an alternate four-pose cycle for the SAME screen heading SW. Correct the aim direction in all rows. Aim SOUTH-WEST: arrow shaft from the pulling hand to the arrowhead must fall exactly as much as it runs LEFT. A true screen diagonal down-left 45 degrees. Move the bow hand lower so the arrow tip is substantially BELOW the pulling hand, not a shallow sideways arrow. The released empty bow and extended arm preserve that 45 degree diagonal. Columns are nock, full draw, release, recovery. Nock and draw have a visible arrow aligned along the target vector; release and recovery have no nocked arrow (quiver arrows may remain). Keep the pose at the same ground point and hood-to-boot height within each row. Shrink all artwork to hood-to-boot height 180-205 source pixels on the original 1280x1280 canvas, four equal320px cells; do not crop character, bow, or arrow. Preserve empty transparent margins between every figure. No text, lines, guides, background or new accessories.",
+      "transparent_background": true
+    },
+    {
+      "tool": "image_gen.imagegen",
+      "date": "2026-10-05",
+      "sourceOriginal": "exec-f17af413-5f0b-4f0d-a0e5-d9691cbf910a.png",
+      "sourceSha256": "9b22bedbcc1dfabb10e8d9e7a2911702552e0d1bde6c4d51424a41bdf41ead1b",
+      "prompt": "Edit this exact transparent sprite sheet. Keep the same Ranger identity, teal gold-trim hood, orange hair, gold bow, brown leather boots, and 4x4 cell arrangement. Every row remains an alternate four-pose cycle for the SAME screen heading SSW. Correct the aim direction in all rows. Aim SOUTH-SOUTH-WEST: arrow shaft from the pulling hand to its arrowhead runs LEFT 50 pixels and DOWN 120 pixels, a steep down-left vector 22.5 degrees LEFT of straight down. The arrowhead must be noticeably LEFT of the pulling hand, not straight down. The released empty bow and extended arm preserve the same steep down-left vector. Columns are nock, full draw, release, recovery. Nock and draw have a visible arrow aligned along the target vector; release and recovery have no nocked arrow (quiver arrows may remain). Keep the pose at the same ground point and hood-to-boot height within each row. Shrink all artwork to hood-to-boot height 180-205 source pixels on the original 1280x1280 canvas, four equal320px cells; do not crop character, bow, or arrow. Preserve empty transparent margins between every figure. No text, lines, guides, background or new accessories.",
+      "transparent_background": true
+    },
+    {
+      "tool": "image_gen.imagegen",
+      "date": "2026-10-05",
+      "sourceOriginal": "exec-be2b5f34-e227-4faf-953c-0e3ea96b7a94.png",
+      "sourceSha256": "477e6c2990a2961d47b7352ffb3a5dc2ba81052e4264715bcdbe4e2b6bcfce0c",
+      "prompt": "Edit this exact transparent Ranger sprite sheet. Every row is one alternate cycle of the SAME NORTH-NORTH-WEST heading. Preserve the exact character, hood, orange hair, gold bow, brown boots, 4x4 cell layout and animation order. Correct ONLY the aim vector and matching arm/bow position. The current nocked arrows lean too far LEFT, around35 degrees from straight up. Make the arrow shaft clearly STEEPER: exactly22.5 degrees LEFT of vertical UP, with a rise of120 pixels for a LEFT run of50 pixels. In the DRAW column, place the arrowhead more to the RIGHT than it is now while keeping it ABOVE the head. The arrow tip must lie only50px LEFT of the pulling-hand arrow tail and120px ABOVE it; not a45-degree diagonal and not vertical. Nock and full draw must both use this same up-left steep vector. Release has the matching up-left aimed empty bow and open pulling hand; recovery has lowered arms and no nocked arrow. Quiver arrows remain. Keep body hood-to-ground height200px and fixed boot contact inside each320px cell of this1280px transparent canvas. Keep complete figures and bows separated by transparent margins. No text, guides, effects or background.",
+      "transparent_background": true
+    },
+    {
+      "tool": "image_gen.imagegen",
+      "date": "2026-10-05",
+      "sourceOriginal": "exec-126b4e43-b09a-4aa2-8e60-410eeabebca5.png",
+      "sourceSha256": "11da371cb4ca4ba8b52d65d01a1ccfdc92db8d4aa9a0de0b785251325fde319a",
+      "prompt": "Edit this exact transparent sprite sheet. Keep the same Ranger identity, teal gold-trim hood, orange hair, gold bow, brown leather boots, and 4x4 cell arrangement. Every row remains an alternate four-pose cycle for the SAME screen heading NNW. Correct the aim direction in all rows. Aim NORTH-NORTH-WEST: arrow shaft from the pulling hand to its arrowhead runs LEFT 50 pixels and UP 120 pixels, a steep up-left vector 22.5 degrees LEFT of straight up. The arrowhead must be noticeably LEFT of the pulling hand, not straight up. The released empty bow and extended arm preserve the same steep up-left vector. Columns are nock, full draw, release, recovery. Nock and draw have a visible arrow aligned along the target vector; release and recovery have no nocked arrow (quiver arrows may remain). Keep the pose at the same ground point and hood-to-boot height within each row. Shrink all artwork to hood-to-boot height 180-205 source pixels on the original 1280x1280 canvas, four equal320px cells; do not crop character, bow, or arrow. Preserve empty transparent margins between every figure. No text, lines, guides, background or new accessories.",
+      "transparent_background": true
+    }
   ],
   "selectedGeneratedInputs": [
     {
@@ -1168,5 +1295,1321 @@
     }
   ],
   "rightsBoundary": "Owner-authorized project use and publication; this receipt documents this batch, not a CC0 declaration or a new license grant for underlying supplied references.",
-  "staticSelectedGeneratedSha256": "096192f35c19ef1d4cae47147fb3340548c017311d205c11fa374781fcd3a257"
+  "staticSelectedGeneratedSha256": "096192f35c19ef1d4cae47147fb3340548c017311d205c11fa374781fcd3a257",
+  "selectedAttackGeneratedInputs": [
+    {
+      "metadata": "cardinal-small-boot-roots.json",
+      "original": "exec-cb30b0fb-6914-4c55-aed4-744c6678111e.png",
+      "sha256": "b352303dc573a5d637cdaf1e677bc744c351a6a404d25b8c42a7801e7adf15c8",
+      "frames": [
+        {
+          "id": "ranger-N-attack-0",
+          "sourceFrameID": "ranger-N-attack-0",
+          "heading": "N",
+          "phase": 0,
+          "variantRow": null,
+          "sourceRect": [
+            103,
+            367,
+            157,
+            224
+          ],
+          "groundPivot": {
+            "x": 73.93872306779996,
+            "y": 217
+          },
+          "bodyHeight": 177,
+          "rgbaSHA256": "32aee2ef7e965a5d6a7783c80a24a1e033f3ea338acf95cd7f7a0df3a317896d"
+        },
+        {
+          "id": "ranger-N-attack-1",
+          "sourceFrameID": "ranger-N-attack-1",
+          "heading": "N",
+          "phase": 1,
+          "variantRow": null,
+          "sourceRect": [
+            411,
+            356,
+            159,
+            233
+          ],
+          "groundPivot": {
+            "x": 74.12107030216706,
+            "y": 227
+          },
+          "bodyHeight": 179,
+          "rgbaSHA256": "3fd84a7c01eb6ceb09779154eb9e55cd1dcc9c8bf446c0bfb5dc0b533f4965bc"
+        },
+        {
+          "id": "ranger-N-attack-2",
+          "sourceFrameID": "ranger-N-attack-2",
+          "heading": "N",
+          "phase": 2,
+          "variantRow": null,
+          "sourceRect": [
+            731,
+            354,
+            152,
+            236
+          ],
+          "groundPivot": {
+            "x": 67.48709895495901,
+            "y": 229
+          },
+          "bodyHeight": 177,
+          "rgbaSHA256": "c2b7c34b5deab0cca7cd27b47d329b235142ec0c933130f55c589863fab0fa85"
+        },
+        {
+          "id": "ranger-N-attack-3",
+          "sourceFrameID": "ranger-N-attack-3",
+          "heading": "N",
+          "phase": 3,
+          "variantRow": null,
+          "sourceRect": [
+            1024,
+            398,
+            164,
+            192
+          ],
+          "groundPivot": {
+            "x": 81.89181597580028,
+            "y": 186
+          },
+          "bodyHeight": 179,
+          "rgbaSHA256": "16da785fcf37480f2fae434bba2a993d3d77a15563111eef1b370b21372c2f54"
+        },
+        {
+          "id": "ranger-E-attack-0",
+          "sourceFrameID": "ranger-E-attack-0",
+          "heading": "E",
+          "phase": 0,
+          "variantRow": null,
+          "sourceRect": [
+            81,
+            100,
+            190,
+            205
+          ],
+          "groundPivot": {
+            "x": 91.09534917029853,
+            "y": 198
+          },
+          "bodyHeight": 194,
+          "rgbaSHA256": "e626e1767c13a9315e0b84a060768874c578dfd14fbf6f4596fd3ad727673514"
+        },
+        {
+          "id": "ranger-E-attack-1",
+          "sourceFrameID": "ranger-E-attack-1",
+          "heading": "E",
+          "phase": 1,
+          "variantRow": null,
+          "sourceRect": [
+            369,
+            87,
+            228,
+            218
+          ],
+          "groundPivot": {
+            "x": 93.48528287461774,
+            "y": 211
+          },
+          "bodyHeight": 193,
+          "rgbaSHA256": "cc6b83760c83e8c35c13b716bd0dec01752f2c2c36f18d280e85621ba8d516c8"
+        },
+        {
+          "id": "ranger-E-attack-2",
+          "sourceFrameID": "ranger-E-attack-2",
+          "heading": "E",
+          "phase": 2,
+          "variantRow": null,
+          "sourceRect": [
+            690,
+            86,
+            206,
+            219
+          ],
+          "groundPivot": {
+            "x": 92.95140304363152,
+            "y": 212
+          },
+          "bodyHeight": 194,
+          "rgbaSHA256": "66b5e258101a78248d0494cc0894eea8caa4093ed2123451f1dc5d0bab68a6d1"
+        },
+        {
+          "id": "ranger-E-attack-3",
+          "sourceFrameID": "ranger-E-attack-3",
+          "heading": "E",
+          "phase": 3,
+          "variantRow": null,
+          "sourceRect": [
+            1010,
+            100,
+            179,
+            205
+          ],
+          "groundPivot": {
+            "x": 90.2813234891988,
+            "y": 198
+          },
+          "bodyHeight": 195,
+          "rgbaSHA256": "1ca49b287506f57730756edea24091e2e5c4e6594a166e0f937e04e61d5c4ab9"
+        },
+        {
+          "id": "ranger-S-attack-0",
+          "sourceFrameID": "ranger-S-attack-0",
+          "heading": "S",
+          "phase": 0,
+          "variantRow": null,
+          "sourceRect": [
+            97,
+            952,
+            167,
+            218
+          ],
+          "groundPivot": {
+            "x": 82.9207452258966,
+            "y": 207
+          },
+          "bodyHeight": 203,
+          "rgbaSHA256": "630f4167377794bf1b968322379e357d437d45cbf51567aa9f111bde5aca6eb2"
+        },
+        {
+          "id": "ranger-S-attack-1",
+          "sourceFrameID": "ranger-S-attack-1",
+          "heading": "S",
+          "phase": 1,
+          "variantRow": null,
+          "sourceRect": [
+            404,
+            950,
+            174,
+            220
+          ],
+          "groundPivot": {
+            "x": 91.04317659472977,
+            "y": 209
+          },
+          "bodyHeight": 205,
+          "rgbaSHA256": "f0e83730bd26596dd9cd8af29970973d55ae628fea7defb68a70ac985d28d5ba"
+        },
+        {
+          "id": "ranger-S-attack-2",
+          "sourceFrameID": "ranger-S-attack-2",
+          "heading": "S",
+          "phase": 2,
+          "variantRow": null,
+          "sourceRect": [
+            691,
+            949,
+            174,
+            216
+          ],
+          "groundPivot": {
+            "x": 91.69419634850604,
+            "y": 210
+          },
+          "bodyHeight": 206,
+          "rgbaSHA256": "39e75b5abb8086add2c508d0fa681e94dfddae1527d569d9a1437a2eb9c17926"
+        },
+        {
+          "id": "ranger-S-attack-3",
+          "sourceFrameID": "ranger-S-attack-3",
+          "heading": "S",
+          "phase": 3,
+          "variantRow": null,
+          "sourceRect": [
+            1002,
+            950,
+            188,
+            215
+          ],
+          "groundPivot": {
+            "x": 89.96359494068662,
+            "y": 209
+          },
+          "bodyHeight": 205,
+          "rgbaSHA256": "8bf105ac655292ee91893951d2241b01494fcddba6629e8f9cee40e6d19d9e68"
+        },
+        {
+          "id": "ranger-W-attack-0",
+          "sourceFrameID": "ranger-W-attack-0",
+          "heading": "W",
+          "phase": 0,
+          "variantRow": null,
+          "sourceRect": [
+            68,
+            674,
+            192,
+            216
+          ],
+          "groundPivot": {
+            "x": 88.35951315358585,
+            "y": 209
+          },
+          "bodyHeight": 205,
+          "rgbaSHA256": "2cc38ff55d00c5fffdb9d3a282400206f108cb1b2b9fee9f0cf1f69094599c94"
+        },
+        {
+          "id": "ranger-W-attack-1",
+          "sourceFrameID": "ranger-W-attack-1",
+          "heading": "W",
+          "phase": 1,
+          "variantRow": null,
+          "sourceRect": [
+            351,
+            665,
+            236,
+            224
+          ],
+          "groundPivot": {
+            "x": 129.90764103784812,
+            "y": 218
+          },
+          "bodyHeight": 204,
+          "rgbaSHA256": "30695fbb440285bf2e5530a9237ca19391319d471c083c35e3ce8b60470879a0"
+        },
+        {
+          "id": "ranger-W-attack-2",
+          "sourceFrameID": "ranger-W-attack-2",
+          "heading": "W",
+          "phase": 2,
+          "variantRow": null,
+          "sourceRect": [
+            686,
+            666,
+            214,
+            223
+          ],
+          "groundPivot": {
+            "x": 108.91721936109158,
+            "y": 217
+          },
+          "bodyHeight": 202,
+          "rgbaSHA256": "fdd8042cbe0275bb877e810baa2a6fe4ba03d00e60470c3f897b8d07fb262b96"
+        },
+        {
+          "id": "ranger-W-attack-3",
+          "sourceFrameID": "ranger-W-attack-3",
+          "heading": "W",
+          "phase": 3,
+          "variantRow": null,
+          "sourceRect": [
+            997,
+            673,
+            193,
+            218
+          ],
+          "groundPivot": {
+            "x": 83.58690995189417,
+            "y": 211
+          },
+          "bodyHeight": 206,
+          "rgbaSHA256": "b8a7e3b3a42fb43bc45d700b34843de54e5d38937c9ee427e1f20a7a9a5c99cc"
+        }
+      ]
+    },
+    {
+      "metadata": "northeast-boot-roots.json",
+      "original": "exec-96ebe7b8-625e-4f1d-8626-ab205b513a96.png",
+      "sha256": "ca91fe457f752274e6d0b3c43862494c15790846f29a93631b1af6bbf85c0523",
+      "frames": [
+        {
+          "id": "ranger-ESE-attack-0",
+          "sourceFrameID": "ranger-ESE-attack-0",
+          "heading": "ESE",
+          "phase": 0,
+          "variantRow": null,
+          "sourceRect": [
+            62,
+            954,
+            226,
+            246
+          ],
+          "groundPivot": {
+            "x": 97.68196234563736,
+            "y": 237
+          },
+          "bodyHeight": 232,
+          "rgbaSHA256": "e59ab4bf373ebe436c727ab4711209796097145d0e5aa28f027901c057f6f2f7"
+        },
+        {
+          "id": "ranger-ESE-attack-1",
+          "sourceFrameID": "ranger-ESE-attack-1",
+          "heading": "ESE",
+          "phase": 1,
+          "variantRow": null,
+          "sourceRect": [
+            373,
+            953,
+            258,
+            247
+          ],
+          "groundPivot": {
+            "x": 92.76788637906478,
+            "y": 239
+          },
+          "bodyHeight": 233,
+          "rgbaSHA256": "4fa00dc019dc7adec4c63df18361ce9229c8eeca0880f0225b437ff4c89f8b43"
+        },
+        {
+          "id": "ranger-ESE-attack-2",
+          "sourceFrameID": "ranger-ESE-attack-2",
+          "heading": "ESE",
+          "phase": 2,
+          "variantRow": null,
+          "sourceRect": [
+            687,
+            955,
+            227,
+            245
+          ],
+          "groundPivot": {
+            "x": 92.81711507163094,
+            "y": 239
+          },
+          "bodyHeight": 234,
+          "rgbaSHA256": "c0039a8fd9e1ceca154c22c7ef9e00eabbb5905768f6c525190c34bb4383f79d"
+        },
+        {
+          "id": "ranger-ESE-attack-3",
+          "sourceFrameID": "ranger-ESE-attack-3",
+          "heading": "ESE",
+          "phase": 3,
+          "variantRow": null,
+          "sourceRect": [
+            1012,
+            955,
+            210,
+            245
+          ],
+          "groundPivot": {
+            "x": 97.36719759579263,
+            "y": 238
+          },
+          "bodyHeight": 233,
+          "rgbaSHA256": "2feeb79e5869a79b90ee3c4a95cf15f64e807a7ad5f3ff61201d4b66053548e8"
+        }
+      ]
+    },
+    {
+      "metadata": "southwest-boot-roots.json",
+      "original": "exec-f544e00f-9600-4896-bb94-ca5d8bfec3ad.png",
+      "sha256": "45e6fce5362b22d3a7504b1f43c1ef2ed2315ea07bf7bc0a79c83adffeebfb5e",
+      "frames": [
+        {
+          "id": "ranger-WSW-attack-0",
+          "sourceFrameID": "ranger-WSW-attack-0",
+          "heading": "WSW",
+          "phase": 0,
+          "variantRow": null,
+          "sourceRect": [
+            28,
+            944,
+            273,
+            277
+          ],
+          "groundPivot": {
+            "x": 171.0129473145125,
+            "y": 272
+          },
+          "bodyHeight": 268,
+          "rgbaSHA256": "a958ffa1153df065151e418dee57ca519e0f8d1cee4219d53ce5841a662cbeaf"
+        },
+        {
+          "id": "ranger-WSW-attack-1",
+          "sourceFrameID": "ranger-WSW-attack-1",
+          "heading": "WSW",
+          "phase": 1,
+          "variantRow": null,
+          "sourceRect": [
+            335,
+            944,
+            285,
+            274
+          ],
+          "groundPivot": {
+            "x": 113.31786652462867,
+            "y": 268
+          },
+          "bodyHeight": 263,
+          "rgbaSHA256": "bf96bc1736045600f7690dc56cbf5b175858294705e2e14de873afc7cdf334bf"
+        },
+        {
+          "id": "ranger-WSW-attack-2",
+          "sourceFrameID": "ranger-WSW-attack-2",
+          "heading": "WSW",
+          "phase": 2,
+          "variantRow": null,
+          "sourceRect": [
+            707,
+            944,
+            229,
+            277
+          ],
+          "groundPivot": {
+            "x": 115.04721893367139,
+            "y": 271
+          },
+          "bodyHeight": 267,
+          "rgbaSHA256": "a4eb17f1a860ab38fd42d05d0cc70b08f19d69da874f9f8b282a645c04f8e3e3"
+        },
+        {
+          "id": "ranger-WSW-attack-3",
+          "sourceFrameID": "ranger-WSW-attack-3",
+          "heading": "WSW",
+          "phase": 3,
+          "variantRow": null,
+          "sourceRect": [
+            997,
+            943,
+            237,
+            278
+          ],
+          "groundPivot": {
+            "x": 81.21702271561173,
+            "y": 273
+          },
+          "bodyHeight": 269,
+          "rgbaSHA256": "1401ede53cf1d7b7c248ab2cfaed034bfb1a0162743eaa75e876f6d9e76b64ce"
+        }
+      ]
+    },
+    {
+      "metadata": "northwest-se-boot-roots.json",
+      "original": "exec-348ee1d9-2939-4f83-aea6-6df814d2b5d2.png",
+      "sha256": "f1c5009a452cb6f654c27091d9ceec2aef570de28f1624fd3e9aabdf854ebf7b",
+      "frames": [
+        {
+          "id": "ranger-WNW-attack-0",
+          "sourceFrameID": "ranger-WNW-attack-0",
+          "heading": "WNW",
+          "phase": 0,
+          "variantRow": null,
+          "sourceRect": [
+            35,
+            65,
+            257,
+            241
+          ],
+          "groundPivot": {
+            "x": 130.86588040981704,
+            "y": 235
+          },
+          "bodyHeight": 231,
+          "rgbaSHA256": "fa5d096bce143f3419d59ede9fc31d6af49abc252742ecc14d68eadd03c3c9f8"
+        },
+        {
+          "id": "ranger-WNW-attack-1",
+          "sourceFrameID": "ranger-WNW-attack-1",
+          "heading": "WNW",
+          "phase": 1,
+          "variantRow": null,
+          "sourceRect": [
+            308,
+            32,
+            285,
+            274
+          ],
+          "groundPivot": {
+            "x": 152.8818669293062,
+            "y": 267
+          },
+          "bodyHeight": 231,
+          "rgbaSHA256": "c6f06daeab1a32c3d5af0b358228042953bd3662e3544075f9464bf942d6c95e"
+        },
+        {
+          "id": "ranger-WNW-attack-2",
+          "sourceFrameID": "ranger-WNW-attack-2",
+          "heading": "WNW",
+          "phase": 2,
+          "variantRow": null,
+          "sourceRect": [
+            673,
+            42,
+            251,
+            263
+          ],
+          "groundPivot": {
+            "x": 121.889667481194,
+            "y": 258
+          },
+          "bodyHeight": 229,
+          "rgbaSHA256": "498a5f02b815de10fb1319e28bc8a309ed134dd72dfaa7c0177b415cd405adbe"
+        },
+        {
+          "id": "ranger-WNW-attack-3",
+          "sourceFrameID": "ranger-WNW-attack-3",
+          "heading": "WNW",
+          "phase": 3,
+          "variantRow": null,
+          "sourceRect": [
+            989,
+            65,
+            234,
+            239
+          ],
+          "groundPivot": {
+            "x": 110.40282189103347,
+            "y": 233
+          },
+          "bodyHeight": 229,
+          "rgbaSHA256": "738da3c67d95c3e579fc8b675680dc06e9b0f4ef684db659f069a2b35d5cae2d"
+        }
+      ]
+    },
+    {
+      "metadata": "focused-nne-boot-roots.json",
+      "original": "exec-03337d77-8de5-4fda-a555-d44bacbf0460.png",
+      "sha256": "2a206b6721addb57517aaf768dea0b010728d942e122a9eb4b5351d34e2d40cc",
+      "frames": [
+        {
+          "id": "ranger-NNE-attack-0",
+          "sourceFrameID": "ranger-NNE-variant-0-attack-0",
+          "heading": "NNE",
+          "phase": 0,
+          "variantRow": 0,
+          "sourceRect": [
+            98,
+            11,
+            166,
+            273
+          ],
+          "groundPivot": {
+            "x": 80.56927951671652,
+            "y": 266
+          },
+          "bodyHeight": 199,
+          "rgbaSHA256": "f18af15497c342bcfb7d4abe4c8bda384eb4c8d346008391e058c7f41e78434e"
+        },
+        {
+          "id": "ranger-NNE-attack-1",
+          "sourceFrameID": "ranger-NNE-variant-0-attack-1",
+          "heading": "NNE",
+          "phase": 1,
+          "variantRow": 0,
+          "sourceRect": [
+            403,
+            1,
+            158,
+            283
+          ],
+          "groundPivot": {
+            "x": 92.023325836175,
+            "y": 277
+          },
+          "bodyHeight": 200,
+          "rgbaSHA256": "7dbe85085ee959075cdb31e69195c048db3ea53c96aab79b73df92036dccfb88"
+        },
+        {
+          "id": "ranger-NNE-attack-2",
+          "sourceFrameID": "ranger-NNE-variant-0-attack-2",
+          "heading": "NNE",
+          "phase": 2,
+          "variantRow": 0,
+          "sourceRect": [
+            698,
+            12,
+            169,
+            272
+          ],
+          "groundPivot": {
+            "x": 101.04686954700914,
+            "y": 267
+          },
+          "bodyHeight": 201,
+          "rgbaSHA256": "4b4694455a8f55598648fe676b7f21c2c53a3b61745287cbdbbf2cacff23ce51"
+        },
+        {
+          "id": "ranger-NNE-attack-3",
+          "sourceFrameID": "ranger-NNE-variant-0-attack-3",
+          "heading": "NNE",
+          "phase": 3,
+          "variantRow": 0,
+          "sourceRect": [
+            1006,
+            25,
+            180,
+            259
+          ],
+          "groundPivot": {
+            "x": 102.74360214014052,
+            "y": 254
+          },
+          "bodyHeight": 201,
+          "rgbaSHA256": "af4fd00c816fe2385d0fecd0b48ddf21a9d198357ff1b88a1649c125e427576f"
+        }
+      ]
+    },
+    {
+      "metadata": "focused-sse-boot-roots.json",
+      "original": "exec-0a4e2b76-258f-4cd8-8074-110ddbf7cab7.png",
+      "sha256": "123c013a3605950d3554646afb5978c4f80a4bd020db57c8fb80e6007b708ff7",
+      "frames": [
+        {
+          "id": "ranger-SSE-attack-0",
+          "sourceFrameID": "ranger-SSE-variant-0-attack-0",
+          "heading": "SSE",
+          "phase": 0,
+          "variantRow": 0,
+          "sourceRect": [
+            60,
+            25,
+            201,
+            280
+          ],
+          "groundPivot": {
+            "x": 71.67255709181296,
+            "y": 263
+          },
+          "bodyHeight": 259,
+          "rgbaSHA256": "cf472240777e1586a39fc9184f5776f17eef06a7f72d5caea5bc94db9d018f05"
+        },
+        {
+          "id": "ranger-SSE-attack-1",
+          "sourceFrameID": "ranger-SSE-variant-0-attack-1",
+          "heading": "SSE",
+          "phase": 1,
+          "variantRow": 0,
+          "sourceRect": [
+            374,
+            20,
+            201,
+            283
+          ],
+          "groundPivot": {
+            "x": 93.86663357912649,
+            "y": 268
+          },
+          "bodyHeight": 264,
+          "rgbaSHA256": "a20ab131ba5670f997fc052b12e036cd6cb14907535a0816033f32bd37347b37"
+        },
+        {
+          "id": "ranger-SSE-attack-2",
+          "sourceFrameID": "ranger-SSE-variant-0-attack-2",
+          "heading": "SSE",
+          "phase": 2,
+          "variantRow": 0,
+          "sourceRect": [
+            687,
+            21,
+            203,
+            272
+          ],
+          "groundPivot": {
+            "x": 128.26590513423537,
+            "y": 267
+          },
+          "bodyHeight": 264,
+          "rgbaSHA256": "7be011b02f8153d721c2fc55b80b3a8397c63ad35460d2d81bd913a626132dac"
+        },
+        {
+          "id": "ranger-SSE-attack-3",
+          "sourceFrameID": "ranger-SSE-variant-0-attack-3",
+          "heading": "SSE",
+          "phase": 3,
+          "variantRow": 0,
+          "sourceRect": [
+            1003,
+            24,
+            220,
+            269
+          ],
+          "groundPivot": {
+            "x": 95.5692551469153,
+            "y": 264
+          },
+          "bodyHeight": 260,
+          "rgbaSHA256": "c45afc86f0e25f0e378bd0849deee9f76c3460c31b668a94d737e59da28c66ce"
+        }
+      ]
+    },
+    {
+      "metadata": "focused-ene-boot-roots.json",
+      "original": "exec-383b32b3-579d-4e87-871b-5f9076253131.png",
+      "sha256": "04487ed414202284d3e92943cce4101ad07ad574f60ea84bce3a69c226bf3a58",
+      "frames": [
+        {
+          "id": "ranger-ENE-attack-0",
+          "sourceFrameID": "ranger-ENE-variant-1-attack-0",
+          "heading": "ENE",
+          "phase": 0,
+          "variantRow": 1,
+          "sourceRect": [
+            46,
+            369,
+            212,
+            226
+          ],
+          "groundPivot": {
+            "x": 115.36205480701967,
+            "y": 220
+          },
+          "bodyHeight": 216,
+          "rgbaSHA256": "cb781a71a81a2446b16f2fb82e141edfedfc681406be89fed9934e52a8e617bd"
+        },
+        {
+          "id": "ranger-ENE-attack-1",
+          "sourceFrameID": "ranger-ENE-variant-1-attack-1",
+          "heading": "ENE",
+          "phase": 1,
+          "variantRow": 1,
+          "sourceRect": [
+            353,
+            347,
+            254,
+            249
+          ],
+          "groundPivot": {
+            "x": 114.69578816017632,
+            "y": 243
+          },
+          "bodyHeight": 216,
+          "rgbaSHA256": "63d9331f2a4159f85ecb3b49eaea68bb82640bfbbc887d76068ea92b09ce7da1"
+        },
+        {
+          "id": "ranger-ENE-attack-2",
+          "sourceFrameID": "ranger-ENE-variant-1-attack-2",
+          "heading": "ENE",
+          "phase": 2,
+          "variantRow": 1,
+          "sourceRect": [
+            659,
+            342,
+            238,
+            254
+          ],
+          "groundPivot": {
+            "x": 119.50896027747956,
+            "y": 248
+          },
+          "bodyHeight": 216,
+          "rgbaSHA256": "cfb4cfd04332eb79c64ce0f2ecb91b302ebf552e56844433455f663fd5945525"
+        },
+        {
+          "id": "ranger-ENE-attack-3",
+          "sourceFrameID": "ranger-ENE-variant-1-attack-3",
+          "heading": "ENE",
+          "phase": 3,
+          "variantRow": 1,
+          "sourceRect": [
+            1005,
+            370,
+            206,
+            226
+          ],
+          "groundPivot": {
+            "x": 117.45218836377202,
+            "y": 220
+          },
+          "bodyHeight": 216,
+          "rgbaSHA256": "fe568214eb68a51e19ab2b2c357d1f7b2d58101b4d9f076d359eb624a769fc54"
+        }
+      ]
+    },
+    {
+      "metadata": "focused-nw-boot-roots.json",
+      "original": "exec-f3db5192-e96e-4efd-bf06-8e0c0451f85b.png",
+      "sha256": "8c0be0fd4cbc2d303977b3e767f6953048355116fddd2efee801e87acdf41160",
+      "frames": [
+        {
+          "id": "ranger-NW-attack-0",
+          "sourceFrameID": "ranger-NW-variant-0-attack-0",
+          "heading": "NW",
+          "phase": 0,
+          "variantRow": 0,
+          "sourceRect": [
+            68,
+            43,
+            195,
+            253
+          ],
+          "groundPivot": {
+            "x": 127.86869429167457,
+            "y": 246
+          },
+          "bodyHeight": 196,
+          "rgbaSHA256": "166d766b97211ff8eed08f2a32801182fd52ce4007b508c01fddf7f7e472e065"
+        },
+        {
+          "id": "ranger-NW-attack-1",
+          "sourceFrameID": "ranger-NW-variant-0-attack-1",
+          "heading": "NW",
+          "phase": 1,
+          "variantRow": 0,
+          "sourceRect": [
+            379,
+            38,
+            207,
+            258
+          ],
+          "groundPivot": {
+            "x": 129.94162436548223,
+            "y": 251
+          },
+          "bodyHeight": 195,
+          "rgbaSHA256": "78053056484c06d0275c07451954def013749cf117df04b3f9e38ce7ed26a833"
+        },
+        {
+          "id": "ranger-NW-attack-2",
+          "sourceFrameID": "ranger-NW-variant-0-attack-2",
+          "heading": "NW",
+          "phase": 2,
+          "variantRow": 0,
+          "sourceRect": [
+            708,
+            37,
+            184,
+            257
+          ],
+          "groundPivot": {
+            "x": 95.8365228380574,
+            "y": 251
+          },
+          "bodyHeight": 195,
+          "rgbaSHA256": "dc683188aa132b1b3a526a28f93113edbe4e60651e00d40c1aaf58446035af4a"
+        },
+        {
+          "id": "ranger-NW-attack-3",
+          "sourceFrameID": "ranger-NW-variant-0-attack-3",
+          "heading": "NW",
+          "phase": 3,
+          "variantRow": 0,
+          "sourceRect": [
+            1013,
+            88,
+            199,
+            208
+          ],
+          "groundPivot": {
+            "x": 127.28391923149054,
+            "y": 201
+          },
+          "bodyHeight": 197,
+          "rgbaSHA256": "113778e7a851a74e6fe3e161c6a7c5cb889b9cec991148270d14464ecbba71ac"
+        }
+      ]
+    },
+    {
+      "metadata": "focused-se-boot-roots.json",
+      "original": "exec-f7bd7bbf-ae22-4910-8c40-ec8a6d729d03.png",
+      "sha256": "837f07a86306e4fb7171cc2096206f361d6869cea8479e47c207fec60eabab1a",
+      "frames": [
+        {
+          "id": "ranger-SE-attack-0",
+          "sourceFrameID": "ranger-SE-variant-0-attack-0",
+          "heading": "SE",
+          "phase": 0,
+          "variantRow": 0,
+          "sourceRect": [
+            63,
+            49,
+            234,
+            255
+          ],
+          "groundPivot": {
+            "x": 85.85396089314078,
+            "y": 247
+          },
+          "bodyHeight": 242,
+          "rgbaSHA256": "fabaf4d6ee8915c6579a482b1ea08f2f5c482d5acf40f508bbf1fe688328afaa"
+        },
+        {
+          "id": "ranger-SE-attack-1",
+          "sourceFrameID": "ranger-SE-variant-0-attack-1",
+          "heading": "SE",
+          "phase": 1,
+          "variantRow": 0,
+          "sourceRect": [
+            364,
+            47,
+            246,
+            256
+          ],
+          "groundPivot": {
+            "x": 93.76978177577878,
+            "y": 249
+          },
+          "bodyHeight": 244,
+          "rgbaSHA256": "8144e80fe30cad9f6b5fc50a3e676c8a2fd73ad88ef79056175d72ded95994ac"
+        },
+        {
+          "id": "ranger-SE-attack-2",
+          "sourceFrameID": "ranger-SE-variant-0-attack-2",
+          "heading": "SE",
+          "phase": 2,
+          "variantRow": 0,
+          "sourceRect": [
+            669,
+            48,
+            222,
+            255
+          ],
+          "groundPivot": {
+            "x": 93.17784869671088,
+            "y": 248
+          },
+          "bodyHeight": 244,
+          "rgbaSHA256": "c13c1c4695b97763e85216a77dcc14c249a8f8a6c9273fe60e018a10c6b50792"
+        },
+        {
+          "id": "ranger-SE-attack-3",
+          "sourceFrameID": "ranger-SE-variant-0-attack-3",
+          "heading": "SE",
+          "phase": 3,
+          "variantRow": 0,
+          "sourceRect": [
+            1001,
+            51,
+            231,
+            253
+          ],
+          "groundPivot": {
+            "x": 80.90030455034038,
+            "y": 245
+          },
+          "bodyHeight": 241,
+          "rgbaSHA256": "040eda07b4f0dbdf430bb32665684a9a8e4a734edbc4fa1b63b72f32fc6d06c1"
+        }
+      ]
+    },
+    {
+      "metadata": "focused-ne-angle2-boot-roots.json",
+      "original": "exec-7cc8fa9c-0c24-46f4-90c7-e7da8eb25893.png",
+      "sha256": "1bb8308647b3493710fc5ebebdfb3fcc4599e774d6a8ae2d39ac1ae692194e20",
+      "frames": [
+        {
+          "id": "ranger-NE-attack-0",
+          "sourceFrameID": "ranger-NE-variant-0-attack-0",
+          "heading": "NE",
+          "phase": 0,
+          "variantRow": 0,
+          "sourceRect": [
+            75,
+            34,
+            199,
+            278
+          ],
+          "groundPivot": {
+            "x": 114.47685503685504,
+            "y": 269
+          },
+          "bodyHeight": 221,
+          "rgbaSHA256": "edb56ac999b749ec278af0eb5972f416b4952726b36db3669452a25ffe90fa05"
+        },
+        {
+          "id": "ranger-NE-attack-1",
+          "sourceFrameID": "ranger-NE-variant-0-attack-1",
+          "heading": "NE",
+          "phase": 1,
+          "variantRow": 0,
+          "sourceRect": [
+            375,
+            16,
+            237,
+            292
+          ],
+          "groundPivot": {
+            "x": 103.12735238474559,
+            "y": 280
+          },
+          "bodyHeight": 219,
+          "rgbaSHA256": "7c1edaa87f51fc2989120f453370bd63771322b3df1a491c8356dc93f21c3513"
+        },
+        {
+          "id": "ranger-NE-attack-2",
+          "sourceFrameID": "ranger-NE-variant-0-attack-2",
+          "heading": "NE",
+          "phase": 2,
+          "variantRow": 0,
+          "sourceRect": [
+            699,
+            21,
+            202,
+            290
+          ],
+          "groundPivot": {
+            "x": 124.32441253263707,
+            "y": 281
+          },
+          "bodyHeight": 222,
+          "rgbaSHA256": "2f7884c65580e69176ea518a87af847252f8ea6082e560bd8eac640d80470aeb"
+        },
+        {
+          "id": "ranger-NE-attack-3",
+          "sourceFrameID": "ranger-NE-variant-0-attack-3",
+          "heading": "NE",
+          "phase": 3,
+          "variantRow": 0,
+          "sourceRect": [
+            1014,
+            48,
+            194,
+            268
+          ],
+          "groundPivot": {
+            "x": 114.16795054217162,
+            "y": 261
+          },
+          "bodyHeight": 226,
+          "rgbaSHA256": "017813d7ae391f28dad730a5a7528479eacc7aa6a9089834b82cb17fac95c7ef"
+        }
+      ]
+    },
+    {
+      "metadata": "focused-sw-angle2-boot-roots.json",
+      "original": "exec-f368ee2d-fe4d-4fd1-927c-f62111b0dac9.png",
+      "sha256": "476fd45a3650b6df1b0749aa4a1c01030cbe08b34d4e778c6789868f755fb64d",
+      "frames": [
+        {
+          "id": "ranger-SW-attack-0",
+          "sourceFrameID": "ranger-SW-variant-1-attack-0",
+          "heading": "SW",
+          "phase": 0,
+          "variantRow": 1,
+          "sourceRect": [
+            40,
+            369,
+            266,
+            244
+          ],
+          "groundPivot": {
+            "x": 129.23828901875592,
+            "y": 235
+          },
+          "bodyHeight": 231,
+          "rgbaSHA256": "04591b24a65972eb36b4902eb19029389c7d23195f84ffd285af84648625af24"
+        },
+        {
+          "id": "ranger-SW-attack-1",
+          "sourceFrameID": "ranger-SW-variant-1-attack-1",
+          "heading": "SW",
+          "phase": 1,
+          "variantRow": 1,
+          "sourceRect": [
+            345,
+            367,
+            282,
+            247
+          ],
+          "groundPivot": {
+            "x": 150.03950132307608,
+            "y": 241
+          },
+          "bodyHeight": 237,
+          "rgbaSHA256": "208bf13daf477991fa8857bd8b3fdccaba140c5995cb6be3a4133578aa858ccd"
+        },
+        {
+          "id": "ranger-SW-attack-2",
+          "sourceFrameID": "ranger-SW-variant-1-attack-2",
+          "heading": "SW",
+          "phase": 2,
+          "variantRow": 1,
+          "sourceRect": [
+            666,
+            370,
+            267,
+            245
+          ],
+          "groundPivot": {
+            "x": 133.69766907076408,
+            "y": 238
+          },
+          "bodyHeight": 233,
+          "rgbaSHA256": "f934adc21e0efd39165eb95015d441c6a8643b050851aab7e2e5a26b4438977e"
+        },
+        {
+          "id": "ranger-SW-attack-3",
+          "sourceFrameID": "ranger-SW-variant-1-attack-3",
+          "heading": "SW",
+          "phase": 3,
+          "variantRow": 1,
+          "sourceRect": [
+            996,
+            369,
+            248,
+            247
+          ],
+          "groundPivot": {
+            "x": 153.17857142857142,
+            "y": 241
+          },
+          "bodyHeight": 237,
+          "rgbaSHA256": "efb5ca00c8fcaffb9481c34d5afbc2702058817e2e5d042d72fa6990fb00e163"
+        }
+      ]
+    },
+    {
+      "metadata": "focused-ssw-angle2-boot-roots.json",
+      "original": "exec-f17af413-5f0b-4f0d-a0e5-d9691cbf910a.png",
+      "sha256": "9b22bedbcc1dfabb10e8d9e7a2911702552e0d1bde6c4d51424a41bdf41ead1b",
+      "frames": [
+        {
+          "id": "ranger-SSW-attack-0",
+          "sourceFrameID": "ranger-SSW-variant-0-attack-0",
+          "heading": "SSW",
+          "phase": 0,
+          "variantRow": 0,
+          "sourceRect": [
+            60,
+            48,
+            233,
+            271
+          ],
+          "groundPivot": {
+            "x": 162.16443854933854,
+            "y": 266
+          },
+          "bodyHeight": 262,
+          "rgbaSHA256": "faf53ecc76fb95758acd8899a095afdc416dd99af7ccc10cf689156c558c7ff8"
+        },
+        {
+          "id": "ranger-SSW-attack-1",
+          "sourceFrameID": "ranger-SSW-variant-0-attack-1",
+          "heading": "SSW",
+          "phase": 1,
+          "variantRow": 0,
+          "sourceRect": [
+            381,
+            47,
+            216,
+            273
+          ],
+          "groundPivot": {
+            "x": 151.90121843410077,
+            "y": 268
+          },
+          "bodyHeight": 264,
+          "rgbaSHA256": "e64f648af38effe928d366882abac446209af4abc6720c69d0162ea6160be746"
+        },
+        {
+          "id": "ranger-SSW-attack-2",
+          "sourceFrameID": "ranger-SSW-variant-0-attack-2",
+          "heading": "SSW",
+          "phase": 2,
+          "variantRow": 0,
+          "sourceRect": [
+            675,
+            47,
+            245,
+            272
+          ],
+          "groundPivot": {
+            "x": 163.91402011265853,
+            "y": 266
+          },
+          "bodyHeight": 262,
+          "rgbaSHA256": "13a9d836fbc89fa228198601691ff6cbe7daba7726bd2e450cbafbc55fa919e1"
+        },
+        {
+          "id": "ranger-SSW-attack-3",
+          "sourceFrameID": "ranger-SSW-variant-0-attack-3",
+          "heading": "SSW",
+          "phase": 3,
+          "variantRow": 0,
+          "sourceRect": [
+            996,
+            48,
+            214,
+            271
+          ],
+          "groundPivot": {
+            "x": 150.9947472500309,
+            "y": 264
+          },
+          "bodyHeight": 260,
+          "rgbaSHA256": "0853f87be3cd10f416d233d4168cf965f4568722545b04e4e539a308c53c5d6f"
+        }
+      ]
+    },
+    {
+      "metadata": "focused-nnw-angle3-boot-roots.json",
+      "original": "exec-be2b5f34-e227-4faf-953c-0e3ea96b7a94.png",
+      "sha256": "477e6c2990a2961d47b7352ffb3a5dc2ba81052e4264715bcdbe4e2b6bcfce0c",
+      "frames": [
+        {
+          "id": "ranger-NNW-attack-0",
+          "sourceFrameID": "ranger-NNW-variant-3-attack-0",
+          "heading": "NNW",
+          "phase": 0,
+          "variantRow": 3,
+          "sourceRect": [
+            80,
+            944,
+            191,
+            289
+          ],
+          "groundPivot": {
+            "x": 101.68906129412242,
+            "y": 279
+          },
+          "bodyHeight": 204,
+          "rgbaSHA256": "181529fe2869e698be14965dee5e512bc2d67736f0366e293f2b22657579547c"
+        },
+        {
+          "id": "ranger-NNW-attack-1",
+          "sourceFrameID": "ranger-NNW-variant-3-attack-1",
+          "heading": "NNW",
+          "phase": 1,
+          "variantRow": 3,
+          "sourceRect": [
+            380,
+            945,
+            197,
+            287
+          ],
+          "groundPivot": {
+            "x": 113.05136526759244,
+            "y": 275
+          },
+          "bodyHeight": 198,
+          "rgbaSHA256": "37278c0c60bfde913eb620fd211edd3d0ee4c885e146b4a3120fbc240215c4d0"
+        },
+        {
+          "id": "ranger-NNW-attack-2",
+          "sourceFrameID": "ranger-NNW-variant-3-attack-2",
+          "heading": "NNW",
+          "phase": 2,
+          "variantRow": 3,
+          "sourceRect": [
+            703,
+            956,
+            190,
+            276
+          ],
+          "groundPivot": {
+            "x": 102.08336904565684,
+            "y": 265
+          },
+          "bodyHeight": 196,
+          "rgbaSHA256": "4e3540a9b179d583472825d8890149f606b13617db0ebf57e80c6faf6004756e"
+        }
+      ]
+    },
+    {
+      "metadata": "focused-nnw-angle2-boot-roots.json",
+      "original": "exec-126b4e43-b09a-4aa2-8e60-410eeabebca5.png",
+      "sha256": "11da371cb4ca4ba8b52d65d01a1ccfdc92db8d4aa9a0de0b785251325fde319a",
+      "frames": [
+        {
+          "id": "ranger-NNW-attack-3",
+          "sourceFrameID": "ranger-NNW-variant-3-attack-3",
+          "heading": "NNW",
+          "phase": 3,
+          "variantRow": 3,
+          "sourceRect": [
+            1006,
+            962,
+            189,
+            270
+          ],
+          "groundPivot": {
+            "x": 130.63477282950967,
+            "y": 264
+          },
+          "bodyHeight": 210,
+          "rgbaSHA256": "ef591e271e505ea09e5bc2fe2a79989d120283e6b1da6e0b0b7932a4f461c615"
+        }
+      ]
+    }
+  ]
 }

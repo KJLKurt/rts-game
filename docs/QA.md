@@ -1,6 +1,12 @@
 # QA and reproducible verification
 
-## Current combined visual and deposit release — 5 October 2026
+## Current Ranger attack candidate
+
+Build **`fc-5106dd6e9270`** adds four authored Mythic Ranger attack phases across sixteen headings. The 144-frame atlas preserves all 80 prior idle/walk crops and adds 64 unique attacks without resampling or mirroring. Existing projectile events and cooldowns drive the animation; gameplay and renderer source are unchanged. **568 unit tests in 60 files**, TypeScript/build and eight mission validations pass. The current complete browser gate reconciles **334 passes and 18 intentional skips across the same 352 case identities**, with zero unresolved cases. Its first full invocation recorded **331 passes, 18 skips and three failed cache-upgrade setups** because the owned QA host lacked its previous-build directory; those failures happened before gameplay. Correcting only that host configuration and rerunning the same three cases once yielded three passes, with automatic retries disabled. The raw failures and rerun remain preserved; this is not a single clean full invocation. All 255 frozen worker-source hashes and 32 dist hashes remained exact. The separate 48 native-input combat fixtures and 192 Canvas excerpts supply attack-specific evidence; they are not added to the 352-case total.
+
+The remaining material records the preceding checkpoints and their evidence.
+
+## Prior combined visual and deposit release — 5 October 2026
 
 The integrated candidate is **Build `fc-716214f4a418`**. The complete gate reconciles **334 passing cases and 18 intentional input-mode skips across the same 352 original case identities**, with zero unresolved cases. The first full invocation recorded **330 passes, 18 intentional skips, one landscape lesson failure and three dependency-blocked upgrades**. A test-only correction selects visible opaque House artwork through the real picker before actual input; all three eight-lesson views then pass with every lesson and named Outpost assertion retained. Three actual prior-production-cache upgrades pass separately and replace the blocked identities. All four PWA cases pass. This is a reconciled gate, not a clean first-run claim. Runtime/assets are unchanged; **564 unit/contract tests in 60 files**, TypeScript/build and eight mission validations remain verified. Earlier failed reports and corrected checks are retained separately.
 

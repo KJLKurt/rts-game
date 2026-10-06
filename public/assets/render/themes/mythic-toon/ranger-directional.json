@@ -1,14 +1,19 @@
 {
   "version": 1,
   "image": "ranger-directional.png",
-  "width": 2048,
-  "height": 2048,
+  "width": 3584,
+  "height": 2240,
   "actors": {
     "ranger": {
       "referenceBodyHeight": 200,
       "suggestedHeight": 59,
       "walkFrameMs": 130,
-      "attackFrameMs": [],
+      "attackFrameMs": [
+        100,
+        100,
+        100,
+        250
+      ],
       "impactFrame": 2,
       "directions": [
         {
@@ -19,7 +24,12 @@
             "ranger-N-walk-2",
             "ranger-N-walk-3"
           ],
-          "attack": []
+          "attack": [
+            "ranger-N-attack-0",
+            "ranger-N-attack-1",
+            "ranger-N-attack-2",
+            "ranger-N-attack-3"
+          ]
         },
         {
           "idle": "ranger-NNE-idle",
@@ -29,7 +39,12 @@
             "ranger-NNE-walk-2",
             "ranger-NNE-walk-3"
           ],
-          "attack": []
+          "attack": [
+            "ranger-NNE-attack-0",
+            "ranger-NNE-attack-1",
+            "ranger-NNE-attack-2",
+            "ranger-NNE-attack-3"
+          ]
         },
         {
           "idle": "ranger-NE-idle",
@@ -39,7 +54,12 @@
             "ranger-NE-walk-2",
             "ranger-NE-walk-3"
           ],
-          "attack": []
+          "attack": [
+            "ranger-NE-attack-0",
+            "ranger-NE-attack-1",
+            "ranger-NE-attack-2",
+            "ranger-NE-attack-3"
+          ]
         },
         {
           "idle": "ranger-ENE-idle",
@@ -49,7 +69,12 @@
             "ranger-ENE-walk-2",
             "ranger-ENE-walk-3"
           ],
-          "attack": []
+          "attack": [
+            "ranger-ENE-attack-0",
+            "ranger-ENE-attack-1",
+            "ranger-ENE-attack-2",
+            "ranger-ENE-attack-3"
+          ]
         },
         {
           "idle": "ranger-E-idle",
@@ -59,7 +84,12 @@
             "ranger-E-walk-2",
             "ranger-E-walk-3"
           ],
-          "attack": []
+          "attack": [
+            "ranger-E-attack-0",
+            "ranger-E-attack-1",
+            "ranger-E-attack-2",
+            "ranger-E-attack-3"
+          ]
         },
         {
           "idle": "ranger-ESE-idle",
@@ -69,7 +99,12 @@
             "ranger-ESE-walk-2",
             "ranger-ESE-walk-3"
           ],
-          "attack": []
+          "attack": [
+            "ranger-ESE-attack-0",
+            "ranger-ESE-attack-1",
+            "ranger-ESE-attack-2",
+            "ranger-ESE-attack-3"
+          ]
         },
         {
           "idle": "ranger-SE-idle",
@@ -79,7 +114,12 @@
             "ranger-SE-walk-2",
             "ranger-SE-walk-3"
           ],
-          "attack": []
+          "attack": [
+            "ranger-SE-attack-0",
+            "ranger-SE-attack-1",
+            "ranger-SE-attack-2",
+            "ranger-SE-attack-3"
+          ]
         },
         {
           "idle": "ranger-SSE-idle",
@@ -89,7 +129,12 @@
             "ranger-SSE-walk-2",
             "ranger-SSE-walk-3"
           ],
-          "attack": []
+          "attack": [
+            "ranger-SSE-attack-0",
+            "ranger-SSE-attack-1",
+            "ranger-SSE-attack-2",
+            "ranger-SSE-attack-3"
+          ]
         },
         {
           "idle": "ranger-S-idle",
@@ -99,7 +144,12 @@
             "ranger-S-walk-2",
             "ranger-S-walk-3"
           ],
-          "attack": []
+          "attack": [
+            "ranger-S-attack-0",
+            "ranger-S-attack-1",
+            "ranger-S-attack-2",
+            "ranger-S-attack-3"
+          ]
         },
         {
           "idle": "ranger-SSW-idle",
@@ -109,7 +159,12 @@
             "ranger-SSW-walk-2",
             "ranger-SSW-walk-3"
           ],
-          "attack": []
+          "attack": [
+            "ranger-SSW-attack-0",
+            "ranger-SSW-attack-1",
+            "ranger-SSW-attack-2",
+            "ranger-SSW-attack-3"
+          ]
         },
         {
           "idle": "ranger-SW-idle",
@@ -119,7 +174,12 @@
             "ranger-SW-walk-2",
             "ranger-SW-walk-3"
           ],
-          "attack": []
+          "attack": [
+            "ranger-SW-attack-0",
+            "ranger-SW-attack-1",
+            "ranger-SW-attack-2",
+            "ranger-SW-attack-3"
+          ]
         },
         {
           "idle": "ranger-WSW-idle",
@@ -129,7 +189,12 @@
             "ranger-WSW-walk-2",
             "ranger-WSW-walk-3"
           ],
-          "attack": []
+          "attack": [
+            "ranger-WSW-attack-0",
+            "ranger-WSW-attack-1",
+            "ranger-WSW-attack-2",
+            "ranger-WSW-attack-3"
+          ]
         },
         {
           "idle": "ranger-W-idle",
@@ -139,7 +204,12 @@
             "ranger-W-walk-2",
             "ranger-W-walk-3"
           ],
-          "attack": []
+          "attack": [
+            "ranger-W-attack-0",
+            "ranger-W-attack-1",
+            "ranger-W-attack-2",
+            "ranger-W-attack-3"
+          ]
         },
         {
           "idle": "ranger-WNW-idle",
@@ -149,7 +219,12 @@
             "ranger-WNW-walk-2",
             "ranger-WNW-walk-3"
           ],
-          "attack": []
+          "attack": [
+            "ranger-WNW-attack-0",
+            "ranger-WNW-attack-1",
+            "ranger-WNW-attack-2",
+            "ranger-WNW-attack-3"
+          ]
         },
         {
           "idle": "ranger-NW-idle",
@@ -159,7 +234,12 @@
             "ranger-NW-walk-2",
             "ranger-NW-walk-3"
           ],
-          "attack": []
+          "attack": [
+            "ranger-NW-attack-0",
+            "ranger-NW-attack-1",
+            "ranger-NW-attack-2",
+            "ranger-NW-attack-3"
+          ]
         },
         {
           "idle": "ranger-NNW-idle",
@@ -169,7 +249,12 @@
             "ranger-NNW-walk-2",
             "ranger-NNW-walk-3"
           ],
-          "attack": []
+          "attack": [
+            "ranger-NNW-attack-0",
+            "ranger-NNW-attack-1",
+            "ranger-NNW-attack-2",
+            "ranger-NNW-attack-3"
+          ]
         }
       ]
     }
@@ -177,8 +262,8 @@
   "frames": {
     "ranger-N-idle": {
       "actor": "ranger",
-      "x": 2,
-      "y": 1362,
+      "x": 2796,
+      "y": 2,
       "w": 194,
       "h": 239,
       "groundPivot": {
@@ -189,8 +274,8 @@
     },
     "ranger-NNE-idle": {
       "actor": "ranger",
-      "x": 1410,
-      "y": 1110,
+      "x": 445,
+      "y": 1995,
       "w": 195,
       "h": 243,
       "groundPivot": {
@@ -201,8 +286,8 @@
     },
     "ranger-NE-idle": {
       "actor": "ranger",
-      "x": 1227,
-      "y": 1110,
+      "x": 2363,
+      "y": 505,
       "w": 179,
       "h": 243,
       "groundPivot": {
@@ -213,8 +298,8 @@
     },
     "ranger-ENE-idle": {
       "actor": "ranger",
-      "x": 855,
-      "y": 1110,
+      "x": 668,
+      "y": 1993,
       "w": 155,
       "h": 245,
       "groundPivot": {
@@ -225,8 +310,8 @@
     },
     "ranger-E-idle": {
       "actor": "ranger",
-      "x": 1701,
-      "y": 837,
+      "x": 2211,
+      "y": 508,
       "w": 148,
       "h": 248,
       "groundPivot": {
@@ -237,8 +322,8 @@
     },
     "ranger-ESE-idle": {
       "actor": "ranger",
-      "x": 2,
-      "y": 1110,
+      "x": 2110,
+      "y": 256,
       "w": 211,
       "h": 248,
       "groundPivot": {
@@ -249,8 +334,8 @@
     },
     "ranger-SE-idle": {
       "actor": "ranger",
-      "x": 1270,
-      "y": 837,
+      "x": 2108,
+      "y": 2,
       "w": 210,
       "h": 250,
       "groundPivot": {
@@ -261,8 +346,8 @@
     },
     "ranger-SSE-idle": {
       "actor": "ranger",
-      "x": 217,
-      "y": 1110,
+      "x": 2322,
+      "y": 2,
       "w": 208,
       "h": 248,
       "groundPivot": {
@@ -273,8 +358,8 @@
     },
     "ranger-S-idle": {
       "actor": "ranger",
-      "x": 429,
-      "y": 1110,
+      "x": 1708,
+      "y": 1630,
       "w": 209,
       "h": 247,
       "groundPivot": {
@@ -285,8 +370,8 @@
     },
     "ranger-SSW-idle": {
       "actor": "ranger",
-      "x": 642,
-      "y": 1110,
+      "x": 1974,
+      "y": 1046,
       "w": 209,
       "h": 246,
       "groundPivot": {
@@ -297,8 +382,8 @@
     },
     "ranger-SW-idle": {
       "actor": "ranger",
-      "x": 1484,
-      "y": 837,
+      "x": 1994,
+      "y": 530,
       "w": 213,
       "h": 249,
       "groundPivot": {
@@ -309,8 +394,8 @@
     },
     "ranger-WSW-idle": {
       "actor": "ranger",
-      "x": 1052,
-      "y": 837,
+      "x": 1892,
+      "y": 275,
       "w": 214,
       "h": 251,
       "groundPivot": {
@@ -321,8 +406,8 @@
     },
     "ranger-W-idle": {
       "actor": "ranger",
-      "x": 851,
-      "y": 837,
+      "x": 1907,
+      "y": 2,
       "w": 197,
       "h": 251,
       "groundPivot": {
@@ -333,8 +418,8 @@
     },
     "ranger-WNW-idle": {
       "actor": "ranger",
-      "x": 1808,
-      "y": 1110,
+      "x": 2546,
+      "y": 505,
       "w": 210,
       "h": 240,
       "groundPivot": {
@@ -345,8 +430,8 @@
     },
     "ranger-NW-idle": {
       "actor": "ranger",
-      "x": 1014,
-      "y": 1110,
+      "x": 2229,
+      "y": 760,
       "w": 209,
       "h": 244,
       "groundPivot": {
@@ -357,8 +442,8 @@
     },
     "ranger-NNW-idle": {
       "actor": "ranger",
-      "x": 1609,
-      "y": 1110,
+      "x": 232,
+      "y": 1998,
       "w": 195,
       "h": 240,
       "groundPivot": {
@@ -369,8 +454,8 @@
     },
     "ranger-N-walk-0": {
       "actor": "ranger",
-      "x": 2,
-      "y": 1827,
+      "x": 2923,
+      "y": 1633,
       "w": 166,
       "h": 213,
       "groundPivot": {
@@ -381,8 +466,8 @@
     },
     "ranger-NNE-walk-0": {
       "actor": "ranger",
-      "x": 200,
-      "y": 1362,
+      "x": 2403,
+      "y": 1761,
       "w": 147,
       "h": 223,
       "groundPivot": {
@@ -393,8 +478,8 @@
     },
     "ranger-NE-walk-0": {
       "actor": "ranger",
-      "x": 1081,
-      "y": 1362,
+      "x": 2703,
+      "y": 749,
       "w": 141,
       "h": 220,
       "groundPivot": {
@@ -405,8 +490,8 @@
     },
     "ranger-ENE-walk-0": {
       "actor": "ranger",
-      "x": 1768,
-      "y": 1827,
+      "x": 3410,
+      "y": 1517,
       "w": 143,
       "h": 203,
       "groundPivot": {
@@ -417,8 +502,8 @@
     },
     "ranger-E-walk-0": {
       "actor": "ranger",
-      "x": 390,
-      "y": 1605,
+      "x": 3153,
+      "y": 446,
       "w": 162,
       "h": 216,
       "groundPivot": {
@@ -429,8 +514,8 @@
     },
     "ranger-ESE-walk-0": {
       "actor": "ranger",
-      "x": 899,
-      "y": 1362,
+      "x": 2589,
+      "y": 1972,
       "w": 178,
       "h": 220,
       "groundPivot": {
@@ -441,8 +526,8 @@
     },
     "ranger-SE-walk-0": {
       "actor": "ranger",
-      "x": 1580,
-      "y": 1362,
+      "x": 2970,
+      "y": 468,
       "w": 179,
       "h": 218,
       "groundPivot": {
@@ -453,8 +538,8 @@
     },
     "ranger-SSE-walk-0": {
       "actor": "ranger",
-      "x": 1763,
-      "y": 1362,
+      "x": 2848,
+      "y": 719,
       "w": 188,
       "h": 218,
       "groundPivot": {
@@ -465,8 +550,8 @@
     },
     "ranger-S-walk-0": {
       "actor": "ranger",
-      "x": 535,
-      "y": 1362,
+      "x": 2518,
+      "y": 1522,
       "w": 183,
       "h": 222,
       "groundPivot": {
@@ -477,8 +562,8 @@
     },
     "ranger-SSW-walk-0": {
       "actor": "ranger",
-      "x": 198,
-      "y": 1605,
+      "x": 2705,
+      "y": 1443,
       "w": 188,
       "h": 217,
       "groundPivot": {
@@ -489,8 +574,8 @@
     },
     "ranger-SW-walk-0": {
       "actor": "ranger",
-      "x": 1226,
-      "y": 1362,
+      "x": 2554,
+      "y": 1748,
       "w": 183,
       "h": 220,
       "groundPivot": {
@@ -501,8 +586,8 @@
     },
     "ranger-WSW-walk-0": {
       "actor": "ranger",
-      "x": 1767,
-      "y": 1605,
+      "x": 3379,
+      "y": 440,
       "w": 186,
       "h": 214,
       "groundPivot": {
@@ -513,8 +598,8 @@
     },
     "ranger-W-walk-0": {
       "actor": "ranger",
-      "x": 1582,
-      "y": 1827,
+      "x": 3138,
+      "y": 1729,
       "w": 182,
       "h": 206,
       "groundPivot": {
@@ -525,8 +610,8 @@
     },
     "ranger-WNW-walk-0": {
       "actor": "ranger",
-      "x": 1585,
-      "y": 1605,
+      "x": 2741,
+      "y": 1664,
       "w": 178,
       "h": 214,
       "groundPivot": {
@@ -537,8 +622,8 @@
     },
     "ranger-NW-walk-0": {
       "actor": "ranger",
-      "x": 351,
-      "y": 1362,
+      "x": 2405,
+      "y": 1988,
       "w": 180,
       "h": 222,
       "groundPivot": {
@@ -549,8 +634,8 @@
     },
     "ranger-NNW-walk-0": {
       "actor": "ranger",
-      "x": 722,
-      "y": 1362,
+      "x": 2,
+      "y": 2017,
       "w": 173,
       "h": 221,
       "groundPivot": {
@@ -561,8 +646,8 @@
     },
     "ranger-N-walk-1": {
       "actor": "ranger",
-      "x": 1813,
-      "y": 562,
+      "x": 1329,
+      "y": 831,
       "w": 219,
       "h": 269,
       "groundPivot": {
@@ -573,8 +658,8 @@
     },
     "ranger-NNE-walk-1": {
       "actor": "ranger",
-      "x": 791,
-      "y": 562,
+      "x": 1275,
+      "y": 2,
       "w": 213,
       "h": 270,
       "groundPivot": {
@@ -585,8 +670,8 @@
     },
     "ranger-NE-walk-1": {
       "actor": "ranger",
-      "x": 592,
-      "y": 562,
+      "x": 1046,
+      "y": 1954,
       "w": 195,
       "h": 270,
       "groundPivot": {
@@ -597,8 +682,8 @@
     },
     "ranger-ENE-walk-1": {
       "actor": "ranger",
-      "x": 1644,
-      "y": 562,
+      "x": 1245,
+      "y": 1952,
       "w": 165,
       "h": 269,
       "groundPivot": {
@@ -609,8 +694,8 @@
     },
     "ranger-E-walk-1": {
       "actor": "ranger",
-      "x": 427,
-      "y": 562,
+      "x": 1225,
+      "y": 1394,
       "w": 161,
       "h": 270,
       "groundPivot": {
@@ -621,8 +706,8 @@
     },
     "ranger-ESE-walk-1": {
       "actor": "ranger",
-      "x": 2,
-      "y": 284,
+      "x": 878,
+      "y": 2,
       "w": 215,
       "h": 274,
       "groundPivot": {
@@ -633,8 +718,8 @@
     },
     "ranger-SE-walk-1": {
       "actor": "ranger",
-      "x": 657,
-      "y": 284,
+      "x": 445,
+      "y": 1718,
       "w": 219,
       "h": 273,
       "groundPivot": {
@@ -645,8 +730,8 @@
     },
     "ranger-SSE-walk-1": {
       "actor": "ranger",
-      "x": 444,
-      "y": 284,
+      "x": 232,
+      "y": 1720,
       "w": 209,
       "h": 274,
       "groundPivot": {
@@ -657,8 +742,8 @@
     },
     "ranger-S-walk-1": {
       "actor": "ranger",
-      "x": 1232,
-      "y": 284,
+      "x": 968,
+      "y": 561,
       "w": 206,
       "h": 272,
       "groundPivot": {
@@ -669,8 +754,8 @@
     },
     "ranger-SSW-walk-1": {
       "actor": "ranger",
-      "x": 845,
-      "y": 2,
+      "x": 211,
+      "y": 1441,
       "w": 219,
       "h": 275,
       "groundPivot": {
@@ -681,8 +766,8 @@
     },
     "ranger-SW-walk-1": {
       "actor": "ranger",
-      "x": 1277,
-      "y": 2,
+      "x": 400,
+      "y": 1161,
       "w": 212,
       "h": 275,
       "groundPivot": {
@@ -693,8 +778,8 @@
     },
     "ranger-WSW-walk-1": {
       "actor": "ranger",
-      "x": 636,
-      "y": 2,
+      "x": 2,
+      "y": 1458,
       "w": 205,
       "h": 276,
       "groundPivot": {
@@ -705,8 +790,8 @@
     },
     "ranger-W-walk-1": {
       "actor": "ranger",
-      "x": 423,
-      "y": 837,
+      "x": 1496,
+      "y": 276,
       "w": 204,
       "h": 269,
       "groundPivot": {
@@ -717,8 +802,8 @@
     },
     "ranger-WNW-walk-1": {
       "actor": "ranger",
-      "x": 1434,
-      "y": 562,
+      "x": 1492,
+      "y": 2,
       "w": 206,
       "h": 270,
       "groundPivot": {
@@ -729,8 +814,8 @@
     },
     "ranger-NW-walk-1": {
       "actor": "ranger",
-      "x": 1212,
-      "y": 562,
+      "x": 1274,
+      "y": 278,
       "w": 218,
       "h": 270,
       "groundPivot": {
@@ -741,8 +826,8 @@
     },
     "ranger-NNW-walk-1": {
       "actor": "ranger",
-      "x": 1008,
-      "y": 562,
+      "x": 842,
+      "y": 1954,
       "w": 200,
       "h": 270,
       "groundPivot": {
@@ -753,8 +838,8 @@
     },
     "ranger-N-walk-2": {
       "actor": "ranger",
-      "x": 172,
-      "y": 1827,
+      "x": 3051,
+      "y": 1415,
       "w": 152,
       "h": 213,
       "groundPivot": {
@@ -765,8 +850,8 @@
     },
     "ranger-NNE-walk-2": {
       "actor": "ranger",
-      "x": 1431,
-      "y": 1605,
+      "x": 2897,
+      "y": 1415,
       "w": 150,
       "h": 214,
       "groundPivot": {
@@ -777,8 +862,8 @@
     },
     "ranger-NE-walk-2": {
       "actor": "ranger",
-      "x": 748,
-      "y": 1605,
+      "x": 3379,
+      "y": 221,
       "w": 147,
       "h": 215,
       "groundPivot": {
@@ -789,8 +874,8 @@
     },
     "ranger-ENE-walk-2": {
       "actor": "ranger",
-      "x": 1230,
-      "y": 1827,
+      "x": 3255,
+      "y": 1304,
       "w": 169,
       "h": 209,
       "groundPivot": {
@@ -801,8 +886,8 @@
     },
     "ranger-E-walk-2": {
       "actor": "ranger",
-      "x": 1245,
-      "y": 1605,
+      "x": 3319,
+      "y": 658,
       "w": 182,
       "h": 214,
       "groundPivot": {
@@ -813,8 +898,8 @@
     },
     "ranger-ESE-walk-2": {
       "actor": "ranger",
-      "x": 556,
-      "y": 1605,
+      "x": 2992,
+      "y": 941,
       "w": 188,
       "h": 216,
       "groundPivot": {
@@ -825,8 +910,8 @@
     },
     "ranger-SE-walk-2": {
       "actor": "ranger",
-      "x": 1058,
-      "y": 1605,
+      "x": 3226,
+      "y": 2,
       "w": 183,
       "h": 215,
       "groundPivot": {
@@ -837,8 +922,8 @@
     },
     "ranger-SSE-walk-2": {
       "actor": "ranger",
-      "x": 2,
-      "y": 1605,
+      "x": 2796,
+      "y": 973,
       "w": 192,
       "h": 218,
       "groundPivot": {
@@ -849,8 +934,8 @@
     },
     "ranger-S-walk-2": {
       "actor": "ranger",
-      "x": 1413,
-      "y": 1362,
+      "x": 2849,
+      "y": 245,
       "w": 163,
       "h": 219,
       "groundPivot": {
@@ -861,8 +946,8 @@
     },
     "ranger-SSW-walk-2": {
       "actor": "ranger",
-      "x": 868,
-      "y": 1827,
+      "x": 3357,
+      "y": 1090,
       "w": 174,
       "h": 210,
       "groundPivot": {
@@ -873,8 +958,8 @@
     },
     "ranger-SW-walk-2": {
       "actor": "ranger",
-      "x": 328,
-      "y": 1827,
+      "x": 2771,
+      "y": 1882,
       "w": 184,
       "h": 213,
       "groundPivot": {
@@ -885,8 +970,8 @@
     },
     "ranger-WSW-walk-2": {
       "actor": "ranger",
-      "x": 1046,
-      "y": 1827,
+      "x": 3357,
+      "y": 876,
       "w": 180,
       "h": 210,
       "groundPivot": {
@@ -897,8 +982,8 @@
     },
     "ranger-W-walk-2": {
       "actor": "ranger",
-      "x": 1403,
-      "y": 1827,
+      "x": 2959,
+      "y": 1850,
       "w": 175,
       "h": 207,
       "groundPivot": {
@@ -909,8 +994,8 @@
     },
     "ranger-WNW-walk-2": {
       "actor": "ranger",
-      "x": 689,
-      "y": 1827,
+      "x": 3076,
+      "y": 1161,
       "w": 175,
       "h": 211,
       "groundPivot": {
@@ -921,8 +1006,8 @@
     },
     "ranger-NW-walk-2": {
       "actor": "ranger",
-      "x": 516,
-      "y": 1827,
+      "x": 3184,
+      "y": 910,
       "w": 169,
       "h": 211,
       "groundPivot": {
@@ -933,8 +1018,8 @@
     },
     "ranger-NNW-walk-2": {
       "actor": "ranger",
-      "x": 899,
-      "y": 1605,
+      "x": 3413,
+      "y": 2,
       "w": 155,
       "h": 215,
       "groundPivot": {
@@ -945,8 +1030,8 @@
     },
     "ranger-N-walk-3": {
       "actor": "ranger",
-      "x": 1666,
-      "y": 284,
+      "x": 1178,
+      "y": 556,
       "w": 186,
       "h": 271,
       "groundPivot": {
@@ -957,8 +1042,8 @@
     },
     "ranger-NNE-walk-3": {
       "actor": "ranger",
-      "x": 2,
-      "y": 562,
+      "x": 1128,
+      "y": 837,
       "w": 197,
       "h": 271,
       "groundPivot": {
@@ -969,8 +1054,8 @@
     },
     "ranger-NE-walk-3": {
       "actor": "ranger",
-      "x": 1054,
-      "y": 284,
+      "x": 1097,
+      "y": 2,
       "w": 174,
       "h": 272,
       "groundPivot": {
@@ -981,8 +1066,8 @@
     },
     "ranger-ENE-walk-3": {
       "actor": "ranger",
-      "x": 880,
-      "y": 284,
+      "x": 668,
+      "y": 1717,
       "w": 170,
       "h": 272,
       "groundPivot": {
@@ -993,8 +1078,8 @@
     },
     "ranger-E-walk-3": {
       "actor": "ranger",
-      "x": 1723,
-      "y": 2,
+      "x": 434,
+      "y": 1440,
       "w": 170,
       "h": 274,
       "groundPivot": {
@@ -1005,7 +1090,7 @@
     },
     "ranger-ESE-walk-3": {
       "actor": "ranger",
-      "x": 426,
+      "x": 668,
       "y": 2,
       "w": 206,
       "h": 277,
@@ -1018,7 +1103,7 @@
     "ranger-SE-walk-3": {
       "actor": "ranger",
       "x": 2,
-      "y": 2,
+      "y": 1176,
       "w": 200,
       "h": 278,
       "groundPivot": {
@@ -1029,7 +1114,7 @@
     },
     "ranger-SSE-walk-3": {
       "actor": "ranger",
-      "x": 206,
+      "x": 448,
       "y": 2,
       "w": 216,
       "h": 278,
@@ -1041,8 +1126,8 @@
     },
     "ranger-S-walk-3": {
       "actor": "ranger",
-      "x": 221,
-      "y": 284,
+      "x": 844,
+      "y": 283,
       "w": 219,
       "h": 274,
       "groundPivot": {
@@ -1053,8 +1138,8 @@
     },
     "ranger-SSW-walk-3": {
       "actor": "ranger",
-      "x": 1068,
-      "y": 2,
+      "x": 406,
+      "y": 849,
       "w": 205,
       "h": 275,
       "groundPivot": {
@@ -1065,8 +1150,8 @@
     },
     "ranger-SW-walk-3": {
       "actor": "ranger",
-      "x": 1493,
-      "y": 2,
+      "x": 2,
+      "y": 1738,
       "w": 226,
       "h": 275,
       "groundPivot": {
@@ -1077,8 +1162,8 @@
     },
     "ranger-WSW-walk-3": {
       "actor": "ranger",
-      "x": 1442,
-      "y": 284,
+      "x": 904,
+      "y": 843,
       "w": 220,
       "h": 272,
       "groundPivot": {
@@ -1089,8 +1174,8 @@
     },
     "ranger-W-walk-3": {
       "actor": "ranger",
-      "x": 631,
-      "y": 837,
+      "x": 1390,
+      "y": 1385,
       "w": 216,
       "h": 266,
       "groundPivot": {
@@ -1101,8 +1186,8 @@
     },
     "ranger-WNW-walk-3": {
       "actor": "ranger",
-      "x": 203,
-      "y": 562,
+      "x": 1001,
+      "y": 1403,
       "w": 220,
       "h": 271,
       "groundPivot": {
@@ -1113,8 +1198,8 @@
     },
     "ranger-NW-walk-3": {
       "actor": "ranger",
-      "x": 207,
-      "y": 837,
+      "x": 1368,
+      "y": 552,
       "w": 212,
       "h": 269,
       "groundPivot": {
@@ -1125,8 +1210,8 @@
     },
     "ranger-NNW-walk-3": {
       "actor": "ranger",
-      "x": 2,
-      "y": 837,
+      "x": 1702,
+      "y": 2,
       "w": 201,
       "h": 269,
       "groundPivot": {
@@ -1134,6 +1219,774 @@
         "y": 265
       },
       "bodyHeight": 262
+    },
+    "ranger-N-attack-0": {
+      "actor": "ranger",
+      "x": 2457,
+      "y": 997,
+      "w": 157,
+      "h": 224,
+      "groundPivot": {
+        "x": 73.93872306779996,
+        "y": 217
+      },
+      "bodyHeight": 177
+    },
+    "ranger-N-attack-1": {
+      "actor": "ranger",
+      "x": 2280,
+      "y": 1294,
+      "w": 159,
+      "h": 233,
+      "groundPivot": {
+        "x": 74.12107030216706,
+        "y": 227
+      },
+      "bodyHeight": 179
+    },
+    "ranger-N-attack-2": {
+      "actor": "ranger",
+      "x": 2152,
+      "y": 1545,
+      "w": 152,
+      "h": 236,
+      "groundPivot": {
+        "x": 67.48709895495901,
+        "y": 229
+      },
+      "bodyHeight": 177
+    },
+    "ranger-N-attack-3": {
+      "actor": "ranger",
+      "x": 3138,
+      "y": 1939,
+      "w": 164,
+      "h": 192,
+      "groundPivot": {
+        "x": 81.89181597580028,
+        "y": 186
+      },
+      "bodyHeight": 179
+    },
+    "ranger-NNE-attack-0": {
+      "actor": "ranger",
+      "x": 616,
+      "y": 1127,
+      "w": 166,
+      "h": 273,
+      "groundPivot": {
+        "x": 80.56927951671652,
+        "y": 266
+      },
+      "bodyHeight": 199
+    },
+    "ranger-NNE-attack-1": {
+      "actor": "ranger",
+      "x": 208,
+      "y": 298,
+      "w": 158,
+      "h": 283,
+      "groundPivot": {
+        "x": 92.023325836175,
+        "y": 277
+      },
+      "bodyHeight": 200
+    },
+    "ranger-NNE-attack-2": {
+      "actor": "ranger",
+      "x": 828,
+      "y": 1403,
+      "w": 169,
+      "h": 272,
+      "groundPivot": {
+        "x": 101.04686954700914,
+        "y": 267
+      },
+      "bodyHeight": 201
+    },
+    "ranger-NNE-attack-3": {
+      "actor": "ranger",
+      "x": 1552,
+      "y": 825,
+      "w": 180,
+      "h": 259,
+      "groundPivot": {
+        "x": 102.74360214014052,
+        "y": 254
+      },
+      "bodyHeight": 201
+    },
+    "ranger-NE-attack-0": {
+      "actor": "ranger",
+      "x": 203,
+      "y": 879,
+      "w": 199,
+      "h": 278,
+      "groundPivot": {
+        "x": 114.47685503685504,
+        "y": 269
+      },
+      "bodyHeight": 221
+    },
+    "ranger-NE-attack-1": {
+      "actor": "ranger",
+      "x": 2,
+      "y": 2,
+      "w": 237,
+      "h": 292,
+      "groundPivot": {
+        "x": 103.12735238474559,
+        "y": 280
+      },
+      "bodyHeight": 219
+    },
+    "ranger-NE-attack-2": {
+      "actor": "ranger",
+      "x": 2,
+      "y": 298,
+      "w": 202,
+      "h": 290,
+      "groundPivot": {
+        "x": 124.32441253263707,
+        "y": 281
+      },
+      "bodyHeight": 222
+    },
+    "ranger-NE-attack-3": {
+      "actor": "ranger",
+      "x": 1272,
+      "y": 1668,
+      "w": 194,
+      "h": 268,
+      "groundPivot": {
+        "x": 114.16795054217162,
+        "y": 261
+      },
+      "bodyHeight": 226
+    },
+    "ranger-ENE-attack-0": {
+      "actor": "ranger",
+      "x": 2187,
+      "y": 1785,
+      "w": 212,
+      "h": 226,
+      "groundPivot": {
+        "x": 115.36205480701967,
+        "y": 220
+      },
+      "bodyHeight": 216
+    },
+    "ranger-ENE-attack-1": {
+      "actor": "ranger",
+      "x": 1971,
+      "y": 793,
+      "w": 254,
+      "h": 249,
+      "groundPivot": {
+        "x": 114.69578816017632,
+        "y": 243
+      },
+      "bodyHeight": 216
+    },
+    "ranger-ENE-attack-2": {
+      "actor": "ranger",
+      "x": 1732,
+      "y": 1088,
+      "w": 238,
+      "h": 254,
+      "groundPivot": {
+        "x": 119.50896027747956,
+        "y": 248
+      },
+      "bodyHeight": 216
+    },
+    "ranger-ENE-attack-3": {
+      "actor": "ranger",
+      "x": 2308,
+      "y": 1531,
+      "w": 206,
+      "h": 226,
+      "groundPivot": {
+        "x": 117.45218836377202,
+        "y": 220
+      },
+      "bodyHeight": 216
+    },
+    "ranger-E-attack-0": {
+      "actor": "ranger",
+      "x": 3324,
+      "y": 1729,
+      "w": 190,
+      "h": 205,
+      "groundPivot": {
+        "x": 91.09534917029853,
+        "y": 198
+      },
+      "bodyHeight": 194
+    },
+    "ranger-E-attack-1": {
+      "actor": "ranger",
+      "x": 2994,
+      "y": 2,
+      "w": 228,
+      "h": 218,
+      "groundPivot": {
+        "x": 93.48528287461774,
+        "y": 211
+      },
+      "bodyHeight": 193
+    },
+    "ranger-E-attack-2": {
+      "actor": "ranger",
+      "x": 2760,
+      "y": 496,
+      "w": 206,
+      "h": 219,
+      "groundPivot": {
+        "x": 92.95140304363152,
+        "y": 212
+      },
+      "bodyHeight": 194
+    },
+    "ranger-E-attack-3": {
+      "actor": "ranger",
+      "x": 3324,
+      "y": 1938,
+      "w": 179,
+      "h": 205,
+      "groundPivot": {
+        "x": 90.2813234891988,
+        "y": 198
+      },
+      "bodyHeight": 195
+    },
+    "ranger-ESE-attack-0": {
+      "actor": "ranger",
+      "x": 1836,
+      "y": 1346,
+      "w": 226,
+      "h": 246,
+      "groundPivot": {
+        "x": 97.68196234563736,
+        "y": 237
+      },
+      "bodyHeight": 232
+    },
+    "ranger-ESE-attack-1": {
+      "actor": "ranger",
+      "x": 2534,
+      "y": 2,
+      "w": 258,
+      "h": 247,
+      "groundPivot": {
+        "x": 92.76788637906478,
+        "y": 239
+      },
+      "bodyHeight": 233
+    },
+    "ranger-ESE-attack-2": {
+      "actor": "ranger",
+      "x": 1921,
+      "y": 1596,
+      "w": 227,
+      "h": 245,
+      "groundPivot": {
+        "x": 92.81711507163094,
+        "y": 239
+      },
+      "bodyHeight": 234
+    },
+    "ranger-ESE-attack-3": {
+      "actor": "ranger",
+      "x": 2066,
+      "y": 1296,
+      "w": 210,
+      "h": 245,
+      "groundPivot": {
+        "x": 97.36719759579263,
+        "y": 238
+      },
+      "bodyHeight": 233
+    },
+    "ranger-SE-attack-0": {
+      "actor": "ranger",
+      "x": 1470,
+      "y": 1655,
+      "w": 234,
+      "h": 255,
+      "groundPivot": {
+        "x": 85.85396089314078,
+        "y": 247
+      },
+      "bodyHeight": 242
+    },
+    "ranger-SE-attack-1": {
+      "actor": "ranger",
+      "x": 1414,
+      "y": 1940,
+      "w": 246,
+      "h": 256,
+      "groundPivot": {
+        "x": 93.76978177577878,
+        "y": 249
+      },
+      "bodyHeight": 244
+    },
+    "ranger-SE-attack-2": {
+      "actor": "ranger",
+      "x": 1610,
+      "y": 1371,
+      "w": 222,
+      "h": 255,
+      "groundPivot": {
+        "x": 93.17784869671088,
+        "y": 248
+      },
+      "bodyHeight": 244
+    },
+    "ranger-SE-attack-3": {
+      "actor": "ranger",
+      "x": 1736,
+      "y": 811,
+      "w": 231,
+      "h": 253,
+      "groundPivot": {
+        "x": 80.90030455034038,
+        "y": 245
+      },
+      "bodyHeight": 241
+    },
+    "ranger-SSE-attack-0": {
+      "actor": "ranger",
+      "x": 243,
+      "y": 2,
+      "w": 201,
+      "h": 280,
+      "groundPivot": {
+        "x": 71.67255709181296,
+        "y": 263
+      },
+      "bodyHeight": 259
+    },
+    "ranger-SSE-attack-1": {
+      "actor": "ranger",
+      "x": 197,
+      "y": 592,
+      "w": 201,
+      "h": 283,
+      "groundPivot": {
+        "x": 93.86663357912649,
+        "y": 268
+      },
+      "bodyHeight": 264
+    },
+    "ranger-SSE-attack-2": {
+      "actor": "ranger",
+      "x": 1067,
+      "y": 280,
+      "w": 203,
+      "h": 272,
+      "groundPivot": {
+        "x": 128.26590513423537,
+        "y": 267
+      },
+      "bodyHeight": 264
+    },
+    "ranger-SSE-attack-3": {
+      "actor": "ranger",
+      "x": 1253,
+      "y": 1112,
+      "w": 220,
+      "h": 269,
+      "groundPivot": {
+        "x": 95.5692551469153,
+        "y": 264
+      },
+      "bodyHeight": 260
+    },
+    "ranger-S-attack-0": {
+      "actor": "ranger",
+      "x": 3016,
+      "y": 224,
+      "w": 167,
+      "h": 218,
+      "groundPivot": {
+        "x": 82.9207452258966,
+        "y": 207
+      },
+      "bodyHeight": 203
+    },
+    "ranger-S-attack-1": {
+      "actor": "ranger",
+      "x": 2618,
+      "y": 997,
+      "w": 174,
+      "h": 220,
+      "groundPivot": {
+        "x": 91.04317659472977,
+        "y": 209
+      },
+      "bodyHeight": 205
+    },
+    "ranger-S-attack-2": {
+      "actor": "ranger",
+      "x": 3040,
+      "y": 690,
+      "w": 174,
+      "h": 216,
+      "groundPivot": {
+        "x": 91.69419634850604,
+        "y": 210
+      },
+      "bodyHeight": 206
+    },
+    "ranger-S-attack-3": {
+      "actor": "ranger",
+      "x": 3187,
+      "y": 224,
+      "w": 188,
+      "h": 215,
+      "groundPivot": {
+        "x": 89.96359494068662,
+        "y": 209
+      },
+      "bodyHeight": 205
+    },
+    "ranger-SSW-attack-0": {
+      "actor": "ranger",
+      "x": 842,
+      "y": 1679,
+      "w": 233,
+      "h": 271,
+      "groundPivot": {
+        "x": 162.16443854933854,
+        "y": 266
+      },
+      "bodyHeight": 262
+    },
+    "ranger-SSW-attack-1": {
+      "actor": "ranger",
+      "x": 608,
+      "y": 1440,
+      "w": 216,
+      "h": 273,
+      "groundPivot": {
+        "x": 151.90121843410077,
+        "y": 268
+      },
+      "bodyHeight": 264
+    },
+    "ranger-SSW-attack-2": {
+      "actor": "ranger",
+      "x": 786,
+      "y": 1127,
+      "w": 245,
+      "h": 272,
+      "groundPivot": {
+        "x": 163.91402011265853,
+        "y": 266
+      },
+      "bodyHeight": 262
+    },
+    "ranger-SSW-attack-3": {
+      "actor": "ranger",
+      "x": 1035,
+      "y": 1119,
+      "w": 214,
+      "h": 271,
+      "groundPivot": {
+        "x": 150.9947472500309,
+        "y": 264
+      },
+      "bodyHeight": 260
+    },
+    "ranger-SW-attack-0": {
+      "actor": "ranger",
+      "x": 2187,
+      "y": 1046,
+      "w": 266,
+      "h": 244,
+      "groundPivot": {
+        "x": 129.23828901875592,
+        "y": 235
+      },
+      "bodyHeight": 231
+    },
+    "ranger-SW-attack-1": {
+      "actor": "ranger",
+      "x": 2325,
+      "y": 254,
+      "w": 282,
+      "h": 247,
+      "groundPivot": {
+        "x": 150.03950132307608,
+        "y": 241
+      },
+      "bodyHeight": 237
+    },
+    "ranger-SW-attack-2": {
+      "actor": "ranger",
+      "x": 1916,
+      "y": 1881,
+      "w": 267,
+      "h": 245,
+      "groundPivot": {
+        "x": 133.69766907076408,
+        "y": 238
+      },
+      "bodyHeight": 233
+    },
+    "ranger-SW-attack-3": {
+      "actor": "ranger",
+      "x": 1664,
+      "y": 1914,
+      "w": 248,
+      "h": 247,
+      "groundPivot": {
+        "x": 153.17857142857142,
+        "y": 241
+      },
+      "bodyHeight": 237
+    },
+    "ranger-WSW-attack-0": {
+      "actor": "ranger",
+      "x": 402,
+      "y": 568,
+      "w": 273,
+      "h": 277,
+      "groundPivot": {
+        "x": 171.0129473145125,
+        "y": 272
+      },
+      "bodyHeight": 268
+    },
+    "ranger-WSW-attack-1": {
+      "actor": "ranger",
+      "x": 679,
+      "y": 565,
+      "w": 285,
+      "h": 274,
+      "groundPivot": {
+        "x": 113.31786652462867,
+        "y": 268
+      },
+      "bodyHeight": 263
+    },
+    "ranger-WSW-attack-2": {
+      "actor": "ranger",
+      "x": 611,
+      "y": 284,
+      "w": 229,
+      "h": 277,
+      "groundPivot": {
+        "x": 115.04721893367139,
+        "y": 271
+      },
+      "bodyHeight": 267
+    },
+    "ranger-WSW-attack-3": {
+      "actor": "ranger",
+      "x": 370,
+      "y": 286,
+      "w": 237,
+      "h": 278,
+      "groundPivot": {
+        "x": 81.21702271561173,
+        "y": 273
+      },
+      "bodyHeight": 269
+    },
+    "ranger-W-attack-0": {
+      "actor": "ranger",
+      "x": 2880,
+      "y": 1195,
+      "w": 192,
+      "h": 216,
+      "groundPivot": {
+        "x": 88.35951315358585,
+        "y": 209
+      },
+      "bodyHeight": 205
+    },
+    "ranger-W-attack-1": {
+      "actor": "ranger",
+      "x": 2443,
+      "y": 1294,
+      "w": 236,
+      "h": 224,
+      "groundPivot": {
+        "x": 129.90764103784812,
+        "y": 218
+      },
+      "bodyHeight": 204
+    },
+    "ranger-W-attack-2": {
+      "actor": "ranger",
+      "x": 2187,
+      "y": 2015,
+      "w": 214,
+      "h": 223,
+      "groundPivot": {
+        "x": 108.91721936109158,
+        "y": 217
+      },
+      "bodyHeight": 202
+    },
+    "ranger-W-attack-3": {
+      "actor": "ranger",
+      "x": 2683,
+      "y": 1221,
+      "w": 193,
+      "h": 218,
+      "groundPivot": {
+        "x": 83.58690995189417,
+        "y": 211
+      },
+      "bodyHeight": 206
+    },
+    "ranger-WNW-attack-0": {
+      "actor": "ranger",
+      "x": 2442,
+      "y": 752,
+      "w": 257,
+      "h": 241,
+      "groundPivot": {
+        "x": 130.86588040981704,
+        "y": 235
+      },
+      "bodyHeight": 231
+    },
+    "ranger-WNW-attack-1": {
+      "actor": "ranger",
+      "x": 615,
+      "y": 849,
+      "w": 285,
+      "h": 274,
+      "groundPivot": {
+        "x": 152.8818669293062,
+        "y": 267
+      },
+      "bodyHeight": 231
+    },
+    "ranger-WNW-attack-2": {
+      "actor": "ranger",
+      "x": 1477,
+      "y": 1104,
+      "w": 251,
+      "h": 263,
+      "groundPivot": {
+        "x": 121.889667481194,
+        "y": 258
+      },
+      "bodyHeight": 229
+    },
+    "ranger-WNW-attack-3": {
+      "actor": "ranger",
+      "x": 2611,
+      "y": 253,
+      "w": 234,
+      "h": 239,
+      "groundPivot": {
+        "x": 110.40282189103347,
+        "y": 233
+      },
+      "bodyHeight": 229
+    },
+    "ranger-NW-attack-0": {
+      "actor": "ranger",
+      "x": 1795,
+      "y": 536,
+      "w": 195,
+      "h": 253,
+      "groundPivot": {
+        "x": 127.86869429167457,
+        "y": 246
+      },
+      "bodyHeight": 196
+    },
+    "ranger-NW-attack-1": {
+      "actor": "ranger",
+      "x": 1584,
+      "y": 549,
+      "w": 207,
+      "h": 258,
+      "groundPivot": {
+        "x": 129.94162436548223,
+        "y": 251
+      },
+      "bodyHeight": 195
+    },
+    "ranger-NW-attack-2": {
+      "actor": "ranger",
+      "x": 1704,
+      "y": 275,
+      "w": 184,
+      "h": 257,
+      "groundPivot": {
+        "x": 95.8365228380574,
+        "y": 251
+      },
+      "bodyHeight": 195
+    },
+    "ranger-NW-attack-3": {
+      "actor": "ranger",
+      "x": 3207,
+      "y": 1517,
+      "w": 199,
+      "h": 208,
+      "groundPivot": {
+        "x": 127.28391923149054,
+        "y": 201
+      },
+      "bodyHeight": 197
+    },
+    "ranger-NNW-attack-0": {
+      "actor": "ranger",
+      "x": 2,
+      "y": 592,
+      "w": 191,
+      "h": 289,
+      "groundPivot": {
+        "x": 101.68906129412242,
+        "y": 279
+      },
+      "bodyHeight": 204
+    },
+    "ranger-NNW-attack-1": {
+      "actor": "ranger",
+      "x": 2,
+      "y": 885,
+      "w": 197,
+      "h": 287,
+      "groundPivot": {
+        "x": 113.05136526759244,
+        "y": 275
+      },
+      "bodyHeight": 198
+    },
+    "ranger-NNW-attack-2": {
+      "actor": "ranger",
+      "x": 206,
+      "y": 1161,
+      "w": 190,
+      "h": 276,
+      "groundPivot": {
+        "x": 102.08336904565684,
+        "y": 265
+      },
+      "bodyHeight": 196
+    },
+    "ranger-NNW-attack-3": {
+      "actor": "ranger",
+      "x": 1079,
+      "y": 1678,
+      "w": 189,
+      "h": 270,
+      "groundPivot": {
+        "x": 130.63477282950967,
+        "y": 264
+      },
+      "bodyHeight": 210
     }
   }
 }

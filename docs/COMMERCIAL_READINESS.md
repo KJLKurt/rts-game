@@ -1,5 +1,11 @@
 # Commercial-readiness work plan and scope
 
+## Current Ranger attack candidate
+
+Build **`fc-5106dd6e9270`** adds four authored Mythic Ranger attack phases across sixteen headings. The 144-frame atlas preserves all 80 prior idle/walk crops and adds 64 unique attacks without resampling or mirroring. Existing projectile events and cooldowns drive the animation; gameplay and renderer source are unchanged. **568 unit tests in 60 files**, TypeScript/build and eight mission validations pass. The current complete browser gate reconciles **334 passes and 18 intentional skips across the same 352 case identities**, with zero unresolved cases. Its first full invocation recorded **331 passes, 18 skips and three failed cache-upgrade setups** because the owned QA host lacked its previous-build directory; those failures happened before gameplay. Correcting only that host configuration and rerunning the same three cases once yielded three passes, with automatic retries disabled. The raw failures and rerun remain preserved; this is not a single clean full invocation. All 255 frozen worker-source hashes and 32 dist hashes remained exact. The separate 48 native-input combat fixtures and 192 Canvas excerpts supply attack-specific evidence; they are not added to the 352-case total.
+
+The remaining material records the preceding checkpoints and their evidence.
+
 Updated 5 October 2026 after the player ranged stance and its complete local verification. **The local candidate passes its runnable browser gate; it remains a testing preview and is not declared commercially ready.** Linux Chromium and emulated phone touch were tested; physical iPhone/Safari, installed-device lifecycle/performance, subjective soundtrack listening, full natural campaign/expedition routes, broad balance and exact deployed-release checks remain open. The lead's attributed read of the original shared chat supports generated reference lineage; the exact selected-reference/main-atlas receipts, redistribution basis and any third-party inputs remain unresolved. Project use and publication are already authorized.
 
 ## Authority and scope
