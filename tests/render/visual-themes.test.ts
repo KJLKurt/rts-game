@@ -2,7 +2,7 @@ import {afterEach, describe, expect, it, vi} from 'vitest';
 import {Battlefield} from '../../src/render/Battlefield';
 import {SpriteAtlas} from '../../src/render/SpriteAtlas';
 import {AnimationAtlas} from '../../src/render/AnimationAtlas';
-import {DirectionalAtlas} from '../../src/render/DirectionalAtlas';
+import {DirectionalAtlas, type DirectionalData} from '../../src/render/DirectionalAtlas';
 import {VISUAL_THEMES, normalizeVisualTheme} from '../../src/render/visualThemes';
 import {readFileSync} from 'node:fs';
 
@@ -79,5 +79,36 @@ describe('complete visual sets and atomic switching', () => {
     vi.spyOn(DirectionalAtlas.prototype,'load').mockResolvedValue(false);
     expect(await view.setVisualTheme('mythic')).toBe(false);
     expect(view.atlas).toBe(original);expect(view.visualTheme).toBe('christmas');
+  });
+  it('a failed additional actor pack rejects the whole theme without replacing its working textures', async () => {
+    const {view} = fixture();
+    await view.setVisualTheme('christmas');
+    const original = view.atlas;
+    const load = vi.spyOn(DirectionalAtlas.prototype, 'load').mockImplementation(async url => !url.endsWith('swordsman-directional.json'));
+    expect(await view.setVisualTheme('mythic')).toBe(false);
+    expect(load.mock.calls.map(([url])=>url)).toEqual(expect.arrayContaining([
+      expect.stringContaining('ranger-directional.json'),
+      expect.stringContaining('swordsman-directional.json'),
+    ]));
+    expect(view.atlas).toBe(original);expect(view.visualTheme).toBe('christmas');
+  });
+  it('routes each actor to its owned texture and releases additional textures on a complete theme switch', async () => {
+    const {view} = fixture();
+    vi.spyOn(DirectionalAtlas.prototype, 'load').mockImplementation(async function(this:DirectionalAtlas,url:string) {
+      const actor=url.endsWith('swordsman-directional.json')?'swordsman':'ranger';
+      this.data={actors:{[actor]:{}}} as DirectionalData;
+      this.image={src:url} as HTMLImageElement;
+      return true;
+    });
+    expect(await view.setVisualTheme('mythic')).toBe(true);
+    const internals=view as unknown as {directionalAtlas:DirectionalAtlas;additionalDirectionalAtlases:DirectionalAtlas[];directionalFor(actor:string):DirectionalAtlas};
+    const ranger=internals.directionalFor('ranger'),swordsman=internals.directionalFor('swordsman');
+    expect(ranger.image?.src).toContain('ranger-directional.json');
+    expect(swordsman.image?.src).toContain('swordsman-directional.json');
+    expect(swordsman).not.toBe(ranger);expect(internals.additionalDirectionalAtlases).toHaveLength(1);
+    expect(internals.directionalFor('engineer')).toBe(ranger);
+    expect(await view.setVisualTheme('christmas')).toBe(true);
+    expect(internals.additionalDirectionalAtlases).toHaveLength(0);
+    expect(internals.directionalFor('swordsman')).not.toBe(swordsman);
   });
 });

@@ -5,12 +5,14 @@ export const VISUAL_THEMES = {
     atlas: 'assets/render/frontier-atlas.json',
     attackAtlas: 'assets/render/frontier-combat-animation.json',
     directionalAtlas: null,
+    additionalDirectionalAtlases: [],
   },
   mythic: {
     name: 'Mythic · Toy 3D',
     atlas: 'assets/render/themes/mythic-toon/atlas.json',
     attackAtlas: null,
     directionalAtlas: 'assets/render/themes/mythic-toon/ranger-directional.json',
+    additionalDirectionalAtlases: ['assets/render/themes/mythic-toon/swordsman-directional.json'],
   },
 } as const;
 

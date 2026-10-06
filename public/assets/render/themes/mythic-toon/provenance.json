@@ -2611,5 +2611,2741 @@
         }
       ]
     }
-  ]
+  ],
+  "swordsmanDirectional20261005": {
+    "status": "Selected source-pixel candidate; native visual/combat QA separately documented",
+    "actor": "swordsman",
+    "totalFrames": 144,
+    "headingCount": 16,
+    "idlePerHeading": 1,
+    "walkPerHeading": 4,
+    "attackPerHeading": 4,
+    "textureDimensions": [
+      1792,
+      2752
+    ],
+    "decodedMiB": 18.8125,
+    "noPixelResizingMirroringMaskingRecoloring": true,
+    "allFrameRGBAUnique": true,
+    "allSourceAndPackedRGBAExact": true,
+    "originalRangerManifestAndPNGByteExact": true,
+    "integration": "Separate owned directional texture loaded atomically with Mythic set. Existing real melee attack events begin hit pose, existing cooldown supplies anticipation. No simulation changes.",
+    "generatedAt": "2026-10-05",
+    "tool": "image_gen.imagegen",
+    "generationRequests": {
+      "idle16-request.json": {
+        "tool": "image_gen.imagegen",
+        "prompt": "Create production sprite artwork for Frontier Command, matching the attached APPROVED MYTHIC SWORDSMAN exactly: compact toy-3D armored knight, dark navy steel and bright brass/gold trim, enclosed dark visor with narrow gold cross T-shaped opening, cobalt-blue short plume, blue cloth waist/tabard, brown leather gloves and boots, short silver STEEL SWORD in anatomical RIGHT hand, round dark-blue shield with gold rim and gold eight-point sun crest in anatomical LEFT hand. Preserve the exact identity, materials, proportions and polished readable miniature rendering. No Santa, snowflake, red costume, skull, spear, bow or other actor.\n\nDeliver one TRUE TRANSPARENT RGBA sheet with EXACTLY SIXTEEN DISTINCT IDLE sprites in FOUR columns by FOUR rows. Fixed elevated isometric camera; rotate the ACTOR on the ground, camera stays fixed. Reading order headings clockwise: row1 N,NNE,NE,ENE; row2 E,ESE,SE,SSE; row3 S,SSW,SW,WSW; row4 W,WNW,NW,NNW. Screen heading N means away from viewer toward TOP of image, body/feet/sword aimed upward; S means toward BOTTOM facing viewer. E is screen RIGHT profile; W is screen LEFT profile. Diagonals must visibly interpolate these orientations; NNE/NNW are predominantly away back views with only slight right/left bias. Never use the same southeast view for all cells. Rear views show back of helmet, plume, back armor and shield outer/back according to proper anatomical handedness. Sword never changes right hand and shield never changes left hand; do not mirror pixels to fake a heading.\n\nAll sixteen use the SAME relaxed stationary ready stance: knees slightly bent, both boots planted, shield at chest side, sword held low pointing forward along their own heading. No attack, movement or airborne feet in this sheet. Same lighting from upper-left and same modest ambient shading within the body. No cast ground shadow.\n\nCanvas square approximately1254x1254, four equal313.5px cells. Keep every WHOLE sprite including sword/shield/plume about140\u2013175px wide and 150\u2013175px tall, HELMET-to-BOOT body height about135\u2013150px, unusually small within its large transparent cell. Each cell has very generous empty gutter. Center ground foot midpoint near local x157,y245; helmet top near y105. All complete pixels strictly inside local x50..264,y65..267. Preserve full weapons/boots and clean antialiasing. No crossing cell borders, no duplicate bodies, no labels, grid, text, decorative sparkles, auras, motion streaks, backgrounds or effects. Exactly16 sprites, no extra icons. This sheet supplies one idle phase in16 directions, NOT16 animation phases.",
+        "referenced_image_paths": [
+          "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/approved-mythic-swordsman-static-reference.png"
+        ],
+        "transparent_background": true,
+        "status": "UNSHIPPED first idle direction art batch"
+      },
+      "idle16-small-layout-request.json": {
+        "tool": "image_gen.imagegen",
+        "prompt": "Edit ONLY sprite SCALE and spacing on this exact16-heading MYTHIC SWORDSMAN idle sheet. Preserve every existing actor direction, stationary pose, anatomical sword RIGHT hand/shield LEFT hand, exact navy steel/brass/blue-plume/blue-sun-shield identity and lighting. Keep true RGBA transparency, four columns by four rows, exactly16 sprites. Current1254x1254 sprites have approx230px plume-to-boot height. SHRINK EVERY WHOLE FIGURE TO55% OF ITS CURRENT SIZE, yielding plume-to-boot BODY HEIGHT125\u2013140px. Do this visually in the image generation, with crisp correct anatomy and clean edges. Center each in its same313.5x313.5 cell. Ground boot midpoint local x156.75,y235; highest plume around y100. The entire silhouette including sword/shield stays inside local x80..240,y85..247. Very large empty gutters are intentional. Same scale across all16; DO NOT enlarge sprites to fill empty space. No change of orientation, action, hands, materials or costume, no added objects/labels/effects/shadows/background/grid, no clipped boots or weapons. Scale/layout correction only, keep exact original compass ordering.",
+        "referenced_image_paths": [
+          "/workspace/generated_images/exec-8e27a557-ecab-4726-b01d-f41d7b65e69b.png"
+        ],
+        "transparent_background": true,
+        "status": "UNSHIPPED layout correction"
+      },
+      "all-phase-generation-requests.json": {
+        "tool": "image_gen.imagegen",
+        "status": "UNSHIPPED first full-cycle art batch; orientations/native/event gates pending",
+        "requests": [
+          {
+            "label": "idle-fixed",
+            "prompt": "Production Frontier Command MYTHIC SWORDSMAN sprite sheet, matching the provided navy steel/brass knight reference exactly: cobalt plume, gold-rimmed round BLUE SUN shield in anatomical LEFT hand, short straight silver sword in anatomical RIGHT hand, blue cloth and brown boots. Preserve this identity, lighting, camera, proportions, weapon hands and clean polished toy-3D game style. True transparent RGBA, no cast shadow or effects.\nFOUR columns by FOUR rows; exactly16 sprites. Actor rotates under a fixed elevated isometric camera. Compass reading order: N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. These are screen-space headings clockwise from top. N away toward top (rear armor); E screenright profile; S toward bottom (front chest and gold visor); W screenleft profile. Adjacent headings smoothly interpolate without aliases or mirrored pixels. All16 sprites show ONE synchronized phase, not different phases assigned to columns.\nIMPORTANT CORRECTION TO PROVIDED GRID: row3 col4 WSW must face screen LEFT and slightly DOWN toward viewer, showing FRONT-LEFT chest/visor, shield outer sun visible, NOT rear armor. Row4 col2 WNW must face screen LEFT and slightly UP away from viewer, showing BACK-LEFT armor, mostly rear helmet, NOT front chest. Preserve correct directions for all other14 cells. NNE and NNW stay predominantly rear facing with subtle right/left bias. Never change anatomical sword/shield hands.\nKeep sprites SMALL with plume-to-boot body height135\u2013150px in the approximately1254square sheet. Each313.5px cell has huge empty gutters: foot-root local x156.75,y235; plume top around90; complete weapon/body pixels within local x50..264,y30..260. Weapon motion can use overhead padding but NEVER shrink body to accommodate weapon. Four-row scale uniform. No text, labels, grid, background, auras, sparks, impact flashes, motion streaks or detached weapon. All complete weapons and boots stay in their own cell. Ground root fixed while limbs move, do not travel across cells.\nIDLE PHASE: calm planted feet, shield guarded at chest side and sword low pointing forward along that actor's heading. Correct only the two specified orientations, preserve the other14 stance/directions. Exactly one stationary idle stance per heading.",
+            "referenced_image_paths": [
+              "/workspace/generated_images/exec-f519430b-d44e-452b-b5b9-14ac577224c0.png",
+              "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/approved-mythic-swordsman-static-reference.png"
+            ],
+            "transparent_background": true
+          },
+          {
+            "label": "walk-0",
+            "prompt": "Production Frontier Command MYTHIC SWORDSMAN sprite sheet, matching the provided navy steel/brass knight reference exactly: cobalt plume, gold-rimmed round BLUE SUN shield in anatomical LEFT hand, short straight silver sword in anatomical RIGHT hand, blue cloth and brown boots. Preserve this identity, lighting, camera, proportions, weapon hands and clean polished toy-3D game style. True transparent RGBA, no cast shadow or effects.\nFOUR columns by FOUR rows; exactly16 sprites. Actor rotates under a fixed elevated isometric camera. Compass reading order: N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. These are screen-space headings clockwise from top. N away toward top (rear armor); E screenright profile; S toward bottom (front chest and gold visor); W screenleft profile. Adjacent headings smoothly interpolate without aliases or mirrored pixels. All16 sprites show ONE synchronized phase, not different phases assigned to columns.\nIMPORTANT CORRECTION TO PROVIDED GRID: row3 col4 WSW must face screen LEFT and slightly DOWN toward viewer, showing FRONT-LEFT chest/visor, shield outer sun visible, NOT rear armor. Row4 col2 WNW must face screen LEFT and slightly UP away from viewer, showing BACK-LEFT armor, mostly rear helmet, NOT front chest. Preserve correct directions for all other14 cells. NNE and NNW stay predominantly rear facing with subtle right/left bias. Never change anatomical sword/shield hands.\nKeep sprites SMALL with plume-to-boot body height135\u2013150px in the approximately1254square sheet. Each313.5px cell has huge empty gutters: foot-root local x156.75,y235; plume top around90; complete weapon/body pixels within local x50..264,y30..260. Weapon motion can use overhead padding but NEVER shrink body to accommodate weapon. Four-row scale uniform. No text, labels, grid, background, auras, sparks, impact flashes, motion streaks or detached weapon. All complete weapons and boots stay in their own cell. Ground root fixed while limbs move, do not travel across cells.\nWALK PHASE0 LEFT CONTACT: anatomical LEFT boot extended FORWARD along own heading and firmly planted, RIGHT boot extended BACK with heel lifted; clear split stance. Shield stays left, sword right carried low; arms naturally counterbalance without changing grip. All16 have this same left-contact phase.",
+            "referenced_image_paths": [
+              "/workspace/generated_images/exec-f519430b-d44e-452b-b5b9-14ac577224c0.png",
+              "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/approved-mythic-swordsman-static-reference.png"
+            ],
+            "transparent_background": true
+          },
+          {
+            "label": "walk-1",
+            "prompt": "Production Frontier Command MYTHIC SWORDSMAN sprite sheet, matching the provided navy steel/brass knight reference exactly: cobalt plume, gold-rimmed round BLUE SUN shield in anatomical LEFT hand, short straight silver sword in anatomical RIGHT hand, blue cloth and brown boots. Preserve this identity, lighting, camera, proportions, weapon hands and clean polished toy-3D game style. True transparent RGBA, no cast shadow or effects.\nFOUR columns by FOUR rows; exactly16 sprites. Actor rotates under a fixed elevated isometric camera. Compass reading order: N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. These are screen-space headings clockwise from top. N away toward top (rear armor); E screenright profile; S toward bottom (front chest and gold visor); W screenleft profile. Adjacent headings smoothly interpolate without aliases or mirrored pixels. All16 sprites show ONE synchronized phase, not different phases assigned to columns.\nIMPORTANT CORRECTION TO PROVIDED GRID: row3 col4 WSW must face screen LEFT and slightly DOWN toward viewer, showing FRONT-LEFT chest/visor, shield outer sun visible, NOT rear armor. Row4 col2 WNW must face screen LEFT and slightly UP away from viewer, showing BACK-LEFT armor, mostly rear helmet, NOT front chest. Preserve correct directions for all other14 cells. NNE and NNW stay predominantly rear facing with subtle right/left bias. Never change anatomical sword/shield hands.\nKeep sprites SMALL with plume-to-boot body height135\u2013150px in the approximately1254square sheet. Each313.5px cell has huge empty gutters: foot-root local x156.75,y235; plume top around90; complete weapon/body pixels within local x50..264,y30..260. Weapon motion can use overhead padding but NEVER shrink body to accommodate weapon. Four-row scale uniform. No text, labels, grid, background, auras, sparks, impact flashes, motion streaks or detached weapon. All complete weapons and boots stay in their own cell. Ground root fixed while limbs move, do not travel across cells.\nWALK PHASE1 LEFT SUPPORT/RIGHT PASSING: LEFT boot planted UNDER pelvis; RIGHT knee raised moving FORWARD and right boot clear of ground. This is a distinct passing pose, not left-contact. Shield left, sword right low. Torso/root and overall body scale stay steady.",
+            "referenced_image_paths": [
+              "/workspace/generated_images/exec-f519430b-d44e-452b-b5b9-14ac577224c0.png",
+              "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/approved-mythic-swordsman-static-reference.png"
+            ],
+            "transparent_background": true
+          },
+          {
+            "label": "walk-2",
+            "prompt": "Production Frontier Command MYTHIC SWORDSMAN sprite sheet, matching the provided navy steel/brass knight reference exactly: cobalt plume, gold-rimmed round BLUE SUN shield in anatomical LEFT hand, short straight silver sword in anatomical RIGHT hand, blue cloth and brown boots. Preserve this identity, lighting, camera, proportions, weapon hands and clean polished toy-3D game style. True transparent RGBA, no cast shadow or effects.\nFOUR columns by FOUR rows; exactly16 sprites. Actor rotates under a fixed elevated isometric camera. Compass reading order: N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. These are screen-space headings clockwise from top. N away toward top (rear armor); E screenright profile; S toward bottom (front chest and gold visor); W screenleft profile. Adjacent headings smoothly interpolate without aliases or mirrored pixels. All16 sprites show ONE synchronized phase, not different phases assigned to columns.\nIMPORTANT CORRECTION TO PROVIDED GRID: row3 col4 WSW must face screen LEFT and slightly DOWN toward viewer, showing FRONT-LEFT chest/visor, shield outer sun visible, NOT rear armor. Row4 col2 WNW must face screen LEFT and slightly UP away from viewer, showing BACK-LEFT armor, mostly rear helmet, NOT front chest. Preserve correct directions for all other14 cells. NNE and NNW stay predominantly rear facing with subtle right/left bias. Never change anatomical sword/shield hands.\nKeep sprites SMALL with plume-to-boot body height135\u2013150px in the approximately1254square sheet. Each313.5px cell has huge empty gutters: foot-root local x156.75,y235; plume top around90; complete weapon/body pixels within local x50..264,y30..260. Weapon motion can use overhead padding but NEVER shrink body to accommodate weapon. Four-row scale uniform. No text, labels, grid, background, auras, sparks, impact flashes, motion streaks or detached weapon. All complete weapons and boots stay in their own cell. Ground root fixed while limbs move, do not travel across cells.\nWALK PHASE2 RIGHT CONTACT: anatomical RIGHT boot extended FORWARD along own heading and planted, LEFT boot extended BACK with heel lifted. Opposite leg-leading from walk0, visibly distinct, never a duplicated crop. Shield left, sword right low; arms naturally counterbalance.",
+            "referenced_image_paths": [
+              "/workspace/generated_images/exec-f519430b-d44e-452b-b5b9-14ac577224c0.png",
+              "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/approved-mythic-swordsman-static-reference.png"
+            ],
+            "transparent_background": true
+          },
+          {
+            "label": "walk-3",
+            "prompt": "Production Frontier Command MYTHIC SWORDSMAN sprite sheet, matching the provided navy steel/brass knight reference exactly: cobalt plume, gold-rimmed round BLUE SUN shield in anatomical LEFT hand, short straight silver sword in anatomical RIGHT hand, blue cloth and brown boots. Preserve this identity, lighting, camera, proportions, weapon hands and clean polished toy-3D game style. True transparent RGBA, no cast shadow or effects.\nFOUR columns by FOUR rows; exactly16 sprites. Actor rotates under a fixed elevated isometric camera. Compass reading order: N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. These are screen-space headings clockwise from top. N away toward top (rear armor); E screenright profile; S toward bottom (front chest and gold visor); W screenleft profile. Adjacent headings smoothly interpolate without aliases or mirrored pixels. All16 sprites show ONE synchronized phase, not different phases assigned to columns.\nIMPORTANT CORRECTION TO PROVIDED GRID: row3 col4 WSW must face screen LEFT and slightly DOWN toward viewer, showing FRONT-LEFT chest/visor, shield outer sun visible, NOT rear armor. Row4 col2 WNW must face screen LEFT and slightly UP away from viewer, showing BACK-LEFT armor, mostly rear helmet, NOT front chest. Preserve correct directions for all other14 cells. NNE and NNW stay predominantly rear facing with subtle right/left bias. Never change anatomical sword/shield hands.\nKeep sprites SMALL with plume-to-boot body height135\u2013150px in the approximately1254square sheet. Each313.5px cell has huge empty gutters: foot-root local x156.75,y235; plume top around90; complete weapon/body pixels within local x50..264,y30..260. Weapon motion can use overhead padding but NEVER shrink body to accommodate weapon. Four-row scale uniform. No text, labels, grid, background, auras, sparks, impact flashes, motion streaks or detached weapon. All complete weapons and boots stay in their own cell. Ground root fixed while limbs move, do not travel across cells.\nWALK PHASE3 RIGHT SUPPORT/LEFT PASSING: RIGHT boot planted UNDER pelvis; LEFT knee raised moving FORWARD and left boot clear of ground. Opposite passing leg from walk1. Shield left, sword right low; steady torso/root, clearly distinct pose.",
+            "referenced_image_paths": [
+              "/workspace/generated_images/exec-f519430b-d44e-452b-b5b9-14ac577224c0.png",
+              "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/approved-mythic-swordsman-static-reference.png"
+            ],
+            "transparent_background": true
+          },
+          {
+            "label": "attack-0",
+            "prompt": "Production Frontier Command MYTHIC SWORDSMAN sprite sheet, matching the provided navy steel/brass knight reference exactly: cobalt plume, gold-rimmed round BLUE SUN shield in anatomical LEFT hand, short straight silver sword in anatomical RIGHT hand, blue cloth and brown boots. Preserve this identity, lighting, camera, proportions, weapon hands and clean polished toy-3D game style. True transparent RGBA, no cast shadow or effects.\nFOUR columns by FOUR rows; exactly16 sprites. Actor rotates under a fixed elevated isometric camera. Compass reading order: N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. These are screen-space headings clockwise from top. N away toward top (rear armor); E screenright profile; S toward bottom (front chest and gold visor); W screenleft profile. Adjacent headings smoothly interpolate without aliases or mirrored pixels. All16 sprites show ONE synchronized phase, not different phases assigned to columns.\nIMPORTANT CORRECTION TO PROVIDED GRID: row3 col4 WSW must face screen LEFT and slightly DOWN toward viewer, showing FRONT-LEFT chest/visor, shield outer sun visible, NOT rear armor. Row4 col2 WNW must face screen LEFT and slightly UP away from viewer, showing BACK-LEFT armor, mostly rear helmet, NOT front chest. Preserve correct directions for all other14 cells. NNE and NNW stay predominantly rear facing with subtle right/left bias. Never change anatomical sword/shield hands.\nKeep sprites SMALL with plume-to-boot body height135\u2013150px in the approximately1254square sheet. Each313.5px cell has huge empty gutters: foot-root local x156.75,y235; plume top around90; complete weapon/body pixels within local x50..264,y30..260. Weapon motion can use overhead padding but NEVER shrink body to accommodate weapon. Four-row scale uniform. No text, labels, grid, background, auras, sparks, impact flashes, motion streaks or detached weapon. All complete weapons and boots stay in their own cell. Ground root fixed while limbs move, do not travel across cells.\nATTACK PHASE0 READY: feet widen slightly into planted fighting guard, knees bend, LEFT shield tucks protectively forward, RIGHT sword arm lifts sword near own right shoulder in readiness. Clear preparation distinct from calm idle. Body still aims along own compass heading. No slash effects.",
+            "referenced_image_paths": [
+              "/workspace/generated_images/exec-f519430b-d44e-452b-b5b9-14ac577224c0.png",
+              "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/approved-mythic-swordsman-static-reference.png"
+            ],
+            "transparent_background": true
+          },
+          {
+            "label": "attack-1",
+            "prompt": "Production Frontier Command MYTHIC SWORDSMAN sprite sheet, matching the provided navy steel/brass knight reference exactly: cobalt plume, gold-rimmed round BLUE SUN shield in anatomical LEFT hand, short straight silver sword in anatomical RIGHT hand, blue cloth and brown boots. Preserve this identity, lighting, camera, proportions, weapon hands and clean polished toy-3D game style. True transparent RGBA, no cast shadow or effects.\nFOUR columns by FOUR rows; exactly16 sprites. Actor rotates under a fixed elevated isometric camera. Compass reading order: N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. These are screen-space headings clockwise from top. N away toward top (rear armor); E screenright profile; S toward bottom (front chest and gold visor); W screenleft profile. Adjacent headings smoothly interpolate without aliases or mirrored pixels. All16 sprites show ONE synchronized phase, not different phases assigned to columns.\nIMPORTANT CORRECTION TO PROVIDED GRID: row3 col4 WSW must face screen LEFT and slightly DOWN toward viewer, showing FRONT-LEFT chest/visor, shield outer sun visible, NOT rear armor. Row4 col2 WNW must face screen LEFT and slightly UP away from viewer, showing BACK-LEFT armor, mostly rear helmet, NOT front chest. Preserve correct directions for all other14 cells. NNE and NNW stay predominantly rear facing with subtle right/left bias. Never change anatomical sword/shield hands.\nKeep sprites SMALL with plume-to-boot body height135\u2013150px in the approximately1254square sheet. Each313.5px cell has huge empty gutters: foot-root local x156.75,y235; plume top around90; complete weapon/body pixels within local x50..264,y30..260. Weapon motion can use overhead padding but NEVER shrink body to accommodate weapon. Four-row scale uniform. No text, labels, grid, background, auras, sparks, impact flashes, motion streaks or detached weapon. All complete weapons and boots stay in their own cell. Ground root fixed while limbs move, do not travel across cells.\nATTACK PHASE1 WINDUP: feet planted, RIGHT sword arm drawn BACK and raised ABOVE own RIGHT shoulder, blade angled backward/up; torso twists slightly back while keeping feet/body facing own compass heading. LEFT shield guards chest. Strong visible stored motion, distinct from ready. Highest sword tip can use y30 padding; fixed helmet/body scale.",
+            "referenced_image_paths": [
+              "/workspace/generated_images/exec-f519430b-d44e-452b-b5b9-14ac577224c0.png",
+              "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/approved-mythic-swordsman-static-reference.png"
+            ],
+            "transparent_background": true
+          },
+          {
+            "label": "attack-2",
+            "prompt": "Production Frontier Command MYTHIC SWORDSMAN sprite sheet, matching the provided navy steel/brass knight reference exactly: cobalt plume, gold-rimmed round BLUE SUN shield in anatomical LEFT hand, short straight silver sword in anatomical RIGHT hand, blue cloth and brown boots. Preserve this identity, lighting, camera, proportions, weapon hands and clean polished toy-3D game style. True transparent RGBA, no cast shadow or effects.\nFOUR columns by FOUR rows; exactly16 sprites. Actor rotates under a fixed elevated isometric camera. Compass reading order: N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. These are screen-space headings clockwise from top. N away toward top (rear armor); E screenright profile; S toward bottom (front chest and gold visor); W screenleft profile. Adjacent headings smoothly interpolate without aliases or mirrored pixels. All16 sprites show ONE synchronized phase, not different phases assigned to columns.\nIMPORTANT CORRECTION TO PROVIDED GRID: row3 col4 WSW must face screen LEFT and slightly DOWN toward viewer, showing FRONT-LEFT chest/visor, shield outer sun visible, NOT rear armor. Row4 col2 WNW must face screen LEFT and slightly UP away from viewer, showing BACK-LEFT armor, mostly rear helmet, NOT front chest. Preserve correct directions for all other14 cells. NNE and NNW stay predominantly rear facing with subtle right/left bias. Never change anatomical sword/shield hands.\nKeep sprites SMALL with plume-to-boot body height135\u2013150px in the approximately1254square sheet. Each313.5px cell has huge empty gutters: foot-root local x156.75,y235; plume top around90; complete weapon/body pixels within local x50..264,y30..260. Weapon motion can use overhead padding but NEVER shrink body to accommodate weapon. Four-row scale uniform. No text, labels, grid, background, auras, sparks, impact flashes, motion streaks or detached weapon. All complete weapons and boots stay in their own cell. Ground root fixed while limbs move, do not travel across cells.\nATTACK PHASE2 REAL HIT STRIKE: RIGHT sword arm drives FORWARD and DOWN in strong diagonal sword slash ALONG OWN HEADING toward enemy; knees bend/torso lean forward without moving ground-root. Blade is ahead of actor, not pointing backward. LEFT shield tucked protectively. For N blade extends upward/away, E blade extends RIGHT, S blade extends downward toward viewer, W blade extends LEFT; interpolate for all diagonals. Same short steel sword, no detached blade, no sparks/flashes/trails. Sword tip stays above ground line. This pose will begin only on the game's actual existing melee-hit event.",
+            "referenced_image_paths": [
+              "/workspace/generated_images/exec-f519430b-d44e-452b-b5b9-14ac577224c0.png",
+              "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/approved-mythic-swordsman-static-reference.png"
+            ],
+            "transparent_background": true
+          },
+          {
+            "label": "attack-3",
+            "prompt": "Production Frontier Command MYTHIC SWORDSMAN sprite sheet, matching the provided navy steel/brass knight reference exactly: cobalt plume, gold-rimmed round BLUE SUN shield in anatomical LEFT hand, short straight silver sword in anatomical RIGHT hand, blue cloth and brown boots. Preserve this identity, lighting, camera, proportions, weapon hands and clean polished toy-3D game style. True transparent RGBA, no cast shadow or effects.\nFOUR columns by FOUR rows; exactly16 sprites. Actor rotates under a fixed elevated isometric camera. Compass reading order: N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. These are screen-space headings clockwise from top. N away toward top (rear armor); E screenright profile; S toward bottom (front chest and gold visor); W screenleft profile. Adjacent headings smoothly interpolate without aliases or mirrored pixels. All16 sprites show ONE synchronized phase, not different phases assigned to columns.\nIMPORTANT CORRECTION TO PROVIDED GRID: row3 col4 WSW must face screen LEFT and slightly DOWN toward viewer, showing FRONT-LEFT chest/visor, shield outer sun visible, NOT rear armor. Row4 col2 WNW must face screen LEFT and slightly UP away from viewer, showing BACK-LEFT armor, mostly rear helmet, NOT front chest. Preserve correct directions for all other14 cells. NNE and NNW stay predominantly rear facing with subtle right/left bias. Never change anatomical sword/shield hands.\nKeep sprites SMALL with plume-to-boot body height135\u2013150px in the approximately1254square sheet. Each313.5px cell has huge empty gutters: foot-root local x156.75,y235; plume top around90; complete weapon/body pixels within local x50..264,y30..260. Weapon motion can use overhead padding but NEVER shrink body to accommodate weapon. Four-row scale uniform. No text, labels, grid, background, auras, sparks, impact flashes, motion streaks or detached weapon. All complete weapons and boots stay in their own cell. Ground root fixed while limbs move, do not travel across cells.\nATTACK PHASE3 RECOVERY: RIGHT sword arm pulls blade BACK from forward strike toward own right shoulder/low guard, torso returns upright, LEFT shield resumes defensive position, both boots remain planted at same root. Visibly different from hit and ready, no second invented attack. Maintain own compass heading and same identity.",
+            "referenced_image_paths": [
+              "/workspace/generated_images/exec-f519430b-d44e-452b-b5b9-14ac577224c0.png",
+              "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/approved-mythic-swordsman-static-reference.png"
+            ],
+            "transparent_background": true
+          }
+        ]
+      },
+      "all-phase-small-layout-requests.json": {
+        "tool": "image_gen.imagegen",
+        "status": "UNSHIPPED scale correction and ESE windup handedness correction; original144 retained",
+        "requests": [
+          {
+            "label": "idle-fixed-small",
+            "prompt": "Edit the attached EXACT16-heading MYTHIC SWORDSMAN idle-fixed sheet for production SCALE/LAYOUT. Preserve every existing compass heading, its single synchronized idle-fixed animation phase, navy steel/brass knight identity, cobalt plume, blue cloth, short silver sword RIGHT hand and round blue/gold SUN shield LEFT hand. Preserve the clear pose and exact gait/attack-phase silhouette of each of the16 existing sprites. True RGBA transparency, FOUR columns x FOUR rows, exactly16 sprites, same ordering.\nThe current1254x1254 sprite bodies are about190\u2013230px tall, too big. SHRINK EACH COMPLETE FIGURE TO70% OF ITS CURRENT SIZE. Final plume-to-boot BODY HEIGHT must be130\u2013155px, uniformly small in huge empty cells. Root local x156.75,y238, plume aroundy95. Complete sword/armor/shield/boots must stay inside local x50..263,y35..260. Center each sprite inside its SAME313.5square cell and NEVER enlarge it to fill empty space. Raised sword uses overhead padding, never a smaller torso. Do not travel the root, clip weapons/boots, or change body proportions, pose, direction, material or clothing. No extra sprite, labels/grid/background, cast shadows, sparkles, streaks, or effects. Scale/layout correction using image generation only.\n",
+            "referenced_image_paths": [
+              "/workspace/generated_images/exec-275fd74a-80c5-4b15-94af-4f6d3c3bf91f.png"
+            ],
+            "transparent_background": true
+          },
+          {
+            "label": "walk-1-small",
+            "prompt": "Edit the attached EXACT16-heading MYTHIC SWORDSMAN walk-1 sheet for production SCALE/LAYOUT. Preserve every existing compass heading, its single synchronized walk-1 animation phase, navy steel/brass knight identity, cobalt plume, blue cloth, short silver sword RIGHT hand and round blue/gold SUN shield LEFT hand. Preserve the clear pose and exact gait/attack-phase silhouette of each of the16 existing sprites. True RGBA transparency, FOUR columns x FOUR rows, exactly16 sprites, same ordering.\nThe current1254x1254 sprite bodies are about190\u2013230px tall, too big. SHRINK EACH COMPLETE FIGURE TO70% OF ITS CURRENT SIZE. Final plume-to-boot BODY HEIGHT must be130\u2013155px, uniformly small in huge empty cells. Root local x156.75,y238, plume aroundy95. Complete sword/armor/shield/boots must stay inside local x50..263,y35..260. Center each sprite inside its SAME313.5square cell and NEVER enlarge it to fill empty space. Raised sword uses overhead padding, never a smaller torso. Do not travel the root, clip weapons/boots, or change body proportions, pose, direction, material or clothing. No extra sprite, labels/grid/background, cast shadows, sparkles, streaks, or effects. Scale/layout correction using image generation only.\n",
+            "referenced_image_paths": [
+              "/workspace/generated_images/exec-120d7ca9-55fb-4aa0-adc3-66d7ec5aba71.png"
+            ],
+            "transparent_background": true
+          },
+          {
+            "label": "walk-2-small",
+            "prompt": "Edit the attached EXACT16-heading MYTHIC SWORDSMAN walk-2 sheet for production SCALE/LAYOUT. Preserve every existing compass heading, its single synchronized walk-2 animation phase, navy steel/brass knight identity, cobalt plume, blue cloth, short silver sword RIGHT hand and round blue/gold SUN shield LEFT hand. Preserve the clear pose and exact gait/attack-phase silhouette of each of the16 existing sprites. True RGBA transparency, FOUR columns x FOUR rows, exactly16 sprites, same ordering.\nThe current1254x1254 sprite bodies are about190\u2013230px tall, too big. SHRINK EACH COMPLETE FIGURE TO70% OF ITS CURRENT SIZE. Final plume-to-boot BODY HEIGHT must be130\u2013155px, uniformly small in huge empty cells. Root local x156.75,y238, plume aroundy95. Complete sword/armor/shield/boots must stay inside local x50..263,y35..260. Center each sprite inside its SAME313.5square cell and NEVER enlarge it to fill empty space. Raised sword uses overhead padding, never a smaller torso. Do not travel the root, clip weapons/boots, or change body proportions, pose, direction, material or clothing. No extra sprite, labels/grid/background, cast shadows, sparkles, streaks, or effects. Scale/layout correction using image generation only.\n",
+            "referenced_image_paths": [
+              "/workspace/generated_images/exec-28ef3ace-7162-48ee-a204-604ce03b25bb.png"
+            ],
+            "transparent_background": true
+          },
+          {
+            "label": "walk-3-small",
+            "prompt": "Edit the attached EXACT16-heading MYTHIC SWORDSMAN walk-3 sheet for production SCALE/LAYOUT. Preserve every existing compass heading, its single synchronized walk-3 animation phase, navy steel/brass knight identity, cobalt plume, blue cloth, short silver sword RIGHT hand and round blue/gold SUN shield LEFT hand. Preserve the clear pose and exact gait/attack-phase silhouette of each of the16 existing sprites. True RGBA transparency, FOUR columns x FOUR rows, exactly16 sprites, same ordering.\nThe current1254x1254 sprite bodies are about190\u2013230px tall, too big. SHRINK EACH COMPLETE FIGURE TO70% OF ITS CURRENT SIZE. Final plume-to-boot BODY HEIGHT must be130\u2013155px, uniformly small in huge empty cells. Root local x156.75,y238, plume aroundy95. Complete sword/armor/shield/boots must stay inside local x50..263,y35..260. Center each sprite inside its SAME313.5square cell and NEVER enlarge it to fill empty space. Raised sword uses overhead padding, never a smaller torso. Do not travel the root, clip weapons/boots, or change body proportions, pose, direction, material or clothing. No extra sprite, labels/grid/background, cast shadows, sparkles, streaks, or effects. Scale/layout correction using image generation only.\n",
+            "referenced_image_paths": [
+              "/workspace/generated_images/exec-ab4ce27b-fe02-4552-b215-fa5fb86d38de.png"
+            ],
+            "transparent_background": true
+          },
+          {
+            "label": "walk-0-small",
+            "prompt": "Edit the attached EXACT16-heading MYTHIC SWORDSMAN walk-0 sheet for production SCALE/LAYOUT. Preserve every existing compass heading, its single synchronized walk-0 animation phase, navy steel/brass knight identity, cobalt plume, blue cloth, short silver sword RIGHT hand and round blue/gold SUN shield LEFT hand. Preserve the clear pose and exact gait/attack-phase silhouette of each of the16 existing sprites. True RGBA transparency, FOUR columns x FOUR rows, exactly16 sprites, same ordering.\nThe current1254x1254 sprite bodies are about190\u2013230px tall, too big. SHRINK EACH COMPLETE FIGURE TO70% OF ITS CURRENT SIZE. Final plume-to-boot BODY HEIGHT must be130\u2013155px, uniformly small in huge empty cells. Root local x156.75,y238, plume aroundy95. Complete sword/armor/shield/boots must stay inside local x50..263,y35..260. Center each sprite inside its SAME313.5square cell and NEVER enlarge it to fill empty space. Raised sword uses overhead padding, never a smaller torso. Do not travel the root, clip weapons/boots, or change body proportions, pose, direction, material or clothing. No extra sprite, labels/grid/background, cast shadows, sparkles, streaks, or effects. Scale/layout correction using image generation only.\n",
+            "referenced_image_paths": [
+              "/workspace/generated_images/exec-f1337a46-e3f8-468c-805f-b0be052fcc61.png"
+            ],
+            "transparent_background": true
+          },
+          {
+            "label": "attack-0-small",
+            "prompt": "Edit the attached EXACT16-heading MYTHIC SWORDSMAN attack-0 sheet for production SCALE/LAYOUT. Preserve every existing compass heading, its single synchronized attack-0 animation phase, navy steel/brass knight identity, cobalt plume, blue cloth, short silver sword RIGHT hand and round blue/gold SUN shield LEFT hand. Preserve the clear pose and exact gait/attack-phase silhouette of each of the16 existing sprites. True RGBA transparency, FOUR columns x FOUR rows, exactly16 sprites, same ordering.\nThe current1254x1254 sprite bodies are about190\u2013230px tall, too big. SHRINK EACH COMPLETE FIGURE TO70% OF ITS CURRENT SIZE. Final plume-to-boot BODY HEIGHT must be130\u2013155px, uniformly small in huge empty cells. Root local x156.75,y238, plume aroundy95. Complete sword/armor/shield/boots must stay inside local x50..263,y35..260. Center each sprite inside its SAME313.5square cell and NEVER enlarge it to fill empty space. Raised sword uses overhead padding, never a smaller torso. Do not travel the root, clip weapons/boots, or change body proportions, pose, direction, material or clothing. No extra sprite, labels/grid/background, cast shadows, sparkles, streaks, or effects. Scale/layout correction using image generation only.\n",
+            "referenced_image_paths": [
+              "/workspace/generated_images/exec-7c1911ae-f8ff-4ea0-94c3-6c4dc18c6e9e.png"
+            ],
+            "transparent_background": true
+          },
+          {
+            "label": "attack-1-small",
+            "prompt": "Edit the attached EXACT16-heading MYTHIC SWORDSMAN attack-1 sheet for production SCALE/LAYOUT. Preserve every existing compass heading, its single synchronized attack-1 animation phase, navy steel/brass knight identity, cobalt plume, blue cloth, short silver sword RIGHT hand and round blue/gold SUN shield LEFT hand. Preserve the clear pose and exact gait/attack-phase silhouette of each of the16 existing sprites. True RGBA transparency, FOUR columns x FOUR rows, exactly16 sprites, same ordering.\nThe current1254x1254 sprite bodies are about190\u2013230px tall, too big. SHRINK EACH COMPLETE FIGURE TO70% OF ITS CURRENT SIZE. Final plume-to-boot BODY HEIGHT must be130\u2013155px, uniformly small in huge empty cells. Root local x156.75,y238, plume aroundy95. Complete sword/armor/shield/boots must stay inside local x50..263,y35..260. Center each sprite inside its SAME313.5square cell and NEVER enlarge it to fill empty space. Raised sword uses overhead padding, never a smaller torso. Do not travel the root, clip weapons/boots, or change body proportions, pose, direction, material or clothing. No extra sprite, labels/grid/background, cast shadows, sparkles, streaks, or effects. Scale/layout correction using image generation only.\nONE REQUIRED ANATOMICAL CORRECTION: row2,col2 ESE windup currently puts the blue SUN shield on the wrong side/hand. Fix that cell to retain sword in the character's RIGHT hand (nearer the viewer for right-facing ESE) and shield in LEFT hand on the FAR side behind/right of chest, as in E/ESE cells of the approved idle. Gold SUN should be partly occluded/edge-on, not a big front-facing shield on screen-left. RIGHT sword arm winds up above OWN right shoulder; LEFT shield remains on far side. Preserve other15 directions and weapon hands unchanged. Keep ESE helmet/feet aimed down-right.\n",
+            "referenced_image_paths": [
+              "/workspace/generated_images/exec-48d9d3be-585b-4c10-9864-ebb2bdcf7e4b.png"
+            ],
+            "transparent_background": true
+          },
+          {
+            "label": "attack-2-small",
+            "prompt": "Edit the attached EXACT16-heading MYTHIC SWORDSMAN attack-2 sheet for production SCALE/LAYOUT. Preserve every existing compass heading, its single synchronized attack-2 animation phase, navy steel/brass knight identity, cobalt plume, blue cloth, short silver sword RIGHT hand and round blue/gold SUN shield LEFT hand. Preserve the clear pose and exact gait/attack-phase silhouette of each of the16 existing sprites. True RGBA transparency, FOUR columns x FOUR rows, exactly16 sprites, same ordering.\nThe current1254x1254 sprite bodies are about190\u2013230px tall, too big. SHRINK EACH COMPLETE FIGURE TO70% OF ITS CURRENT SIZE. Final plume-to-boot BODY HEIGHT must be130\u2013155px, uniformly small in huge empty cells. Root local x156.75,y238, plume aroundy95. Complete sword/armor/shield/boots must stay inside local x50..263,y35..260. Center each sprite inside its SAME313.5square cell and NEVER enlarge it to fill empty space. Raised sword uses overhead padding, never a smaller torso. Do not travel the root, clip weapons/boots, or change body proportions, pose, direction, material or clothing. No extra sprite, labels/grid/background, cast shadows, sparkles, streaks, or effects. Scale/layout correction using image generation only.\n",
+            "referenced_image_paths": [
+              "/workspace/generated_images/exec-ec2eb0aa-db3f-4ebe-ba0c-0fb02ea6c304.png"
+            ],
+            "transparent_background": true
+          },
+          {
+            "label": "attack-3-small",
+            "prompt": "Edit the attached EXACT16-heading MYTHIC SWORDSMAN attack-3 sheet for production SCALE/LAYOUT. Preserve every existing compass heading, its single synchronized attack-3 animation phase, navy steel/brass knight identity, cobalt plume, blue cloth, short silver sword RIGHT hand and round blue/gold SUN shield LEFT hand. Preserve the clear pose and exact gait/attack-phase silhouette of each of the16 existing sprites. True RGBA transparency, FOUR columns x FOUR rows, exactly16 sprites, same ordering.\nThe current1254x1254 sprite bodies are about190\u2013230px tall, too big. SHRINK EACH COMPLETE FIGURE TO70% OF ITS CURRENT SIZE. Final plume-to-boot BODY HEIGHT must be130\u2013155px, uniformly small in huge empty cells. Root local x156.75,y238, plume aroundy95. Complete sword/armor/shield/boots must stay inside local x50..263,y35..260. Center each sprite inside its SAME313.5square cell and NEVER enlarge it to fill empty space. Raised sword uses overhead padding, never a smaller torso. Do not travel the root, clip weapons/boots, or change body proportions, pose, direction, material or clothing. No extra sprite, labels/grid/background, cast shadows, sparkles, streaks, or effects. Scale/layout correction using image generation only.\n",
+            "referenced_image_paths": [
+              "/workspace/generated_images/exec-5ec9dbba-1294-4f25-a581-92ae8ac09bb0.png"
+            ],
+            "transparent_background": true
+          }
+        ]
+      },
+      "focused-wsw-walk1-request.json": {
+        "tool": "image_gen.imagegen",
+        "prompt": "Correct one specific MYTHIC SWORDSMAN directional WALK sprite from the attached approved WSW IDLE reference. Preserve EXACT anatomy and viewpoint from that first approved idle crop: gold-visor helmet and FRONT chest visible; facing screen LEFT and a little DOWN toward viewer (WSW,22.5degrees south of west). The anatomical RIGHT sword hand is on the LEFT/front of the picture holding the silver blade low toward screenleft. The anatomical LEFT round blue SUN shield remains on the RIGHT/front of the picture, with its sun face visible. DO NOT use the back-facing pose or swapped shield from the second attached rejected walking crop. The second crop only explains what to correct.\n\nCreate a TRUE transparent RGBA sheet with FOUR candidate variations in TWO columns x TWO rows, ALL THE SAME WSW HEADING and SAME WALK-PHASE1. Phase1: anatomical LEFT leg supports under pelvis; anatomical RIGHT knee raised stepping FORWARD toward screenleft/down, right boot clearly lifted off ground. Keep torso/helmet facing the correct FRONT-LEFT WSW view, exactly as approved first image. Sword stays right hand/near-screenleft, shield stays left hand/near-screenright. Clear passing leg pose, not a stationary idle or contact stride. Four subtle variants of this same pose for selection, NOT4 directions or4 animation phases.\n\nExact navy steel armor, brass trims, cobalt-blue plume, blue cloth skirt, brown gloves/boots and gold-rimmed SUN shield. Short steel sword, no red cape or other costume. Fixed elevated isometric camera and lighting. Each figure SMALL: plume-to-boot body height140\u2013160px, in very large transparent627square cells of1254square total canvas. Ground root cell-local x313,y415; plume aroundy265. Complete figure/weapon fits local x205..425,y230..440 with huge transparent gutters. Four full isolated sprites only, clean antialiased opaque bodies, no cast ground shadows, effects, motion trails, labels, text, grid or background. Preserve fixed torso size while the leg passes.",
+        "referenced_image_paths": [
+          "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/idle-fixed-small-swordsman-WSW-idle.png",
+          "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-1-small-swordsman-WSW-walk-1.png"
+        ],
+        "transparent_background": true,
+        "status": "UNSHIPPED focused WSW passing-pose handedness/orientation correction"
+      }
+    },
+    "selectedSources": [
+      {
+        "label": "idle-fixed-small",
+        "original": "/workspace/generated_images/exec-27592c28-2d0b-4ede-9147-01a14499e013.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/idle-fixed-small-original.png",
+        "sourceSHA256": "cebd89fa822f0aef49b5cd61a1931f94d339787b5b7df16e32358ad4194e41c0"
+      },
+      {
+        "label": "walk-0-small",
+        "original": "/workspace/generated_images/exec-b8cd5e7f-19b3-4cb6-b36a-1862dd2c89d9.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-0-small-original.png",
+        "sourceSHA256": "3c30f85b2586e0bf840f3b3a6316a883643776d53d2a3c8722af54f8fde56562"
+      },
+      {
+        "label": "walk-1-small",
+        "original": "/workspace/generated_images/exec-866d69f6-ada1-4eb3-a8c0-21e998a4bfe2.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-1-small-original.png",
+        "sourceSHA256": "3667013c57f072bec82d120f2961a5602ff4cf1ca486ac4c52926ffd2ac54f9b"
+      },
+      {
+        "label": "walk-2-small",
+        "original": "/workspace/generated_images/exec-c3b7b386-cf5d-42ad-8b7a-876aebc36cbc.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-2-small-original.png",
+        "sourceSHA256": "f9df0e57c30c3a39315deb211cd5210aebeedf6ba1c8798cbd842eb982264654"
+      },
+      {
+        "label": "walk-3-small",
+        "original": "/workspace/generated_images/exec-036c02e0-be8d-4656-ac56-937090c92762.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-3-small-original.png",
+        "sourceSHA256": "10e5a1791dbaff5cda837222becd5ef73281df97ccd3533bae4ade5d85f217ee"
+      },
+      {
+        "label": "attack-0-small",
+        "original": "/workspace/generated_images/exec-c666144c-8dc0-4191-8afc-6603121726ca.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-0-small-original.png",
+        "sourceSHA256": "e62c466e39f6f897c29d91c2c5b83efa676a8012bedee104d88b69144b73203b"
+      },
+      {
+        "label": "attack-1-small",
+        "original": "/workspace/generated_images/exec-9fe5197c-3891-4779-b645-6b048e4de208.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-1-small-original.png",
+        "sourceSHA256": "f696ea19ed8060dbcc107ffcc4a1bf751a467cb9413aff2820bab7f64cd05e98"
+      },
+      {
+        "label": "attack-2-small",
+        "original": "/workspace/generated_images/exec-bf0d6d84-3dd9-4ddd-9e98-a944687e425e.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-2-small-original.png",
+        "sourceSHA256": "e7882f582b3f6c0221f52846955b04d4b3fd9ae25e30d62e3a01ae9048301e91"
+      },
+      {
+        "label": "attack-3-small",
+        "original": "/workspace/generated_images/exec-f6769056-96dd-458f-882d-2d206f09eb39.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-3-small-original.png",
+        "sourceSHA256": "8a8fce5f7dfe18cb03ffdabd95eb319e876da4aca0e682da3053b0c484b3876c"
+      },
+      {
+        "label": "focused-wsw-walk1-selected",
+        "original": "/workspace/generated_images/exec-bdba3401-6421-4eda-a93a-62bec01f9a4c.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/focused-wsw-walk1-original.png",
+        "sourceSHA256": "13612d24eff4b17474f690fa029fb861b561bcf516505173b20a95c89da8ea6b"
+      }
+    ],
+    "selectedFrames": [
+      {
+        "id": "swordsman-N-idle",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/idle-fixed-small-swordsman-N-idle.png",
+        "sourceRect": [
+          86,
+          128,
+          160,
+          164
+        ],
+        "packedRect": [
+          1269,
+          2446,
+          160,
+          164
+        ],
+        "rgbaSHA256": "f220dad417c8c9d006cf53621bc4ca86bcd4f212a543f1c87e5e3498ab894b4b"
+      },
+      {
+        "id": "swordsman-NNE-idle",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/idle-fixed-small-swordsman-NNE-idle.png",
+        "sourceRect": [
+          401,
+          128,
+          159,
+          165
+        ],
+        "packedRect": [
+          1433,
+          1760,
+          159,
+          165
+        ],
+        "rgbaSHA256": "516dd081fbf27e5dd4a08e5da4a73f3c32504f1e40ccd73eccb01c24e0c1131c"
+      },
+      {
+        "id": "swordsman-NE-idle",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/idle-fixed-small-swordsman-NE-idle.png",
+        "sourceRect": [
+          723,
+          128,
+          161,
+          165
+        ],
+        "packedRect": [
+          1419,
+          1929,
+          161,
+          165
+        ],
+        "rgbaSHA256": "53e26f71eb7b49f9b8ad19b801116ee88fd6ff2aae17a7e8dfb0d18c48adbbcf"
+      },
+      {
+        "id": "swordsman-ENE-idle",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/idle-fixed-small-swordsman-ENE-idle.png",
+        "sourceRect": [
+          1041,
+          127,
+          155,
+          166
+        ],
+        "packedRect": [
+          1129,
+          2276,
+          155,
+          166
+        ],
+        "rgbaSHA256": "74e5e14888713246d79a01d67a00f95c0d2480398efc91bcab8deca366296370"
+      },
+      {
+        "id": "swordsman-E-idle",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/idle-fixed-small-swordsman-E-idle.png",
+        "sourceRect": [
+          114,
+          413,
+          143,
+          175
+        ],
+        "packedRect": [
+          317,
+          2014,
+          143,
+          175
+        ],
+        "rgbaSHA256": "a189b9998a06e1ba91c7fd6cdd68b838e1d1a6d13570bd5c1b2f38684af6498d"
+      },
+      {
+        "id": "swordsman-ESE-idle",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/idle-fixed-small-swordsman-ESE-idle.png",
+        "sourceRect": [
+          432,
+          412,
+          138,
+          177
+        ],
+        "packedRect": [
+          2,
+          1654,
+          138,
+          177
+        ],
+        "rgbaSHA256": "72f22330d2d29dc2cb088fbd65d33a8f380b33a32fd8e505f4dea26fcab9d28f"
+      },
+      {
+        "id": "swordsman-SE-idle",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/idle-fixed-small-swordsman-SE-idle.png",
+        "sourceRect": [
+          740,
+          412,
+          138,
+          177
+        ],
+        "packedRect": [
+          2,
+          2197,
+          138,
+          177
+        ],
+        "rgbaSHA256": "7855d56b5743dcbf748f0cc1b295017ac5044d7103bd8754b2f84a58b66048a3"
+      },
+      {
+        "id": "swordsman-SSE-idle",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/idle-fixed-small-swordsman-SSE-idle.png",
+        "sourceRect": [
+          1026,
+          412,
+          168,
+          177
+        ],
+        "packedRect": [
+          1336,
+          1579,
+          168,
+          177
+        ],
+        "rgbaSHA256": "fc0bfc89f39dacabd54753f59cd634255a345892306fb918149c5f28d95d758a"
+      },
+      {
+        "id": "swordsman-S-idle",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/idle-fixed-small-swordsman-S-idle.png",
+        "sourceRect": [
+          80,
+          694,
+          168,
+          170
+        ],
+        "packedRect": [
+          681,
+          2111,
+          168,
+          170
+        ],
+        "rgbaSHA256": "63c759890aa51de4c3395c171f0f9e44a9b7cea004f3eaca6a3725f2fe5b47ae"
+      },
+      {
+        "id": "swordsman-SSW-idle",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/idle-fixed-small-swordsman-SSW-idle.png",
+        "sourceRect": [
+          395,
+          694,
+          163,
+          172
+        ],
+        "packedRect": [
+          361,
+          2369,
+          163,
+          172
+        ],
+        "rgbaSHA256": "a13c7770ee91daca5a5832cfc8c312bc96d1a5c5d8eed6bb822a5dc6f3e3838a"
+      },
+      {
+        "id": "swordsman-SW-idle",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/idle-fixed-small-swordsman-SW-idle.png",
+        "sourceRect": [
+          700,
+          697,
+          157,
+          171
+        ],
+        "packedRect": [
+          609,
+          1936,
+          157,
+          171
+        ],
+        "rgbaSHA256": "d6519e53bf24041eec842ccbdc36e027371e2636fe3754be615116ade435e8d5"
+      },
+      {
+        "id": "swordsman-WSW-idle",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/idle-fixed-small-swordsman-WSW-idle.png",
+        "sourceRect": [
+          1027,
+          697,
+          153,
+          169
+        ],
+        "packedRect": [
+          816,
+          2285,
+          153,
+          169
+        ],
+        "rgbaSHA256": "fd9cd5817852e0e91249cff78673c13a98046e527b063a72d7cff272b5b52462"
+      },
+      {
+        "id": "swordsman-W-idle",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/idle-fixed-small-swordsman-W-idle.png",
+        "sourceRect": [
+          70,
+          977,
+          144,
+          169
+        ],
+        "packedRect": [
+          853,
+          2109,
+          144,
+          169
+        ],
+        "rgbaSHA256": "aefd2fbebaff337cc1d697c97b71b4e85b201b3692cdb210b2d9a3941c5f924c"
+      },
+      {
+        "id": "swordsman-WNW-idle",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/idle-fixed-small-swordsman-WNW-idle.png",
+        "sourceRect": [
+          398,
+          978,
+          138,
+          167
+        ],
+        "packedRect": [
+          1097,
+          1760,
+          138,
+          167
+        ],
+        "rgbaSHA256": "4c54043440b7e96530a824bc896631c59775575e6b2bc4e661be2f9e9bc71510"
+      },
+      {
+        "id": "swordsman-NW-idle",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/idle-fixed-small-swordsman-NW-idle.png",
+        "sourceRect": [
+          709,
+          978,
+          139,
+          167
+        ],
+        "packedRect": [
+          1001,
+          2105,
+          139,
+          167
+        ],
+        "rgbaSHA256": "e2f3fd9be1feb95fcaff900cd3b62701cdf0ae005ce26d5030dcdcc0d23ec66b"
+      },
+      {
+        "id": "swordsman-NNW-idle",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/idle-fixed-small-swordsman-NNW-idle.png",
+        "sourceRect": [
+          1032,
+          976,
+          156,
+          168
+        ],
+        "packedRect": [
+          920,
+          1933,
+          156,
+          168
+        ],
+        "rgbaSHA256": "f0725153914a0025a95f6f16e35b6c46a59a4ed17536cbec8b4f2215b7483f75"
+      },
+      {
+        "id": "swordsman-N-walk-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-0-small-swordsman-N-walk-0.png",
+        "sourceRect": [
+          78,
+          83,
+          168,
+          199
+        ],
+        "packedRect": [
+          493,
+          425,
+          168,
+          199
+        ],
+        "rgbaSHA256": "8cd5533853bfa74ea808487f6cc46dd414b79fd7c0e726626aaaef2c8798ca5f"
+      },
+      {
+        "id": "swordsman-NNE-walk-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-0-small-swordsman-NNE-walk-0.png",
+        "sourceRect": [
+          402,
+          86,
+          167,
+          195
+        ],
+        "packedRect": [
+          2,
+          707,
+          167,
+          195
+        ],
+        "rgbaSHA256": "1655aa147cacaaa57bc33ef0c75437e84223d560c4f8dcfce88daba27a945e92"
+      },
+      {
+        "id": "swordsman-NE-walk-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-0-small-swordsman-NE-walk-0.png",
+        "sourceRect": [
+          712,
+          87,
+          173,
+          197
+        ],
+        "packedRect": [
+          1301,
+          623,
+          173,
+          197
+        ],
+        "rgbaSHA256": "ab673a3d5806bd190263e343257eec25e7dfb6115e28cadb9a591cd69423ea69"
+      },
+      {
+        "id": "swordsman-ENE-walk-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-0-small-swordsman-ENE-walk-0.png",
+        "sourceRect": [
+          1026,
+          90,
+          164,
+          198
+        ],
+        "packedRect": [
+          2,
+          505,
+          164,
+          198
+        ],
+        "rgbaSHA256": "0afb0098c5022ed05c7293e0c4afe6030d5a8ade8b57b73729ad58856c63ec9d"
+      },
+      {
+        "id": "swordsman-E-walk-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-0-small-swordsman-E-walk-0.png",
+        "sourceRect": [
+          99,
+          397,
+          160,
+          201
+        ],
+        "packedRect": [
+          970,
+          219,
+          160,
+          201
+        ],
+        "rgbaSHA256": "b1f853e2be43ad1445a1e246a8568b3d825395d62561af224b66bfdc754160ae"
+      },
+      {
+        "id": "swordsman-ESE-walk-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-0-small-swordsman-ESE-walk-0.png",
+        "sourceRect": [
+          418,
+          400,
+          155,
+          197
+        ],
+        "packedRect": [
+          990,
+          626,
+          155,
+          197
+        ],
+        "rgbaSHA256": "a15d14b868e98905a9caf6954d118cec7237a302169a04a2b23b01b933e1cf97"
+      },
+      {
+        "id": "swordsman-SE-walk-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-0-small-swordsman-SE-walk-0.png",
+        "sourceRect": [
+          731,
+          399,
+          156,
+          200
+        ],
+        "packedRect": [
+          667,
+          424,
+          156,
+          200
+        ],
+        "rgbaSHA256": "6db523adad785f5b932a6eafaef89c9cde900e717ce62a236138d30ffb84a4b7"
+      },
+      {
+        "id": "swordsman-SSE-walk-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-0-small-swordsman-SSE-walk-0.png",
+        "sourceRect": [
+          1019,
+          397,
+          174,
+          202
+        ],
+        "packedRect": [
+          1271,
+          216,
+          174,
+          202
+        ],
+        "rgbaSHA256": "eff6f8685be0a5d4a16c6c0ba4f1fdba2ee4212a9c46682778e23d433f25a0a9"
+      },
+      {
+        "id": "swordsman-S-walk-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-0-small-swordsman-S-walk-0.png",
+        "sourceRect": [
+          77,
+          699,
+          173,
+          193
+        ],
+        "packedRect": [
+          1149,
+          824,
+          173,
+          193
+        ],
+        "rgbaSHA256": "27a134c177deb3aaba19d75edc46fceb8591ac4c5ef5d1165949fcce4c033a3a"
+      },
+      {
+        "id": "swordsman-SSW-walk-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-0-small-swordsman-SSW-walk-0.png",
+        "sourceRect": [
+          388,
+          701,
+          163,
+          192
+        ],
+        "packedRect": [
+          1326,
+          824,
+          163,
+          192
+        ],
+        "rgbaSHA256": "2f6934451b3e5a61c44c5ff680de10e08512b977120dfce2de5cacf22f8e1a34"
+      },
+      {
+        "id": "swordsman-SW-walk-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-0-small-swordsman-SW-walk-0.png",
+        "sourceRect": [
+          707,
+          701,
+          159,
+          197
+        ],
+        "packedRect": [
+          827,
+          626,
+          159,
+          197
+        ],
+        "rgbaSHA256": "c3302c4645ff484b3ec19caaaa3271b63301524ad49cd9c69a7ff76d77706bff"
+      },
+      {
+        "id": "swordsman-WSW-walk-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-0-small-swordsman-WSW-walk-0.png",
+        "sourceRect": [
+          1018,
+          700,
+          164,
+          198
+        ],
+        "packedRect": [
+          170,
+          505,
+          164,
+          198
+        ],
+        "rgbaSHA256": "5b503f8df3fb14c1904334e6ca0414da2a87b27f05f92c56779ee74dad6f7320"
+      },
+      {
+        "id": "swordsman-W-walk-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-0-small-swordsman-W-walk-0.png",
+        "sourceRect": [
+          68,
+          994,
+          162,
+          186
+        ],
+        "packedRect": [
+          866,
+          827,
+          162,
+          186
+        ],
+        "rgbaSHA256": "6db7e6f000911ad27f450d0d31f22185d3bfcd1cdbc5e5e4b1da9bab701f90a8"
+      },
+      {
+        "id": "swordsman-WNW-walk-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-0-small-swordsman-WNW-walk-0.png",
+        "sourceRect": [
+          391,
+          997,
+          159,
+          182
+        ],
+        "packedRect": [
+          843,
+          1206,
+          159,
+          182
+        ],
+        "rgbaSHA256": "230500b7c3b0cf250caf868bd3e264c2282641700b21ec1af5aedc5a10cee0b0"
+      },
+      {
+        "id": "swordsman-NW-walk-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-0-small-swordsman-NW-walk-0.png",
+        "sourceRect": [
+          701,
+          993,
+          163,
+          185
+        ],
+        "packedRect": [
+          888,
+          1017,
+          163,
+          185
+        ],
+        "rgbaSHA256": "85be3110dab5c51041139beedfa1699fb2177435ee000ee290bd7dbf2ac03f43"
+      },
+      {
+        "id": "swordsman-NNW-walk-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-0-small-swordsman-NNW-walk-0.png",
+        "sourceRect": [
+          1021,
+          993,
+          169,
+          195
+        ],
+        "packedRect": [
+          509,
+          628,
+          169,
+          195
+        ],
+        "rgbaSHA256": "93b5df2c5566b94fcdcc3b6ccad39367ab04eb722c8fbe6298147b03aa9dd633"
+      },
+      {
+        "id": "swordsman-N-walk-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-1-small-swordsman-N-walk-1.png",
+        "sourceRect": [
+          87,
+          123,
+          161,
+          180
+        ],
+        "packedRect": [
+          1500,
+          1211,
+          161,
+          180
+        ],
+        "rgbaSHA256": "3bf4063589c5722f173c8ad72bc59051cb7b8e2f1a534ead5338290d8b62cb7a"
+      },
+      {
+        "id": "swordsman-NNE-walk-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-1-small-swordsman-NNE-walk-1.png",
+        "sourceRect": [
+          414,
+          120,
+          157,
+          182
+        ],
+        "packedRect": [
+          1006,
+          1210,
+          157,
+          182
+        ],
+        "rgbaSHA256": "e646f5cfb9d8b95c1b33927b5f35c8019a31f8400f54957177d5fb4aae6ddf81"
+      },
+      {
+        "id": "swordsman-NE-walk-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-1-small-swordsman-NE-walk-1.png",
+        "sourceRect": [
+          727,
+          117,
+          161,
+          185
+        ],
+        "packedRect": [
+          1055,
+          1021,
+          161,
+          185
+        ],
+        "rgbaSHA256": "4c7f0802d436937f5ff1f0dd85bcfe45b6b0fdbf171a92583e4e9e702c7137e7"
+      },
+      {
+        "id": "swordsman-ENE-walk-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-1-small-swordsman-ENE-walk-1.png",
+        "sourceRect": [
+          1036,
+          118,
+          165,
+          186
+        ],
+        "packedRect": [
+          2,
+          906,
+          165,
+          186
+        ],
+        "rgbaSHA256": "27c00e68f4ee2039538aa99efa3d356681e11678497534e8a38e6efa0cf7c14a"
+      },
+      {
+        "id": "swordsman-E-walk-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-1-small-swordsman-E-walk-1.png",
+        "sourceRect": [
+          119,
+          409,
+          147,
+          183
+        ],
+        "packedRect": [
+          181,
+          1096,
+          147,
+          183
+        ],
+        "rgbaSHA256": "42cb3343b8d7bdb58ee29f4e44716e6e130ebe74d93326fba658e8a0cb11f094"
+      },
+      {
+        "id": "swordsman-ESE-walk-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-1-small-swordsman-ESE-walk-1.png",
+        "sourceRect": [
+          435,
+          407,
+          141,
+          185
+        ],
+        "packedRect": [
+          682,
+          628,
+          141,
+          185
+        ],
+        "rgbaSHA256": "22bdfe5d2393ef1c1ced83d5161e3800e86ac822987555122c63a85265915e5e"
+      },
+      {
+        "id": "swordsman-SE-walk-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-1-small-swordsman-SE-walk-1.png",
+        "sourceRect": [
+          744,
+          407,
+          143,
+          185
+        ],
+        "packedRect": [
+          1449,
+          212,
+          143,
+          185
+        ],
+        "rgbaSHA256": "ca4ea79a36351aa38d0ff7b4950a0d0f6c71a01a029c00c6306c1500dd3d6417"
+      },
+      {
+        "id": "swordsman-SSE-walk-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-1-small-swordsman-SSE-walk-1.png",
+        "sourceRect": [
+          1024,
+          407,
+          169,
+          183
+        ],
+        "packedRect": [
+          670,
+          1206,
+          169,
+          183
+        ],
+        "rgbaSHA256": "7610f315c264b8fef5c3f0a10b20026dcdeaf4311d603e347e66c8259c97d48e"
+      },
+      {
+        "id": "swordsman-S-walk-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-1-small-swordsman-S-walk-1.png",
+        "sourceRect": [
+          78,
+          694,
+          175,
+          184
+        ],
+        "packedRect": [
+          2,
+          1096,
+          175,
+          184
+        ],
+        "rgbaSHA256": "ae43769e578f93de3c128c227035a042cad38ef88b51a9375fddeca8b5e6b39c"
+      },
+      {
+        "id": "swordsman-SSW-walk-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-1-small-swordsman-SSW-walk-1.png",
+        "sourceRect": [
+          399,
+          690,
+          165,
+          189
+        ],
+        "packedRect": [
+          1493,
+          1018,
+          165,
+          189
+        ],
+        "rgbaSHA256": "0fc6ada3d0d699dcc4cb6d8235341403ea90a8cbeb0744b38be0906c2ed88076"
+      },
+      {
+        "id": "swordsman-SW-walk-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-1-small-swordsman-SW-walk-1.png",
+        "sourceRect": [
+          704,
+          690,
+          165,
+          190
+        ],
+        "packedRect": [
+          1493,
+          824,
+          165,
+          190
+        ],
+        "rgbaSHA256": "e03190e64d5e1691c78f0cf1f7bd8ad73d8ee90041127567721d9a8ba8e06d28"
+      },
+      {
+        "id": "swordsman-WSW-walk-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/focused-wsw-walk1-swordsman-WSW-variant-0-walk-1.png",
+        "sourceRect": [
+          88,
+          82,
+          487,
+          499
+        ],
+        "packedRect": [
+          2,
+          2,
+          487,
+          499
+        ],
+        "rgbaSHA256": "b7a2eddc66ad5d02df2cb5b02e1824ec824e5cd2c97ae37eb573f254c683bea5"
+      },
+      {
+        "id": "swordsman-W-walk-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-1-small-swordsman-W-walk-1.png",
+        "sourceRect": [
+          71,
+          980,
+          150,
+          179
+        ],
+        "packedRect": [
+          146,
+          1470,
+          150,
+          179
+        ],
+        "rgbaSHA256": "e2eb54d384162f72f471391891cace164e9237bd2e336738fd71357d39b05fc9"
+      },
+      {
+        "id": "swordsman-WNW-walk-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-1-small-swordsman-WNW-walk-1.png",
+        "sourceRect": [
+          402,
+          976,
+          142,
+          184
+        ],
+        "packedRect": [
+          1149,
+          626,
+          142,
+          184
+        ],
+        "rgbaSHA256": "9806c2dca95718c706ce1294c32acac33613a83403b7d33c6842197a579d1520"
+      },
+      {
+        "id": "swordsman-NW-walk-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-1-small-swordsman-NW-walk-1.png",
+        "sourceRect": [
+          709,
+          978,
+          145,
+          183
+        ],
+        "packedRect": [
+          332,
+          1208,
+          145,
+          183
+        ],
+        "rgbaSHA256": "67bb3cff7a3c3924bb1937431a2595340099a1a04a3880cbfa9c46c9474efa90"
+      },
+      {
+        "id": "swordsman-NNW-walk-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-1-small-swordsman-NNW-walk-1.png",
+        "sourceRect": [
+          1036,
+          979,
+          152,
+          183
+        ],
+        "packedRect": [
+          489,
+          1207,
+          152,
+          183
+        ],
+        "rgbaSHA256": "ec654873ac87c97c61344b68ad52c9e17b9f47ddefb13773519e9dc05a4d231f"
+      },
+      {
+        "id": "swordsman-N-walk-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-2-small-swordsman-N-walk-2.png",
+        "sourceRect": [
+          79,
+          97,
+          171,
+          177
+        ],
+        "packedRect": [
+          1161,
+          1579,
+          171,
+          177
+        ],
+        "rgbaSHA256": "98ebbdd2f314098ae52c556b0e0cb535c8fa3d1295ddb186d1c7537e34f4eafa"
+      },
+      {
+        "id": "swordsman-NNE-walk-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-2-small-swordsman-NNE-walk-2.png",
+        "sourceRect": [
+          399,
+          99,
+          176,
+          173
+        ],
+        "packedRect": [
+          181,
+          2377,
+          176,
+          173
+        ],
+        "rgbaSHA256": "c3f16bcad5269d881bff34a9e48a9549c9d3e76820b9dee27314f531503b3ddc"
+      },
+      {
+        "id": "swordsman-NE-walk-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-2-small-swordsman-NE-walk-2.png",
+        "sourceRect": [
+          713,
+          101,
+          175,
+          176
+        ],
+        "packedRect": [
+          2,
+          2378,
+          175,
+          176
+        ],
+        "rgbaSHA256": "f9e1cf699ddde4fb18998848cef7889495cbfd669a13522b662c11c246ef020d"
+      },
+      {
+        "id": "swordsman-ENE-walk-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-2-small-swordsman-ENE-walk-2.png",
+        "sourceRect": [
+          1030,
+          102,
+          171,
+          176
+        ],
+        "packedRect": [
+          144,
+          2197,
+          171,
+          176
+        ],
+        "rgbaSHA256": "5397ece44b2684c9adbfc2979b5a5a04331f49cffd0152a3dd48400a1e86c8ca"
+      },
+      {
+        "id": "swordsman-E-walk-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-2-small-swordsman-E-walk-2.png",
+        "sourceRect": [
+          104,
+          400,
+          159,
+          186
+        ],
+        "packedRect": [
+          171,
+          906,
+          159,
+          186
+        ],
+        "rgbaSHA256": "25bb375906ffed8d390d8a90d1f1466ed9192450a372ee39a21a57143008f618"
+      },
+      {
+        "id": "swordsman-ESE-walk-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-2-small-swordsman-ESE-walk-2.png",
+        "sourceRect": [
+          417,
+          400,
+          162,
+          187
+        ],
+        "packedRect": [
+          1326,
+          1020,
+          162,
+          187
+        ],
+        "rgbaSHA256": "07c78a5e27ce110e340b238807d20be3753e10b72e94a559fa47a678be9bd1d3"
+      },
+      {
+        "id": "swordsman-SE-walk-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-2-small-swordsman-SE-walk-2.png",
+        "sourceRect": [
+          726,
+          399,
+          160,
+          187
+        ],
+        "packedRect": [
+          334,
+          828,
+          160,
+          187
+        ],
+        "rgbaSHA256": "e537b15fd249bef9e93036964508c005f46dad02aca4f02e8757e67da3a560d9"
+      },
+      {
+        "id": "swordsman-SSE-walk-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-2-small-swordsman-SSE-walk-2.png",
+        "sourceRect": [
+          1013,
+          399,
+          186,
+          187
+        ],
+        "packedRect": [
+          509,
+          827,
+          186,
+          187
+        ],
+        "rgbaSHA256": "a1b1c03e90f9f101a4c33ae126caf3721cc26650f2b503b33105de54e907377f"
+      },
+      {
+        "id": "swordsman-S-walk-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-2-small-swordsman-S-walk-2.png",
+        "sourceRect": [
+          74,
+          700,
+          181,
+          181
+        ],
+        "packedRect": [
+          645,
+          1393,
+          181,
+          181
+        ],
+        "rgbaSHA256": "2b9d2ca779e25e925b0d6fbacdb1dfcb9fb8b009ee4f98f1f167e70471959026"
+      },
+      {
+        "id": "swordsman-SSW-walk-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-2-small-swordsman-SSW-walk-2.png",
+        "sourceRect": [
+          385,
+          701,
+          173,
+          180
+        ],
+        "packedRect": [
+          1323,
+          1211,
+          173,
+          180
+        ],
+        "rgbaSHA256": "61b36389c50374d4e5704739f8861154c428fc92506269bb782c4d5d598568a3"
+      },
+      {
+        "id": "swordsman-SW-walk-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-2-small-swordsman-SW-walk-2.png",
+        "sourceRect": [
+          694,
+          696,
+          163,
+          186
+        ],
+        "packedRect": [
+          699,
+          827,
+          163,
+          186
+        ],
+        "rgbaSHA256": "8d149f233a06f64512ba655b379953c0fff2fc0c980b750cf7151188cd032f2b"
+      },
+      {
+        "id": "swordsman-WSW-walk-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-2-small-swordsman-WSW-walk-2.png",
+        "sourceRect": [
+          1009,
+          697,
+          185,
+          185
+        ],
+        "packedRect": [
+          699,
+          1017,
+          185,
+          185
+        ],
+        "rgbaSHA256": "550a5afdcec904f1660f0d8e18d60b08284f56c1918d947e4b8dd1ff5408dc73"
+      },
+      {
+        "id": "swordsman-W-walk-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-2-small-swordsman-W-walk-2.png",
+        "sourceRect": [
+          66,
+          981,
+          159,
+          177
+        ],
+        "packedRect": [
+          1508,
+          1579,
+          159,
+          177
+        ],
+        "rgbaSHA256": "aa6a9ce0a96fb6cc9e11d34092173f57b4cffb6afdde4e36bbc8b12e0f02e640"
+      },
+      {
+        "id": "swordsman-WNW-walk-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-2-small-swordsman-WNW-walk-2.png",
+        "sourceRect": [
+          384,
+          980,
+          156,
+          180
+        ],
+        "packedRect": [
+          1485,
+          1395,
+          156,
+          180
+        ],
+        "rgbaSHA256": "43e02626f7d40aa1af72e1281989c656a8fcce048bca51992cb708f82e71506a"
+      },
+      {
+        "id": "swordsman-NW-walk-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-2-small-swordsman-NW-walk-2.png",
+        "sourceRect": [
+          701,
+          977,
+          158,
+          180
+        ],
+        "packedRect": [
+          1323,
+          1395,
+          158,
+          180
+        ],
+        "rgbaSHA256": "df6b071a267b1b15942addbf54466b2b7b19f49514554065f35150f4dcdbe010"
+      },
+      {
+        "id": "swordsman-NNW-walk-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-2-small-swordsman-NNW-walk-2.png",
+        "sourceRect": [
+          1023,
+          980,
+          173,
+          177
+        ],
+        "packedRect": [
+          984,
+          1579,
+          173,
+          177
+        ],
+        "rgbaSHA256": "246b7154c5eb29732b4c1a01121e92e034eb6cad5776f7ae84195b0c0da0365c"
+      },
+      {
+        "id": "swordsman-N-walk-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-3-small-swordsman-N-walk-3.png",
+        "sourceRect": [
+          87,
+          117,
+          161,
+          171
+        ],
+        "packedRect": [
+          472,
+          1761,
+          161,
+          171
+        ],
+        "rgbaSHA256": "fc556209ed5dafaea317b2703e286b03a845f6338d8cb5b29c1e91c993103822"
+      },
+      {
+        "id": "swordsman-NNE-walk-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-3-small-swordsman-NNE-walk-3.png",
+        "sourceRect": [
+          409,
+          116,
+          160,
+          172
+        ],
+        "packedRect": [
+          465,
+          2545,
+          160,
+          172
+        ],
+        "rgbaSHA256": "ae2cebb5bcf7c8b8159d7515eec71f519bdcf6e40e6dbbd68495e7b1f816e232"
+      },
+      {
+        "id": "swordsman-NE-walk-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-3-small-swordsman-NE-walk-3.png",
+        "sourceRect": [
+          728,
+          116,
+          159,
+          175
+        ],
+        "packedRect": [
+          154,
+          2016,
+          159,
+          175
+        ],
+        "rgbaSHA256": "2a1f9af4da790220636e4cf245cd589fdbe917237698e44baf0371e17dad67fb"
+      },
+      {
+        "id": "swordsman-ENE-walk-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-3-small-swordsman-ENE-walk-3.png",
+        "sourceRect": [
+          1043,
+          116,
+          155,
+          175
+        ],
+        "packedRect": [
+          161,
+          1835,
+          155,
+          175
+        ],
+        "rgbaSHA256": "1261175c83075fb0992c87bbb4414eb5479f4e4e4f4af9c1aaa5da150d2200a7"
+      },
+      {
+        "id": "swordsman-E-walk-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-3-small-swordsman-E-walk-3.png",
+        "sourceRect": [
+          111,
+          406,
+          151,
+          185
+        ],
+        "packedRect": [
+          334,
+          1019,
+          151,
+          185
+        ],
+        "rgbaSHA256": "b539345575fa4701af09c0c0fb3b8a4cc0866c864d10ac94725120c61a39de49"
+      },
+      {
+        "id": "swordsman-ESE-walk-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-3-small-swordsman-ESE-walk-3.png",
+        "sourceRect": [
+          435,
+          405,
+          144,
+          183
+        ],
+        "packedRect": [
+          181,
+          1283,
+          144,
+          183
+        ],
+        "rgbaSHA256": "9edf8b8f028223144d9c2034e6571727bd92718d24c6c97bdaf9fdda4824abf0"
+      },
+      {
+        "id": "swordsman-SE-walk-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-3-small-swordsman-SE-walk-3.png",
+        "sourceRect": [
+          744,
+          403,
+          140,
+          182
+        ],
+        "packedRect": [
+          843,
+          1392,
+          140,
+          182
+        ],
+        "rgbaSHA256": "f6b681f4620ccd167d33039c9138499f109708ee11a2fbf3cc3651a93bac4ea6"
+      },
+      {
+        "id": "swordsman-SSE-walk-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-3-small-swordsman-SSE-walk-3.png",
+        "sourceRect": [
+          1032,
+          406,
+          168,
+          185
+        ],
+        "packedRect": [
+          498,
+          1018,
+          168,
+          185
+        ],
+        "rgbaSHA256": "9e0e3bb0fbe3f0c85078da5e8e1f529b6a33faf523d297ccf48d398d2ddba2f4"
+      },
+      {
+        "id": "swordsman-S-walk-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-3-small-swordsman-S-walk-3.png",
+        "sourceRect": [
+          73,
+          694,
+          175,
+          178
+        ],
+        "packedRect": [
+          632,
+          1578,
+          175,
+          178
+        ],
+        "rgbaSHA256": "54f602a4097630109de28e92cd261079e098de2ff7af89e53835b5d0d3dc5065"
+      },
+      {
+        "id": "swordsman-SSW-walk-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-3-small-swordsman-SSW-walk-3.png",
+        "sourceRect": [
+          389,
+          692,
+          169,
+          178
+        ],
+        "packedRect": [
+          811,
+          1578,
+          169,
+          178
+        ],
+        "rgbaSHA256": "25734e681d5f5f052c31c92a41b2bbb83bf5cb7db2105beda451e850097dfee0"
+      },
+      {
+        "id": "swordsman-SW-walk-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-3-small-swordsman-SW-walk-3.png",
+        "sourceRect": [
+          702,
+          693,
+          161,
+          178
+        ],
+        "packedRect": [
+          300,
+          1579,
+          161,
+          178
+        ],
+        "rgbaSHA256": "ca3044241f58082e1206ce4dbd4997f2d197a1a7dbae9a24f769a5aff0e88e20"
+      },
+      {
+        "id": "swordsman-WSW-walk-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-3-small-swordsman-WSW-walk-3.png",
+        "sourceRect": [
+          1021,
+          694,
+          146,
+          178
+        ],
+        "packedRect": [
+          146,
+          1653,
+          146,
+          178
+        ],
+        "rgbaSHA256": "18a743d14bec27582cc8317b0048cf3222a4663399bcb60cede0038ca9cbc26c"
+      },
+      {
+        "id": "swordsman-W-walk-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-3-small-swordsman-W-walk-3.png",
+        "sourceRect": [
+          71,
+          973,
+          148,
+          180
+        ],
+        "packedRect": [
+          329,
+          1395,
+          148,
+          180
+        ],
+        "rgbaSHA256": "4a82879e5f0a094d9d883692bf4e960a34c85711d216f7d794f47a7b9847f4ec"
+      },
+      {
+        "id": "swordsman-WNW-walk-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-3-small-swordsman-WNW-walk-3.png",
+        "sourceRect": [
+          396,
+          974,
+          145,
+          179
+        ],
+        "packedRect": [
+          987,
+          1396,
+          145,
+          179
+        ],
+        "rgbaSHA256": "d894895e9141bcb702a3845cf17dd3c7293ab08a043e811792f31e2759de83ff"
+      },
+      {
+        "id": "swordsman-NW-walk-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-3-small-swordsman-NW-walk-3.png",
+        "sourceRect": [
+          714,
+          973,
+          141,
+          180
+        ],
+        "packedRect": [
+          1645,
+          1395,
+          141,
+          180
+        ],
+        "rgbaSHA256": "1b41142dfb9ab3f422599138c5e0929bb972cc9e1ab51947160d298233cc37cb"
+      },
+      {
+        "id": "swordsman-NNW-walk-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/walk-3-small-swordsman-NNW-walk-3.png",
+        "sourceRect": [
+          1037,
+          971,
+          152,
+          182
+        ],
+        "packedRect": [
+          1167,
+          1210,
+          152,
+          182
+        ],
+        "rgbaSHA256": "6f8a70d04c81df48f9b591f107e83abecef7f802bfe6f271137b3421ec5a094d"
+      },
+      {
+        "id": "swordsman-N-attack-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-0-small-swordsman-N-attack-0.png",
+        "sourceRect": [
+          92,
+          118,
+          139,
+          168
+        ],
+        "packedRect": [
+          954,
+          1760,
+          139,
+          168
+        ],
+        "rgbaSHA256": "e780b60e513cfe997d038803dcafc9fbf8bfc4495ef394cab2dd85fed84ae779"
+      },
+      {
+        "id": "swordsman-NNE-attack-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-0-small-swordsman-NNE-attack-0.png",
+        "sourceRect": [
+          415,
+          120,
+          142,
+          171
+        ],
+        "packedRect": [
+          528,
+          2288,
+          142,
+          171
+        ],
+        "rgbaSHA256": "6855adf2bba95bf13b5d9ad90ca623b2ad26d14fbde858d87edd939316d975c6"
+      },
+      {
+        "id": "swordsman-NE-attack-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-0-small-swordsman-NE-attack-0.png",
+        "sourceRect": [
+          725,
+          119,
+          138,
+          171
+        ],
+        "packedRect": [
+          674,
+          2288,
+          138,
+          171
+        ],
+        "rgbaSHA256": "3090a3ae8174059093ed9ab565998e07c19fdd1735214311a89032df6625032a"
+      },
+      {
+        "id": "swordsman-ENE-attack-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-0-small-swordsman-ENE-attack-0.png",
+        "sourceRect": [
+          1036,
+          119,
+          139,
+          171
+        ],
+        "packedRect": [
+          629,
+          2463,
+          139,
+          171
+        ],
+        "rgbaSHA256": "6a65b2a7c0e89acf4b08657fa1dab549dc5033931b7aa30c920625408c351f0c"
+      },
+      {
+        "id": "swordsman-E-attack-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-0-small-swordsman-E-attack-0.png",
+        "sourceRect": [
+          108,
+          404,
+          118,
+          181
+        ],
+        "packedRect": [
+          1662,
+          809,
+          118,
+          181
+        ],
+        "rgbaSHA256": "32390220bacc791c6eda96d0a6ecad28cc7ac103ae46f05b639878868038c4f8"
+      },
+      {
+        "id": "swordsman-ESE-attack-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-0-small-swordsman-ESE-attack-0.png",
+        "sourceRect": [
+          428,
+          401,
+          128,
+          183
+        ],
+        "packedRect": [
+          667,
+          220,
+          128,
+          183
+        ],
+        "rgbaSHA256": "ed97a7f3e68419fef5a8b702f380aa7b59d944a69388964562d6d62eaac1f33a"
+      },
+      {
+        "id": "swordsman-SE-attack-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-0-small-swordsman-SE-attack-0.png",
+        "sourceRect": [
+          737,
+          405,
+          148,
+          177
+        ],
+        "packedRect": [
+          2,
+          2016,
+          148,
+          177
+        ],
+        "rgbaSHA256": "9a3039aae21b629c1e3b88858378221565482408248b1088dedb687aba3f8229"
+      },
+      {
+        "id": "swordsman-SSE-attack-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-0-small-swordsman-SSE-attack-0.png",
+        "sourceRect": [
+          1041,
+          402,
+          151,
+          178
+        ],
+        "packedRect": [
+          465,
+          1579,
+          151,
+          178
+        ],
+        "rgbaSHA256": "9e409bbd811797ff60984b2e583114f355a6791cf40ed0680d277e8b63653d9f"
+      },
+      {
+        "id": "swordsman-S-attack-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-0-small-swordsman-S-attack-0.png",
+        "sourceRect": [
+          90,
+          696,
+          155,
+          177
+        ],
+        "packedRect": [
+          2,
+          1835,
+          155,
+          177
+        ],
+        "rgbaSHA256": "52dd4806133e7519af389b3d0b19679171679388bd34ce66e2627d16e98a51fe"
+      },
+      {
+        "id": "swordsman-SSW-attack-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-0-small-swordsman-SSW-attack-0.png",
+        "sourceRect": [
+          417,
+          692,
+          147,
+          181
+        ],
+        "packedRect": [
+          481,
+          1394,
+          147,
+          181
+        ],
+        "rgbaSHA256": "8f890ef8d91c9c8bf653c22e237a1367d5e881f8355533d6eaea5ea223b827e2"
+      },
+      {
+        "id": "swordsman-SW-attack-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-0-small-swordsman-SW-attack-0.png",
+        "sourceRect": [
+          724,
+          691,
+          136,
+          182
+        ],
+        "packedRect": [
+          1651,
+          623,
+          136,
+          182
+        ],
+        "rgbaSHA256": "65156774560a718dc844902dd2a84314ab6f7045613432ecde134602c2ab08e7"
+      },
+      {
+        "id": "swordsman-WSW-attack-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-0-small-swordsman-WSW-attack-0.png",
+        "sourceRect": [
+          1040,
+          692,
+          140,
+          180
+        ],
+        "packedRect": [
+          2,
+          1470,
+          140,
+          180
+        ],
+        "rgbaSHA256": "5054f83ab3aa425cb1c2fede233a32f5ded76af0827338505be2055f012c30dc"
+      },
+      {
+        "id": "swordsman-W-attack-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-0-small-swordsman-W-attack-0.png",
+        "sourceRect": [
+          99,
+          978,
+          122,
+          174
+        ],
+        "packedRect": [
+          1665,
+          1172,
+          122,
+          174
+        ],
+        "rgbaSHA256": "d93954d072de7c8fadb315bb53f2373c1ef6cafbaef4f61fd2a5678980f35852"
+      },
+      {
+        "id": "swordsman-WNW-attack-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-0-small-swordsman-WNW-attack-0.png",
+        "sourceRect": [
+          412,
+          978,
+          127,
+          174
+        ],
+        "packedRect": [
+          1662,
+          994,
+          127,
+          174
+        ],
+        "rgbaSHA256": "f97641001092c4bdb9fef1d0f4ec04bff0d5e37117827ac83173b9f6465c5004"
+      },
+      {
+        "id": "swordsman-NW-attack-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-0-small-swordsman-NW-attack-0.png",
+        "sourceRect": [
+          723,
+          978,
+          130,
+          173
+        ],
+        "packedRect": [
+          998,
+          424,
+          130,
+          173
+        ],
+        "rgbaSHA256": "7e3b2b744d2be67a5ae638da0d35a91bf68298524ed069667431cfb4f9ba0c09"
+      },
+      {
+        "id": "swordsman-NNW-attack-0",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-0-small-swordsman-NNW-attack-0.png",
+        "sourceRect": [
+          1029,
+          980,
+          145,
+          171
+        ],
+        "packedRect": [
+          637,
+          1760,
+          145,
+          171
+        ],
+        "rgbaSHA256": "87d3b05f0f0f638afbd5e652053d1c873c52be0829de60634d992f4c5413bd52"
+      },
+      {
+        "id": "swordsman-N-attack-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-1-small-swordsman-N-attack-1.png",
+        "sourceRect": [
+          82,
+          74,
+          172,
+          201
+        ],
+        "packedRect": [
+          1449,
+          418,
+          172,
+          201
+        ],
+        "rgbaSHA256": "6a70633fe550b693c0e731696146a7a3df31023a4c5110e44e804c60fc7cdac8"
+      },
+      {
+        "id": "swordsman-NNE-attack-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-1-small-swordsman-NNE-attack-1.png",
+        "sourceRect": [
+          406,
+          76,
+          163,
+          200
+        ],
+        "packedRect": [
+          1134,
+          422,
+          163,
+          200
+        ],
+        "rgbaSHA256": "25118ca26ffec11f9f96ea13cafa438fa0455515c9b18cc4fbede8a7092447b3"
+      },
+      {
+        "id": "swordsman-NE-attack-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-1-small-swordsman-NE-attack-1.png",
+        "sourceRect": [
+          717,
+          76,
+          170,
+          200
+        ],
+        "packedRect": [
+          493,
+          221,
+          170,
+          200
+        ],
+        "rgbaSHA256": "d212478532955d8985d82d1dc9c19ab3059ba1018fd10fef27da6dfc1b1b065a"
+      },
+      {
+        "id": "swordsman-ENE-attack-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-1-small-swordsman-ENE-attack-1.png",
+        "sourceRect": [
+          1037,
+          75,
+          161,
+          201
+        ],
+        "packedRect": [
+          1625,
+          418,
+          161,
+          201
+        ],
+        "rgbaSHA256": "c81723ec073da06b4fe808641c29d0e378e90eb0b505b6ee8d7ea79a6896f8bd"
+      },
+      {
+        "id": "swordsman-E-attack-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-1-small-swordsman-E-attack-1.png",
+        "sourceRect": [
+          94,
+          376,
+          150,
+          214
+        ],
+        "packedRect": [
+          645,
+          2,
+          150,
+          214
+        ],
+        "rgbaSHA256": "936410b928c71a8c0d740a3c005eb4baf4a1342a263ec60149f7da7e4c72bb16"
+      },
+      {
+        "id": "swordsman-ESE-attack-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-1-small-swordsman-ESE-attack-1.png",
+        "sourceRect": [
+          410,
+          375,
+          154,
+          213
+        ],
+        "packedRect": [
+          961,
+          2,
+          154,
+          213
+        ],
+        "rgbaSHA256": "f382ab4856ea12d293282f4b5cdde652841539f2a4dfd99b34d5d2657cbd6c68"
+      },
+      {
+        "id": "swordsman-SE-attack-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-1-small-swordsman-SE-attack-1.png",
+        "sourceRect": [
+          738,
+          374,
+          148,
+          215
+        ],
+        "packedRect": [
+          493,
+          2,
+          148,
+          215
+        ],
+        "rgbaSHA256": "410702798fa926e40bf5c527e52c6494e357effa5023a7475e1bec4c574d49c3"
+      },
+      {
+        "id": "swordsman-SSE-attack-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-1-small-swordsman-SSE-attack-1.png",
+        "sourceRect": [
+          1050,
+          377,
+          148,
+          211
+        ],
+        "packedRect": [
+          1119,
+          2,
+          148,
+          211
+        ],
+        "rgbaSHA256": "4547e50b19ac9deb2846f58bf759f5c0d2c230efd506754b66823c06790f0e69"
+      },
+      {
+        "id": "swordsman-S-attack-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-1-small-swordsman-S-attack-1.png",
+        "sourceRect": [
+          77,
+          688,
+          169,
+          203
+        ],
+        "packedRect": [
+          1600,
+          211,
+          169,
+          203
+        ],
+        "rgbaSHA256": "600bb38cce10c94a7c247d55b5a807231d213d602a8c1e2cbd399b525ecc11ea"
+      },
+      {
+        "id": "swordsman-SSW-attack-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-1-small-swordsman-SSW-attack-1.png",
+        "sourceRect": [
+          408,
+          682,
+          154,
+          210
+        ],
+        "packedRect": [
+          1271,
+          2,
+          154,
+          210
+        ],
+        "rgbaSHA256": "fb6abf248a53cf4b28db150f94a0b60a51e5c7940bfde68e568317a39483ea20"
+      },
+      {
+        "id": "swordsman-SW-attack-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-1-small-swordsman-SW-attack-1.png",
+        "sourceRect": [
+          715,
+          679,
+          158,
+          213
+        ],
+        "packedRect": [
+          799,
+          2,
+          158,
+          213
+        ],
+        "rgbaSHA256": "a08c72dc680c56f74d20a1cd2c139d9356c5d54b5a5ae616bbdd7a50994d2015"
+      },
+      {
+        "id": "swordsman-WSW-attack-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-1-small-swordsman-WSW-attack-1.png",
+        "sourceRect": [
+          1030,
+          686,
+          167,
+          206
+        ],
+        "packedRect": [
+          1429,
+          2,
+          167,
+          206
+        ],
+        "rgbaSHA256": "f0ac12beb7f4a409f13b584fc17c93e50d39870e21edaf67bec8bd02b89aa917"
+      },
+      {
+        "id": "swordsman-W-attack-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-1-small-swordsman-W-attack-1.png",
+        "sourceRect": [
+          87,
+          971,
+          167,
+          201
+        ],
+        "packedRect": [
+          799,
+          219,
+          167,
+          201
+        ],
+        "rgbaSHA256": "b832ba8a63da582dd76fbbd4a0ccee5fa530fa0ee308751c010bbea97d03a996"
+      },
+      {
+        "id": "swordsman-WNW-attack-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-1-small-swordsman-WNW-attack-1.png",
+        "sourceRect": [
+          407,
+          974,
+          167,
+          196
+        ],
+        "packedRect": [
+          338,
+          628,
+          167,
+          196
+        ],
+        "rgbaSHA256": "774f72d79d130d1a694241542196bfdfa8231c268bbe66ff87f3cd842f3a769e"
+      },
+      {
+        "id": "swordsman-NW-attack-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-1-small-swordsman-NW-attack-1.png",
+        "sourceRect": [
+          721,
+          971,
+          167,
+          198
+        ],
+        "packedRect": [
+          827,
+          424,
+          167,
+          198
+        ],
+        "rgbaSHA256": "b287cf9de0c54e79cab17bbbd23cdece5f1579c7693a4d399635823b153f3d0f"
+      },
+      {
+        "id": "swordsman-NNW-attack-1",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-1-small-swordsman-NNW-attack-1.png",
+        "sourceRect": [
+          1038,
+          970,
+          169,
+          197
+        ],
+        "packedRect": [
+          1478,
+          623,
+          169,
+          197
+        ],
+        "rgbaSHA256": "075148ce51e39274b20b3daad154f77b16fc750bfb0b2118943f02279c4a1a6a"
+      },
+      {
+        "id": "swordsman-N-attack-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-2-small-swordsman-N-attack-2.png",
+        "sourceRect": [
+          103,
+          74,
+          145,
+          205
+        ],
+        "packedRect": [
+          1600,
+          2,
+          145,
+          205
+        ],
+        "rgbaSHA256": "6490e2a9f9fc0d1851433b8bdf3e6b83e9b5d038876cfefb02daa883ab5f6302"
+      },
+      {
+        "id": "swordsman-NNE-attack-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-2-small-swordsman-NNE-attack-2.png",
+        "sourceRect": [
+          416,
+          98,
+          174,
+          182
+        ],
+        "packedRect": [
+          2,
+          1284,
+          174,
+          182
+        ],
+        "rgbaSHA256": "e77d3df2f28281241161664294949c059439a9754d159385f1d10f662b1871df"
+      },
+      {
+        "id": "swordsman-NE-attack-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-2-small-swordsman-NE-attack-2.png",
+        "sourceRect": [
+          726,
+          127,
+          192,
+          154
+        ],
+        "packedRect": [
+          1597,
+          2435,
+          192,
+          154
+        ],
+        "rgbaSHA256": "adcd3366c9c0724f1032cc01684aed19ba1dea9230684364445b1cca2a08802a"
+      },
+      {
+        "id": "swordsman-ENE-attack-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-2-small-swordsman-ENE-attack-2.png",
+        "sourceRect": [
+          1038,
+          130,
+          192,
+          151
+        ],
+        "packedRect": [
+          1597,
+          2593,
+          192,
+          151
+        ],
+        "rgbaSHA256": "423797567a04ed1c14643adf6405995b0592e62590d297fd218e56e425bedf8d"
+      },
+      {
+        "id": "swordsman-E-attack-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-2-small-swordsman-E-attack-2.png",
+        "sourceRect": [
+          109,
+          399,
+          194,
+          172
+        ],
+        "packedRect": [
+          319,
+          2193,
+          194,
+          172
+        ],
+        "rgbaSHA256": "9963be00df338e16fbee15919028832eaccba684e1343365c983ab7ace3c1a09"
+      },
+      {
+        "id": "swordsman-ESE-attack-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-2-small-swordsman-ESE-attack-2.png",
+        "sourceRect": [
+          427,
+          402,
+          175,
+          166
+        ],
+        "packedRect": [
+          1090,
+          2453,
+          175,
+          166
+        ],
+        "rgbaSHA256": "70b736c81ead61958f773a42e34e6d578e7cc92bc4919f068b986fdd5648e398"
+      },
+      {
+        "id": "swordsman-SE-attack-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-2-small-swordsman-SE-attack-2.png",
+        "sourceRect": [
+          731,
+          399,
+          168,
+          172
+        ],
+        "packedRect": [
+          293,
+          2554,
+          168,
+          172
+        ],
+        "rgbaSHA256": "ed9a8e755b25667f7ae1387e1fbef64d1055e79813f0627a0354211e6e339e4b"
+      },
+      {
+        "id": "swordsman-SSE-attack-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-2-small-swordsman-SSE-attack-2.png",
+        "sourceRect": [
+          1038,
+          405,
+          157,
+          194
+        ],
+        "packedRect": [
+          173,
+          707,
+          157,
+          194
+        ],
+        "rgbaSHA256": "cb89dbc2c80e2c9c4456dbc02a8f9204de7626eb0447830f91dd80dfff689e58"
+      },
+      {
+        "id": "swordsman-S-attack-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-2-small-swordsman-S-attack-2.png",
+        "sourceRect": [
+          109,
+          698,
+          142,
+          190
+        ],
+        "packedRect": [
+          1301,
+          422,
+          142,
+          190
+        ],
+        "rgbaSHA256": "4171881480f683402cf3a21e27f4250faa26fdd24feb708302d1ad9fe3fbc1b8"
+      },
+      {
+        "id": "swordsman-SSW-attack-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-2-small-swordsman-SSW-attack-2.png",
+        "sourceRect": [
+          401,
+          699,
+          164,
+          169
+        ],
+        "packedRect": [
+          786,
+          1760,
+          164,
+          169
+        ],
+        "rgbaSHA256": "29a5dd15654ef45ca93094497a7952311f6ce4312a60e6d1ceef47b7dbd790d3"
+      },
+      {
+        "id": "swordsman-SW-attack-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-2-small-swordsman-SW-attack-2.png",
+        "sourceRect": [
+          677,
+          698,
+          192,
+          165
+        ],
+        "packedRect": [
+          1223,
+          1931,
+          192,
+          165
+        ],
+        "rgbaSHA256": "0c8fcf7e1a9034342c881b5a119d52c0044d8dc38657118dcb1b9cbfacb5ad28"
+      },
+      {
+        "id": "swordsman-WSW-attack-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-2-small-swordsman-WSW-attack-2.png",
+        "sourceRect": [
+          963,
+          716,
+          212,
+          159
+        ],
+        "packedRect": [
+          1456,
+          2098,
+          212,
+          159
+        ],
+        "rgbaSHA256": "6af40c3de1c075dda1132f8cb51410b8105253fc385576b378cbda448dd6bd2a"
+      },
+      {
+        "id": "swordsman-W-attack-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-2-small-swordsman-W-attack-2.png",
+        "sourceRect": [
+          50,
+          1001,
+          190,
+          165
+        ],
+        "packedRect": [
+          1239,
+          1760,
+          190,
+          165
+        ],
+        "rgbaSHA256": "7d68b37e1a71ddd54c494be932f79dc623a12d364ccc97fc6dfbc86109da48a2"
+      },
+      {
+        "id": "swordsman-WNW-attack-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-2-small-swordsman-WNW-attack-2.png",
+        "sourceRect": [
+          387,
+          998,
+          154,
+          167
+        ],
+        "packedRect": [
+          932,
+          2458,
+          154,
+          167
+        ],
+        "rgbaSHA256": "34c6056541085122de228a934d843e12f3dec1f8c174583ed63eb79f87931833"
+      },
+      {
+        "id": "swordsman-NW-attack-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-2-small-swordsman-NW-attack-2.png",
+        "sourceRect": [
+          692,
+          1003,
+          160,
+          162
+        ],
+        "packedRect": [
+          1433,
+          2437,
+          160,
+          162
+        ],
+        "rgbaSHA256": "7626a4d61e350cbb413c39ccbd94b704b18b9f68d5c370336bc9975a5a1c2fe2"
+      },
+      {
+        "id": "swordsman-NNW-attack-2",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-2-small-swordsman-NNW-attack-2.png",
+        "sourceRect": [
+          1030,
+          987,
+          144,
+          179
+        ],
+        "packedRect": [
+          1136,
+          1396,
+          144,
+          179
+        ],
+        "rgbaSHA256": "5685562bd7d3ced07dee99d45524a0b7eb2d47d184cf5bcc537bd790fc460c2b"
+      },
+      {
+        "id": "swordsman-N-attack-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-3-small-swordsman-N-attack-3.png",
+        "sourceRect": [
+          102,
+          119,
+          144,
+          156
+        ],
+        "packedRect": [
+          1610,
+          2261,
+          144,
+          156
+        ],
+        "rgbaSHA256": "b15906ae418c44b2737abde971848dab9981a2acd03cfb779bb1c2bf4366fe2d"
+      },
+      {
+        "id": "swordsman-NNE-attack-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-3-small-swordsman-NNE-attack-3.png",
+        "sourceRect": [
+          407,
+          118,
+          158,
+          162
+        ],
+        "packedRect": [
+          1448,
+          2269,
+          158,
+          162
+        ],
+        "rgbaSHA256": "00a46239036eecb445db46c0294262bb581579aae4b64bb0eadb72f8d9725b7e"
+      },
+      {
+        "id": "swordsman-NE-attack-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-3-small-swordsman-NE-attack-3.png",
+        "sourceRect": [
+          720,
+          117,
+          156,
+          164
+        ],
+        "packedRect": [
+          1288,
+          2269,
+          156,
+          164
+        ],
+        "rgbaSHA256": "4dcbf8725b40da665519a09005b306441ad82a23948c253e54f9d0223c025388"
+      },
+      {
+        "id": "swordsman-ENE-attack-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-3-small-swordsman-ENE-attack-3.png",
+        "sourceRect": [
+          1025,
+          115,
+          152,
+          167
+        ],
+        "packedRect": [
+          973,
+          2282,
+          152,
+          167
+        ],
+        "rgbaSHA256": "b17d7e6f026d8ef39805cead4c6297b05351c18d0b459984b6228a4b185cbcd3"
+      },
+      {
+        "id": "swordsman-E-attack-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-3-small-swordsman-E-attack-3.png",
+        "sourceRect": [
+          112,
+          406,
+          141,
+          172
+        ],
+        "packedRect": [
+          464,
+          1937,
+          141,
+          172
+        ],
+        "rgbaSHA256": "3594b91abeaf4cd710487c68a6510b2b879b4caab14a0aed10ad9dc29337ee07"
+      },
+      {
+        "id": "swordsman-ESE-attack-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-3-small-swordsman-ESE-attack-3.png",
+        "sourceRect": [
+          423,
+          405,
+          141,
+          175
+        ],
+        "packedRect": [
+          2,
+          2558,
+          141,
+          175
+        ],
+        "rgbaSHA256": "50eff1fc287a2f6f01a0e6a111aecade7be4b90bb5f74df2a441d229b77c85bd"
+      },
+      {
+        "id": "swordsman-SE-attack-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-3-small-swordsman-SE-attack-3.png",
+        "sourceRect": [
+          734,
+          404,
+          142,
+          174
+        ],
+        "packedRect": [
+          147,
+          2558,
+          142,
+          174
+        ],
+        "rgbaSHA256": "5266889e9a68dc95442cb3654e6b2d2cb8b9799d8350d919a92edf0fcf53426a"
+      },
+      {
+        "id": "swordsman-SSE-attack-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-3-small-swordsman-SSE-attack-3.png",
+        "sourceRect": [
+          1023,
+          405,
+          160,
+          171
+        ],
+        "packedRect": [
+          517,
+          2113,
+          160,
+          171
+        ],
+        "rgbaSHA256": "6b2d40ea32df02650712732f5c3d2c1f4ff0ecea60f008016ebcd640261bcd9a"
+      },
+      {
+        "id": "swordsman-S-attack-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-3-small-swordsman-S-attack-3.png",
+        "sourceRect": [
+          90,
+          709,
+          165,
+          165
+        ],
+        "packedRect": [
+          1287,
+          2100,
+          165,
+          165
+        ],
+        "rgbaSHA256": "fe8bd673996098faa14c487d072e67695c8f8c00a12af5c930fab4c7a2289ac1"
+      },
+      {
+        "id": "swordsman-SSW-attack-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-3-small-swordsman-SSW-attack-3.png",
+        "sourceRect": [
+          403,
+          707,
+          156,
+          169
+        ],
+        "packedRect": [
+          772,
+          2463,
+          156,
+          169
+        ],
+        "rgbaSHA256": "15c0af9492da1f429cefd1552cfb0720837fd3cf9a781a3500e1da5910b6d93c"
+      },
+      {
+        "id": "swordsman-SW-attack-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-3-small-swordsman-SW-attack-3.png",
+        "sourceRect": [
+          711,
+          708,
+          148,
+          172
+        ],
+        "packedRect": [
+          320,
+          1761,
+          148,
+          172
+        ],
+        "rgbaSHA256": "709c08e5a78a068174ec927637e4080353660a34c791a4f32deb80091d98b56c"
+      },
+      {
+        "id": "swordsman-WSW-attack-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-3-small-swordsman-WSW-attack-3.png",
+        "sourceRect": [
+          1017,
+          708,
+          146,
+          170
+        ],
+        "packedRect": [
+          770,
+          1935,
+          146,
+          170
+        ],
+        "rgbaSHA256": "e6b18f77c8b43ab603642b7e91ed24c4d781be28b20891ed3f47efe6a601fb55"
+      },
+      {
+        "id": "swordsman-W-attack-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-3-small-swordsman-W-attack-3.png",
+        "sourceRect": [
+          87,
+          983,
+          139,
+          166
+        ],
+        "packedRect": [
+          1144,
+          2103,
+          139,
+          166
+        ],
+        "rgbaSHA256": "2b1b4e3b08e7b5678211dbd60831c647167b63844fb3681acca63bb329fe9653"
+      },
+      {
+        "id": "swordsman-WNW-attack-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-3-small-swordsman-WNW-attack-3.png",
+        "sourceRect": [
+          399,
+          982,
+          139,
+          167
+        ],
+        "packedRect": [
+          1080,
+          1932,
+          139,
+          167
+        ],
+        "rgbaSHA256": "bdd6b26cb395bea1209118999f85d15f64e374c577920f846ac727b0a88af3f1"
+      },
+      {
+        "id": "swordsman-NW-attack-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-3-small-swordsman-NW-attack-3.png",
+        "sourceRect": [
+          711,
+          984,
+          138,
+          165
+        ],
+        "packedRect": [
+          1584,
+          1929,
+          138,
+          165
+        ],
+        "rgbaSHA256": "ae5f0087e702e0550a5264877e8ebe69bf6d7ca6a5544d6da3d2f889044dbdc0"
+      },
+      {
+        "id": "swordsman-NNW-attack-3",
+        "source": "/workspace/rts-browser-qa/mythic-swordsman-animation-20261005/evidence/attack-3-small-swordsman-NNW-attack-3.png",
+        "sourceRect": [
+          1028,
+          982,
+          145,
+          165
+        ],
+        "packedRect": [
+          1596,
+          1760,
+          145,
+          165
+        ],
+        "rgbaSHA256": "67f5b1d0d0675a0ab04013507ecf198d4662d6c984ae36ada1bdadeaa9c2b982"
+      }
+    ],
+    "rejectedRetained": [
+      "First full-size idle16; first whole-cycle144 and oversize layouts retained, not active",
+      "Original ESE windup shield handedness corrected by ImageGen",
+      "Original WSW walk1 incorrect rear view corrected by focused front-left passing sprite; source-pixel variant0 selected"
+    ],
+    "remainingFamilyFrames": 1008,
+    "remainingActors": 7,
+    "physicalPhonePerformanceClaim": false
+  }
 }

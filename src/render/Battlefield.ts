@@ -38,6 +38,7 @@ export class Battlefield {
  atlas=new SpriteAtlas();
  private attackAtlas=new AnimationAtlas();
  private directionalAtlas=new DirectionalAtlas();
+ private additionalDirectionalAtlases:DirectionalAtlas[]=[];
  private atlasLoad:Promise<boolean>=Promise.resolve(false);
  visualTheme:VisualThemeId='christmas';
  private themeRequest=0;
@@ -76,18 +77,23 @@ export class Battlefield {
    if(request!==this.themeRequest)return false;
    if(id===this.visualTheme&&this.atlas.ready)return true;
    const theme=VISUAL_THEMES[id],next=new SpriteAtlas(),attack=new AnimationAtlas(),directional=new DirectionalAtlas();
+   const additional=theme.additionalDirectionalAtlases.map(()=>new DirectionalAtlas());
    const base=import.meta.env?.BASE_URL??'./';
-   const [ready,attackReady,directionalReady]=await Promise.all([
+   const [ready,attackReady,directionalReady,additionalReady]=await Promise.all([
     next.load(`${base}${theme.atlas}`),
     theme.attackAtlas?attack.load(`${base}${theme.attackAtlas}`):Promise.resolve(true),
     theme.directionalAtlas?directional.load(`${base}${theme.directionalAtlas}`):Promise.resolve(true),
+    Promise.all(additional.map((atlas,index)=>atlas.load(`${base}${theme.additionalDirectionalAtlases[index]}`))),
    ]);
-   if(!ready||!attackReady||!directionalReady||request!==this.themeRequest)return false;
-   this.atlas=next;this.attackAtlas=attack;this.directionalAtlas=directional;this.visualTheme=id;
+   if(!ready||!attackReady||!directionalReady||!additionalReady.every(Boolean)||request!==this.themeRequest)return false;
+   this.atlas=next;this.attackAtlas=attack;this.directionalAtlas=directional;this.additionalDirectionalAtlases=additional;this.visualTheme=id;
    return true;
   })();
   this.atlasLoad=operation;
   return operation;
+ }
+ private directionalFor(actor:string):DirectionalAtlas{
+  return this.directionalAtlas.data?.actors[actor]?this.directionalAtlas:this.additionalDirectionalAtlases.find(atlas=>atlas.data?.actors[actor])??this.directionalAtlas;
  }
  /** Menu art uses the same original commander asset as the battlefield, at native aspect. */
  async renderPortrait(canvas:HTMLCanvasElement,type:string,team=0):Promise<void>{
@@ -344,8 +350,9 @@ export class Battlefield {
   }else{
    const authoredFrame=this.attackAtlas.attackFrame(e.type,pose.age,pose.anticipation,!!options.reducedMotion);
    const facing=attacking||pose.anticipation>0?Math.atan2(pose.direction.y,pose.direction.x):e.facing;
-   const directionalFrame=this.directionalAtlas.frame(e.type,facing,{attackAge:pose.age,anticipation:pose.anticipation,moving:move,travel},!!options.reducedMotion);
-   const directionalAttack=!!this.directionalAtlas.data?.actors[e.type]?.attackFrameMs.length;
+   const directional=this.directionalFor(e.type);
+   const directionalFrame=directional.frame(e.type,facing,{attackAge:pose.age,anticipation:pose.anticipation,moving:move,travel},!!options.reducedMotion);
+   const directionalAttack=!!directional.data?.actors[e.type]?.attackFrameMs.length;
    const authored=!!authoredFrame||!!directionalFrame&&(!attacking&&pose.anticipation<=0||directionalAttack||!!options.reducedMotion);
    const bob=options.reducedMotion?0:move?Math.sin(travel*9+phase)*1.8:Math.sin(t*1.8+phase)*.4;
    c.save();
@@ -361,7 +368,7 @@ export class Battlefield {
    if(move&&!options.reducedMotion&&!authored){const stride=Math.sin(travel*9+phase);c.scale(1+stride*.015,1-stride*.022);}
    const width=e.type==='siege'?55:e.type==='cavalry'?51:commander?47:36;const height=e.type==='siege'?44:e.type==='cavalry'?48:commander?59:45;
 
-   const drewAuthored=directionalFrame?this.directionalAtlas.draw(c,e.type,directionalFrame,height):authoredFrame?this.attackAtlas.draw(c,e.type,authoredFrame):false;
+   const drewAuthored=directionalFrame?directional.draw(c,e.type,directionalFrame,height):authoredFrame?this.attackAtlas.draw(c,e.type,authoredFrame):false;
    if(!drewAuthored&&!this.atlas.draw(c,e.type,width,height))unit(c,e.type,e.team,attacking?pose.age*3:t+phase,move,attacking&&!options.reducedMotion,e.facing,pose.age/.3);
    c.restore();
    // Narrow pennants render beyond dense ranks and remain distinct from the supplied costume palette.
@@ -389,9 +396,10 @@ export class Battlefield {
    if(structure){c.translate(0,progress*4);c.scale(1+progress*.06,1-progress*.35);}
    else{const side=Math.cos(fall.facing)-Math.sin(fall.facing)<0?-1:1;c.translate(side*progress*9,progress*4);c.rotate(side*progress*.8);c.scale(1,1-progress*.4);}
   }
-  const directionalFrame=structure?undefined:this.directionalAtlas.frame(fall.type,fall.facing,{attackAge:Infinity,anticipation:0,moving:false,travel:0},true);
+  const directional=this.directionalFor(fall.type);
+  const directionalFrame=structure?undefined:directional.frame(fall.type,fall.facing,{attackAge:Infinity,anticipation:0,moving:false,travel:0},true);
   if(!structure&&!directionalFrame&&Math.cos(fall.facing)-Math.sin(fall.facing)<-.05)c.scale(-1,1);
-  const directionalDrawn=directionalFrame?this.directionalAtlas.draw(c,fall.type,directionalFrame,height):false;
+  const directionalDrawn=directionalFrame?directional.draw(c,fall.type,directionalFrame,height):false;
   if(!directionalDrawn&&!this.atlas.draw(c,fall.type==='turret'?'tower':fall.type,width,structure?undefined:height)){
    if(structure)building(c,fall.type,fall.team,0);else unit(c,fall.type,fall.team,0,false,false,fall.facing);
   }c.restore();

@@ -1,0 +1,1992 @@
+{
+  "version": 1,
+  "image": "swordsman-directional.png",
+  "width": 1792,
+  "height": 2752,
+  "actors": {
+    "swordsman": {
+      "referenceBodyHeight": 145,
+      "suggestedHeight": 45,
+      "walkFrameMs": 130,
+      "attackFrameMs": [
+        100,
+        100,
+        100,
+        250
+      ],
+      "impactFrame": 2,
+      "directions": [
+        {
+          "idle": "swordsman-N-idle",
+          "walk": [
+            "swordsman-N-walk-0",
+            "swordsman-N-walk-1",
+            "swordsman-N-walk-2",
+            "swordsman-N-walk-3"
+          ],
+          "attack": [
+            "swordsman-N-attack-0",
+            "swordsman-N-attack-1",
+            "swordsman-N-attack-2",
+            "swordsman-N-attack-3"
+          ]
+        },
+        {
+          "idle": "swordsman-NNE-idle",
+          "walk": [
+            "swordsman-NNE-walk-0",
+            "swordsman-NNE-walk-1",
+            "swordsman-NNE-walk-2",
+            "swordsman-NNE-walk-3"
+          ],
+          "attack": [
+            "swordsman-NNE-attack-0",
+            "swordsman-NNE-attack-1",
+            "swordsman-NNE-attack-2",
+            "swordsman-NNE-attack-3"
+          ]
+        },
+        {
+          "idle": "swordsman-NE-idle",
+          "walk": [
+            "swordsman-NE-walk-0",
+            "swordsman-NE-walk-1",
+            "swordsman-NE-walk-2",
+            "swordsman-NE-walk-3"
+          ],
+          "attack": [
+            "swordsman-NE-attack-0",
+            "swordsman-NE-attack-1",
+            "swordsman-NE-attack-2",
+            "swordsman-NE-attack-3"
+          ]
+        },
+        {
+          "idle": "swordsman-ENE-idle",
+          "walk": [
+            "swordsman-ENE-walk-0",
+            "swordsman-ENE-walk-1",
+            "swordsman-ENE-walk-2",
+            "swordsman-ENE-walk-3"
+          ],
+          "attack": [
+            "swordsman-ENE-attack-0",
+            "swordsman-ENE-attack-1",
+            "swordsman-ENE-attack-2",
+            "swordsman-ENE-attack-3"
+          ]
+        },
+        {
+          "idle": "swordsman-E-idle",
+          "walk": [
+            "swordsman-E-walk-0",
+            "swordsman-E-walk-1",
+            "swordsman-E-walk-2",
+            "swordsman-E-walk-3"
+          ],
+          "attack": [
+            "swordsman-E-attack-0",
+            "swordsman-E-attack-1",
+            "swordsman-E-attack-2",
+            "swordsman-E-attack-3"
+          ]
+        },
+        {
+          "idle": "swordsman-ESE-idle",
+          "walk": [
+            "swordsman-ESE-walk-0",
+            "swordsman-ESE-walk-1",
+            "swordsman-ESE-walk-2",
+            "swordsman-ESE-walk-3"
+          ],
+          "attack": [
+            "swordsman-ESE-attack-0",
+            "swordsman-ESE-attack-1",
+            "swordsman-ESE-attack-2",
+            "swordsman-ESE-attack-3"
+          ]
+        },
+        {
+          "idle": "swordsman-SE-idle",
+          "walk": [
+            "swordsman-SE-walk-0",
+            "swordsman-SE-walk-1",
+            "swordsman-SE-walk-2",
+            "swordsman-SE-walk-3"
+          ],
+          "attack": [
+            "swordsman-SE-attack-0",
+            "swordsman-SE-attack-1",
+            "swordsman-SE-attack-2",
+            "swordsman-SE-attack-3"
+          ]
+        },
+        {
+          "idle": "swordsman-SSE-idle",
+          "walk": [
+            "swordsman-SSE-walk-0",
+            "swordsman-SSE-walk-1",
+            "swordsman-SSE-walk-2",
+            "swordsman-SSE-walk-3"
+          ],
+          "attack": [
+            "swordsman-SSE-attack-0",
+            "swordsman-SSE-attack-1",
+            "swordsman-SSE-attack-2",
+            "swordsman-SSE-attack-3"
+          ]
+        },
+        {
+          "idle": "swordsman-S-idle",
+          "walk": [
+            "swordsman-S-walk-0",
+            "swordsman-S-walk-1",
+            "swordsman-S-walk-2",
+            "swordsman-S-walk-3"
+          ],
+          "attack": [
+            "swordsman-S-attack-0",
+            "swordsman-S-attack-1",
+            "swordsman-S-attack-2",
+            "swordsman-S-attack-3"
+          ]
+        },
+        {
+          "idle": "swordsman-SSW-idle",
+          "walk": [
+            "swordsman-SSW-walk-0",
+            "swordsman-SSW-walk-1",
+            "swordsman-SSW-walk-2",
+            "swordsman-SSW-walk-3"
+          ],
+          "attack": [
+            "swordsman-SSW-attack-0",
+            "swordsman-SSW-attack-1",
+            "swordsman-SSW-attack-2",
+            "swordsman-SSW-attack-3"
+          ]
+        },
+        {
+          "idle": "swordsman-SW-idle",
+          "walk": [
+            "swordsman-SW-walk-0",
+            "swordsman-SW-walk-1",
+            "swordsman-SW-walk-2",
+            "swordsman-SW-walk-3"
+          ],
+          "attack": [
+            "swordsman-SW-attack-0",
+            "swordsman-SW-attack-1",
+            "swordsman-SW-attack-2",
+            "swordsman-SW-attack-3"
+          ]
+        },
+        {
+          "idle": "swordsman-WSW-idle",
+          "walk": [
+            "swordsman-WSW-walk-0",
+            "swordsman-WSW-walk-1",
+            "swordsman-WSW-walk-2",
+            "swordsman-WSW-walk-3"
+          ],
+          "attack": [
+            "swordsman-WSW-attack-0",
+            "swordsman-WSW-attack-1",
+            "swordsman-WSW-attack-2",
+            "swordsman-WSW-attack-3"
+          ]
+        },
+        {
+          "idle": "swordsman-W-idle",
+          "walk": [
+            "swordsman-W-walk-0",
+            "swordsman-W-walk-1",
+            "swordsman-W-walk-2",
+            "swordsman-W-walk-3"
+          ],
+          "attack": [
+            "swordsman-W-attack-0",
+            "swordsman-W-attack-1",
+            "swordsman-W-attack-2",
+            "swordsman-W-attack-3"
+          ]
+        },
+        {
+          "idle": "swordsman-WNW-idle",
+          "walk": [
+            "swordsman-WNW-walk-0",
+            "swordsman-WNW-walk-1",
+            "swordsman-WNW-walk-2",
+            "swordsman-WNW-walk-3"
+          ],
+          "attack": [
+            "swordsman-WNW-attack-0",
+            "swordsman-WNW-attack-1",
+            "swordsman-WNW-attack-2",
+            "swordsman-WNW-attack-3"
+          ]
+        },
+        {
+          "idle": "swordsman-NW-idle",
+          "walk": [
+            "swordsman-NW-walk-0",
+            "swordsman-NW-walk-1",
+            "swordsman-NW-walk-2",
+            "swordsman-NW-walk-3"
+          ],
+          "attack": [
+            "swordsman-NW-attack-0",
+            "swordsman-NW-attack-1",
+            "swordsman-NW-attack-2",
+            "swordsman-NW-attack-3"
+          ]
+        },
+        {
+          "idle": "swordsman-NNW-idle",
+          "walk": [
+            "swordsman-NNW-walk-0",
+            "swordsman-NNW-walk-1",
+            "swordsman-NNW-walk-2",
+            "swordsman-NNW-walk-3"
+          ],
+          "attack": [
+            "swordsman-NNW-attack-0",
+            "swordsman-NNW-attack-1",
+            "swordsman-NNW-attack-2",
+            "swordsman-NNW-attack-3"
+          ]
+        }
+      ]
+    }
+  },
+  "frames": {
+    "swordsman-N-idle": {
+      "actor": "swordsman",
+      "x": 1269,
+      "y": 2446,
+      "w": 160,
+      "h": 164,
+      "groundPivot": {
+        "x": 95.79133144144407,
+        "y": 159
+      },
+      "bodyHeight": 155
+    },
+    "swordsman-NNE-idle": {
+      "actor": "swordsman",
+      "x": 1433,
+      "y": 1760,
+      "w": 159,
+      "h": 165,
+      "groundPivot": {
+        "x": 94.9377220601404,
+        "y": 160
+      },
+      "bodyHeight": 155
+    },
+    "swordsman-NE-idle": {
+      "actor": "swordsman",
+      "x": 1419,
+      "y": 1929,
+      "w": 161,
+      "h": 165,
+      "groundPivot": {
+        "x": 95.02855274629474,
+        "y": 160
+      },
+      "bodyHeight": 156
+    },
+    "swordsman-ENE-idle": {
+      "actor": "swordsman",
+      "x": 1129,
+      "y": 2276,
+      "w": 155,
+      "h": 166,
+      "groundPivot": {
+        "x": 88.91438483608044,
+        "y": 161
+      },
+      "bodyHeight": 157
+    },
+    "swordsman-E-idle": {
+      "actor": "swordsman",
+      "x": 317,
+      "y": 2014,
+      "w": 143,
+      "h": 175,
+      "groundPivot": {
+        "x": 38.66558217489896,
+        "y": 170
+      },
+      "bodyHeight": 166
+    },
+    "swordsman-ESE-idle": {
+      "actor": "swordsman",
+      "x": 2,
+      "y": 1654,
+      "w": 138,
+      "h": 177,
+      "groundPivot": {
+        "x": 29.735367451295247,
+        "y": 172
+      },
+      "bodyHeight": 168
+    },
+    "swordsman-SE-idle": {
+      "actor": "swordsman",
+      "x": 2,
+      "y": 2197,
+      "w": 138,
+      "h": 177,
+      "groundPivot": {
+        "x": 29.230038372985405,
+        "y": 172
+      },
+      "bodyHeight": 168
+    },
+    "swordsman-SSE-idle": {
+      "actor": "swordsman",
+      "x": 1336,
+      "y": 1579,
+      "w": 168,
+      "h": 177,
+      "groundPivot": {
+        "x": 51.81776406265726,
+        "y": 173
+      },
+      "bodyHeight": 168
+    },
+    "swordsman-S-idle": {
+      "actor": "swordsman",
+      "x": 681,
+      "y": 2111,
+      "w": 168,
+      "h": 170,
+      "groundPivot": {
+        "x": 98.42900602157732,
+        "y": 164
+      },
+      "bodyHeight": 159
+    },
+    "swordsman-SSW-idle": {
+      "actor": "swordsman",
+      "x": 361,
+      "y": 2369,
+      "w": 163,
+      "h": 172,
+      "groundPivot": {
+        "x": 116.56556221938189,
+        "y": 166
+      },
+      "bodyHeight": 161
+    },
+    "swordsman-SW-idle": {
+      "actor": "swordsman",
+      "x": 609,
+      "y": 1936,
+      "w": 157,
+      "h": 171,
+      "groundPivot": {
+        "x": 110.0142024877972,
+        "y": 165
+      },
+      "bodyHeight": 161
+    },
+    "swordsman-WSW-idle": {
+      "actor": "swordsman",
+      "x": 816,
+      "y": 2285,
+      "w": 153,
+      "h": 169,
+      "groundPivot": {
+        "x": 107.52124057525839,
+        "y": 164
+      },
+      "bodyHeight": 160
+    },
+    "swordsman-W-idle": {
+      "actor": "swordsman",
+      "x": 853,
+      "y": 2109,
+      "w": 144,
+      "h": 169,
+      "groundPivot": {
+        "x": 70.30606356634937,
+        "y": 164
+      },
+      "bodyHeight": 159
+    },
+    "swordsman-WNW-idle": {
+      "actor": "swordsman",
+      "x": 1097,
+      "y": 1760,
+      "w": 138,
+      "h": 167,
+      "groundPivot": {
+        "x": 61.33422560288756,
+        "y": 162
+      },
+      "bodyHeight": 158
+    },
+    "swordsman-NW-idle": {
+      "actor": "swordsman",
+      "x": 1001,
+      "y": 2105,
+      "w": 139,
+      "h": 167,
+      "groundPivot": {
+        "x": 68.59578408285506,
+        "y": 162
+      },
+      "bodyHeight": 158
+    },
+    "swordsman-NNW-idle": {
+      "actor": "swordsman",
+      "x": 920,
+      "y": 1933,
+      "w": 156,
+      "h": 168,
+      "groundPivot": {
+        "x": 80.00852122621109,
+        "y": 163
+      },
+      "bodyHeight": 159
+    },
+    "swordsman-N-walk-0": {
+      "actor": "swordsman",
+      "x": 493,
+      "y": 425,
+      "w": 168,
+      "h": 199,
+      "groundPivot": {
+        "x": 107.17796610169492,
+        "y": 192
+      },
+      "bodyHeight": 187
+    },
+    "swordsman-NNE-walk-0": {
+      "actor": "swordsman",
+      "x": 2,
+      "y": 707,
+      "w": 167,
+      "h": 195,
+      "groundPivot": {
+        "x": 89.77046117476596,
+        "y": 188
+      },
+      "bodyHeight": 183
+    },
+    "swordsman-NE-walk-0": {
+      "actor": "swordsman",
+      "x": 1301,
+      "y": 623,
+      "w": 173,
+      "h": 197,
+      "groundPivot": {
+        "x": 87.26789852328659,
+        "y": 190
+      },
+      "bodyHeight": 185
+    },
+    "swordsman-ENE-walk-0": {
+      "actor": "swordsman",
+      "x": 2,
+      "y": 505,
+      "w": 164,
+      "h": 198,
+      "groundPivot": {
+        "x": 95.77288684025757,
+        "y": 191
+      },
+      "bodyHeight": 187
+    },
+    "swordsman-E-walk-0": {
+      "actor": "swordsman",
+      "x": 970,
+      "y": 219,
+      "w": 160,
+      "h": 201,
+      "groundPivot": {
+        "x": 45.2078918828731,
+        "y": 196
+      },
+      "bodyHeight": 191
+    },
+    "swordsman-ESE-walk-0": {
+      "actor": "swordsman",
+      "x": 990,
+      "y": 626,
+      "w": 155,
+      "h": 197,
+      "groundPivot": {
+        "x": 42.0201816347124,
+        "y": 193
+      },
+      "bodyHeight": 189
+    },
+    "swordsman-SE-walk-0": {
+      "actor": "swordsman",
+      "x": 667,
+      "y": 424,
+      "w": 156,
+      "h": 200,
+      "groundPivot": {
+        "x": 34.65154543507742,
+        "y": 195
+      },
+      "bodyHeight": 191
+    },
+    "swordsman-SSE-walk-0": {
+      "actor": "swordsman",
+      "x": 1271,
+      "y": 216,
+      "w": 174,
+      "h": 202,
+      "groundPivot": {
+        "x": 57.68550801197398,
+        "y": 198
+      },
+      "bodyHeight": 194
+    },
+    "swordsman-S-walk-0": {
+      "actor": "swordsman",
+      "x": 1149,
+      "y": 824,
+      "w": 173,
+      "h": 193,
+      "groundPivot": {
+        "x": 111.35188478264698,
+        "y": 187
+      },
+      "bodyHeight": 183
+    },
+    "swordsman-SSW-walk-0": {
+      "actor": "swordsman",
+      "x": 1326,
+      "y": 824,
+      "w": 163,
+      "h": 192,
+      "groundPivot": {
+        "x": 109.71980953133647,
+        "y": 187
+      },
+      "bodyHeight": 182
+    },
+    "swordsman-SW-walk-0": {
+      "actor": "swordsman",
+      "x": 827,
+      "y": 626,
+      "w": 159,
+      "h": 197,
+      "groundPivot": {
+        "x": 97.98109286500141,
+        "y": 192
+      },
+      "bodyHeight": 187
+    },
+    "swordsman-WSW-walk-0": {
+      "actor": "swordsman",
+      "x": 170,
+      "y": 505,
+      "w": 164,
+      "h": 198,
+      "groundPivot": {
+        "x": 110.70558224959655,
+        "y": 193
+      },
+      "bodyHeight": 188
+    },
+    "swordsman-W-walk-0": {
+      "actor": "swordsman",
+      "x": 866,
+      "y": 827,
+      "w": 162,
+      "h": 186,
+      "groundPivot": {
+        "x": 66.5731414341974,
+        "y": 181
+      },
+      "bodyHeight": 176
+    },
+    "swordsman-WNW-walk-0": {
+      "actor": "swordsman",
+      "x": 843,
+      "y": 1206,
+      "w": 159,
+      "h": 182,
+      "groundPivot": {
+        "x": 93.16203399514353,
+        "y": 177
+      },
+      "bodyHeight": 172
+    },
+    "swordsman-NW-walk-0": {
+      "actor": "swordsman",
+      "x": 888,
+      "y": 1017,
+      "w": 163,
+      "h": 185,
+      "groundPivot": {
+        "x": 89.80872656755014,
+        "y": 179
+      },
+      "bodyHeight": 175
+    },
+    "swordsman-NNW-walk-0": {
+      "actor": "swordsman",
+      "x": 509,
+      "y": 628,
+      "w": 169,
+      "h": 195,
+      "groundPivot": {
+        "x": 119.23951626639405,
+        "y": 189
+      },
+      "bodyHeight": 184
+    },
+    "swordsman-N-walk-1": {
+      "actor": "swordsman",
+      "x": 1500,
+      "y": 1211,
+      "w": 161,
+      "h": 180,
+      "groundPivot": {
+        "x": 91.732908139855,
+        "y": 175
+      },
+      "bodyHeight": 171
+    },
+    "swordsman-NNE-walk-1": {
+      "actor": "swordsman",
+      "x": 1006,
+      "y": 1210,
+      "w": 157,
+      "h": 182,
+      "groundPivot": {
+        "x": 91.30841463973252,
+        "y": 177
+      },
+      "bodyHeight": 172
+    },
+    "swordsman-NE-walk-1": {
+      "actor": "swordsman",
+      "x": 1055,
+      "y": 1021,
+      "w": 161,
+      "h": 185,
+      "groundPivot": {
+        "x": 92.9329930830703,
+        "y": 180
+      },
+      "bodyHeight": 175
+    },
+    "swordsman-ENE-walk-1": {
+      "actor": "swordsman",
+      "x": 2,
+      "y": 906,
+      "w": 165,
+      "h": 186,
+      "groundPivot": {
+        "x": 90.5996171345405,
+        "y": 181
+      },
+      "bodyHeight": 176
+    },
+    "swordsman-E-walk-1": {
+      "actor": "swordsman",
+      "x": 181,
+      "y": 1096,
+      "w": 147,
+      "h": 183,
+      "groundPivot": {
+        "x": 38.20974904296045,
+        "y": 179
+      },
+      "bodyHeight": 175
+    },
+    "swordsman-ESE-walk-1": {
+      "actor": "swordsman",
+      "x": 682,
+      "y": 628,
+      "w": 141,
+      "h": 185,
+      "groundPivot": {
+        "x": 34.70434023645163,
+        "y": 180
+      },
+      "bodyHeight": 176
+    },
+    "swordsman-SE-walk-1": {
+      "actor": "swordsman",
+      "x": 1449,
+      "y": 212,
+      "w": 143,
+      "h": 185,
+      "groundPivot": {
+        "x": 37.11341591040434,
+        "y": 180
+      },
+      "bodyHeight": 176
+    },
+    "swordsman-SSE-walk-1": {
+      "actor": "swordsman",
+      "x": 670,
+      "y": 1206,
+      "w": 169,
+      "h": 183,
+      "groundPivot": {
+        "x": 59.74698734177218,
+        "y": 178
+      },
+      "bodyHeight": 174
+    },
+    "swordsman-S-walk-1": {
+      "actor": "swordsman",
+      "x": 2,
+      "y": 1096,
+      "w": 175,
+      "h": 184,
+      "groundPivot": {
+        "x": 115.8188875802465,
+        "y": 179
+      },
+      "bodyHeight": 173
+    },
+    "swordsman-SSW-walk-1": {
+      "actor": "swordsman",
+      "x": 1493,
+      "y": 1018,
+      "w": 165,
+      "h": 189,
+      "groundPivot": {
+        "x": 110.89389763779525,
+        "y": 184
+      },
+      "bodyHeight": 179
+    },
+    "swordsman-SW-walk-1": {
+      "actor": "swordsman",
+      "x": 1493,
+      "y": 824,
+      "w": 165,
+      "h": 190,
+      "groundPivot": {
+        "x": 112.7297496082632,
+        "y": 185
+      },
+      "bodyHeight": 180
+    },
+    "swordsman-WSW-walk-1": {
+      "actor": "swordsman",
+      "x": 2,
+      "y": 2,
+      "w": 487,
+      "h": 499,
+      "groundPivot": {
+        "x": 350.00462423399375,
+        "y": 492
+      },
+      "bodyHeight": 488
+    },
+    "swordsman-W-walk-1": {
+      "actor": "swordsman",
+      "x": 146,
+      "y": 1470,
+      "w": 150,
+      "h": 179,
+      "groundPivot": {
+        "x": 71.02449589701351,
+        "y": 174
+      },
+      "bodyHeight": 169
+    },
+    "swordsman-WNW-walk-1": {
+      "actor": "swordsman",
+      "x": 1149,
+      "y": 626,
+      "w": 142,
+      "h": 184,
+      "groundPivot": {
+        "x": 58.553513702420105,
+        "y": 179
+      },
+      "bodyHeight": 174
+    },
+    "swordsman-NW-walk-1": {
+      "actor": "swordsman",
+      "x": 332,
+      "y": 1208,
+      "w": 145,
+      "h": 183,
+      "groundPivot": {
+        "x": 61.0200586656681,
+        "y": 178
+      },
+      "bodyHeight": 174
+    },
+    "swordsman-NNW-walk-1": {
+      "actor": "swordsman",
+      "x": 489,
+      "y": 1207,
+      "w": 152,
+      "h": 183,
+      "groundPivot": {
+        "x": 97.92886318858223,
+        "y": 178
+      },
+      "bodyHeight": 174
+    },
+    "swordsman-N-walk-2": {
+      "actor": "swordsman",
+      "x": 1161,
+      "y": 1579,
+      "w": 171,
+      "h": 177,
+      "groundPivot": {
+        "x": 48.02462220666317,
+        "y": 172
+      },
+      "bodyHeight": 166
+    },
+    "swordsman-NNE-walk-2": {
+      "actor": "swordsman",
+      "x": 181,
+      "y": 2377,
+      "w": 176,
+      "h": 173,
+      "groundPivot": {
+        "x": 78.00181505540695,
+        "y": 168
+      },
+      "bodyHeight": 163
+    },
+    "swordsman-NE-walk-2": {
+      "actor": "swordsman",
+      "x": 2,
+      "y": 2378,
+      "w": 175,
+      "h": 176,
+      "groundPivot": {
+        "x": 98.0558100195185,
+        "y": 171
+      },
+      "bodyHeight": 166
+    },
+    "swordsman-ENE-walk-2": {
+      "actor": "swordsman",
+      "x": 144,
+      "y": 2197,
+      "w": 171,
+      "h": 176,
+      "groundPivot": {
+        "x": 94.2302149747577,
+        "y": 171
+      },
+      "bodyHeight": 167
+    },
+    "swordsman-E-walk-2": {
+      "actor": "swordsman",
+      "x": 171,
+      "y": 906,
+      "w": 159,
+      "h": 186,
+      "groundPivot": {
+        "x": 54.348436246992776,
+        "y": 181
+      },
+      "bodyHeight": 177
+    },
+    "swordsman-ESE-walk-2": {
+      "actor": "swordsman",
+      "x": 1326,
+      "y": 1020,
+      "w": 162,
+      "h": 187,
+      "groundPivot": {
+        "x": 44.70996909084448,
+        "y": 182
+      },
+      "bodyHeight": 178
+    },
+    "swordsman-SE-walk-2": {
+      "actor": "swordsman",
+      "x": 334,
+      "y": 828,
+      "w": 160,
+      "h": 187,
+      "groundPivot": {
+        "x": 39.03264218937693,
+        "y": 182
+      },
+      "bodyHeight": 177
+    },
+    "swordsman-SSE-walk-2": {
+      "actor": "swordsman",
+      "x": 509,
+      "y": 827,
+      "w": 186,
+      "h": 187,
+      "groundPivot": {
+        "x": 62.59250304400757,
+        "y": 182
+      },
+      "bodyHeight": 178
+    },
+    "swordsman-S-walk-2": {
+      "actor": "swordsman",
+      "x": 645,
+      "y": 1393,
+      "w": 181,
+      "h": 181,
+      "groundPivot": {
+        "x": 60.391528756349345,
+        "y": 176
+      },
+      "bodyHeight": 171
+    },
+    "swordsman-SSW-walk-2": {
+      "actor": "swordsman",
+      "x": 1323,
+      "y": 1211,
+      "w": 173,
+      "h": 180,
+      "groundPivot": {
+        "x": 62.92827522905708,
+        "y": 175
+      },
+      "bodyHeight": 170
+    },
+    "swordsman-SW-walk-2": {
+      "actor": "swordsman",
+      "x": 699,
+      "y": 827,
+      "w": 163,
+      "h": 186,
+      "groundPivot": {
+        "x": 66.837552883174,
+        "y": 181
+      },
+      "bodyHeight": 176
+    },
+    "swordsman-WSW-walk-2": {
+      "actor": "swordsman",
+      "x": 699,
+      "y": 1017,
+      "w": 185,
+      "h": 185,
+      "groundPivot": {
+        "x": 66.9207231335788,
+        "y": 180
+      },
+      "bodyHeight": 175
+    },
+    "swordsman-W-walk-2": {
+      "actor": "swordsman",
+      "x": 1508,
+      "y": 1579,
+      "w": 159,
+      "h": 177,
+      "groundPivot": {
+        "x": 77.45209770296779,
+        "y": 172
+      },
+      "bodyHeight": 166
+    },
+    "swordsman-WNW-walk-2": {
+      "actor": "swordsman",
+      "x": 1485,
+      "y": 1395,
+      "w": 156,
+      "h": 180,
+      "groundPivot": {
+        "x": 66.93459027315123,
+        "y": 176
+      },
+      "bodyHeight": 171
+    },
+    "swordsman-NW-walk-2": {
+      "actor": "swordsman",
+      "x": 1323,
+      "y": 1395,
+      "w": 158,
+      "h": 180,
+      "groundPivot": {
+        "x": 70.99507990483664,
+        "y": 175
+      },
+      "bodyHeight": 171
+    },
+    "swordsman-NNW-walk-2": {
+      "actor": "swordsman",
+      "x": 984,
+      "y": 1579,
+      "w": 173,
+      "h": 177,
+      "groundPivot": {
+        "x": 62.30150881915415,
+        "y": 172
+      },
+      "bodyHeight": 168
+    },
+    "swordsman-N-walk-3": {
+      "actor": "swordsman",
+      "x": 472,
+      "y": 1761,
+      "w": 161,
+      "h": 171,
+      "groundPivot": {
+        "x": 61.33703407291364,
+        "y": 166
+      },
+      "bodyHeight": 162
+    },
+    "swordsman-NNE-walk-3": {
+      "actor": "swordsman",
+      "x": 465,
+      "y": 2545,
+      "w": 160,
+      "h": 172,
+      "groundPivot": {
+        "x": 55.932127877714606,
+        "y": 167
+      },
+      "bodyHeight": 163
+    },
+    "swordsman-NE-walk-3": {
+      "actor": "swordsman",
+      "x": 154,
+      "y": 2016,
+      "w": 159,
+      "h": 175,
+      "groundPivot": {
+        "x": 63.8689861871253,
+        "y": 170
+      },
+      "bodyHeight": 166
+    },
+    "swordsman-ENE-walk-3": {
+      "actor": "swordsman",
+      "x": 161,
+      "y": 1835,
+      "w": 155,
+      "h": 175,
+      "groundPivot": {
+        "x": 61.29987155419417,
+        "y": 170
+      },
+      "bodyHeight": 166
+    },
+    "swordsman-E-walk-3": {
+      "actor": "swordsman",
+      "x": 334,
+      "y": 1019,
+      "w": 151,
+      "h": 185,
+      "groundPivot": {
+        "x": 36.40651896855741,
+        "y": 180
+      },
+      "bodyHeight": 176
+    },
+    "swordsman-ESE-walk-3": {
+      "actor": "swordsman",
+      "x": 181,
+      "y": 1283,
+      "w": 144,
+      "h": 183,
+      "groundPivot": {
+        "x": 37.01320201173513,
+        "y": 178
+      },
+      "bodyHeight": 173
+    },
+    "swordsman-SE-walk-3": {
+      "actor": "swordsman",
+      "x": 843,
+      "y": 1392,
+      "w": 140,
+      "h": 182,
+      "groundPivot": {
+        "x": 33.227546259050655,
+        "y": 177
+      },
+      "bodyHeight": 173
+    },
+    "swordsman-SSE-walk-3": {
+      "actor": "swordsman",
+      "x": 498,
+      "y": 1018,
+      "w": 168,
+      "h": 185,
+      "groundPivot": {
+        "x": 69.09362319919592,
+        "y": 180
+      },
+      "bodyHeight": 177
+    },
+    "swordsman-S-walk-3": {
+      "actor": "swordsman",
+      "x": 632,
+      "y": 1578,
+      "w": 175,
+      "h": 178,
+      "groundPivot": {
+        "x": 71.60751124488485,
+        "y": 173
+      },
+      "bodyHeight": 169
+    },
+    "swordsman-SSW-walk-3": {
+      "actor": "swordsman",
+      "x": 811,
+      "y": 1578,
+      "w": 169,
+      "h": 178,
+      "groundPivot": {
+        "x": 107.05258746043967,
+        "y": 173
+      },
+      "bodyHeight": 167
+    },
+    "swordsman-SW-walk-3": {
+      "actor": "swordsman",
+      "x": 300,
+      "y": 1579,
+      "w": 161,
+      "h": 178,
+      "groundPivot": {
+        "x": 108.37002345789142,
+        "y": 173
+      },
+      "bodyHeight": 169
+    },
+    "swordsman-WSW-walk-3": {
+      "actor": "swordsman",
+      "x": 146,
+      "y": 1653,
+      "w": 146,
+      "h": 178,
+      "groundPivot": {
+        "x": 97.08824137218426,
+        "y": 173
+      },
+      "bodyHeight": 169
+    },
+    "swordsman-W-walk-3": {
+      "actor": "swordsman",
+      "x": 329,
+      "y": 1395,
+      "w": 148,
+      "h": 180,
+      "groundPivot": {
+        "x": 85.83981042654028,
+        "y": 175
+      },
+      "bodyHeight": 171
+    },
+    "swordsman-WNW-walk-3": {
+      "actor": "swordsman",
+      "x": 987,
+      "y": 1396,
+      "w": 145,
+      "h": 179,
+      "groundPivot": {
+        "x": 105.29095894313286,
+        "y": 174
+      },
+      "bodyHeight": 170
+    },
+    "swordsman-NW-walk-3": {
+      "actor": "swordsman",
+      "x": 1645,
+      "y": 1395,
+      "w": 141,
+      "h": 180,
+      "groundPivot": {
+        "x": 106.2770777239275,
+        "y": 175
+      },
+      "bodyHeight": 171
+    },
+    "swordsman-NNW-walk-3": {
+      "actor": "swordsman",
+      "x": 1167,
+      "y": 1210,
+      "w": 152,
+      "h": 182,
+      "groundPivot": {
+        "x": 97.14745420479153,
+        "y": 177
+      },
+      "bodyHeight": 173
+    },
+    "swordsman-N-attack-0": {
+      "actor": "swordsman",
+      "x": 954,
+      "y": 1760,
+      "w": 139,
+      "h": 168,
+      "groundPivot": {
+        "x": 84.38513947557962,
+        "y": 163
+      },
+      "bodyHeight": 157
+    },
+    "swordsman-NNE-attack-0": {
+      "actor": "swordsman",
+      "x": 528,
+      "y": 2288,
+      "w": 142,
+      "h": 171,
+      "groundPivot": {
+        "x": 100.69100650335281,
+        "y": 166
+      },
+      "bodyHeight": 161
+    },
+    "swordsman-NE-attack-0": {
+      "actor": "swordsman",
+      "x": 674,
+      "y": 2288,
+      "w": 138,
+      "h": 171,
+      "groundPivot": {
+        "x": 94.29280634383713,
+        "y": 166
+      },
+      "bodyHeight": 161
+    },
+    "swordsman-ENE-attack-0": {
+      "actor": "swordsman",
+      "x": 629,
+      "y": 2463,
+      "w": 139,
+      "h": 171,
+      "groundPivot": {
+        "x": 94.1693763845069,
+        "y": 166
+      },
+      "bodyHeight": 161
+    },
+    "swordsman-E-attack-0": {
+      "actor": "swordsman",
+      "x": 1662,
+      "y": 809,
+      "w": 118,
+      "h": 181,
+      "groundPivot": {
+        "x": 45.361489520484696,
+        "y": 176
+      },
+      "bodyHeight": 172
+    },
+    "swordsman-ESE-attack-0": {
+      "actor": "swordsman",
+      "x": 667,
+      "y": 220,
+      "w": 128,
+      "h": 183,
+      "groundPivot": {
+        "x": 25.898361694163725,
+        "y": 178
+      },
+      "bodyHeight": 173
+    },
+    "swordsman-SE-attack-0": {
+      "actor": "swordsman",
+      "x": 2,
+      "y": 2016,
+      "w": 148,
+      "h": 177,
+      "groundPivot": {
+        "x": 25.23015299982808,
+        "y": 173
+      },
+      "bodyHeight": 169
+    },
+    "swordsman-SSE-attack-0": {
+      "actor": "swordsman",
+      "x": 465,
+      "y": 1579,
+      "w": 151,
+      "h": 178,
+      "groundPivot": {
+        "x": 53.28742979489243,
+        "y": 173
+      },
+      "bodyHeight": 168
+    },
+    "swordsman-S-attack-0": {
+      "actor": "swordsman",
+      "x": 2,
+      "y": 1835,
+      "w": 155,
+      "h": 177,
+      "groundPivot": {
+        "x": 110.47574126080278,
+        "y": 172
+      },
+      "bodyHeight": 167
+    },
+    "swordsman-SSW-attack-0": {
+      "actor": "swordsman",
+      "x": 481,
+      "y": 1394,
+      "w": 147,
+      "h": 181,
+      "groundPivot": {
+        "x": 108.71820483527347,
+        "y": 176
+      },
+      "bodyHeight": 171
+    },
+    "swordsman-SW-attack-0": {
+      "actor": "swordsman",
+      "x": 1651,
+      "y": 623,
+      "w": 136,
+      "h": 182,
+      "groundPivot": {
+        "x": 101.14740526822436,
+        "y": 177
+      },
+      "bodyHeight": 172
+    },
+    "swordsman-WSW-attack-0": {
+      "actor": "swordsman",
+      "x": 2,
+      "y": 1470,
+      "w": 140,
+      "h": 180,
+      "groundPivot": {
+        "x": 105.64580012262422,
+        "y": 175
+      },
+      "bodyHeight": 170
+    },
+    "swordsman-W-attack-0": {
+      "actor": "swordsman",
+      "x": 1665,
+      "y": 1172,
+      "w": 122,
+      "h": 174,
+      "groundPivot": {
+        "x": 41.097844975598576,
+        "y": 169
+      },
+      "bodyHeight": 164
+    },
+    "swordsman-WNW-attack-0": {
+      "actor": "swordsman",
+      "x": 1662,
+      "y": 994,
+      "w": 127,
+      "h": 174,
+      "groundPivot": {
+        "x": 50.23274831357844,
+        "y": 169
+      },
+      "bodyHeight": 164
+    },
+    "swordsman-NW-attack-0": {
+      "actor": "swordsman",
+      "x": 998,
+      "y": 424,
+      "w": 130,
+      "h": 173,
+      "groundPivot": {
+        "x": 52.78854077087965,
+        "y": 168
+      },
+      "bodyHeight": 163
+    },
+    "swordsman-NNW-attack-0": {
+      "actor": "swordsman",
+      "x": 637,
+      "y": 1760,
+      "w": 145,
+      "h": 171,
+      "groundPivot": {
+        "x": 86.41047192993506,
+        "y": 166
+      },
+      "bodyHeight": 161
+    },
+    "swordsman-N-attack-1": {
+      "actor": "swordsman",
+      "x": 1449,
+      "y": 418,
+      "w": 172,
+      "h": 201,
+      "groundPivot": {
+        "x": 79.29516740823675,
+        "y": 196
+      },
+      "bodyHeight": 166
+    },
+    "swordsman-NNE-attack-1": {
+      "actor": "swordsman",
+      "x": 1134,
+      "y": 422,
+      "w": 163,
+      "h": 200,
+      "groundPivot": {
+        "x": 59.988457207207205,
+        "y": 195
+      },
+      "bodyHeight": 166
+    },
+    "swordsman-NE-attack-1": {
+      "actor": "swordsman",
+      "x": 493,
+      "y": 221,
+      "w": 170,
+      "h": 200,
+      "groundPivot": {
+        "x": 60.84924346629987,
+        "y": 195
+      },
+      "bodyHeight": 166
+    },
+    "swordsman-ENE-attack-1": {
+      "actor": "swordsman",
+      "x": 1625,
+      "y": 418,
+      "w": 161,
+      "h": 201,
+      "groundPivot": {
+        "x": 57.65214164822282,
+        "y": 196
+      },
+      "bodyHeight": 166
+    },
+    "swordsman-E-attack-1": {
+      "actor": "swordsman",
+      "x": 645,
+      "y": 2,
+      "w": 150,
+      "h": 214,
+      "groundPivot": {
+        "x": 44.22581182775022,
+        "y": 209
+      },
+      "bodyHeight": 176
+    },
+    "swordsman-ESE-attack-1": {
+      "actor": "swordsman",
+      "x": 961,
+      "y": 2,
+      "w": 154,
+      "h": 213,
+      "groundPivot": {
+        "x": 37.125526233491314,
+        "y": 208
+      },
+      "bodyHeight": 176
+    },
+    "swordsman-SE-attack-1": {
+      "actor": "swordsman",
+      "x": 493,
+      "y": 2,
+      "w": 148,
+      "h": 215,
+      "groundPivot": {
+        "x": 33.34648798521255,
+        "y": 210
+      },
+      "bodyHeight": 189
+    },
+    "swordsman-SSE-attack-1": {
+      "actor": "swordsman",
+      "x": 1119,
+      "y": 2,
+      "w": 148,
+      "h": 211,
+      "groundPivot": {
+        "x": 32.789148039185875,
+        "y": 207
+      },
+      "bodyHeight": 175
+    },
+    "swordsman-S-attack-1": {
+      "actor": "swordsman",
+      "x": 1600,
+      "y": 211,
+      "w": 169,
+      "h": 203,
+      "groundPivot": {
+        "x": 119.45112198414037,
+        "y": 198
+      },
+      "bodyHeight": 171
+    },
+    "swordsman-SSW-attack-1": {
+      "actor": "swordsman",
+      "x": 1271,
+      "y": 2,
+      "w": 154,
+      "h": 210,
+      "groundPivot": {
+        "x": 116.47082480122492,
+        "y": 205
+      },
+      "bodyHeight": 178
+    },
+    "swordsman-SW-attack-1": {
+      "actor": "swordsman",
+      "x": 799,
+      "y": 2,
+      "w": 158,
+      "h": 213,
+      "groundPivot": {
+        "x": 123.51311858793804,
+        "y": 208
+      },
+      "bodyHeight": 177
+    },
+    "swordsman-WSW-attack-1": {
+      "actor": "swordsman",
+      "x": 1429,
+      "y": 2,
+      "w": 167,
+      "h": 206,
+      "groundPivot": {
+        "x": 126.91527529318228,
+        "y": 201
+      },
+      "bodyHeight": 176
+    },
+    "swordsman-W-attack-1": {
+      "actor": "swordsman",
+      "x": 799,
+      "y": 219,
+      "w": 167,
+      "h": 201,
+      "groundPivot": {
+        "x": 40.55339068408104,
+        "y": 197
+      },
+      "bodyHeight": 174
+    },
+    "swordsman-WNW-attack-1": {
+      "actor": "swordsman",
+      "x": 338,
+      "y": 628,
+      "w": 167,
+      "h": 196,
+      "groundPivot": {
+        "x": 47.660300864184364,
+        "y": 191
+      },
+      "bodyHeight": 171
+    },
+    "swordsman-NW-attack-1": {
+      "actor": "swordsman",
+      "x": 827,
+      "y": 424,
+      "w": 167,
+      "h": 198,
+      "groundPivot": {
+        "x": 55.80445575535066,
+        "y": 193
+      },
+      "bodyHeight": 167
+    },
+    "swordsman-NNW-attack-1": {
+      "actor": "swordsman",
+      "x": 1478,
+      "y": 623,
+      "w": 169,
+      "h": 197,
+      "groundPivot": {
+        "x": 73.26433706027888,
+        "y": 192
+      },
+      "bodyHeight": 168
+    },
+    "swordsman-N-attack-2": {
+      "actor": "swordsman",
+      "x": 1600,
+      "y": 2,
+      "w": 145,
+      "h": 205,
+      "groundPivot": {
+        "x": 40.289275154060846,
+        "y": 200
+      },
+      "bodyHeight": 142
+    },
+    "swordsman-NNE-attack-2": {
+      "actor": "swordsman",
+      "x": 2,
+      "y": 1284,
+      "w": 174,
+      "h": 182,
+      "groundPivot": {
+        "x": 84.29197617459698,
+        "y": 177
+      },
+      "bodyHeight": 142
+    },
+    "swordsman-NE-attack-2": {
+      "actor": "swordsman",
+      "x": 1597,
+      "y": 2435,
+      "w": 192,
+      "h": 154,
+      "groundPivot": {
+        "x": 90.2374234492795,
+        "y": 149
+      },
+      "bodyHeight": 145
+    },
+    "swordsman-ENE-attack-2": {
+      "actor": "swordsman",
+      "x": 1597,
+      "y": 2593,
+      "w": 192,
+      "h": 151,
+      "groundPivot": {
+        "x": 82.66161222421465,
+        "y": 146
+      },
+      "bodyHeight": 142
+    },
+    "swordsman-E-attack-2": {
+      "actor": "swordsman",
+      "x": 319,
+      "y": 2193,
+      "w": 194,
+      "h": 172,
+      "groundPivot": {
+        "x": 45.258283001755984,
+        "y": 166
+      },
+      "bodyHeight": 162
+    },
+    "swordsman-ESE-attack-2": {
+      "actor": "swordsman",
+      "x": 1090,
+      "y": 2453,
+      "w": 175,
+      "h": 166,
+      "groundPivot": {
+        "x": 41.11520315330557,
+        "y": 161
+      },
+      "bodyHeight": 156
+    },
+    "swordsman-SE-attack-2": {
+      "actor": "swordsman",
+      "x": 293,
+      "y": 2554,
+      "w": 168,
+      "h": 172,
+      "groundPivot": {
+        "x": 47.03543975032994,
+        "y": 163
+      },
+      "bodyHeight": 159
+    },
+    "swordsman-SSE-attack-2": {
+      "actor": "swordsman",
+      "x": 173,
+      "y": 707,
+      "w": 157,
+      "h": 194,
+      "groundPivot": {
+        "x": 135.2917166866746,
+        "y": 184
+      },
+      "bodyHeight": 179
+    },
+    "swordsman-S-attack-2": {
+      "actor": "swordsman",
+      "x": 1301,
+      "y": 422,
+      "w": 142,
+      "h": 190,
+      "groundPivot": {
+        "x": 42.90933967691279,
+        "y": 147
+      },
+      "bodyHeight": 143
+    },
+    "swordsman-SSW-attack-2": {
+      "actor": "swordsman",
+      "x": 786,
+      "y": 1760,
+      "w": 164,
+      "h": 169,
+      "groundPivot": {
+        "x": 117.95292907523515,
+        "y": 159
+      },
+      "bodyHeight": 155
+    },
+    "swordsman-SW-attack-2": {
+      "actor": "swordsman",
+      "x": 1223,
+      "y": 1931,
+      "w": 192,
+      "h": 165,
+      "groundPivot": {
+        "x": 153.863684481963,
+        "y": 160
+      },
+      "bodyHeight": 156
+    },
+    "swordsman-WSW-attack-2": {
+      "actor": "swordsman",
+      "x": 1456,
+      "y": 2098,
+      "w": 212,
+      "h": 159,
+      "groundPivot": {
+        "x": 180.00277784667287,
+        "y": 154
+      },
+      "bodyHeight": 150
+    },
+    "swordsman-W-attack-2": {
+      "actor": "swordsman",
+      "x": 1239,
+      "y": 1760,
+      "w": 190,
+      "h": 165,
+      "groundPivot": {
+        "x": 112.2836789720715,
+        "y": 160
+      },
+      "bodyHeight": 156
+    },
+    "swordsman-WNW-attack-2": {
+      "actor": "swordsman",
+      "x": 932,
+      "y": 2458,
+      "w": 154,
+      "h": 167,
+      "groundPivot": {
+        "x": 68.04948580469369,
+        "y": 162
+      },
+      "bodyHeight": 158
+    },
+    "swordsman-NW-attack-2": {
+      "actor": "swordsman",
+      "x": 1433,
+      "y": 2437,
+      "w": 160,
+      "h": 162,
+      "groundPivot": {
+        "x": 71.84045344389028,
+        "y": 157
+      },
+      "bodyHeight": 153
+    },
+    "swordsman-NNW-attack-2": {
+      "actor": "swordsman",
+      "x": 1136,
+      "y": 1396,
+      "w": 144,
+      "h": 179,
+      "groundPivot": {
+        "x": 88.73947332916305,
+        "y": 173
+      },
+      "bodyHeight": 148
+    },
+    "swordsman-N-attack-3": {
+      "actor": "swordsman",
+      "x": 1610,
+      "y": 2261,
+      "w": 144,
+      "h": 156,
+      "groundPivot": {
+        "x": 78.94868878125152,
+        "y": 151
+      },
+      "bodyHeight": 146
+    },
+    "swordsman-NNE-attack-3": {
+      "actor": "swordsman",
+      "x": 1448,
+      "y": 2269,
+      "w": 158,
+      "h": 162,
+      "groundPivot": {
+        "x": 96.09007114624507,
+        "y": 157
+      },
+      "bodyHeight": 152
+    },
+    "swordsman-NE-attack-3": {
+      "actor": "swordsman",
+      "x": 1288,
+      "y": 2269,
+      "w": 156,
+      "h": 164,
+      "groundPivot": {
+        "x": 93.16974549803979,
+        "y": 159
+      },
+      "bodyHeight": 154
+    },
+    "swordsman-ENE-attack-3": {
+      "actor": "swordsman",
+      "x": 973,
+      "y": 2282,
+      "w": 152,
+      "h": 167,
+      "groundPivot": {
+        "x": 88.79863063176253,
+        "y": 162
+      },
+      "bodyHeight": 158
+    },
+    "swordsman-E-attack-3": {
+      "actor": "swordsman",
+      "x": 464,
+      "y": 1937,
+      "w": 141,
+      "h": 172,
+      "groundPivot": {
+        "x": 47.553927315357555,
+        "y": 168
+      },
+      "bodyHeight": 163
+    },
+    "swordsman-ESE-attack-3": {
+      "actor": "swordsman",
+      "x": 2,
+      "y": 2558,
+      "w": 141,
+      "h": 175,
+      "groundPivot": {
+        "x": 37.42883070171098,
+        "y": 170
+      },
+      "bodyHeight": 166
+    },
+    "swordsman-SE-attack-3": {
+      "actor": "swordsman",
+      "x": 147,
+      "y": 2558,
+      "w": 142,
+      "h": 174,
+      "groundPivot": {
+        "x": 30.72402844063504,
+        "y": 169
+      },
+      "bodyHeight": 164
+    },
+    "swordsman-SSE-attack-3": {
+      "actor": "swordsman",
+      "x": 517,
+      "y": 2113,
+      "w": 160,
+      "h": 171,
+      "groundPivot": {
+        "x": 43.32192355722964,
+        "y": 166
+      },
+      "bodyHeight": 162
+    },
+    "swordsman-S-attack-3": {
+      "actor": "swordsman",
+      "x": 1287,
+      "y": 2100,
+      "w": 165,
+      "h": 165,
+      "groundPivot": {
+        "x": 115.32609744331887,
+        "y": 160
+      },
+      "bodyHeight": 156
+    },
+    "swordsman-SSW-attack-3": {
+      "actor": "swordsman",
+      "x": 772,
+      "y": 2463,
+      "w": 156,
+      "h": 169,
+      "groundPivot": {
+        "x": 110.30388630887956,
+        "y": 164
+      },
+      "bodyHeight": 159
+    },
+    "swordsman-SW-attack-3": {
+      "actor": "swordsman",
+      "x": 320,
+      "y": 1761,
+      "w": 148,
+      "h": 172,
+      "groundPivot": {
+        "x": 98.4516043839958,
+        "y": 166
+      },
+      "bodyHeight": 161
+    },
+    "swordsman-WSW-attack-3": {
+      "actor": "swordsman",
+      "x": 770,
+      "y": 1935,
+      "w": 146,
+      "h": 170,
+      "groundPivot": {
+        "x": 98.76394949221913,
+        "y": 165
+      },
+      "bodyHeight": 160
+    },
+    "swordsman-W-attack-3": {
+      "actor": "swordsman",
+      "x": 1144,
+      "y": 2103,
+      "w": 139,
+      "h": 166,
+      "groundPivot": {
+        "x": 65.482861259821,
+        "y": 160
+      },
+      "bodyHeight": 156
+    },
+    "swordsman-WNW-attack-3": {
+      "actor": "swordsman",
+      "x": 1080,
+      "y": 1932,
+      "w": 139,
+      "h": 167,
+      "groundPivot": {
+        "x": 62.333261900297316,
+        "y": 162
+      },
+      "bodyHeight": 157
+    },
+    "swordsman-NW-attack-3": {
+      "actor": "swordsman",
+      "x": 1584,
+      "y": 1929,
+      "w": 138,
+      "h": 165,
+      "groundPivot": {
+        "x": 65.67884855760303,
+        "y": 160
+      },
+      "bodyHeight": 156
+    },
+    "swordsman-NNW-attack-3": {
+      "actor": "swordsman",
+      "x": 1596,
+      "y": 1760,
+      "w": 145,
+      "h": 165,
+      "groundPivot": {
+        "x": 66.12599488202454,
+        "y": 160
+      },
+      "bodyHeight": 156
+    }
+  }
+}

@@ -1,6 +1,12 @@
 # Commercial-readiness work plan and scope
 
-## Current Ranger attack candidate
+## Current Swordsman candidate
+
+Build **`fc-4d0b2bae4d0c`** adds a separate 144-frame Mythic Swordsman atlas, with sixteen headings and idle, four walk and four attack phases. Both actor textures load together before switching themes; a failed load retains the complete working set. Ranger assets, all fifteen simulation files, unit definitions, campaign rules and audio remain unchanged. About correctly describes Ranger and Swordsman coverage. **573 unit tests in 61 files**, TypeScript/build, eight mission validations and 34 repeat-build outputs are verified. The current complete browser gate passed **340 cases with 18 intentional input-mode skips across 358 distinct identities**, in one invocation with **zero failures, automatic retries or manual reruns**. It retains all 352 prior identities and adds exactly six Swordsman cases. The full gate includes all four PWA cases and three real Ranger-to-Swordsman cache upgrades. All 260 frozen worker-source hashes and 34 dist hashes remained exact. Earlier focused bootstrap failures and art-driver corrections remain separate historical evidence; the clean full gate does not erase them. The separate bootstrap robustness patch and next-actor experiments are excluded.
+
+The remaining material retains the preceding checkpoints and their evidence.
+
+## Prior Ranger attack candidate
 
 Build **`fc-5106dd6e9270`** adds four authored Mythic Ranger attack phases across sixteen headings. The 144-frame atlas preserves all 80 prior idle/walk crops and adds 64 unique attacks without resampling or mirroring. Existing projectile events and cooldowns drive the animation; gameplay and renderer source are unchanged. **568 unit tests in 60 files**, TypeScript/build and eight mission validations pass. The current complete browser gate reconciles **334 passes and 18 intentional skips across the same 352 case identities**, with zero unresolved cases. Its first full invocation recorded **331 passes, 18 skips and three failed cache-upgrade setups** because the owned QA host lacked its previous-build directory; those failures happened before gameplay. Correcting only that host configuration and rerunning the same three cases once yielded three passes, with automatic retries disabled. The raw failures and rerun remain preserved; this is not a single clean full invocation. All 255 frozen worker-source hashes and 32 dist hashes remained exact. The separate 48 native-input combat fixtures and 192 Canvas excerpts supply attack-specific evidence; they are not added to the 352-case total.
 
