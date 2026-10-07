@@ -1,0 +1,1992 @@
+{
+  "version": 1,
+  "image": "cavalry-directional.png",
+  "width": 1536,
+  "height": 2432,
+  "actors": {
+    "cavalry": {
+      "referenceBodyHeight": 115,
+      "suggestedHeight": 48,
+      "walkFrameMs": 130,
+      "attackFrameMs": [
+        100,
+        100,
+        100,
+        250
+      ],
+      "impactFrame": 2,
+      "directions": [
+        {
+          "idle": "cavalry-N-idle",
+          "walk": [
+            "cavalry-N-walk-0",
+            "cavalry-N-walk-1",
+            "cavalry-N-walk-2",
+            "cavalry-N-walk-3"
+          ],
+          "attack": [
+            "cavalry-N-attack-0",
+            "cavalry-N-attack-1",
+            "cavalry-N-attack-2",
+            "cavalry-N-attack-3"
+          ]
+        },
+        {
+          "idle": "cavalry-NNE-idle",
+          "walk": [
+            "cavalry-NNE-walk-0",
+            "cavalry-NNE-walk-1",
+            "cavalry-NNE-walk-2",
+            "cavalry-NNE-walk-3"
+          ],
+          "attack": [
+            "cavalry-NNE-attack-0",
+            "cavalry-NNE-attack-1",
+            "cavalry-NNE-attack-2",
+            "cavalry-NNE-attack-3"
+          ]
+        },
+        {
+          "idle": "cavalry-NE-idle",
+          "walk": [
+            "cavalry-NE-walk-0",
+            "cavalry-NE-walk-1",
+            "cavalry-NE-walk-2",
+            "cavalry-NE-walk-3"
+          ],
+          "attack": [
+            "cavalry-NE-attack-0",
+            "cavalry-NE-attack-1",
+            "cavalry-NE-attack-2",
+            "cavalry-NE-attack-3"
+          ]
+        },
+        {
+          "idle": "cavalry-ENE-idle",
+          "walk": [
+            "cavalry-ENE-walk-0",
+            "cavalry-ENE-walk-1",
+            "cavalry-ENE-walk-2",
+            "cavalry-ENE-walk-3"
+          ],
+          "attack": [
+            "cavalry-ENE-attack-0",
+            "cavalry-ENE-attack-1",
+            "cavalry-ENE-attack-2",
+            "cavalry-ENE-attack-3"
+          ]
+        },
+        {
+          "idle": "cavalry-E-idle",
+          "walk": [
+            "cavalry-E-walk-0",
+            "cavalry-E-walk-1",
+            "cavalry-E-walk-2",
+            "cavalry-E-walk-3"
+          ],
+          "attack": [
+            "cavalry-E-attack-0",
+            "cavalry-E-attack-1",
+            "cavalry-E-attack-2",
+            "cavalry-E-attack-3"
+          ]
+        },
+        {
+          "idle": "cavalry-ESE-idle",
+          "walk": [
+            "cavalry-ESE-walk-0",
+            "cavalry-ESE-walk-1",
+            "cavalry-ESE-walk-2",
+            "cavalry-ESE-walk-3"
+          ],
+          "attack": [
+            "cavalry-ESE-attack-0",
+            "cavalry-ESE-attack-1",
+            "cavalry-ESE-attack-2",
+            "cavalry-ESE-attack-3"
+          ]
+        },
+        {
+          "idle": "cavalry-SE-idle",
+          "walk": [
+            "cavalry-SE-walk-0",
+            "cavalry-SE-walk-1",
+            "cavalry-SE-walk-2",
+            "cavalry-SE-walk-3"
+          ],
+          "attack": [
+            "cavalry-SE-attack-0",
+            "cavalry-SE-attack-1",
+            "cavalry-SE-attack-2",
+            "cavalry-SE-attack-3"
+          ]
+        },
+        {
+          "idle": "cavalry-SSE-idle",
+          "walk": [
+            "cavalry-SSE-walk-0",
+            "cavalry-SSE-walk-1",
+            "cavalry-SSE-walk-2",
+            "cavalry-SSE-walk-3"
+          ],
+          "attack": [
+            "cavalry-SSE-attack-0",
+            "cavalry-SSE-attack-1",
+            "cavalry-SSE-attack-2",
+            "cavalry-SSE-attack-3"
+          ]
+        },
+        {
+          "idle": "cavalry-S-idle",
+          "walk": [
+            "cavalry-S-walk-0",
+            "cavalry-S-walk-1",
+            "cavalry-S-walk-2",
+            "cavalry-S-walk-3"
+          ],
+          "attack": [
+            "cavalry-S-attack-0",
+            "cavalry-S-attack-1",
+            "cavalry-S-attack-2",
+            "cavalry-S-attack-3"
+          ]
+        },
+        {
+          "idle": "cavalry-SSW-idle",
+          "walk": [
+            "cavalry-SSW-walk-0",
+            "cavalry-SSW-walk-1",
+            "cavalry-SSW-walk-2",
+            "cavalry-SSW-walk-3"
+          ],
+          "attack": [
+            "cavalry-SSW-attack-0",
+            "cavalry-SSW-attack-1",
+            "cavalry-SSW-attack-2",
+            "cavalry-SSW-attack-3"
+          ]
+        },
+        {
+          "idle": "cavalry-SW-idle",
+          "walk": [
+            "cavalry-SW-walk-0",
+            "cavalry-SW-walk-1",
+            "cavalry-SW-walk-2",
+            "cavalry-SW-walk-3"
+          ],
+          "attack": [
+            "cavalry-SW-attack-0",
+            "cavalry-SW-attack-1",
+            "cavalry-SW-attack-2",
+            "cavalry-SW-attack-3"
+          ]
+        },
+        {
+          "idle": "cavalry-WSW-idle",
+          "walk": [
+            "cavalry-WSW-walk-0",
+            "cavalry-WSW-walk-1",
+            "cavalry-WSW-walk-2",
+            "cavalry-WSW-walk-3"
+          ],
+          "attack": [
+            "cavalry-WSW-attack-0",
+            "cavalry-WSW-attack-1",
+            "cavalry-WSW-attack-2",
+            "cavalry-WSW-attack-3"
+          ]
+        },
+        {
+          "idle": "cavalry-W-idle",
+          "walk": [
+            "cavalry-W-walk-0",
+            "cavalry-W-walk-1",
+            "cavalry-W-walk-2",
+            "cavalry-W-walk-3"
+          ],
+          "attack": [
+            "cavalry-W-attack-0",
+            "cavalry-W-attack-1",
+            "cavalry-W-attack-2",
+            "cavalry-W-attack-3"
+          ]
+        },
+        {
+          "idle": "cavalry-WNW-idle",
+          "walk": [
+            "cavalry-WNW-walk-0",
+            "cavalry-WNW-walk-1",
+            "cavalry-WNW-walk-2",
+            "cavalry-WNW-walk-3"
+          ],
+          "attack": [
+            "cavalry-WNW-attack-0",
+            "cavalry-WNW-attack-1",
+            "cavalry-WNW-attack-2",
+            "cavalry-WNW-attack-3"
+          ]
+        },
+        {
+          "idle": "cavalry-NW-idle",
+          "walk": [
+            "cavalry-NW-walk-0",
+            "cavalry-NW-walk-1",
+            "cavalry-NW-walk-2",
+            "cavalry-NW-walk-3"
+          ],
+          "attack": [
+            "cavalry-NW-attack-0",
+            "cavalry-NW-attack-1",
+            "cavalry-NW-attack-2",
+            "cavalry-NW-attack-3"
+          ]
+        },
+        {
+          "idle": "cavalry-NNW-idle",
+          "walk": [
+            "cavalry-NNW-walk-0",
+            "cavalry-NNW-walk-1",
+            "cavalry-NNW-walk-2",
+            "cavalry-NNW-walk-3"
+          ],
+          "attack": [
+            "cavalry-NNW-attack-0",
+            "cavalry-NNW-attack-1",
+            "cavalry-NNW-attack-2",
+            "cavalry-NNW-attack-3"
+          ]
+        }
+      ]
+    }
+  },
+  "frames": {
+    "cavalry-N-idle": {
+      "actor": "cavalry",
+      "x": 1187,
+      "y": 2,
+      "w": 84,
+      "h": 203,
+      "groundPivot": {
+        "x": 40.656615013889365,
+        "y": 200
+      },
+      "bodyHeight": 155
+    },
+    "cavalry-NNE-idle": {
+      "actor": "cavalry",
+      "x": 98,
+      "y": 217,
+      "w": 102,
+      "h": 193,
+      "groundPivot": {
+        "x": 39.405446236356056,
+        "y": 190
+      },
+      "bodyHeight": 148
+    },
+    "cavalry-NE-idle": {
+      "actor": "cavalry",
+      "x": 430,
+      "y": 605,
+      "w": 116,
+      "h": 187,
+      "groundPivot": {
+        "x": 50.334006782596134,
+        "y": 184
+      },
+      "bodyHeight": 145
+    },
+    "cavalry-ENE-idle": {
+      "actor": "cavalry",
+      "x": 312,
+      "y": 412,
+      "w": 126,
+      "h": 188,
+      "groundPivot": {
+        "x": 50.357587811467965,
+        "y": 185
+      },
+      "bodyHeight": 144
+    },
+    "cavalry-E-idle": {
+      "actor": "cavalry",
+      "x": 653,
+      "y": 607,
+      "w": 146,
+      "h": 186,
+      "groundPivot": {
+        "x": 71.3204371344628,
+        "y": 183
+      },
+      "bodyHeight": 143
+    },
+    "cavalry-ESE-idle": {
+      "actor": "cavalry",
+      "x": 155,
+      "y": 606,
+      "w": 142,
+      "h": 187,
+      "groundPivot": {
+        "x": 69.35607805935763,
+        "y": 184
+      },
+      "bodyHeight": 148
+    },
+    "cavalry-SE-idle": {
+      "actor": "cavalry",
+      "x": 505,
+      "y": 411,
+      "w": 133,
+      "h": 190,
+      "groundPivot": {
+        "x": 71.47506747730313,
+        "y": 187
+      },
+      "bodyHeight": 151
+    },
+    "cavalry-SSE-idle": {
+      "actor": "cavalry",
+      "x": 312,
+      "y": 604,
+      "w": 114,
+      "h": 188,
+      "groundPivot": {
+        "x": 70.34785046728962,
+        "y": 185
+      },
+      "bodyHeight": 150
+    },
+    "cavalry-S-idle": {
+      "actor": "cavalry",
+      "x": 2,
+      "y": 218,
+      "w": 86,
+      "h": 192,
+      "groundPivot": {
+        "x": 41.447891617273484,
+        "y": 189
+      },
+      "bodyHeight": 160
+    },
+    "cavalry-SSW-idle": {
+      "actor": "cavalry",
+      "x": 138,
+      "y": 797,
+      "w": 125,
+      "h": 186,
+      "groundPivot": {
+        "x": 53.42934709294485,
+        "y": 183
+      },
+      "bodyHeight": 147
+    },
+    "cavalry-SW-idle": {
+      "actor": "cavalry",
+      "x": 2,
+      "y": 796,
+      "w": 132,
+      "h": 187,
+      "groundPivot": {
+        "x": 44.628639040228904,
+        "y": 184
+      },
+      "bodyHeight": 146
+    },
+    "cavalry-WSW-idle": {
+      "actor": "cavalry",
+      "x": 653,
+      "y": 797,
+      "w": 141,
+      "h": 185,
+      "groundPivot": {
+        "x": 60.36506878976638,
+        "y": 182
+      },
+      "bodyHeight": 146
+    },
+    "cavalry-W-idle": {
+      "actor": "cavalry",
+      "x": 1052,
+      "y": 802,
+      "w": 139,
+      "h": 181,
+      "groundPivot": {
+        "x": 62.88380024360535,
+        "y": 178
+      },
+      "bodyHeight": 141
+    },
+    "cavalry-WNW-idle": {
+      "actor": "cavalry",
+      "x": 930,
+      "y": 608,
+      "w": 123,
+      "h": 184,
+      "groundPivot": {
+        "x": 78.64706352377146,
+        "y": 181
+      },
+      "bodyHeight": 143
+    },
+    "cavalry-NW-idle": {
+      "actor": "cavalry",
+      "x": 1057,
+      "y": 614,
+      "w": 119,
+      "h": 184,
+      "groundPivot": {
+        "x": 66.09322967486071,
+        "y": 181
+      },
+      "bodyHeight": 142
+    },
+    "cavalry-NNW-idle": {
+      "actor": "cavalry",
+      "x": 1441,
+      "y": 2,
+      "w": 88,
+      "h": 187,
+      "groundPivot": {
+        "x": 50.97144456886895,
+        "y": 184
+      },
+      "bodyHeight": 146
+    },
+    "cavalry-N-walk-0": {
+      "actor": "cavalry",
+      "x": 970,
+      "y": 1972,
+      "w": 70,
+      "h": 137,
+      "groundPivot": {
+        "x": 30.99171203380189,
+        "y": 134
+      },
+      "bodyHeight": 108
+    },
+    "cavalry-NNE-walk-0": {
+      "actor": "cavalry",
+      "x": 653,
+      "y": 2136,
+      "w": 86,
+      "h": 143,
+      "groundPivot": {
+        "x": 34.88597124663562,
+        "y": 140
+      },
+      "bodyHeight": 111
+    },
+    "cavalry-NE-walk-0": {
+      "actor": "cavalry",
+      "x": 743,
+      "y": 2129,
+      "w": 104,
+      "h": 141,
+      "groundPivot": {
+        "x": 36.588494394020245,
+        "y": 138
+      },
+      "bodyHeight": 109
+    },
+    "cavalry-ENE-walk-0": {
+      "actor": "cavalry",
+      "x": 663,
+      "y": 1984,
+      "w": 111,
+      "h": 141,
+      "groundPivot": {
+        "x": 34.88312292358796,
+        "y": 138
+      },
+      "bodyHeight": 109
+    },
+    "cavalry-E-walk-0": {
+      "actor": "cavalry",
+      "x": 1044,
+      "y": 1964,
+      "w": 124,
+      "h": 132,
+      "groundPivot": {
+        "x": 68.12399093612802,
+        "y": 129
+      },
+      "bodyHeight": 102
+    },
+    "cavalry-ESE-walk-0": {
+      "actor": "cavalry",
+      "x": 1040,
+      "y": 1826,
+      "w": 116,
+      "h": 134,
+      "groundPivot": {
+        "x": 77.88457633376407,
+        "y": 131
+      },
+      "bodyHeight": 109
+    },
+    "cavalry-SE-walk-0": {
+      "actor": "cavalry",
+      "x": 869,
+      "y": 2271,
+      "w": 113,
+      "h": 137,
+      "groundPivot": {
+        "x": 81.84472233746226,
+        "y": 134
+      },
+      "bodyHeight": 111
+    },
+    "cavalry-SSE-walk-0": {
+      "actor": "cavalry",
+      "x": 851,
+      "y": 2128,
+      "w": 93,
+      "h": 139,
+      "groundPivot": {
+        "x": 65.85989196488867,
+        "y": 136
+      },
+      "bodyHeight": 112
+    },
+    "cavalry-S-walk-0": {
+      "actor": "cavalry",
+      "x": 992,
+      "y": 1684,
+      "w": 83,
+      "h": 138,
+      "groundPivot": {
+        "x": 32.416082851050874,
+        "y": 135
+      },
+      "bodyHeight": 113
+    },
+    "cavalry-SSW-walk-0": {
+      "actor": "cavalry",
+      "x": 948,
+      "y": 2116,
+      "w": 108,
+      "h": 137,
+      "groundPivot": {
+        "x": 25.857370386643254,
+        "y": 134
+      },
+      "bodyHeight": 108
+    },
+    "cavalry-SW-walk-0": {
+      "actor": "cavalry",
+      "x": 797,
+      "y": 1830,
+      "w": 112,
+      "h": 139,
+      "groundPivot": {
+        "x": 27.794366517121944,
+        "y": 136
+      },
+      "bodyHeight": 109
+    },
+    "cavalry-WSW-walk-0": {
+      "actor": "cavalry",
+      "x": 913,
+      "y": 1830,
+      "w": 123,
+      "h": 138,
+      "groundPivot": {
+        "x": 25.591877109274947,
+        "y": 135
+      },
+      "bodyHeight": 109
+    },
+    "cavalry-W-walk-0": {
+      "actor": "cavalry",
+      "x": 402,
+      "y": 2295,
+      "w": 126,
+      "h": 134,
+      "groundPivot": {
+        "x": 57.247683414095036,
+        "y": 131
+      },
+      "bodyHeight": 102
+    },
+    "cavalry-WNW-walk-0": {
+      "actor": "cavalry",
+      "x": 778,
+      "y": 1984,
+      "w": 103,
+      "h": 140,
+      "groundPivot": {
+        "x": 71.37689785011537,
+        "y": 137
+      },
+      "bodyHeight": 111
+    },
+    "cavalry-NW-walk-0": {
+      "actor": "cavalry",
+      "x": 541,
+      "y": 2287,
+      "w": 110,
+      "h": 143,
+      "groundPivot": {
+        "x": 73.68178053830229,
+        "y": 140
+      },
+      "bodyHeight": 110
+    },
+    "cavalry-NNW-walk-0": {
+      "actor": "cavalry",
+      "x": 574,
+      "y": 1988,
+      "w": 85,
+      "h": 144,
+      "groundPivot": {
+        "x": 45.64558193849757,
+        "y": 141
+      },
+      "bodyHeight": 109
+    },
+    "cavalry-N-walk-1": {
+      "actor": "cavalry",
+      "x": 2,
+      "y": 2,
+      "w": 92,
+      "h": 212,
+      "groundPivot": {
+        "x": 37.73516299804959,
+        "y": 209
+      },
+      "bodyHeight": 164
+    },
+    "cavalry-NNE-walk-1": {
+      "actor": "cavalry",
+      "x": 98,
+      "y": 2,
+      "w": 119,
+      "h": 211,
+      "groundPivot": {
+        "x": 35.92872807017545,
+        "y": 208
+      },
+      "bodyHeight": 165
+    },
+    "cavalry-NE-walk-1": {
+      "actor": "cavalry",
+      "x": 376,
+      "y": 2,
+      "w": 150,
+      "h": 208,
+      "groundPivot": {
+        "x": 46.44760680621869,
+        "y": 205
+      },
+      "bodyHeight": 162
+    },
+    "cavalry-ENE-walk-1": {
+      "actor": "cavalry",
+      "x": 221,
+      "y": 2,
+      "w": 151,
+      "h": 209,
+      "groundPivot": {
+        "x": 45.9839301835691,
+        "y": 206
+      },
+      "bodyHeight": 161
+    },
+    "cavalry-E-walk-1": {
+      "actor": "cavalry",
+      "x": 1275,
+      "y": 2,
+      "w": 162,
+      "h": 201,
+      "groundPivot": {
+        "x": 88.40103052692982,
+        "y": 198
+      },
+      "bodyHeight": 151
+    },
+    "cavalry-ESE-walk-1": {
+      "actor": "cavalry",
+      "x": 916,
+      "y": 2,
+      "w": 161,
+      "h": 203,
+      "groundPivot": {
+        "x": 106.17185815908601,
+        "y": 200
+      },
+      "bodyHeight": 159
+    },
+    "cavalry-SE-walk-1": {
+      "actor": "cavalry",
+      "x": 530,
+      "y": 2,
+      "w": 148,
+      "h": 206,
+      "groundPivot": {
+        "x": 94.64891454589804,
+        "y": 203
+      },
+      "bodyHeight": 160
+    },
+    "cavalry-SSE-walk-1": {
+      "actor": "cavalry",
+      "x": 779,
+      "y": 2,
+      "w": 133,
+      "h": 205,
+      "groundPivot": {
+        "x": 98.6003349816558,
+        "y": 202
+      },
+      "bodyHeight": 161
+    },
+    "cavalry-S-walk-1": {
+      "actor": "cavalry",
+      "x": 550,
+      "y": 607,
+      "w": 99,
+      "h": 187,
+      "groundPivot": {
+        "x": 37.739864397398634,
+        "y": 184
+      },
+      "bodyHeight": 151
+    },
+    "cavalry-SSW-walk-1": {
+      "actor": "cavalry",
+      "x": 1220,
+      "y": 412,
+      "w": 147,
+      "h": 197,
+      "groundPivot": {
+        "x": 27.47217145705264,
+        "y": 194
+      },
+      "bodyHeight": 153
+    },
+    "cavalry-SW-walk-1": {
+      "actor": "cavalry",
+      "x": 1069,
+      "y": 209,
+      "w": 147,
+      "h": 200,
+      "groundPivot": {
+        "x": 56.74425833189434,
+        "y": 197
+      },
+      "bodyHeight": 157
+    },
+    "cavalry-WSW-walk-1": {
+      "actor": "cavalry",
+      "x": 1213,
+      "y": 613,
+      "w": 153,
+      "h": 195,
+      "groundPivot": {
+        "x": 92.89525474525476,
+        "y": 192
+      },
+      "bodyHeight": 153
+    },
+    "cavalry-W-walk-1": {
+      "actor": "cavalry",
+      "x": 1371,
+      "y": 612,
+      "w": 159,
+      "h": 195,
+      "groundPivot": {
+        "x": 116.82646699266505,
+        "y": 192
+      },
+      "bodyHeight": 153
+    },
+    "cavalry-WNW-walk-1": {
+      "actor": "cavalry",
+      "x": 916,
+      "y": 209,
+      "w": 149,
+      "h": 201,
+      "groundPivot": {
+        "x": 93.95701736739755,
+        "y": 198
+      },
+      "bodyHeight": 159
+    },
+    "cavalry-NW-walk-1": {
+      "actor": "cavalry",
+      "x": 1275,
+      "y": 207,
+      "w": 153,
+      "h": 201,
+      "groundPivot": {
+        "x": 98.40136821530598,
+        "y": 198
+      },
+      "bodyHeight": 158
+    },
+    "cavalry-NNW-walk-1": {
+      "actor": "cavalry",
+      "x": 1081,
+      "y": 2,
+      "w": 102,
+      "h": 203,
+      "groundPivot": {
+        "x": 53.93801591981128,
+        "y": 200
+      },
+      "bodyHeight": 161
+    },
+    "cavalry-N-walk-2": {
+      "actor": "cavalry",
+      "x": 682,
+      "y": 2,
+      "w": 93,
+      "h": 206,
+      "groundPivot": {
+        "x": 37.03787189814213,
+        "y": 203
+      },
+      "bodyHeight": 152
+    },
+    "cavalry-NNE-walk-2": {
+      "actor": "cavalry",
+      "x": 376,
+      "y": 214,
+      "w": 125,
+      "h": 194,
+      "groundPivot": {
+        "x": 41.053347934918634,
+        "y": 191
+      },
+      "bodyHeight": 149
+    },
+    "cavalry-NE-walk-2": {
+      "actor": "cavalry",
+      "x": 1371,
+      "y": 412,
+      "w": 140,
+      "h": 196,
+      "groundPivot": {
+        "x": 38.58247979601538,
+        "y": 193
+      },
+      "bodyHeight": 145
+    },
+    "cavalry-ENE-walk-2": {
+      "actor": "cavalry",
+      "x": 221,
+      "y": 215,
+      "w": 147,
+      "h": 193,
+      "groundPivot": {
+        "x": 40.857193458881966,
+        "y": 190
+      },
+      "bodyHeight": 146
+    },
+    "cavalry-E-walk-2": {
+      "actor": "cavalry",
+      "x": 477,
+      "y": 798,
+      "w": 166,
+      "h": 184,
+      "groundPivot": {
+        "x": 99.29285695819652,
+        "y": 181
+      },
+      "bodyHeight": 137
+    },
+    "cavalry-ESE-walk-2": {
+      "actor": "cavalry",
+      "x": 798,
+      "y": 798,
+      "w": 159,
+      "h": 183,
+      "groundPivot": {
+        "x": 78.42778016148537,
+        "y": 180
+      },
+      "bodyHeight": 140
+    },
+    "cavalry-SE-walk-2": {
+      "actor": "cavalry",
+      "x": 814,
+      "y": 414,
+      "w": 153,
+      "h": 190,
+      "groundPivot": {
+        "x": 116.04718004338395,
+        "y": 187
+      },
+      "bodyHeight": 146
+    },
+    "cavalry-SSE-walk-2": {
+      "actor": "cavalry",
+      "x": 643,
+      "y": 212,
+      "w": 131,
+      "h": 194,
+      "groundPivot": {
+        "x": 103.06630968317722,
+        "y": 191
+      },
+      "bodyHeight": 149
+    },
+    "cavalry-S-walk-2": {
+      "actor": "cavalry",
+      "x": 530,
+      "y": 212,
+      "w": 109,
+      "h": 195,
+      "groundPivot": {
+        "x": 40.7041911840611,
+        "y": 192
+      },
+      "bodyHeight": 151
+    },
+    "cavalry-SSW-walk-2": {
+      "actor": "cavalry",
+      "x": 443,
+      "y": 986,
+      "w": 145,
+      "h": 176,
+      "groundPivot": {
+        "x": 58.133611821185866,
+        "y": 173
+      },
+      "bodyHeight": 139
+    },
+    "cavalry-SW-walk-2": {
+      "actor": "cavalry",
+      "x": 2,
+      "y": 605,
+      "w": 149,
+      "h": 187,
+      "groundPivot": {
+        "x": 27.83563184867296,
+        "y": 184
+      },
+      "bodyHeight": 148
+    },
+    "cavalry-WSW-walk-2": {
+      "actor": "cavalry",
+      "x": 1082,
+      "y": 995,
+      "w": 160,
+      "h": 177,
+      "groundPivot": {
+        "x": 90.64952243307789,
+        "y": 174
+      },
+      "bodyHeight": 141
+    },
+    "cavalry-W-walk-2": {
+      "actor": "cavalry",
+      "x": 909,
+      "y": 987,
+      "w": 169,
+      "h": 177,
+      "groundPivot": {
+        "x": 91.35538547694605,
+        "y": 174
+      },
+      "bodyHeight": 138
+    },
+    "cavalry-WNW-walk-2": {
+      "actor": "cavalry",
+      "x": 2,
+      "y": 414,
+      "w": 151,
+      "h": 187,
+      "groundPivot": {
+        "x": 106.29978624089341,
+        "y": 184
+      },
+      "bodyHeight": 146
+    },
+    "cavalry-NW-walk-2": {
+      "actor": "cavalry",
+      "x": 1370,
+      "y": 811,
+      "w": 147,
+      "h": 195,
+      "groundPivot": {
+        "x": 99.1810992033927,
+        "y": 192
+      },
+      "bodyHeight": 149
+    },
+    "cavalry-NNW-walk-2": {
+      "actor": "cavalry",
+      "x": 779,
+      "y": 211,
+      "w": 126,
+      "h": 195,
+      "groundPivot": {
+        "x": 77.27562545542878,
+        "y": 192
+      },
+      "bodyHeight": 149
+    },
+    "cavalry-N-walk-3": {
+      "actor": "cavalry",
+      "x": 478,
+      "y": 1669,
+      "w": 75,
+      "h": 151,
+      "groundPivot": {
+        "x": 26.83327742368334,
+        "y": 148
+      },
+      "bodyHeight": 118
+    },
+    "cavalry-NNE-walk-3": {
+      "actor": "cavalry",
+      "x": 2,
+      "y": 1829,
+      "w": 101,
+      "h": 155,
+      "groundPivot": {
+        "x": 34.36944288126057,
+        "y": 152
+      },
+      "bodyHeight": 121
+    },
+    "cavalry-NE-walk-3": {
+      "actor": "cavalry",
+      "x": 334,
+      "y": 1830,
+      "w": 111,
+      "h": 152,
+      "groundPivot": {
+        "x": 39.09118747873424,
+        "y": 149
+      },
+      "bodyHeight": 116
+    },
+    "cavalry-ENE-walk-3": {
+      "actor": "cavalry",
+      "x": 1241,
+      "y": 1527,
+      "w": 119,
+      "h": 153,
+      "groundPivot": {
+        "x": 39.15307402760345,
+        "y": 150
+      },
+      "bodyHeight": 119
+    },
+    "cavalry-E-walk-3": {
+      "actor": "cavalry",
+      "x": 402,
+      "y": 2144,
+      "w": 135,
+      "h": 147,
+      "groundPivot": {
+        "x": 71.92692798541478,
+        "y": 144
+      },
+      "bodyHeight": 110
+    },
+    "cavalry-ESE-walk-3": {
+      "actor": "cavalry",
+      "x": 663,
+      "y": 1829,
+      "w": 130,
+      "h": 151,
+      "groundPivot": {
+        "x": 76.4969448711384,
+        "y": 148
+      },
+      "bodyHeight": 117
+    },
+    "cavalry-SE-walk-3": {
+      "actor": "cavalry",
+      "x": 724,
+      "y": 1668,
+      "w": 130,
+      "h": 157,
+      "groundPivot": {
+        "x": 109.75402067777145,
+        "y": 154
+      },
+      "bodyHeight": 121
+    },
+    "cavalry-SSE-walk-3": {
+      "actor": "cavalry",
+      "x": 2,
+      "y": 1667,
+      "w": 118,
+      "h": 158,
+      "groundPivot": {
+        "x": 96.590582490408,
+        "y": 155
+      },
+      "bodyHeight": 123
+    },
+    "cavalry-S-walk-3": {
+      "actor": "cavalry",
+      "x": 244,
+      "y": 1826,
+      "w": 86,
+      "h": 156,
+      "groundPivot": {
+        "x": 35.32065744784086,
+        "y": 153
+      },
+      "bodyHeight": 121
+    },
+    "cavalry-SSW-walk-3": {
+      "actor": "cavalry",
+      "x": 1364,
+      "y": 1534,
+      "w": 114,
+      "h": 153,
+      "groundPivot": {
+        "x": 27.067320984241064,
+        "y": 150
+      },
+      "bodyHeight": 115
+    },
+    "cavalry-SW-walk-3": {
+      "actor": "cavalry",
+      "x": 357,
+      "y": 1669,
+      "w": 117,
+      "h": 157,
+      "groundPivot": {
+        "x": 49.91195390504754,
+        "y": 154
+      },
+      "bodyHeight": 116
+    },
+    "cavalry-WSW-walk-3": {
+      "actor": "cavalry",
+      "x": 858,
+      "y": 1673,
+      "w": 130,
+      "h": 153,
+      "groundPivot": {
+        "x": 62.6157268292684,
+        "y": 150
+      },
+      "bodyHeight": 116
+    },
+    "cavalry-W-walk-3": {
+      "actor": "cavalry",
+      "x": 913,
+      "y": 1512,
+      "w": 132,
+      "h": 157,
+      "groundPivot": {
+        "x": 95.17437946992007,
+        "y": 154
+      },
+      "bodyHeight": 117
+    },
+    "cavalry-WNW-walk-3": {
+      "actor": "cavalry",
+      "x": 634,
+      "y": 1340,
+      "w": 110,
+      "h": 160,
+      "groundPivot": {
+        "x": 74.37122935779814,
+        "y": 157
+      },
+      "bodyHeight": 121
+    },
+    "cavalry-NW-walk-3": {
+      "actor": "cavalry",
+      "x": 124,
+      "y": 1826,
+      "w": 116,
+      "h": 157,
+      "groundPivot": {
+        "x": 80.09839903337866,
+        "y": 154
+      },
+      "bodyHeight": 118
+    },
+    "cavalry-NNW-walk-3": {
+      "actor": "cavalry",
+      "x": 164,
+      "y": 1502,
+      "w": 91,
+      "h": 158,
+      "groundPivot": {
+        "x": 52.5144195034934,
+        "y": 155
+      },
+      "bodyHeight": 119
+    },
+    "cavalry-N-attack-0": {
+      "actor": "cavalry",
+      "x": 1227,
+      "y": 1191,
+      "w": 138,
+      "h": 169,
+      "groundPivot": {
+        "x": 45.63688317716341,
+        "y": 166
+      },
+      "bodyHeight": 149
+    },
+    "cavalry-NNE-attack-0": {
+      "actor": "cavalry",
+      "x": 266,
+      "y": 1499,
+      "w": 168,
+      "h": 161,
+      "groundPivot": {
+        "x": 48.84742906837698,
+        "y": 158
+      },
+      "bodyHeight": 154
+    },
+    "cavalry-NE-attack-0": {
+      "actor": "cavalry",
+      "x": 748,
+      "y": 1344,
+      "w": 185,
+      "h": 159,
+      "groundPivot": {
+        "x": 46.57826304384059,
+        "y": 156
+      },
+      "bodyHeight": 152
+    },
+    "cavalry-ENE-attack-0": {
+      "actor": "cavalry",
+      "x": 164,
+      "y": 1664,
+      "w": 189,
+      "h": 158,
+      "groundPivot": {
+        "x": 45.64190025286484,
+        "y": 155
+      },
+      "bodyHeight": 151
+    },
+    "cavalry-E-attack-0": {
+      "actor": "cavalry",
+      "x": 179,
+      "y": 2146,
+      "w": 219,
+      "h": 150,
+      "groundPivot": {
+        "x": 96.59742652189689,
+        "y": 147
+      },
+      "bodyHeight": 143
+    },
+    "cavalry-ESE-attack-0": {
+      "actor": "cavalry",
+      "x": 244,
+      "y": 1986,
+      "w": 209,
+      "h": 154,
+      "groundPivot": {
+        "x": 125.41581788551639,
+        "y": 151
+      },
+      "bodyHeight": 147
+    },
+    "cavalry-SE-attack-0": {
+      "actor": "cavalry",
+      "x": 310,
+      "y": 1333,
+      "w": 192,
+      "h": 162,
+      "groundPivot": {
+        "x": 106.33987359683044,
+        "y": 159
+      },
+      "bodyHeight": 155
+    },
+    "cavalry-SSE-attack-0": {
+      "actor": "cavalry",
+      "x": 2,
+      "y": 1503,
+      "w": 158,
+      "h": 160,
+      "groundPivot": {
+        "x": 87.39721474916928,
+        "y": 157
+      },
+      "bodyHeight": 153
+    },
+    "cavalry-S-attack-0": {
+      "actor": "cavalry",
+      "x": 1087,
+      "y": 1364,
+      "w": 140,
+      "h": 159,
+      "groundPivot": {
+        "x": 70.79397095094546,
+        "y": 156
+      },
+      "bodyHeight": 152
+    },
+    "cavalry-SSW-attack-0": {
+      "actor": "cavalry",
+      "x": 478,
+      "y": 1828,
+      "w": 181,
+      "h": 156,
+      "groundPivot": {
+        "x": 72.19254691979012,
+        "y": 153
+      },
+      "bodyHeight": 148
+    },
+    "cavalry-SW-attack-0": {
+      "actor": "cavalry",
+      "x": 1049,
+      "y": 1527,
+      "w": 188,
+      "h": 153,
+      "groundPivot": {
+        "x": 76.45277223160804,
+        "y": 150
+      },
+      "bodyHeight": 145
+    },
+    "cavalry-WSW-attack-0": {
+      "actor": "cavalry",
+      "x": 2,
+      "y": 1988,
+      "w": 199,
+      "h": 154,
+      "groundPivot": {
+        "x": 83.18084763948491,
+        "y": 151
+      },
+      "bodyHeight": 147
+    },
+    "cavalry-W-attack-0": {
+      "actor": "cavalry",
+      "x": 655,
+      "y": 2283,
+      "w": 210,
+      "h": 142,
+      "groundPivot": {
+        "x": 119.14743843166437,
+        "y": 139
+      },
+      "bodyHeight": 135
+    },
+    "cavalry-WNW-attack-0": {
+      "actor": "cavalry",
+      "x": 2,
+      "y": 2146,
+      "w": 173,
+      "h": 154,
+      "groundPivot": {
+        "x": 122.4823149334373,
+        "y": 151
+      },
+      "bodyHeight": 147
+    },
+    "cavalry-NW-attack-0": {
+      "actor": "cavalry",
+      "x": 747,
+      "y": 1507,
+      "w": 162,
+      "h": 157,
+      "groundPivot": {
+        "x": 111.66556049644919,
+        "y": 154
+      },
+      "bodyHeight": 150
+    },
+    "cavalry-NNW-attack-0": {
+      "actor": "cavalry",
+      "x": 937,
+      "y": 1349,
+      "w": 146,
+      "h": 159,
+      "groundPivot": {
+        "x": 97.20316868592727,
+        "y": 156
+      },
+      "bodyHeight": 152
+    },
+    "cavalry-N-attack-1": {
+      "actor": "cavalry",
+      "x": 1432,
+      "y": 207,
+      "w": 94,
+      "h": 197,
+      "groundPivot": {
+        "x": 47.265433450087556,
+        "y": 194
+      },
+      "bodyHeight": 153
+    },
+    "cavalry-NNE-attack-1": {
+      "actor": "cavalry",
+      "x": 1069,
+      "y": 413,
+      "w": 140,
+      "h": 197,
+      "groundPivot": {
+        "x": 37.54650341417471,
+        "y": 194
+      },
+      "bodyHeight": 152
+    },
+    "cavalry-NE-attack-1": {
+      "actor": "cavalry",
+      "x": 643,
+      "y": 410,
+      "w": 167,
+      "h": 193,
+      "groundPivot": {
+        "x": 43.06434614454918,
+        "y": 190
+      },
+      "bodyHeight": 149
+    },
+    "cavalry-ENE-attack-1": {
+      "actor": "cavalry",
+      "x": 301,
+      "y": 796,
+      "w": 172,
+      "h": 186,
+      "groundPivot": {
+        "x": 43.75428973984799,
+        "y": 183
+      },
+      "bodyHeight": 147
+    },
+    "cavalry-E-attack-1": {
+      "actor": "cavalry",
+      "x": 267,
+      "y": 986,
+      "w": 172,
+      "h": 176,
+      "groundPivot": {
+        "x": 46.423169349353884,
+        "y": 173
+      },
+      "bodyHeight": 141
+    },
+    "cavalry-ESE-attack-1": {
+      "actor": "cavalry",
+      "x": 592,
+      "y": 986,
+      "w": 177,
+      "h": 174,
+      "groundPivot": {
+        "x": 83.75923170867105,
+        "y": 171
+      },
+      "bodyHeight": 139
+    },
+    "cavalry-SE-attack-1": {
+      "actor": "cavalry",
+      "x": 592,
+      "y": 1164,
+      "w": 161,
+      "h": 172,
+      "groundPivot": {
+        "x": 84.79576405803243,
+        "y": 169
+      },
+      "bodyHeight": 140
+    },
+    "cavalry-SSE-attack-1": {
+      "actor": "cavalry",
+      "x": 914,
+      "y": 1168,
+      "w": 142,
+      "h": 172,
+      "groundPivot": {
+        "x": 80.63186383592961,
+        "y": 169
+      },
+      "bodyHeight": 142
+    },
+    "cavalry-S-attack-1": {
+      "actor": "cavalry",
+      "x": 204,
+      "y": 412,
+      "w": 104,
+      "h": 190,
+      "groundPivot": {
+        "x": 47.42028865979381,
+        "y": 187
+      },
+      "bodyHeight": 155
+    },
+    "cavalry-SSW-attack-1": {
+      "actor": "cavalry",
+      "x": 1246,
+      "y": 1010,
+      "w": 147,
+      "h": 177,
+      "groundPivot": {
+        "x": 45.60888996990059,
+        "y": 174
+      },
+      "bodyHeight": 140
+    },
+    "cavalry-SW-attack-1": {
+      "actor": "cavalry",
+      "x": 1195,
+      "y": 812,
+      "w": 153,
+      "h": 179,
+      "groundPivot": {
+        "x": 73.96520950986542,
+        "y": 176
+      },
+      "bodyHeight": 138
+    },
+    "cavalry-WSW-attack-1": {
+      "actor": "cavalry",
+      "x": 2,
+      "y": 987,
+      "w": 160,
+      "h": 176,
+      "groundPivot": {
+        "x": 74.53092543430671,
+        "y": 173
+      },
+      "bodyHeight": 140
+    },
+    "cavalry-W-attack-1": {
+      "actor": "cavalry",
+      "x": 310,
+      "y": 1166,
+      "w": 172,
+      "h": 163,
+      "groundPivot": {
+        "x": 127.7523131327811,
+        "y": 160
+      },
+      "bodyHeight": 139
+    },
+    "cavalry-WNW-attack-1": {
+      "actor": "cavalry",
+      "x": 1060,
+      "y": 1176,
+      "w": 163,
+      "h": 169,
+      "groundPivot": {
+        "x": 111.9194480102696,
+        "y": 166
+      },
+      "bodyHeight": 139
+    },
+    "cavalry-NW-attack-1": {
+      "actor": "cavalry",
+      "x": 757,
+      "y": 1168,
+      "w": 153,
+      "h": 172,
+      "groundPivot": {
+        "x": 100.36093999543687,
+        "y": 169
+      },
+      "bodyHeight": 140
+    },
+    "cavalry-NNW-attack-1": {
+      "actor": "cavalry",
+      "x": 803,
+      "y": 608,
+      "w": 123,
+      "h": 186,
+      "groundPivot": {
+        "x": 64.61106061330906,
+        "y": 183
+      },
+      "bodyHeight": 150
+    },
+    "cavalry-N-attack-2": {
+      "actor": "cavalry",
+      "x": 486,
+      "y": 1166,
+      "w": 78,
+      "h": 163,
+      "groundPivot": {
+        "x": 43.034934945190045,
+        "y": 158
+      },
+      "bodyHeight": 112
+    },
+    "cavalry-NNE-attack-2": {
+      "actor": "cavalry",
+      "x": 457,
+      "y": 1988,
+      "w": 113,
+      "h": 146,
+      "groundPivot": {
+        "x": 36.58010582010582,
+        "y": 141
+      },
+      "bodyHeight": 104
+    },
+    "cavalry-NE-attack-2": {
+      "actor": "cavalry",
+      "x": 179,
+      "y": 2300,
+      "w": 143,
+      "h": 128,
+      "groundPivot": {
+        "x": 56.059841649788254,
+        "y": 122
+      },
+      "bodyHeight": 98
+    },
+    "cavalry-ENE-attack-2": {
+      "actor": "cavalry",
+      "x": 1344,
+      "y": 1802,
+      "w": 154,
+      "h": 107,
+      "groundPivot": {
+        "x": 72.3831915957979,
+        "y": 102
+      },
+      "bodyHeight": 92
+    },
+    "cavalry-E-attack-2": {
+      "actor": "cavalry",
+      "x": 1156,
+      "y": 2312,
+      "w": 170,
+      "h": 100,
+      "groundPivot": {
+        "x": 68.29185905224787,
+        "y": 95
+      },
+      "bodyHeight": 91
+    },
+    "cavalry-ESE-attack-2": {
+      "actor": "cavalry",
+      "x": 1156,
+      "y": 2207,
+      "w": 167,
+      "h": 101,
+      "groundPivot": {
+        "x": 59.07259046143632,
+        "y": 95
+      },
+      "bodyHeight": 91
+    },
+    "cavalry-SE-attack-2": {
+      "actor": "cavalry",
+      "x": 1060,
+      "y": 2100,
+      "w": 152,
+      "h": 103,
+      "groundPivot": {
+        "x": 62.78523274478331,
+        "y": 96
+      },
+      "bodyHeight": 92
+    },
+    "cavalry-SSE-attack-2": {
+      "actor": "cavalry",
+      "x": 2,
+      "y": 2304,
+      "w": 136,
+      "h": 124,
+      "groundPivot": {
+        "x": 83.04252175340666,
+        "y": 107
+      },
+      "bodyHeight": 103
+    },
+    "cavalry-S-attack-2": {
+      "actor": "cavalry",
+      "x": 885,
+      "y": 1973,
+      "w": 81,
+      "h": 139,
+      "groundPivot": {
+        "x": 48.80450849963045,
+        "y": 118
+      },
+      "bodyHeight": 114
+    },
+    "cavalry-SSW-attack-2": {
+      "actor": "cavalry",
+      "x": 1213,
+      "y": 1684,
+      "w": 127,
+      "h": 116,
+      "groundPivot": {
+        "x": 69.23105134474328,
+        "y": 110
+      },
+      "bodyHeight": 106
+    },
+    "cavalry-SW-attack-2": {
+      "actor": "cavalry",
+      "x": 1160,
+      "y": 1820,
+      "w": 153,
+      "h": 114,
+      "groundPivot": {
+        "x": 72.00223613595706,
+        "y": 107
+      },
+      "bodyHeight": 102
+    },
+    "cavalry-WSW-attack-2": {
+      "actor": "cavalry",
+      "x": 986,
+      "y": 2257,
+      "w": 166,
+      "h": 106,
+      "groundPivot": {
+        "x": 70.84295788069373,
+        "y": 100
+      },
+      "bodyHeight": 96
+    },
+    "cavalry-W-attack-2": {
+      "actor": "cavalry",
+      "x": 1317,
+      "y": 1913,
+      "w": 180,
+      "h": 106,
+      "groundPivot": {
+        "x": 101.30086890098349,
+        "y": 99
+      },
+      "bodyHeight": 95
+    },
+    "cavalry-WNW-attack-2": {
+      "actor": "cavalry",
+      "x": 1344,
+      "y": 1691,
+      "w": 167,
+      "h": 107,
+      "groundPivot": {
+        "x": 94.66688175512179,
+        "y": 98
+      },
+      "bodyHeight": 95
+    },
+    "cavalry-NW-attack-2": {
+      "actor": "cavalry",
+      "x": 1079,
+      "y": 1684,
+      "w": 130,
+      "h": 132,
+      "groundPivot": {
+        "x": 71.09250457038391,
+        "y": 126
+      },
+      "bodyHeight": 102
+    },
+    "cavalry-NNW-attack-2": {
+      "actor": "cavalry",
+      "x": 541,
+      "y": 2138,
+      "w": 108,
+      "h": 145,
+      "groundPivot": {
+        "x": 60.819678127286025,
+        "y": 138
+      },
+      "bodyHeight": 107
+    },
+    "cavalry-N-attack-3": {
+      "actor": "cavalry",
+      "x": 971,
+      "y": 414,
+      "w": 80,
+      "h": 183,
+      "groundPivot": {
+        "x": 39.4629149988227,
+        "y": 180
+      },
+      "bodyHeight": 142
+    },
+    "cavalry-NNE-attack-3": {
+      "actor": "cavalry",
+      "x": 798,
+      "y": 985,
+      "w": 107,
+      "h": 179,
+      "groundPivot": {
+        "x": 40.75556223692121,
+        "y": 176
+      },
+      "bodyHeight": 130
+    },
+    "cavalry-NE-attack-3": {
+      "actor": "cavalry",
+      "x": 1397,
+      "y": 1010,
+      "w": 120,
+      "h": 172,
+      "groundPivot": {
+        "x": 41.160402726533675,
+        "y": 169
+      },
+      "bodyHeight": 128
+    },
+    "cavalry-ENE-attack-3": {
+      "actor": "cavalry",
+      "x": 1369,
+      "y": 1361,
+      "w": 129,
+      "h": 169,
+      "groundPivot": {
+        "x": 38.330013504388944,
+        "y": 166
+      },
+      "bodyHeight": 127
+    },
+    "cavalry-E-attack-3": {
+      "actor": "cavalry",
+      "x": 166,
+      "y": 1166,
+      "w": 140,
+      "h": 166,
+      "groundPivot": {
+        "x": 81.54071371635294,
+        "y": 163
+      },
+      "bodyHeight": 123
+    },
+    "cavalry-ESE-attack-3": {
+      "actor": "cavalry",
+      "x": 1231,
+      "y": 1364,
+      "w": 130,
+      "h": 159,
+      "groundPivot": {
+        "x": 99.68521567336188,
+        "y": 156
+      },
+      "bodyHeight": 123
+    },
+    "cavalry-SE-attack-3": {
+      "actor": "cavalry",
+      "x": 438,
+      "y": 1506,
+      "w": 137,
+      "h": 159,
+      "groundPivot": {
+        "x": 77.50855429292926,
+        "y": 156
+      },
+      "bodyHeight": 121
+    },
+    "cavalry-SSE-attack-3": {
+      "actor": "cavalry",
+      "x": 634,
+      "y": 1504,
+      "w": 109,
+      "h": 159,
+      "groundPivot": {
+        "x": 75.17414050822117,
+        "y": 156
+      },
+      "bodyHeight": 125
+    },
+    "cavalry-S-attack-3": {
+      "actor": "cavalry",
+      "x": 961,
+      "y": 796,
+      "w": 87,
+      "h": 183,
+      "groundPivot": {
+        "x": 42.45626598465472,
+        "y": 180
+      },
+      "bodyHeight": 141
+    },
+    "cavalry-SSW-attack-3": {
+      "actor": "cavalry",
+      "x": 1397,
+      "y": 1186,
+      "w": 120,
+      "h": 171,
+      "groundPivot": {
+        "x": 32.01691536928297,
+        "y": 168
+      },
+      "bodyHeight": 129
+    },
+    "cavalry-SW-attack-3": {
+      "actor": "cavalry",
+      "x": 2,
+      "y": 1335,
+      "w": 129,
+      "h": 164,
+      "groundPivot": {
+        "x": 29.611782401604387,
+        "y": 161
+      },
+      "bodyHeight": 126
+    },
+    "cavalry-WSW-attack-3": {
+      "actor": "cavalry",
+      "x": 2,
+      "y": 1167,
+      "w": 139,
+      "h": 164,
+      "groundPivot": {
+        "x": 44.01127576327053,
+        "y": 161
+      },
+      "bodyHeight": 122
+    },
+    "cavalry-W-attack-3": {
+      "actor": "cavalry",
+      "x": 579,
+      "y": 1667,
+      "w": 141,
+      "h": 157,
+      "groundPivot": {
+        "x": 63.13559185427974,
+        "y": 154
+      },
+      "bodyHeight": 120
+    },
+    "cavalry-WNW-attack-3": {
+      "actor": "cavalry",
+      "x": 135,
+      "y": 1336,
+      "w": 127,
+      "h": 162,
+      "groundPivot": {
+        "x": 84.18277097481416,
+        "y": 159
+      },
+      "bodyHeight": 124
+    },
+    "cavalry-NW-attack-3": {
+      "actor": "cavalry",
+      "x": 506,
+      "y": 1340,
+      "w": 124,
+      "h": 162,
+      "groundPivot": {
+        "x": 78.64426897349495,
+        "y": 159
+      },
+      "bodyHeight": 124
+    },
+    "cavalry-NNW-attack-3": {
+      "actor": "cavalry",
+      "x": 166,
+      "y": 987,
+      "w": 86,
+      "h": 175,
+      "groundPivot": {
+        "x": 47.93355469470566,
+        "y": 172
+      },
+      "bodyHeight": 129
+    }
+  }
+}

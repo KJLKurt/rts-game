@@ -1,0 +1,1992 @@
+{
+  "version": 1,
+  "image": "spearman-directional.png",
+  "width": 2560,
+  "height": 1664,
+  "actors": {
+    "spearman": {
+      "referenceBodyHeight": 140,
+      "suggestedHeight": 45,
+      "walkFrameMs": 130,
+      "attackFrameMs": [
+        100,
+        100,
+        100,
+        250
+      ],
+      "impactFrame": 2,
+      "directions": [
+        {
+          "idle": "spearman-N-idle",
+          "walk": [
+            "spearman-N-walk-0",
+            "spearman-N-walk-1",
+            "spearman-N-walk-2",
+            "spearman-N-walk-3"
+          ],
+          "attack": [
+            "spearman-N-attack-0",
+            "spearman-N-attack-1",
+            "spearman-N-attack-2",
+            "spearman-N-attack-3"
+          ]
+        },
+        {
+          "idle": "spearman-NNE-idle",
+          "walk": [
+            "spearman-NNE-walk-0",
+            "spearman-NNE-walk-1",
+            "spearman-NNE-walk-2",
+            "spearman-NNE-walk-3"
+          ],
+          "attack": [
+            "spearman-NNE-attack-0",
+            "spearman-NNE-attack-1",
+            "spearman-NNE-attack-2",
+            "spearman-NNE-attack-3"
+          ]
+        },
+        {
+          "idle": "spearman-NE-idle",
+          "walk": [
+            "spearman-NE-walk-0",
+            "spearman-NE-walk-1",
+            "spearman-NE-walk-2",
+            "spearman-NE-walk-3"
+          ],
+          "attack": [
+            "spearman-NE-attack-0",
+            "spearman-NE-attack-1",
+            "spearman-NE-attack-2",
+            "spearman-NE-attack-3"
+          ]
+        },
+        {
+          "idle": "spearman-ENE-idle",
+          "walk": [
+            "spearman-ENE-walk-0",
+            "spearman-ENE-walk-1",
+            "spearman-ENE-walk-2",
+            "spearman-ENE-walk-3"
+          ],
+          "attack": [
+            "spearman-ENE-attack-0",
+            "spearman-ENE-attack-1",
+            "spearman-ENE-attack-2",
+            "spearman-ENE-attack-3"
+          ]
+        },
+        {
+          "idle": "spearman-E-idle",
+          "walk": [
+            "spearman-E-walk-0",
+            "spearman-E-walk-1",
+            "spearman-E-walk-2",
+            "spearman-E-walk-3"
+          ],
+          "attack": [
+            "spearman-E-attack-0",
+            "spearman-E-attack-1",
+            "spearman-E-attack-2",
+            "spearman-E-attack-3"
+          ]
+        },
+        {
+          "idle": "spearman-ESE-idle",
+          "walk": [
+            "spearman-ESE-walk-0",
+            "spearman-ESE-walk-1",
+            "spearman-ESE-walk-2",
+            "spearman-ESE-walk-3"
+          ],
+          "attack": [
+            "spearman-ESE-attack-0",
+            "spearman-ESE-attack-1",
+            "spearman-ESE-attack-2",
+            "spearman-ESE-attack-3"
+          ]
+        },
+        {
+          "idle": "spearman-SE-idle",
+          "walk": [
+            "spearman-SE-walk-0",
+            "spearman-SE-walk-1",
+            "spearman-SE-walk-2",
+            "spearman-SE-walk-3"
+          ],
+          "attack": [
+            "spearman-SE-attack-0",
+            "spearman-SE-attack-1",
+            "spearman-SE-attack-2",
+            "spearman-SE-attack-3"
+          ]
+        },
+        {
+          "idle": "spearman-SSE-idle",
+          "walk": [
+            "spearman-SSE-walk-0",
+            "spearman-SSE-walk-1",
+            "spearman-SSE-walk-2",
+            "spearman-SSE-walk-3"
+          ],
+          "attack": [
+            "spearman-SSE-attack-0",
+            "spearman-SSE-attack-1",
+            "spearman-SSE-attack-2",
+            "spearman-SSE-attack-3"
+          ]
+        },
+        {
+          "idle": "spearman-S-idle",
+          "walk": [
+            "spearman-S-walk-0",
+            "spearman-S-walk-1",
+            "spearman-S-walk-2",
+            "spearman-S-walk-3"
+          ],
+          "attack": [
+            "spearman-S-attack-0",
+            "spearman-S-attack-1",
+            "spearman-S-attack-2",
+            "spearman-S-attack-3"
+          ]
+        },
+        {
+          "idle": "spearman-SSW-idle",
+          "walk": [
+            "spearman-SSW-walk-0",
+            "spearman-SSW-walk-1",
+            "spearman-SSW-walk-2",
+            "spearman-SSW-walk-3"
+          ],
+          "attack": [
+            "spearman-SSW-attack-0",
+            "spearman-SSW-attack-1",
+            "spearman-SSW-attack-2",
+            "spearman-SSW-attack-3"
+          ]
+        },
+        {
+          "idle": "spearman-SW-idle",
+          "walk": [
+            "spearman-SW-walk-0",
+            "spearman-SW-walk-1",
+            "spearman-SW-walk-2",
+            "spearman-SW-walk-3"
+          ],
+          "attack": [
+            "spearman-SW-attack-0",
+            "spearman-SW-attack-1",
+            "spearman-SW-attack-2",
+            "spearman-SW-attack-3"
+          ]
+        },
+        {
+          "idle": "spearman-WSW-idle",
+          "walk": [
+            "spearman-WSW-walk-0",
+            "spearman-WSW-walk-1",
+            "spearman-WSW-walk-2",
+            "spearman-WSW-walk-3"
+          ],
+          "attack": [
+            "spearman-WSW-attack-0",
+            "spearman-WSW-attack-1",
+            "spearman-WSW-attack-2",
+            "spearman-WSW-attack-3"
+          ]
+        },
+        {
+          "idle": "spearman-W-idle",
+          "walk": [
+            "spearman-W-walk-0",
+            "spearman-W-walk-1",
+            "spearman-W-walk-2",
+            "spearman-W-walk-3"
+          ],
+          "attack": [
+            "spearman-W-attack-0",
+            "spearman-W-attack-1",
+            "spearman-W-attack-2",
+            "spearman-W-attack-3"
+          ]
+        },
+        {
+          "idle": "spearman-WNW-idle",
+          "walk": [
+            "spearman-WNW-walk-0",
+            "spearman-WNW-walk-1",
+            "spearman-WNW-walk-2",
+            "spearman-WNW-walk-3"
+          ],
+          "attack": [
+            "spearman-WNW-attack-0",
+            "spearman-WNW-attack-1",
+            "spearman-WNW-attack-2",
+            "spearman-WNW-attack-3"
+          ]
+        },
+        {
+          "idle": "spearman-NW-idle",
+          "walk": [
+            "spearman-NW-walk-0",
+            "spearman-NW-walk-1",
+            "spearman-NW-walk-2",
+            "spearman-NW-walk-3"
+          ],
+          "attack": [
+            "spearman-NW-attack-0",
+            "spearman-NW-attack-1",
+            "spearman-NW-attack-2",
+            "spearman-NW-attack-3"
+          ]
+        },
+        {
+          "idle": "spearman-NNW-idle",
+          "walk": [
+            "spearman-NNW-walk-0",
+            "spearman-NNW-walk-1",
+            "spearman-NNW-walk-2",
+            "spearman-NNW-walk-3"
+          ],
+          "attack": [
+            "spearman-NNW-attack-0",
+            "spearman-NNW-attack-1",
+            "spearman-NNW-attack-2",
+            "spearman-NNW-attack-3"
+          ]
+        }
+      ]
+    }
+  },
+  "frames": {
+    "spearman-N-idle": {
+      "actor": "spearman",
+      "x": 970,
+      "y": 1257,
+      "w": 116,
+      "h": 168,
+      "groundPivot": {
+        "x": 56.88920314045498,
+        "y": 163
+      },
+      "bodyHeight": 138
+    },
+    "spearman-NNE-idle": {
+      "actor": "spearman",
+      "x": 1689,
+      "y": 509,
+      "w": 133,
+      "h": 164,
+      "groundPivot": {
+        "x": 77.30651916598379,
+        "y": 159
+      },
+      "bodyHeight": 139
+    },
+    "spearman-NE-idle": {
+      "actor": "spearman",
+      "x": 1759,
+      "y": 844,
+      "w": 146,
+      "h": 161,
+      "groundPivot": {
+        "x": 78.29186630243566,
+        "y": 156
+      },
+      "bodyHeight": 139
+    },
+    "spearman-ENE-idle": {
+      "actor": "spearman",
+      "x": 1979,
+      "y": 2,
+      "w": 140,
+      "h": 162,
+      "groundPivot": {
+        "x": 68.87357116649264,
+        "y": 157
+      },
+      "bodyHeight": 139
+    },
+    "spearman-E-idle": {
+      "actor": "spearman",
+      "x": 1516,
+      "y": 1387,
+      "w": 136,
+      "h": 162,
+      "groundPivot": {
+        "x": 69.9268700032855,
+        "y": 158
+      },
+      "bodyHeight": 139
+    },
+    "spearman-ESE-idle": {
+      "actor": "spearman",
+      "x": 1564,
+      "y": 683,
+      "w": 134,
+      "h": 164,
+      "groundPivot": {
+        "x": 62.57858573239514,
+        "y": 159
+      },
+      "bodyHeight": 143
+    },
+    "spearman-SE-idle": {
+      "actor": "spearman",
+      "x": 465,
+      "y": 1499,
+      "w": 137,
+      "h": 163,
+      "groundPivot": {
+        "x": 57.85945494413704,
+        "y": 158
+      },
+      "bodyHeight": 142
+    },
+    "spearman-SSE-idle": {
+      "actor": "spearman",
+      "x": 1702,
+      "y": 677,
+      "w": 142,
+      "h": 163,
+      "groundPivot": {
+        "x": 56.4285078842604,
+        "y": 158
+      },
+      "bodyHeight": 144
+    },
+    "spearman-S-idle": {
+      "actor": "spearman",
+      "x": 1955,
+      "y": 1345,
+      "w": 130,
+      "h": 153,
+      "groundPivot": {
+        "x": 77.00566059928838,
+        "y": 148
+      },
+      "bodyHeight": 139
+    },
+    "spearman-SSW-idle": {
+      "actor": "spearman",
+      "x": 1656,
+      "y": 1360,
+      "w": 134,
+      "h": 159,
+      "groundPivot": {
+        "x": 74.69304277206277,
+        "y": 154
+      },
+      "bodyHeight": 138
+    },
+    "spearman-SW-idle": {
+      "actor": "spearman",
+      "x": 1826,
+      "y": 509,
+      "w": 133,
+      "h": 163,
+      "groundPivot": {
+        "x": 67.59552571350628,
+        "y": 158
+      },
+      "bodyHeight": 139
+    },
+    "spearman-WSW-idle": {
+      "actor": "spearman",
+      "x": 2416,
+      "y": 165,
+      "w": 140,
+      "h": 156,
+      "groundPivot": {
+        "x": 83.85470373345083,
+        "y": 152
+      },
+      "bodyHeight": 140
+    },
+    "spearman-W-idle": {
+      "actor": "spearman",
+      "x": 1545,
+      "y": 514,
+      "w": 140,
+      "h": 165,
+      "groundPivot": {
+        "x": 64.93563569393504,
+        "y": 161
+      },
+      "bodyHeight": 145
+    },
+    "spearman-WNW-idle": {
+      "actor": "spearman",
+      "x": 1389,
+      "y": 2,
+      "w": 128,
+      "h": 169,
+      "groundPivot": {
+        "x": 46.897302712700366,
+        "y": 164
+      },
+      "bodyHeight": 143
+    },
+    "spearman-NW-idle": {
+      "actor": "spearman",
+      "x": 1264,
+      "y": 178,
+      "w": 139,
+      "h": 169,
+      "groundPivot": {
+        "x": 49.399566928557874,
+        "y": 164
+      },
+      "bodyHeight": 141
+    },
+    "spearman-NNW-idle": {
+      "actor": "spearman",
+      "x": 1296,
+      "y": 712,
+      "w": 120,
+      "h": 167,
+      "groundPivot": {
+        "x": 44.46661426753508,
+        "y": 162
+      },
+      "bodyHeight": 139
+    },
+    "spearman-N-walk-0": {
+      "actor": "spearman",
+      "x": 939,
+      "y": 1439,
+      "w": 126,
+      "h": 168,
+      "groundPivot": {
+        "x": 58.90163428923836,
+        "y": 163
+      },
+      "bodyHeight": 139
+    },
+    "spearman-NNE-walk-0": {
+      "actor": "spearman",
+      "x": 1320,
+      "y": 883,
+      "w": 141,
+      "h": 165,
+      "groundPivot": {
+        "x": 70.66252994729274,
+        "y": 160
+      },
+      "bodyHeight": 143
+    },
+    "spearman-NE-walk-0": {
+      "actor": "spearman",
+      "x": 2293,
+      "y": 2,
+      "w": 141,
+      "h": 159,
+      "groundPivot": {
+        "x": 51.88925924473551,
+        "y": 154
+      },
+      "bodyHeight": 141
+    },
+    "spearman-ENE-walk-0": {
+      "actor": "spearman",
+      "x": 1954,
+      "y": 1502,
+      "w": 148,
+      "h": 153,
+      "groundPivot": {
+        "x": 58.1036192028248,
+        "y": 148
+      },
+      "bodyHeight": 138
+    },
+    "spearman-E-walk-0": {
+      "actor": "spearman",
+      "x": 1794,
+      "y": 1345,
+      "w": 157,
+      "h": 153,
+      "groundPivot": {
+        "x": 63.07312919600457,
+        "y": 148
+      },
+      "bodyHeight": 140
+    },
+    "spearman-ESE-walk-0": {
+      "actor": "spearman",
+      "x": 1958,
+      "y": 1171,
+      "w": 167,
+      "h": 151,
+      "groundPivot": {
+        "x": 96.24365669917273,
+        "y": 146
+      },
+      "bodyHeight": 143
+    },
+    "spearman-SE-walk-0": {
+      "actor": "spearman",
+      "x": 2129,
+      "y": 1158,
+      "w": 161,
+      "h": 150,
+      "groundPivot": {
+        "x": 92.01293637489982,
+        "y": 145
+      },
+      "bodyHeight": 141
+    },
+    "spearman-SSE-walk-0": {
+      "actor": "spearman",
+      "x": 2012,
+      "y": 1003,
+      "w": 160,
+      "h": 151,
+      "groundPivot": {
+        "x": 88.31236989844183,
+        "y": 147
+      },
+      "bodyHeight": 144
+    },
+    "spearman-S-walk-0": {
+      "actor": "spearman",
+      "x": 2147,
+      "y": 661,
+      "w": 127,
+      "h": 151,
+      "groundPivot": {
+        "x": 63.911479028697585,
+        "y": 146
+      },
+      "bodyHeight": 135
+    },
+    "spearman-SSW-walk-0": {
+      "actor": "spearman",
+      "x": 2077,
+      "y": 831,
+      "w": 144,
+      "h": 151,
+      "groundPivot": {
+        "x": 64.89060973226498,
+        "y": 145
+      },
+      "bodyHeight": 134
+    },
+    "spearman-SW-walk-0": {
+      "actor": "spearman",
+      "x": 2176,
+      "y": 986,
+      "w": 160,
+      "h": 150,
+      "groundPivot": {
+        "x": 63.103078562919336,
+        "y": 145
+      },
+      "bodyHeight": 132
+    },
+    "spearman-WSW-walk-0": {
+      "actor": "spearman",
+      "x": 2198,
+      "y": 331,
+      "w": 161,
+      "h": 157,
+      "groundPivot": {
+        "x": 100.02249250249906,
+        "y": 152
+      },
+      "bodyHeight": 137
+    },
+    "spearman-W-walk-0": {
+      "actor": "spearman",
+      "x": 1852,
+      "y": 339,
+      "w": 166,
+      "h": 162,
+      "groundPivot": {
+        "x": 100.04801173402868,
+        "y": 157
+      },
+      "bodyHeight": 138
+    },
+    "spearman-WNW-walk-0": {
+      "actor": "spearman",
+      "x": 1753,
+      "y": 171,
+      "w": 166,
+      "h": 164,
+      "groundPivot": {
+        "x": 93.43988961364778,
+        "y": 159
+      },
+      "bodyHeight": 140
+    },
+    "spearman-NW-walk-0": {
+      "actor": "spearman",
+      "x": 698,
+      "y": 1093,
+      "w": 163,
+      "h": 170,
+      "groundPivot": {
+        "x": 86.43791163886351,
+        "y": 165
+      },
+      "bodyHeight": 142
+    },
+    "spearman-NNW-walk-0": {
+      "actor": "spearman",
+      "x": 1420,
+      "y": 691,
+      "w": 140,
+      "h": 165,
+      "groundPivot": {
+        "x": 72.73751621949691,
+        "y": 159
+      },
+      "bodyHeight": 137
+    },
+    "spearman-N-walk-1": {
+      "actor": "spearman",
+      "x": 118,
+      "y": 2,
+      "w": 132,
+      "h": 193,
+      "groundPivot": {
+        "x": 65.69276233927832,
+        "y": 184
+      },
+      "bodyHeight": 158
+    },
+    "spearman-NNE-walk-1": {
+      "actor": "spearman",
+      "x": 2,
+      "y": 421,
+      "w": 153,
+      "h": 191,
+      "groundPivot": {
+        "x": 70.81919929001083,
+        "y": 186
+      },
+      "bodyHeight": 162
+    },
+    "spearman-NE-walk-1": {
+      "actor": "spearman",
+      "x": 420,
+      "y": 2,
+      "w": 156,
+      "h": 184,
+      "groundPivot": {
+        "x": 82.84253570242447,
+        "y": 179
+      },
+      "bodyHeight": 161
+    },
+    "spearman-ENE-walk-1": {
+      "actor": "spearman",
+      "x": 519,
+      "y": 939,
+      "w": 163,
+      "h": 176,
+      "groundPivot": {
+        "x": 87.93038512365479,
+        "y": 170
+      },
+      "bodyHeight": 157
+    },
+    "spearman-E-walk-1": {
+      "actor": "spearman",
+      "x": 469,
+      "y": 377,
+      "w": 167,
+      "h": 180,
+      "groundPivot": {
+        "x": 83.32248358862145,
+        "y": 174
+      },
+      "bodyHeight": 163
+    },
+    "spearman-ESE-walk-1": {
+      "actor": "spearman",
+      "x": 826,
+      "y": 370,
+      "w": 171,
+      "h": 175,
+      "groundPivot": {
+        "x": 81.66599037736944,
+        "y": 169
+      },
+      "bodyHeight": 163
+    },
+    "spearman-SE-walk-1": {
+      "actor": "spearman",
+      "x": 1001,
+      "y": 363,
+      "w": 163,
+      "h": 172,
+      "groundPivot": {
+        "x": 83.86734814814815,
+        "y": 167
+      },
+      "bodyHeight": 163
+    },
+    "spearman-SSE-walk-1": {
+      "actor": "spearman",
+      "x": 1102,
+      "y": 181,
+      "w": 158,
+      "h": 172,
+      "groundPivot": {
+        "x": 80.95243067359525,
+        "y": 167
+      },
+      "bodyHeight": 163
+    },
+    "spearman-S-walk-1": {
+      "actor": "spearman",
+      "x": 659,
+      "y": 554,
+      "w": 131,
+      "h": 177,
+      "groundPivot": {
+        "x": 67.84097282414726,
+        "y": 172
+      },
+      "bodyHeight": 160
+    },
+    "spearman-SSW-walk-1": {
+      "actor": "spearman",
+      "x": 358,
+      "y": 956,
+      "w": 157,
+      "h": 180,
+      "groundPivot": {
+        "x": 76.10071768684008,
+        "y": 175
+      },
+      "bodyHeight": 157
+    },
+    "spearman-SW-walk-1": {
+      "actor": "spearman",
+      "x": 2,
+      "y": 808,
+      "w": 183,
+      "h": 183,
+      "groundPivot": {
+        "x": 82.95984644117038,
+        "y": 178
+      },
+      "bodyHeight": 156
+    },
+    "spearman-WSW-walk-1": {
+      "actor": "spearman",
+      "x": 754,
+      "y": 188,
+      "w": 179,
+      "h": 178,
+      "groundPivot": {
+        "x": 94.74589114740661,
+        "y": 172
+      },
+      "bodyHeight": 154
+    },
+    "spearman-W-walk-1": {
+      "actor": "spearman",
+      "x": 2,
+      "y": 995,
+      "w": 169,
+      "h": 182,
+      "groundPivot": {
+        "x": 86.52344007147224,
+        "y": 176
+      },
+      "bodyHeight": 156
+    },
+    "spearman-WNW-walk-1": {
+      "actor": "spearman",
+      "x": 584,
+      "y": 188,
+      "w": 166,
+      "h": 180,
+      "groundPivot": {
+        "x": 84.68631766639737,
+        "y": 175
+      },
+      "bodyHeight": 155
+    },
+    "spearman-NW-walk-1": {
+      "actor": "spearman",
+      "x": 2,
+      "y": 616,
+      "w": 170,
+      "h": 188,
+      "groundPivot": {
+        "x": 84.64515762352232,
+        "y": 182
+      },
+      "bodyHeight": 159
+    },
+    "spearman-NNW-walk-1": {
+      "actor": "spearman",
+      "x": 159,
+      "y": 393,
+      "w": 146,
+      "h": 187,
+      "groundPivot": {
+        "x": 74.44686749214566,
+        "y": 182
+      },
+      "bodyHeight": 156
+    },
+    "spearman-N-walk-2": {
+      "actor": "spearman",
+      "x": 1521,
+      "y": 2,
+      "w": 134,
+      "h": 166,
+      "groundPivot": {
+        "x": 52.26674468851277,
+        "y": 156
+      },
+      "bodyHeight": 138
+    },
+    "spearman-NNE-walk-2": {
+      "actor": "spearman",
+      "x": 1242,
+      "y": 1224,
+      "w": 146,
+      "h": 164,
+      "groundPivot": {
+        "x": 64.01666046165303,
+        "y": 159
+      },
+      "bodyHeight": 144
+    },
+    "spearman-NE-walk-2": {
+      "actor": "spearman",
+      "x": 1608,
+      "y": 851,
+      "w": 147,
+      "h": 163,
+      "groundPivot": {
+        "x": 74.53636061763245,
+        "y": 158
+      },
+      "bodyHeight": 144
+    },
+    "spearman-ENE-walk-2": {
+      "actor": "spearman",
+      "x": 2363,
+      "y": 325,
+      "w": 149,
+      "h": 155,
+      "groundPivot": {
+        "x": 87.39219760525702,
+        "y": 150
+      },
+      "bodyHeight": 138
+    },
+    "spearman-E-walk-2": {
+      "actor": "spearman",
+      "x": 2256,
+      "y": 165,
+      "w": 156,
+      "h": 156,
+      "groundPivot": {
+        "x": 82.13421918501646,
+        "y": 152
+      },
+      "bodyHeight": 144
+    },
+    "spearman-ESE-walk-2": {
+      "actor": "spearman",
+      "x": 2089,
+      "y": 1326,
+      "w": 164,
+      "h": 150,
+      "groundPivot": {
+        "x": 101.98632124909301,
+        "y": 146
+      },
+      "bodyHeight": 143
+    },
+    "spearman-SE-walk-2": {
+      "actor": "spearman",
+      "x": 1985,
+      "y": 669,
+      "w": 158,
+      "h": 158,
+      "groundPivot": {
+        "x": 91.29244120640703,
+        "y": 153
+      },
+      "bodyHeight": 145
+    },
+    "spearman-SSE-walk-2": {
+      "actor": "spearman",
+      "x": 1794,
+      "y": 1502,
+      "w": 156,
+      "h": 153,
+      "groundPivot": {
+        "x": 92.61023357627914,
+        "y": 148
+      },
+      "bodyHeight": 143
+    },
+    "spearman-S-walk-2": {
+      "actor": "spearman",
+      "x": 1848,
+      "y": 676,
+      "w": 133,
+      "h": 161,
+      "groundPivot": {
+        "x": 64.32861072902338,
+        "y": 156
+      },
+      "bodyHeight": 141
+    },
+    "spearman-SSW-walk-2": {
+      "actor": "spearman",
+      "x": 2133,
+      "y": 499,
+      "w": 156,
+      "h": 158,
+      "groundPivot": {
+        "x": 67.08941008169256,
+        "y": 153
+      },
+      "bodyHeight": 140
+    },
+    "spearman-SW-walk-2": {
+      "actor": "spearman",
+      "x": 1909,
+      "y": 841,
+      "w": 164,
+      "h": 158,
+      "groundPivot": {
+        "x": 63.51944198784702,
+        "y": 153
+      },
+      "bodyHeight": 139
+    },
+    "spearman-WSW-walk-2": {
+      "actor": "spearman",
+      "x": 2123,
+      "y": 2,
+      "w": 166,
+      "h": 159,
+      "groundPivot": {
+        "x": 63.582471744610984,
+        "y": 154
+      },
+      "bodyHeight": 141
+    },
+    "spearman-W-walk-2": {
+      "actor": "spearman",
+      "x": 865,
+      "y": 1085,
+      "w": 169,
+      "h": 168,
+      "groundPivot": {
+        "x": 65.51746670642021,
+        "y": 163
+      },
+      "bodyHeight": 141
+    },
+    "spearman-WNW-walk-2": {
+      "actor": "spearman",
+      "x": 1407,
+      "y": 175,
+      "w": 173,
+      "h": 166,
+      "groundPivot": {
+        "x": 70.76760323410053,
+        "y": 161
+      },
+      "bodyHeight": 140
+    },
+    "spearman-NW-walk-2": {
+      "actor": "spearman",
+      "x": 1963,
+      "y": 505,
+      "w": 166,
+      "h": 160,
+      "groundPivot": {
+        "x": 73.53004693294827,
+        "y": 156
+      },
+      "bodyHeight": 135
+    },
+    "spearman-NNW-walk-2": {
+      "actor": "spearman",
+      "x": 1175,
+      "y": 884,
+      "w": 141,
+      "h": 167,
+      "groundPivot": {
+        "x": 79.19070839138362,
+        "y": 159
+      },
+      "bodyHeight": 140
+    },
+    "spearman-N-walk-3": {
+      "actor": "spearman",
+      "x": 369,
+      "y": 756,
+      "w": 118,
+      "h": 180,
+      "groundPivot": {
+        "x": 56.268227848101276,
+        "y": 174
+      },
+      "bodyHeight": 144
+    },
+    "spearman-NNE-walk-3": {
+      "actor": "spearman",
+      "x": 357,
+      "y": 571,
+      "w": 131,
+      "h": 181,
+      "groundPivot": {
+        "x": 62.478676395026184,
+        "y": 176
+      },
+      "bodyHeight": 148
+    },
+    "spearman-NE-walk-3": {
+      "actor": "spearman",
+      "x": 465,
+      "y": 1320,
+      "w": 141,
+      "h": 175,
+      "groundPivot": {
+        "x": 66.10316851764821,
+        "y": 170
+      },
+      "bodyHeight": 146
+    },
+    "spearman-ENE-walk-3": {
+      "actor": "spearman",
+      "x": 824,
+      "y": 734,
+      "w": 158,
+      "h": 174,
+      "groundPivot": {
+        "x": 46.5722020832377,
+        "y": 169
+      },
+      "bodyHeight": 147
+    },
+    "spearman-E-walk-3": {
+      "actor": "spearman",
+      "x": 1584,
+      "y": 172,
+      "w": 165,
+      "h": 165,
+      "groundPivot": {
+        "x": 82.04744708039337,
+        "y": 159
+      },
+      "bodyHeight": 147
+    },
+    "spearman-ESE-walk-3": {
+      "actor": "spearman",
+      "x": 2082,
+      "y": 168,
+      "w": 170,
+      "h": 159,
+      "groundPivot": {
+        "x": 92.35481099656357,
+        "y": 154
+      },
+      "bodyHeight": 148
+    },
+    "spearman-SE-walk-3": {
+      "actor": "spearman",
+      "x": 1835,
+      "y": 1009,
+      "w": 173,
+      "h": 158,
+      "groundPivot": {
+        "x": 85.6371256591384,
+        "y": 153
+      },
+      "bodyHeight": 147
+    },
+    "spearman-SSE-walk-3": {
+      "actor": "spearman",
+      "x": 2022,
+      "y": 336,
+      "w": 172,
+      "h": 159,
+      "groundPivot": {
+        "x": 88.49327129921448,
+        "y": 154
+      },
+      "bodyHeight": 150
+    },
+    "spearman-S-walk-3": {
+      "actor": "spearman",
+      "x": 2363,
+      "y": 484,
+      "w": 133,
+      "h": 155,
+      "groundPivot": {
+        "x": 66.17032967032966,
+        "y": 150
+      },
+      "bodyHeight": 141
+    },
+    "spearman-SSW-walk-3": {
+      "actor": "spearman",
+      "x": 1818,
+      "y": 2,
+      "w": 157,
+      "h": 164,
+      "groundPivot": {
+        "x": 78.37546545304099,
+        "y": 159
+      },
+      "bodyHeight": 145
+    },
+    "spearman-SW-walk-3": {
+      "actor": "spearman",
+      "x": 1676,
+      "y": 341,
+      "w": 172,
+      "h": 164,
+      "groundPivot": {
+        "x": 78.45074241786017,
+        "y": 159
+      },
+      "bodyHeight": 145
+    },
+    "spearman-WSW-walk-3": {
+      "actor": "spearman",
+      "x": 1499,
+      "y": 345,
+      "w": 173,
+      "h": 165,
+      "groundPivot": {
+        "x": 85.57954187243877,
+        "y": 160
+      },
+      "bodyHeight": 142
+    },
+    "spearman-W-walk-3": {
+      "actor": "spearman",
+      "x": 789,
+      "y": 1267,
+      "w": 177,
+      "h": 168,
+      "groundPivot": {
+        "x": 95.30434675895245,
+        "y": 163
+      },
+      "bodyHeight": 143
+    },
+    "spearman-WNW-walk-3": {
+      "actor": "spearman",
+      "x": 849,
+      "y": 912,
+      "w": 174,
+      "h": 169,
+      "groundPivot": {
+        "x": 93.45371896432562,
+        "y": 165
+      },
+      "bodyHeight": 148
+    },
+    "spearman-NW-walk-3": {
+      "actor": "spearman",
+      "x": 794,
+      "y": 554,
+      "w": 158,
+      "h": 176,
+      "groundPivot": {
+        "x": 91.40580887579972,
+        "y": 171
+      },
+      "bodyHeight": 147
+    },
+    "spearman-NNW-walk-3": {
+      "actor": "spearman",
+      "x": 1247,
+      "y": 2,
+      "w": 138,
+      "h": 172,
+      "groundPivot": {
+        "x": 58.72044709737838,
+        "y": 166
+      },
+      "bodyHeight": 145
+    },
+    "spearman-N-attack-0": {
+      "actor": "spearman",
+      "x": 610,
+      "y": 1472,
+      "w": 133,
+      "h": 171,
+      "groundPivot": {
+        "x": 62.06848096515492,
+        "y": 166
+      },
+      "bodyHeight": 139
+    },
+    "spearman-NNE-attack-0": {
+      "actor": "spearman",
+      "x": 686,
+      "y": 915,
+      "w": 159,
+      "h": 174,
+      "groundPivot": {
+        "x": 80.77874522392511,
+        "y": 168
+      },
+      "bodyHeight": 143
+    },
+    "spearman-NE-attack-0": {
+      "actor": "spearman",
+      "x": 937,
+      "y": 184,
+      "w": 161,
+      "h": 175,
+      "groundPivot": {
+        "x": 79.46391111591697,
+        "y": 170
+      },
+      "bodyHeight": 145
+    },
+    "spearman-ENE-attack-0": {
+      "actor": "spearman",
+      "x": 661,
+      "y": 735,
+      "w": 159,
+      "h": 176,
+      "groundPivot": {
+        "x": 79.14905956112852,
+        "y": 171
+      },
+      "bodyHeight": 146
+    },
+    "spearman-E-attack-0": {
+      "actor": "spearman",
+      "x": 294,
+      "y": 1366,
+      "w": 167,
+      "h": 176,
+      "groundPivot": {
+        "x": 74.97563309524622,
+        "y": 171
+      },
+      "bodyHeight": 148
+    },
+    "spearman-ESE-attack-0": {
+      "actor": "spearman",
+      "x": 364,
+      "y": 1140,
+      "w": 164,
+      "h": 176,
+      "groundPivot": {
+        "x": 68.21572926069894,
+        "y": 171
+      },
+      "bodyHeight": 149
+    },
+    "spearman-SE-attack-0": {
+      "actor": "spearman",
+      "x": 760,
+      "y": 2,
+      "w": 169,
+      "h": 178,
+      "groundPivot": {
+        "x": 64.84461172899898,
+        "y": 173
+      },
+      "bodyHeight": 150
+    },
+    "spearman-SSE-attack-0": {
+      "actor": "spearman",
+      "x": 2,
+      "y": 1181,
+      "w": 166,
+      "h": 182,
+      "groundPivot": {
+        "x": 52.21109104201605,
+        "y": 176
+      },
+      "bodyHeight": 154
+    },
+    "spearman-S-attack-0": {
+      "actor": "spearman",
+      "x": 1090,
+      "y": 2,
+      "w": 153,
+      "h": 175,
+      "groundPivot": {
+        "x": 75.86411322565169,
+        "y": 170
+      },
+      "bodyHeight": 145
+    },
+    "spearman-SSW-attack-0": {
+      "actor": "spearman",
+      "x": 933,
+      "y": 2,
+      "w": 153,
+      "h": 178,
+      "groundPivot": {
+        "x": 111.19066361337724,
+        "y": 173
+      },
+      "bodyHeight": 150
+    },
+    "spearman-SW-attack-0": {
+      "actor": "spearman",
+      "x": 2,
+      "y": 1367,
+      "w": 159,
+      "h": 182,
+      "groundPivot": {
+        "x": 86.56134811660183,
+        "y": 177
+      },
+      "bodyHeight": 147
+    },
+    "spearman-WSW-attack-0": {
+      "actor": "spearman",
+      "x": 492,
+      "y": 561,
+      "w": 163,
+      "h": 179,
+      "groundPivot": {
+        "x": 102.0394042101866,
+        "y": 174
+      },
+      "bodyHeight": 149
+    },
+    "spearman-W-attack-0": {
+      "actor": "spearman",
+      "x": 309,
+      "y": 384,
+      "w": 156,
+      "h": 183,
+      "groundPivot": {
+        "x": 65.61243940144385,
+        "y": 176
+      },
+      "bodyHeight": 144
+    },
+    "spearman-WNW-attack-0": {
+      "actor": "spearman",
+      "x": 491,
+      "y": 756,
+      "w": 166,
+      "h": 179,
+      "groundPivot": {
+        "x": 74.05107845461009,
+        "y": 173
+      },
+      "bodyHeight": 145
+    },
+    "spearman-NW-attack-0": {
+      "actor": "spearman",
+      "x": 428,
+      "y": 190,
+      "w": 152,
+      "h": 183,
+      "groundPivot": {
+        "x": 52.31783911252819,
+        "y": 178
+      },
+      "bodyHeight": 148
+    },
+    "spearman-NNW-attack-0": {
+      "actor": "spearman",
+      "x": 165,
+      "y": 1367,
+      "w": 125,
+      "h": 182,
+      "groundPivot": {
+        "x": 66.29570739626615,
+        "y": 178
+      },
+      "bodyHeight": 144
+    },
+    "spearman-N-attack-1": {
+      "actor": "spearman",
+      "x": 986,
+      "y": 725,
+      "w": 159,
+      "h": 169,
+      "groundPivot": {
+        "x": 62.06135891346295,
+        "y": 164
+      },
+      "bodyHeight": 142
+    },
+    "spearman-NNE-attack-1": {
+      "actor": "spearman",
+      "x": 956,
+      "y": 549,
+      "w": 177,
+      "h": 172,
+      "groundPivot": {
+        "x": 92.91036621159896,
+        "y": 167
+      },
+      "bodyHeight": 142
+    },
+    "spearman-NE-attack-1": {
+      "actor": "spearman",
+      "x": 610,
+      "y": 1297,
+      "w": 175,
+      "h": 171,
+      "groundPivot": {
+        "x": 84.92825400914535,
+        "y": 166
+      },
+      "bodyHeight": 142
+    },
+    "spearman-ENE-attack-1": {
+      "actor": "spearman",
+      "x": 747,
+      "y": 1472,
+      "w": 188,
+      "h": 170,
+      "groundPivot": {
+        "x": 93.1840979201911,
+        "y": 164
+      },
+      "bodyHeight": 143
+    },
+    "spearman-E-attack-1": {
+      "actor": "spearman",
+      "x": 1320,
+      "y": 351,
+      "w": 175,
+      "h": 166,
+      "groundPivot": {
+        "x": 83.06373247560495,
+        "y": 161
+      },
+      "bodyHeight": 144
+    },
+    "spearman-ESE-attack-1": {
+      "actor": "spearman",
+      "x": 1574,
+      "y": 1195,
+      "w": 182,
+      "h": 161,
+      "groundPivot": {
+        "x": 70.57523286039208,
+        "y": 156
+      },
+      "bodyHeight": 147
+    },
+    "spearman-SE-attack-1": {
+      "actor": "spearman",
+      "x": 1651,
+      "y": 1018,
+      "w": 180,
+      "h": 161,
+      "groundPivot": {
+        "x": 70.04406341168055,
+        "y": 155
+      },
+      "bodyHeight": 146
+    },
+    "spearman-SSE-attack-1": {
+      "actor": "spearman",
+      "x": 1392,
+      "y": 1220,
+      "w": 178,
+      "h": 163,
+      "groundPivot": {
+        "x": 64.24834872484871,
+        "y": 158
+      },
+      "bodyHeight": 147
+    },
+    "spearman-S-attack-1": {
+      "actor": "spearman",
+      "x": 532,
+      "y": 1119,
+      "w": 162,
+      "h": 174,
+      "groundPivot": {
+        "x": 116.92128969223253,
+        "y": 169
+      },
+      "bodyHeight": 143
+    },
+    "spearman-SSW-attack-1": {
+      "actor": "spearman",
+      "x": 189,
+      "y": 771,
+      "w": 176,
+      "h": 181,
+      "groundPivot": {
+        "x": 118.0071442000376,
+        "y": 176
+      },
+      "bodyHeight": 146
+    },
+    "spearman-SW-attack-1": {
+      "actor": "spearman",
+      "x": 175,
+      "y": 995,
+      "w": 179,
+      "h": 181,
+      "groundPivot": {
+        "x": 127.26166509193979,
+        "y": 176
+      },
+      "bodyHeight": 146
+    },
+    "spearman-WSW-attack-1": {
+      "actor": "spearman",
+      "x": 172,
+      "y": 1181,
+      "w": 188,
+      "h": 181,
+      "groundPivot": {
+        "x": 133.67895382872257,
+        "y": 176
+      },
+      "bodyHeight": 148
+    },
+    "spearman-W-attack-1": {
+      "actor": "spearman",
+      "x": 640,
+      "y": 372,
+      "w": 182,
+      "h": 178,
+      "groundPivot": {
+        "x": 97.0735718194052,
+        "y": 173
+      },
+      "bodyHeight": 147
+    },
+    "spearman-WNW-attack-1": {
+      "actor": "spearman",
+      "x": 176,
+      "y": 584,
+      "w": 177,
+      "h": 183,
+      "groundPivot": {
+        "x": 80.30053886706486,
+        "y": 178
+      },
+      "bodyHeight": 146
+    },
+    "spearman-NW-attack-1": {
+      "actor": "spearman",
+      "x": 580,
+      "y": 2,
+      "w": 176,
+      "h": 182,
+      "groundPivot": {
+        "x": 81.42903584566682,
+        "y": 177
+      },
+      "bodyHeight": 146
+    },
+    "spearman-NNW-attack-1": {
+      "actor": "spearman",
+      "x": 277,
+      "y": 195,
+      "w": 147,
+      "h": 185,
+      "groundPivot": {
+        "x": 45.00026131835102,
+        "y": 180
+      },
+      "bodyHeight": 149
+    },
+    "spearman-N-attack-2": {
+      "actor": "spearman",
+      "x": 2,
+      "y": 2,
+      "w": 112,
+      "h": 207,
+      "groundPivot": {
+        "x": 75.8773766700925,
+        "y": 202
+      },
+      "bodyHeight": 136
+    },
+    "spearman-NNE-attack-2": {
+      "actor": "spearman",
+      "x": 2,
+      "y": 213,
+      "w": 145,
+      "h": 204,
+      "groundPivot": {
+        "x": 72.35632994259242,
+        "y": 199
+      },
+      "bodyHeight": 140
+    },
+    "spearman-NE-attack-2": {
+      "actor": "spearman",
+      "x": 254,
+      "y": 2,
+      "w": 162,
+      "h": 189,
+      "groundPivot": {
+        "x": 46.560619769282994,
+        "y": 184
+      },
+      "bodyHeight": 135
+    },
+    "spearman-ENE-attack-2": {
+      "actor": "spearman",
+      "x": 1760,
+      "y": 1183,
+      "w": 194,
+      "h": 158,
+      "groundPivot": {
+        "x": 42.446930712151925,
+        "y": 153
+      },
+      "bodyHeight": 131
+    },
+    "spearman-E-attack-2": {
+      "actor": "spearman",
+      "x": 2294,
+      "y": 1251,
+      "w": 236,
+      "h": 135,
+      "groundPivot": {
+        "x": 57.292851540616255,
+        "y": 130
+      },
+      "bodyHeight": 127
+    },
+    "spearman-ESE-attack-2": {
+      "actor": "spearman",
+      "x": 2340,
+      "y": 964,
+      "w": 205,
+      "h": 141,
+      "groundPivot": {
+        "x": 56.00633604673641,
+        "y": 137
+      },
+      "bodyHeight": 133
+    },
+    "spearman-SE-attack-2": {
+      "actor": "spearman",
+      "x": 2106,
+      "y": 1480,
+      "w": 184,
+      "h": 138,
+      "groundPivot": {
+        "x": 51.344105313667,
+        "y": 133
+      },
+      "bodyHeight": 129
+    },
+    "spearman-SSE-attack-2": {
+      "actor": "spearman",
+      "x": 2387,
+      "y": 800,
+      "w": 160,
+      "h": 143,
+      "groundPivot": {
+        "x": 58.20531997918829,
+        "y": 132
+      },
+      "bodyHeight": 123
+    },
+    "spearman-S-attack-2": {
+      "actor": "spearman",
+      "x": 2438,
+      "y": 2,
+      "w": 120,
+      "h": 152,
+      "groundPivot": {
+        "x": 81.41436138905237,
+        "y": 136
+      },
+      "bodyHeight": 132
+    },
+    "spearman-SSW-attack-2": {
+      "actor": "spearman",
+      "x": 2225,
+      "y": 816,
+      "w": 158,
+      "h": 144,
+      "groundPivot": {
+        "x": 103.79588940285953,
+        "y": 139
+      },
+      "bodyHeight": 134
+    },
+    "spearman-SW-attack-2": {
+      "actor": "spearman",
+      "x": 2294,
+      "y": 1390,
+      "w": 194,
+      "h": 135,
+      "groundPivot": {
+        "x": 106.29475538690883,
+        "y": 130
+      },
+      "bodyHeight": 125
+    },
+    "spearman-WSW-attack-2": {
+      "actor": "spearman",
+      "x": 2340,
+      "y": 1109,
+      "w": 217,
+      "h": 138,
+      "groundPivot": {
+        "x": 132.47343066411054,
+        "y": 133
+      },
+      "bodyHeight": 129
+    },
+    "spearman-W-attack-2": {
+      "actor": "spearman",
+      "x": 2294,
+      "y": 1529,
+      "w": 220,
+      "h": 131,
+      "groundPivot": {
+        "x": 126.93103504883854,
+        "y": 126
+      },
+      "bodyHeight": 123
+    },
+    "spearman-WNW-attack-2": {
+      "actor": "spearman",
+      "x": 2293,
+      "y": 643,
+      "w": 167,
+      "h": 153,
+      "groundPivot": {
+        "x": 78.68819411656028,
+        "y": 148
+      },
+      "bodyHeight": 130
+    },
+    "spearman-NW-attack-2": {
+      "actor": "spearman",
+      "x": 1137,
+      "y": 539,
+      "w": 158,
+      "h": 169,
+      "groundPivot": {
+        "x": 86.45762347503626,
+        "y": 165
+      },
+      "bodyHeight": 133
+    },
+    "spearman-NNW-attack-2": {
+      "actor": "spearman",
+      "x": 151,
+      "y": 199,
+      "w": 122,
+      "h": 190,
+      "groundPivot": {
+        "x": 99.41136738568798,
+        "y": 184
+      },
+      "bodyHeight": 134
+    },
+    "spearman-N-attack-3": {
+      "actor": "spearman",
+      "x": 1419,
+      "y": 521,
+      "w": 122,
+      "h": 166,
+      "groundPivot": {
+        "x": 63.44740701793225,
+        "y": 161
+      },
+      "bodyHeight": 141
+    },
+    "spearman-NNE-attack-3": {
+      "actor": "spearman",
+      "x": 1149,
+      "y": 712,
+      "w": 143,
+      "h": 168,
+      "groundPivot": {
+        "x": 79.83533660628632,
+        "y": 163
+      },
+      "bodyHeight": 141
+    },
+    "spearman-NE-attack-3": {
+      "actor": "spearman",
+      "x": 1069,
+      "y": 1429,
+      "w": 151,
+      "h": 165,
+      "groundPivot": {
+        "x": 79.01731511254025,
+        "y": 160
+      },
+      "bodyHeight": 142
+    },
+    "spearman-ENE-attack-3": {
+      "actor": "spearman",
+      "x": 1090,
+      "y": 1241,
+      "w": 148,
+      "h": 165,
+      "groundPivot": {
+        "x": 72.833826035544,
+        "y": 160
+      },
+      "bodyHeight": 142
+    },
+    "spearman-E-attack-3": {
+      "actor": "spearman",
+      "x": 1923,
+      "y": 170,
+      "w": 155,
+      "h": 162,
+      "groundPivot": {
+        "x": 78.45728723574376,
+        "y": 157
+      },
+      "bodyHeight": 141
+    },
+    "spearman-ESE-attack-3": {
+      "actor": "spearman",
+      "x": 1659,
+      "y": 2,
+      "w": 155,
+      "h": 165,
+      "groundPivot": {
+        "x": 61.52506717086277,
+        "y": 159
+      },
+      "bodyHeight": 145
+    },
+    "spearman-SE-attack-3": {
+      "actor": "spearman",
+      "x": 1224,
+      "y": 1410,
+      "w": 151,
+      "h": 164,
+      "groundPivot": {
+        "x": 62.67231253162049,
+        "y": 158
+      },
+      "bodyHeight": 145
+    },
+    "spearman-SSE-attack-3": {
+      "actor": "spearman",
+      "x": 1496,
+      "y": 1028,
+      "w": 151,
+      "h": 163,
+      "groundPivot": {
+        "x": 61.46413440161086,
+        "y": 158
+      },
+      "bodyHeight": 145
+    },
+    "spearman-S-attack-3": {
+      "actor": "spearman",
+      "x": 1379,
+      "y": 1392,
+      "w": 133,
+      "h": 164,
+      "groundPivot": {
+        "x": 76.84276395505171,
+        "y": 159
+      },
+      "bodyHeight": 142
+    },
+    "spearman-SSW-attack-3": {
+      "actor": "spearman",
+      "x": 1465,
+      "y": 860,
+      "w": 139,
+      "h": 164,
+      "groundPivot": {
+        "x": 76.76440447072667,
+        "y": 159
+      },
+      "bodyHeight": 141
+    },
+    "spearman-SW-attack-3": {
+      "actor": "spearman",
+      "x": 1346,
+      "y": 1052,
+      "w": 146,
+      "h": 164,
+      "groundPivot": {
+        "x": 76.33315055139224,
+        "y": 159
+      },
+      "bodyHeight": 143
+    },
+    "spearman-WSW-attack-3": {
+      "actor": "spearman",
+      "x": 1199,
+      "y": 1055,
+      "w": 143,
+      "h": 165,
+      "groundPivot": {
+        "x": 85.73588870211438,
+        "y": 160
+      },
+      "bodyHeight": 145
+    },
+    "spearman-W-attack-3": {
+      "actor": "spearman",
+      "x": 1168,
+      "y": 357,
+      "w": 148,
+      "h": 169,
+      "groundPivot": {
+        "x": 68.69209440817329,
+        "y": 164
+      },
+      "bodyHeight": 147
+    },
+    "spearman-WNW-attack-3": {
+      "actor": "spearman",
+      "x": 1027,
+      "y": 898,
+      "w": 144,
+      "h": 168,
+      "groundPivot": {
+        "x": 56.83676428328846,
+        "y": 163
+      },
+      "bodyHeight": 143
+    },
+    "spearman-NW-attack-3": {
+      "actor": "spearman",
+      "x": 1038,
+      "y": 1070,
+      "w": 157,
+      "h": 167,
+      "groundPivot": {
+        "x": 65.6431771150335,
+        "y": 162
+      },
+      "bodyHeight": 142
+    },
+    "spearman-NNW-attack-3": {
+      "actor": "spearman",
+      "x": 1299,
+      "y": 530,
+      "w": 116,
+      "h": 167,
+      "groundPivot": {
+        "x": 55.36184056377624,
+        "y": 162
+      },
+      "bodyHeight": 141
+    }
+  }
+}

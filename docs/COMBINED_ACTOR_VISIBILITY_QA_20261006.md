@@ -1,0 +1,15 @@
+# Combined actor and visibility candidate — frozen before full412 gate
+
+Current checkpoint: **fc-0f1a6b425705**, with the complete final **400-pass / 18-intentional-skip / zero-failure** 418-case gate. Prior candidate, publication-hold and pending-gate statements below retain their historical context. Later UI design and campaign work are separate. See the current [README](../README.md).
+
+Build fc-4a71fd4dca98 / index-DKH52sol.js / index-BWAZawEF.css / cache frontier-command-rts-game-a9ba3e240282. Five accepted actor packs cover720/1296 unique authored frames; Siege/Support/Warlord/Engineer576 remain. Archer/Spearman/Cavalry files, prior Ranger/Swordsman and provenance are byte-exact from frozen fc-fe6ef97ce9bd. Five visibility production files are exact corrected fc-48ef95e814c0. Older three docs merge append-only. Simulation/content/audio and original release-update harness remain exact. The four proposed UI boards are not implemented.
+
+588 unit tests in64 files pass (session35300 exit0,17.41s); TypeScript and eight mission validations pass with both production builds (sessions65217/16016 exit0). All40 distribution files repeat byte-exact;38 precache paths. One wrong-working-directory unit driver executed no cases and is retained; it was corrected before these checks.
+
+Three first-attempt earned Normal Broken Alliance continuations use identical actual save551.3 with origin-only adaptation. Desktop/portrait/landscape each ends559.7 with eight positive Ranger hits and active hostile AI. Human ranged attack events are represented as projectiles/hits, not melee attack events. Whole Game/browser storage/profile8games3wins remain exactly restored online/offline. No simulation fixture mutation. Nine original screenshots viewed. All three samples end with commander recovering at Keep, army population0,winnernull. No new win or fun claim. Landscape uses actual native pinch, minimap collapse and panning.
+
+The complete412-case/34-file gate is separate and required before acceptance. It includes all394 corrected visibility identities and all376 Cavalry coverage with six deposit title mappings, including18 newly independent actor cases. Swordsman published baseline40b4a3db7477b56ac726b8eb7c626dfe3339fa05 supplies the actual previous cache; original release-update test remains unchanged. Every raw attempt and actual terminal outcome must be preserved.
+
+Held original visibility full376355PASS18SKIP3FAIL remains preserved: libfile_43415d5049f88191b919a808d8f4472d. Corrected standalone full394376PASS18SKIP is libfile_a71997ffa17481918e397c6d0e95add1. Cavalry full376 is reconciled358PASS18SKIP after two unchanged-budget timeout recoveries, libfile_1ae9ab56c778819187e829ccb7cda993. None of those separate gates substitutes for this combined runtime.
+
+No pushes, deployments or Actions. Publication approval canceled pending fresh confirmation. Physical-device/Safari/hosted-HTTPS/performance/listening and fun remain distinct unverified categories. See COMBINED_REQUIREMENTS_AUDIT_20261006.md for original scope and the next independent performance acceptance work.

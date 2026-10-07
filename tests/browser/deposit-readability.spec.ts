@@ -1,6 +1,6 @@
 import {test,expect,launch,pause} from './helpers';
 
-for(const theme of ['christmas','mythic'])test(`${theme} deposits reveal protected friendly bodies without changing labels or picking`,async({page})=>{
+for(const theme of ['christmas','mythic'])test(`${theme} deposits reveal every visible body and keep captions readable`,async({page})=>{
  await launch(page,{commander:'ranger'});await pause(page);
  const evidence=await page.evaluate(async theme=>{
   const live=window.__FRONTIER__,before=JSON.stringify(live.state),original=live.renderer as any;
@@ -27,17 +27,17 @@ for(const theme of ['christmas','mythic'])test(`${theme} deposits reveal protect
     const options={reveal:true,reducedMotion:true,showHealth:true};
     const alpha:number[]=[],draw=r.atlas.draw.bind(r.atlas);r.atlas.draw=(c:any,name:string,...args:any[])=>{if(name.startsWith(kind+'-'))alpha.push(c.globalAlpha);return draw(c,name,...args);};
     r.render(state,selection,options);
-    const expected=['commander','selected-unit'].includes(variant)?.3:1;
+    const expected=['commander','selected-unit','unselected-unit','enemy'].includes(variant)?.3:1;
     if(alpha.at(-1)!==expected)throw new Error(`${theme}/${kind}/${variant}: opacity ${alpha.at(-1)}, expected ${expected}`);
     const p=r.worldToScreen(node.x,node.y),labelY=kind==='relic'?-94:kind==='wood'?-90:-75;
     const c=r.context,read=(x:number,y:number,w:number,h:number):number[]=>Array.from(c.getImageData(Math.round(x*r.dpr),Math.round(y*r.dpr),Math.round(w*r.dpr),Math.round(h*r.dpr)).data) as number[];
-    const labelCalls:any[]=[],fillText=c.fillText.bind(c);c.fillText=(text:string,x:number,y:number,...args:any[])=>{if(y===labelY)labelCalls.push({text,alpha:c.globalAlpha,color:c.fillStyle,font:c.font});return fillText(text,x,y,...args);};
+    const labelCalls:any[]=[],fillText=c.fillText.bind(c);c.fillText=(text:string,x:number,y:number,...args:any[])=>{if(text.startsWith('ANCIENT')||text.startsWith('YOUR')||text.startsWith('RIVAL')||text.startsWith('◆')||text.startsWith('▥')||text==='DEPLETED')labelCalls.push({text,alpha:c.globalAlpha,color:c.fillStyle,font:c.font,matrix:Array.from([c.getTransform().e,c.getTransform().f])});return fillText(text,x,y,...args);};
     r.render(state,selection,options);
     const label=labelCalls.at(-1),pick=r.pick(state,p.x,p.y-15)?.id;
     const opacity=r.nodeOpacity.bind(r);r.nodeOpacity=()=>1;r.render(state,selection,options);
     const baselineLabel=labelCalls.at(-1),baselinePick=r.pick(state,p.x,p.y-15)?.id;
     if(JSON.stringify(label)!==JSON.stringify(baselineLabel)||label.alpha!==1)throw new Error(`${theme}/${kind}/${variant}: caption drawing changed`);
-    if(pick!==baselinePick)throw new Error(`${theme}/${kind}/${variant}: pick changed`);
+    if(pick!==baselinePick&&pick!=='fixture-actor')throw new Error(`${theme}/${kind}/${variant}: faded art intercepted a visible actor`);
     let pixels:any;
     if(variant==='commander'){
      const point=r.worldToScreen(actor.x,actor.y),box={x:point.x-18,y:point.y-55,w:36,h:42};
@@ -53,7 +53,7 @@ for(const theme of ['christmas','mythic'])test(`${theme} deposits reveal protect
      if(count<40||fadedError>=opaqueError*.85)throw new Error(`${theme}/${kind}: protected-body pixel error did not improve (${count}, ${opaqueError}, ${fadedError})`);
      pixels={count,opaqueError,fadedError,reduction:1-fadedError/opaqueError,beforePNG,afterPNG};
     }
-    r.nodeOpacity=opacity;r.atlas.draw=draw;c.fillText=fillText;results.push({kind,variant,opacity:expected,captionDrawingIdentical:true,captionGlobalAlpha:label.alpha,pickUnchanged:true,pixels});
+    r.nodeOpacity=opacity;r.atlas.draw=draw;c.fillText=fillText;results.push({kind,variant,opacity:expected,captionDrawingIdentical:true,captionGlobalAlpha:label.alpha,pickWithFade:pick,pickWithoutFade:baselinePick,visibleActorPassThroughAllowed:true,pixels});
    }
   }
   if(JSON.stringify(live.state)!==before)throw new Error('Presentation fixture modified live simulation');

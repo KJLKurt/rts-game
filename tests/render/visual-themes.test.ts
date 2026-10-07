@@ -80,35 +80,46 @@ describe('complete visual sets and atomic switching', () => {
     expect(await view.setVisualTheme('mythic')).toBe(false);
     expect(view.atlas).toBe(original);expect(view.visualTheme).toBe('christmas');
   });
-  it('a failed additional actor pack rejects the whole theme without replacing its working textures', async () => {
+  it.each(['swordsman','archer','spearman','cavalry'])('a failed additional %s pack rejects the whole theme without replacing its working textures', async actor => {
     const {view} = fixture();
     await view.setVisualTheme('christmas');
     const original = view.atlas;
-    const load = vi.spyOn(DirectionalAtlas.prototype, 'load').mockImplementation(async url => !url.endsWith('swordsman-directional.json'));
+    const load = vi.spyOn(DirectionalAtlas.prototype, 'load').mockImplementation(async url => !url.endsWith(actor+'-directional.json'));
     expect(await view.setVisualTheme('mythic')).toBe(false);
     expect(load.mock.calls.map(([url])=>url)).toEqual(expect.arrayContaining([
       expect.stringContaining('ranger-directional.json'),
       expect.stringContaining('swordsman-directional.json'),
+      expect.stringContaining('archer-directional.json'),
+      expect.stringContaining('spearman-directional.json'),
+      expect.stringContaining('cavalry-directional.json'),
     ]));
     expect(view.atlas).toBe(original);expect(view.visualTheme).toBe('christmas');
   });
   it('routes each actor to its owned texture and releases additional textures on a complete theme switch', async () => {
     const {view} = fixture();
     vi.spyOn(DirectionalAtlas.prototype, 'load').mockImplementation(async function(this:DirectionalAtlas,url:string) {
-      const actor=url.endsWith('swordsman-directional.json')?'swordsman':'ranger';
+      const actor=url.match(/(ranger|swordsman|archer|spearman|cavalry)-directional\.json$/)?.[1];
+      if(!actor)throw new Error('Unexpected owned directional pack');
       this.data={actors:{[actor]:{}}} as DirectionalData;
       this.image={src:url} as HTMLImageElement;
       return true;
     });
     expect(await view.setVisualTheme('mythic')).toBe(true);
     const internals=view as unknown as {directionalAtlas:DirectionalAtlas;additionalDirectionalAtlases:DirectionalAtlas[];directionalFor(actor:string):DirectionalAtlas};
-    const ranger=internals.directionalFor('ranger'),swordsman=internals.directionalFor('swordsman');
+    const ranger=internals.directionalFor('ranger'),swordsman=internals.directionalFor('swordsman'),archer=internals.directionalFor('archer'),spearman=internals.directionalFor('spearman'),cavalry=internals.directionalFor('cavalry');
     expect(ranger.image?.src).toContain('ranger-directional.json');
     expect(swordsman.image?.src).toContain('swordsman-directional.json');
-    expect(swordsman).not.toBe(ranger);expect(internals.additionalDirectionalAtlases).toHaveLength(1);
+    expect(archer.image?.src).toContain('archer-directional.json');
+    expect(spearman.image?.src).toContain('spearman-directional.json');
+    expect(cavalry.image?.src).toContain('cavalry-directional.json');
+    expect(new Set([ranger,swordsman,archer,spearman,cavalry]).size).toBe(5);
+    expect(internals.additionalDirectionalAtlases).toHaveLength(4);
     expect(internals.directionalFor('engineer')).toBe(ranger);
     expect(await view.setVisualTheme('christmas')).toBe(true);
     expect(internals.additionalDirectionalAtlases).toHaveLength(0);
     expect(internals.directionalFor('swordsman')).not.toBe(swordsman);
+    expect(internals.directionalFor('archer')).not.toBe(archer);
+    expect(internals.directionalFor('spearman')).not.toBe(spearman);
+    expect(internals.directionalFor('cavalry')).not.toBe(cavalry);
   });
 });

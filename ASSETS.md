@@ -1,5 +1,7 @@
 # Asset provenance
 
+Current checkpoint: **fc-0f1a6b425705**, with the complete final **400-pass / 18-intentional-skip / zero-failure** 418-case gate. Prior candidate, publication-hold and pending-gate statements below retain their historical context. Later UI design and campaign work are separate. See the current [README](README.md).
+
 The production sprite atlas under `public/assets/render/` was generated from user-supplied reference artwork specifically for this project. It is not copied from a commercial game. See `docs/ART_DIRECTION.md` for the source-selection and generation details. Do not infer a CC0/public-domain license from generation or user supply.
 
 Canvas terrain, flags, icons, particle effects, interface design and the original generative sound program were authored for this implementation. No external font service or asset CDN is required. System fonts are used.
@@ -27,3 +29,32 @@ Exact prompts, accepted source/frame hashes and production-file hashes are in [`
 The isolated next-actor batch adds144 authored Swordsman frames across16 headings: one idle, four walk and four attack phases per heading. Its independent1792×2752 texture decodes to18.8125 MiB and is loaded with the whole Mythic set before an atomic switch. The existing Ranger PNG and manifest remain byte-identical. Original ImageGen PNGs, exact prompts and source/crop/packed RGBA hashes are retained in the handoff and theme provenance. Packing copies selected crops unchanged; no resampling, mirroring, masking or recoloring is used. The rejected WSW passing pose and ESE windup remain archived. Native presentation QA is separate from these provenance facts.
 
 Existing simulation melee attack/damage events supply strike timing; presentation does not create damage or modify gameplay stats. This batch changes no audio. Two Mythic actors represent288/1296 family frames; seven actors1008 frames and other active themes/styles/music remain open. Desktop/emulated-phone evidence does not establish physical-device memory, thermals or FPS.
+
+## Mythic Archer directional candidate — 6 October
+
+The isolated next-actor batch adds144 unique Archer frames across16 headings: idle/four walk/four attack phases. The independent1536×2816 atlas decodes to16.5 MiB, above the original16 MiB target and below the documented20 MiB cap. ImageGen compact redraws precede unchanged-pixel cropping/packing; no packed-source pixel resampling, mirroring, masking or recoloring occurs. All25 original outputs/requests, rejected aim/release/scale iterations and source/crop/packed/readback hashes are retained. Ranger and Swordsman assets stay byte-identical. Existing simulation projectiles and damage events drive attacks; no rules, stats or audio change. Three actors cover432/1296 Mythic family frames, with six actors864 frames still open. Their directional textures total65.9375 MiB decoded plus static art; physical-phone performance is unmeasured. See [ARCHER_ANIMATION_QA_20261006.md](docs/ARCHER_ANIMATION_QA_20261006.md) for exact build attribution, native human attacks, retained fixture failures and save/offline evidence.
+
+
+### Mythic Spearman directional animation — 6 October 2026
+
+The optional Mythic set now includes 144 unique female Spearman idle, walk and thrust frames over sixteen headings. One right-hand spear and left-hand blue/gold sun shield preserve the approved static identity. Separate `spearman-directional.png` and `.json` assets use exact unchanged ImageGen crops: 2560×1664 RGBA, 16.25 MiB decoded (the initial 16 MiB target misses by 0.25 MiB; the 20 MiB cap passes). Eleven original sources/prompts include two rejected oversized pilots and subsequent ImageGen size edits. Ranger, Swordsman and Archer assets remain exact. The family has 576/1296 frames; five actors and 720 frames remain. Evidence and limits are in `docs/SPEARMAN_ANIMATION_QA_20261006.md`. No new source-rights or redistribution clearance is established.
+
+
+## Cavalry directional animation — local reviewed candidate 2026-10-06
+
+Cavalry adds 144 original frames at sixteen headings, 14.25 MiB decoded, bringing five complete actors to 720/1296 frames. Candidate fc-fe6ef97ce9bd has 588 unit passes, 52 focused browser passes, three cache upgrades and 48 real native combat scenes. Three owned match continuations produced 39/34/41 human attack hits with exact online/offline saves; all recruits died by the final screenshots. Full 376-case receipt is required separately. Depot/crest/caption occlusion and dense picking remain visible quality issues. See [Cavalry local QA](docs/CAVALRY_ANIMATION_QA_20261006.md). Accepted source does not imply publication; parent main remains last confirmed 40b4a3d. Preserve existing publication history and locator cleanup when merging this append-only addition.
+
+
+## 2026-10-06 visibility and native picking review
+
+The isolated Swordsman-baseline visibility candidate changes renderer picking, scenery transparency, ground faction markers, captions and pause HUD placement without changing any actor asset. See [visibility/picking review](docs/VISIBILITY_PICKING_QA_20261006.md). Full regression acceptance is a separate publication gate; unpublished actor packets remain separate.
+
+
+### Superseding visibility ground-marker correction — 2026-10-06
+
+Hold first-stage `fc-9708c3913116`: native commander ground-marker taps queued a tiny Move. Corrected `fc-48ef95e814c0` preserves painted ground-marker selection below opaque sprite pixels; 21 targeted native checks pass, including all three commanders/both themes/three widths, and three earned continuations each produce eight Ranger damage hits with exact offline restoration. Full394 acceptance is reported separately. No new actor art. See [corrected review](docs/VISIBILITY_PICKING_QA_20261006.md).
+
+
+## Combined actor and corrected visibility candidate — 2026-10-06
+
+Frozen pre-full buildfc-4a71fd4dca98 passes588units/64files,8missions,TS/build,40exactrepeat outputs and3first-attempt earned native targeting/offline continuations. Five unchanged actor packs cover720/1296frames; corrected visibility code is combined without sim/content/audio changes. Full412 gate remains separately required. See docs/COMBINED_ACTOR_VISIBILITY_QA_20261006.md (repository root) and COMBINED_REQUIREMENTS_AUDIT_20261006.md. No publication; four UI boards remain proposals.

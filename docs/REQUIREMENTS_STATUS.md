@@ -1,6 +1,18 @@
 # Recovered candidate requirement status
 
-## Current Swordsman candidate
+## Current combined Focus checkpoint — 6 October 2026
+
+Build **`fc-0f1a6b425705`** combines the reviewed Mythic Archer, Spearman and Cavalry packs with corrected troop visibility, sprite-body and ground-marker selection, lower-quality overlay caching, and explicit Focus framing outside HUD controls. Focus retains enlarged zoom when the commander and health bar fit; short landscape layouts can minimize the panel and reduce zoom. All fifteen simulation files, campaign rules, costs and audio remain unchanged. Later campaign work and UI redesign are outside this frozen checkpoint.
+
+The final production candidate passed **588 unit tests**, TypeScript/build, eight mission validations and an exact 40-file repeat build. Its **418-case browser gate completed in one invocation: 400 passed, 18 unchanged intentional skips, zero failures, retries, reruns or flaky cases**, with exit code zero. All 412 prior identities remain; six framing cases were added. Four PWA tests and three upgrades from published Swordsman passed. All 283 frozen worker-source files and 40 build files remained exact; publication preserves the additional earlier recovery document and release-history edits.
+
+Three earned-save continuations each produced eight new Ranger damage hits with active enemy AI and exact whole-game, storage and profile restoration online/offline. These samples do not establish a newly earned win or uncoached fun. Historical evidence remains intact: the first visibility candidate had three ground-marker failures; the corrected version passed separately; the optimized-renderer gate required three skipped upgrade cases to be completed after a runner flag was supplied. The final 418-case result belongs to this exact combined Focus build. The early focused PNG-retention mistake remains documented; final framing screenshots are preserved.
+
+The separate paired renderer experiment measured 600-unit median rendering-CPU reductions of 22.6% desktop, 38.1% portrait and 34.8% landscape. Those paused fixtures are not physical-phone FPS or live-combat speed proof; dense phone-width rendering still cost about 30–32 ms. Five complete Mythic actors cover 720/1296 directional frames; four actor packs and other requested content remain unfinished. Asset memory, physical-device/Safari and installed-PWA behavior, subjective listening, the original requirements audit and full usability/fun acceptance remain open. Fresh dependency installation in the QA environment was blocked by a registry proxy and an empty package cache; existing locked dependencies supported the recorded tests. Publication CI performs its own installation and build.
+
+Earlier candidate and pending-gate statements below are historical snapshots; the final result above supersedes them for this exact build.
+
+## Prior Swordsman candidate
 
 Build **`fc-4d0b2bae4d0c`** adds a separate 144-frame Mythic Swordsman atlas, with sixteen headings and idle, four walk and four attack phases. Both actor textures load together before switching themes; a failed load retains the complete working set. Ranger assets, all fifteen simulation files, unit definitions, campaign rules and audio remain unchanged. About correctly describes Ranger and Swordsman coverage. **573 unit tests in 61 files**, TypeScript/build, eight mission validations and 34 repeat-build outputs are verified. The current complete browser gate passed **340 cases with 18 intentional input-mode skips across 358 distinct identities**, in one invocation with **zero failures, automatic retries or manual reruns**. It retains all 352 prior identities and adds exactly six Swordsman cases. The full gate includes all four PWA cases and three real Ranger-to-Swordsman cache upgrades. All 260 frozen worker-source hashes and 34 dist hashes remained exact. Earlier focused bootstrap failures and art-driver corrections remain separate historical evidence; the clean full gate does not erase them. The separate bootstrap robustness patch and next-actor experiments are excluded.
 
@@ -148,3 +160,34 @@ that earlier checkpoint. This update does not establish commercial readiness,
 physical-device coverage, later natural-route completion or broad balance.
 
 ## Retained prior-checkpoint scope
+
+## Mythic Archer candidate — 6 October 2026
+
+Candidate **`fc-d34d3b0b9271`** adds144 unique Archer frames across16 authored headings in a separate16.5 MiB atlas. It passes578 units/62 files, TypeScript/build/eight mission checks and40 final focused browser cases. Art-stage buildfc-7ec6bb5dfe61 has identical normalized runtime/selected pixels:48 completed native attack scenes across three retained invocations,432 native gallery captures and three natural owned99.6→220.1/220.2/220.3s continuations. Each natural match observes16 human Archer projectiles14 hits with active enemy AI and exact whole-game/browser-storage restoration online/offline. History remains8 games3 wins; no new terminal or fun claim. Family coverage is432/1296, six actors864 frames remain. The separate full364 browser receipt records its actual outcomes. See [ARCHER_ANIMATION_QA_20261006.md](ARCHER_ANIMATION_QA_20261006.md).
+
+The lead reports Swordsman published to both branches at40b4a3db7477b56ac726b8eb7c626dfe3339fa05, buildfc-4d0b2bae4d0c, with Pages37398189483 successful at01:15:53 UTC on6 October. These attributed facts supersede earlier historical unpushed-candidate wording; cloud hosted-HTTPS verification is not claimed. Preserve the lead publication-history document and locator cleanup when applying the narrow Archer handoff.
+
+
+### Spearman candidate evidence — 6 October 2026
+
+An isolated fourth actor pack adds 144 unchanged Spearman frames: 576/1296 family coverage, with 720 frames across five actors remaining. Build `fc-25ce7e924e91` passes 583 unit tests, eight story missions and TypeScript/build. Six prior actor assets and all simulation, content, audio and Battlefield bytes remain exact. The source engine's 96 strikes/96 hits, 432 final native galleries and 48 native combat scenes are separate from three owned natural continuations with 17/20/22 human hits and exact online/offline saves/storage. Foreground buildings, crests and captions still obscure combat poses. The full 370-case ordinary regression is a separate frozen receipt required before publication; this addition asserts no unexecuted full pass or new live deployment. See `SPEARMAN_ANIMATION_QA_20261006.md`.
+
+
+## Cavalry directional animation — local reviewed candidate 2026-10-06
+
+Cavalry adds 144 original frames at sixteen headings, 14.25 MiB decoded, bringing five complete actors to 720/1296 frames. Candidate fc-fe6ef97ce9bd has 588 unit passes, 52 focused browser passes, three cache upgrades and 48 real native combat scenes. Three owned match continuations produced 39/34/41 human attack hits with exact online/offline saves; all recruits died by the final screenshots. Full 376-case receipt is required separately. Depot/crest/caption occlusion and dense picking remain visible quality issues. See [Cavalry local QA](CAVALRY_ANIMATION_QA_20261006.md). Accepted source does not imply publication; parent main remains last confirmed 40b4a3d. Preserve existing publication history and locator cleanup when merging this append-only addition.
+
+
+## 2026-10-06 visibility and native picking candidate
+
+A separate candidate addresses foreground depots hiding visible troops, transparent foreground hit rectangles stealing enemy taps, overlapping faction/caption labels and the floating pause overlay race. Final focused native browser checks: 69 passes. Three earned desktop/phone save continuations each produced eight Ranger damage hits with enemy AI and exact offline restoration. The frozen full-suite gate is reported separately; no publication or fun claim. See [review](VISIBILITY_PICKING_QA_20261006.md).
+
+
+### Superseding visibility ground-marker correction — 2026-10-06
+
+Hold first-stage `fc-9708c3913116`: native commander ground-marker taps queued a tiny Move. Corrected `fc-48ef95e814c0` preserves painted ground-marker selection below opaque sprite pixels; 21 targeted native checks pass, including all three commanders/both themes/three widths, and three earned continuations each produce eight Ranger damage hits with exact offline restoration. Full394 acceptance is reported separately. No new actor art. See [corrected review](VISIBILITY_PICKING_QA_20261006.md).
+
+
+## Combined actor and corrected visibility candidate — 2026-10-06
+
+Frozen pre-full buildfc-4a71fd4dca98 passes588units/64files,8missions,TS/build,40exactrepeat outputs and3first-attempt earned native targeting/offline continuations. Five unchanged actor packs cover720/1296frames; corrected visibility code is combined without sim/content/audio changes. Full412 gate remains separately required. See docs/COMBINED_ACTOR_VISIBILITY_QA_20261006.md (repository root) and COMBINED_REQUIREMENTS_AUDIT_20261006.md. No publication; four UI boards remain proposals.

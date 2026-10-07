@@ -24,7 +24,12 @@ describe('complete Mythic Swordsman directional art integration',()=>{
   expect(sha('ranger-directional.png')).toBe('da4153d26107b3edf37aff253dc0001e35d7c887f68a3e2384e29e70a43f1703');
   expect(sha('ranger-directional.json')).toBe('b788699b98e0d4b9cc381e63697cec2add9029dc9108d99acda75a50b7eed1b9');
   expect(VISUAL_THEMES.mythic.directionalAtlas).toContain('ranger-directional.json');
-  expect(VISUAL_THEMES.mythic.additionalDirectionalAtlases).toEqual(['assets/render/themes/mythic-toon/swordsman-directional.json']);
+  expect(VISUAL_THEMES.mythic.additionalDirectionalAtlases).toEqual([
+   'assets/render/themes/mythic-toon/swordsman-directional.json',
+   'assets/render/themes/mythic-toon/archer-directional.json',
+   'assets/render/themes/mythic-toon/spearman-directional.json',
+   'assets/render/themes/mythic-toon/cavalry-directional.json',
+  ]);
  });
  it('keeps every crop disjoint so one phase cannot overwrite another actor pose',()=>{
   const frames=Object.values(data.frames);

@@ -1,0 +1,1992 @@
+{
+  "version": 1,
+  "image": "archer-directional.png",
+  "width": 1536,
+  "height": 2816,
+  "actors": {
+    "archer": {
+      "referenceBodyHeight": 140,
+      "suggestedHeight": 45,
+      "walkFrameMs": 130,
+      "attackFrameMs": [
+        100,
+        100,
+        100,
+        250
+      ],
+      "impactFrame": 2,
+      "directions": [
+        {
+          "idle": "archer-N-idle",
+          "walk": [
+            "archer-N-walk-0",
+            "archer-N-walk-1",
+            "archer-N-walk-2",
+            "archer-N-walk-3"
+          ],
+          "attack": [
+            "archer-N-attack-0",
+            "archer-N-attack-1",
+            "archer-N-attack-2",
+            "archer-N-attack-3"
+          ]
+        },
+        {
+          "idle": "archer-NNE-idle",
+          "walk": [
+            "archer-NNE-walk-0",
+            "archer-NNE-walk-1",
+            "archer-NNE-walk-2",
+            "archer-NNE-walk-3"
+          ],
+          "attack": [
+            "archer-NNE-attack-0",
+            "archer-NNE-attack-1",
+            "archer-NNE-attack-2",
+            "archer-NNE-attack-3"
+          ]
+        },
+        {
+          "idle": "archer-NE-idle",
+          "walk": [
+            "archer-NE-walk-0",
+            "archer-NE-walk-1",
+            "archer-NE-walk-2",
+            "archer-NE-walk-3"
+          ],
+          "attack": [
+            "archer-NE-attack-0",
+            "archer-NE-attack-1",
+            "archer-NE-attack-2",
+            "archer-NE-attack-3"
+          ]
+        },
+        {
+          "idle": "archer-ENE-idle",
+          "walk": [
+            "archer-ENE-walk-0",
+            "archer-ENE-walk-1",
+            "archer-ENE-walk-2",
+            "archer-ENE-walk-3"
+          ],
+          "attack": [
+            "archer-ENE-attack-0",
+            "archer-ENE-attack-1",
+            "archer-ENE-attack-2",
+            "archer-ENE-attack-3"
+          ]
+        },
+        {
+          "idle": "archer-E-idle",
+          "walk": [
+            "archer-E-walk-0",
+            "archer-E-walk-1",
+            "archer-E-walk-2",
+            "archer-E-walk-3"
+          ],
+          "attack": [
+            "archer-E-attack-0",
+            "archer-E-attack-1",
+            "archer-E-attack-2",
+            "archer-E-attack-3"
+          ]
+        },
+        {
+          "idle": "archer-ESE-idle",
+          "walk": [
+            "archer-ESE-walk-0",
+            "archer-ESE-walk-1",
+            "archer-ESE-walk-2",
+            "archer-ESE-walk-3"
+          ],
+          "attack": [
+            "archer-ESE-attack-0",
+            "archer-ESE-attack-1",
+            "archer-ESE-attack-2",
+            "archer-ESE-attack-3"
+          ]
+        },
+        {
+          "idle": "archer-SE-idle",
+          "walk": [
+            "archer-SE-walk-0",
+            "archer-SE-walk-1",
+            "archer-SE-walk-2",
+            "archer-SE-walk-3"
+          ],
+          "attack": [
+            "archer-SE-attack-0",
+            "archer-SE-attack-1",
+            "archer-SE-attack-2",
+            "archer-SE-attack-3"
+          ]
+        },
+        {
+          "idle": "archer-SSE-idle",
+          "walk": [
+            "archer-SSE-walk-0",
+            "archer-SSE-walk-1",
+            "archer-SSE-walk-2",
+            "archer-SSE-walk-3"
+          ],
+          "attack": [
+            "archer-SSE-attack-0",
+            "archer-SSE-attack-1",
+            "archer-SSE-attack-2",
+            "archer-SSE-attack-3"
+          ]
+        },
+        {
+          "idle": "archer-S-idle",
+          "walk": [
+            "archer-S-walk-0",
+            "archer-S-walk-1",
+            "archer-S-walk-2",
+            "archer-S-walk-3"
+          ],
+          "attack": [
+            "archer-S-attack-0",
+            "archer-S-attack-1",
+            "archer-S-attack-2",
+            "archer-S-attack-3"
+          ]
+        },
+        {
+          "idle": "archer-SSW-idle",
+          "walk": [
+            "archer-SSW-walk-0",
+            "archer-SSW-walk-1",
+            "archer-SSW-walk-2",
+            "archer-SSW-walk-3"
+          ],
+          "attack": [
+            "archer-SSW-attack-0",
+            "archer-SSW-attack-1",
+            "archer-SSW-attack-2",
+            "archer-SSW-attack-3"
+          ]
+        },
+        {
+          "idle": "archer-SW-idle",
+          "walk": [
+            "archer-SW-walk-0",
+            "archer-SW-walk-1",
+            "archer-SW-walk-2",
+            "archer-SW-walk-3"
+          ],
+          "attack": [
+            "archer-SW-attack-0",
+            "archer-SW-attack-1",
+            "archer-SW-attack-2",
+            "archer-SW-attack-3"
+          ]
+        },
+        {
+          "idle": "archer-WSW-idle",
+          "walk": [
+            "archer-WSW-walk-0",
+            "archer-WSW-walk-1",
+            "archer-WSW-walk-2",
+            "archer-WSW-walk-3"
+          ],
+          "attack": [
+            "archer-WSW-attack-0",
+            "archer-WSW-attack-1",
+            "archer-WSW-attack-2",
+            "archer-WSW-attack-3"
+          ]
+        },
+        {
+          "idle": "archer-W-idle",
+          "walk": [
+            "archer-W-walk-0",
+            "archer-W-walk-1",
+            "archer-W-walk-2",
+            "archer-W-walk-3"
+          ],
+          "attack": [
+            "archer-W-attack-0",
+            "archer-W-attack-1",
+            "archer-W-attack-2",
+            "archer-W-attack-3"
+          ]
+        },
+        {
+          "idle": "archer-WNW-idle",
+          "walk": [
+            "archer-WNW-walk-0",
+            "archer-WNW-walk-1",
+            "archer-WNW-walk-2",
+            "archer-WNW-walk-3"
+          ],
+          "attack": [
+            "archer-WNW-attack-0",
+            "archer-WNW-attack-1",
+            "archer-WNW-attack-2",
+            "archer-WNW-attack-3"
+          ]
+        },
+        {
+          "idle": "archer-NW-idle",
+          "walk": [
+            "archer-NW-walk-0",
+            "archer-NW-walk-1",
+            "archer-NW-walk-2",
+            "archer-NW-walk-3"
+          ],
+          "attack": [
+            "archer-NW-attack-0",
+            "archer-NW-attack-1",
+            "archer-NW-attack-2",
+            "archer-NW-attack-3"
+          ]
+        },
+        {
+          "idle": "archer-NNW-idle",
+          "walk": [
+            "archer-NNW-walk-0",
+            "archer-NNW-walk-1",
+            "archer-NNW-walk-2",
+            "archer-NNW-walk-3"
+          ],
+          "attack": [
+            "archer-NNW-attack-0",
+            "archer-NNW-attack-1",
+            "archer-NNW-attack-2",
+            "archer-NNW-attack-3"
+          ]
+        }
+      ]
+    }
+  },
+  "frames": {
+    "archer-N-idle": {
+      "actor": "archer",
+      "x": 1259,
+      "y": 2667,
+      "w": 119,
+      "h": 143,
+      "groundPivot": {
+        "x": 60.0926016581129,
+        "y": 139
+      },
+      "bodyHeight": 135
+    },
+    "archer-NNE-idle": {
+      "actor": "archer",
+      "x": 1404,
+      "y": 2357,
+      "w": 120,
+      "h": 146,
+      "groundPivot": {
+        "x": 75.14013036701147,
+        "y": 141
+      },
+      "bodyHeight": 137
+    },
+    "archer-NE-idle": {
+      "actor": "archer",
+      "x": 1022,
+      "y": 2520,
+      "w": 115,
+      "h": 147,
+      "groundPivot": {
+        "x": 80.11333362197115,
+        "y": 142
+      },
+      "bodyHeight": 138
+    },
+    "archer-ENE-idle": {
+      "actor": "archer",
+      "x": 1422,
+      "y": 2205,
+      "w": 102,
+      "h": 148,
+      "groundPivot": {
+        "x": 80.7513187118268,
+        "y": 143
+      },
+      "bodyHeight": 139
+    },
+    "archer-E-idle": {
+      "actor": "archer",
+      "x": 365,
+      "y": 1239,
+      "w": 99,
+      "h": 155,
+      "groundPivot": {
+        "x": 73.53468477599839,
+        "y": 150
+      },
+      "bodyHeight": 146
+    },
+    "archer-ESE-idle": {
+      "actor": "archer",
+      "x": 542,
+      "y": 2106,
+      "w": 129,
+      "h": 156,
+      "groundPivot": {
+        "x": 48.826506862141855,
+        "y": 151
+      },
+      "bodyHeight": 147
+    },
+    "archer-SE-idle": {
+      "actor": "archer",
+      "x": 375,
+      "y": 2611,
+      "w": 133,
+      "h": 156,
+      "groundPivot": {
+        "x": 51.58742774566474,
+        "y": 151
+      },
+      "bodyHeight": 148
+    },
+    "archer-SSE-idle": {
+      "actor": "archer",
+      "x": 806,
+      "y": 2093,
+      "w": 135,
+      "h": 154,
+      "groundPivot": {
+        "x": 55.52729506365881,
+        "y": 150
+      },
+      "bodyHeight": 146
+    },
+    "archer-S-idle": {
+      "actor": "archer",
+      "x": 684,
+      "y": 2425,
+      "w": 137,
+      "h": 153,
+      "groundPivot": {
+        "x": 65.47897171774639,
+        "y": 148
+      },
+      "bodyHeight": 144
+    },
+    "archer-SSW-idle": {
+      "actor": "archer",
+      "x": 1005,
+      "y": 2053,
+      "w": 134,
+      "h": 157,
+      "groundPivot": {
+        "x": 85.43679037005887,
+        "y": 152
+      },
+      "bodyHeight": 148
+    },
+    "archer-SW-idle": {
+      "actor": "archer",
+      "x": 544,
+      "y": 2266,
+      "w": 138,
+      "h": 155,
+      "groundPivot": {
+        "x": 82.7114585813689,
+        "y": 150
+      },
+      "bodyHeight": 146
+    },
+    "archer-WSW-idle": {
+      "actor": "archer",
+      "x": 540,
+      "y": 2430,
+      "w": 140,
+      "h": 155,
+      "groundPivot": {
+        "x": 80.00685336976312,
+        "y": 150
+      },
+      "bodyHeight": 146
+    },
+    "archer-W-idle": {
+      "actor": "archer",
+      "x": 675,
+      "y": 2106,
+      "w": 127,
+      "h": 155,
+      "groundPivot": {
+        "x": 64.53824514400534,
+        "y": 150
+      },
+      "bodyHeight": 146
+    },
+    "archer-WNW-idle": {
+      "actor": "archer",
+      "x": 771,
+      "y": 2582,
+      "w": 133,
+      "h": 150,
+      "groundPivot": {
+        "x": 46.85340390475773,
+        "y": 145
+      },
+      "bodyHeight": 141
+    },
+    "archer-NW-idle": {
+      "actor": "archer",
+      "x": 686,
+      "y": 2265,
+      "w": 133,
+      "h": 153,
+      "groundPivot": {
+        "x": 61.511090103564015,
+        "y": 148
+      },
+      "bodyHeight": 144
+    },
+    "archer-NNW-idle": {
+      "actor": "archer",
+      "x": 2,
+      "y": 2127,
+      "w": 132,
+      "h": 152,
+      "groundPivot": {
+        "x": 72.88098340717579,
+        "y": 147
+      },
+      "bodyHeight": 143
+    },
+    "archer-N-walk-0": {
+      "actor": "archer",
+      "x": 1421,
+      "y": 1198,
+      "w": 111,
+      "h": 169,
+      "groundPivot": {
+        "x": 45.20307189542484,
+        "y": 164
+      },
+      "bodyHeight": 160
+    },
+    "archer-NNE-walk-0": {
+      "actor": "archer",
+      "x": 1421,
+      "y": 1025,
+      "w": 112,
+      "h": 169,
+      "groundPivot": {
+        "x": 42.69237088763583,
+        "y": 164
+      },
+      "bodyHeight": 161
+    },
+    "archer-NE-walk-0": {
+      "actor": "archer",
+      "x": 1411,
+      "y": 850,
+      "w": 116,
+      "h": 171,
+      "groundPivot": {
+        "x": 40.12636934160196,
+        "y": 166
+      },
+      "bodyHeight": 162
+    },
+    "archer-ENE-walk-0": {
+      "actor": "archer",
+      "x": 1134,
+      "y": 1051,
+      "w": 118,
+      "h": 166,
+      "groundPivot": {
+        "x": 91.54451427299341,
+        "y": 161
+      },
+      "bodyHeight": 157
+    },
+    "archer-E-walk-0": {
+      "actor": "archer",
+      "x": 299,
+      "y": 1936,
+      "w": 135,
+      "h": 164,
+      "groundPivot": {
+        "x": 103.21605180842201,
+        "y": 159
+      },
+      "bodyHeight": 155
+    },
+    "archer-ESE-walk-0": {
+      "actor": "archer",
+      "x": 457,
+      "y": 1767,
+      "w": 139,
+      "h": 165,
+      "groundPivot": {
+        "x": 102.72185455086259,
+        "y": 160
+      },
+      "bodyHeight": 156
+    },
+    "archer-SE-walk-0": {
+      "actor": "archer",
+      "x": 152,
+      "y": 1780,
+      "w": 143,
+      "h": 165,
+      "groundPivot": {
+        "x": 102.13350832729907,
+        "y": 161
+      },
+      "bodyHeight": 157
+    },
+    "archer-SSE-walk-0": {
+      "actor": "archer",
+      "x": 2,
+      "y": 1790,
+      "w": 140,
+      "h": 165,
+      "groundPivot": {
+        "x": 98.81473532260816,
+        "y": 161
+      },
+      "bodyHeight": 158
+    },
+    "archer-S-walk-0": {
+      "actor": "archer",
+      "x": 1014,
+      "y": 1587,
+      "w": 138,
+      "h": 166,
+      "groundPivot": {
+        "x": 59.02129552916628,
+        "y": 161
+      },
+      "bodyHeight": 157
+    },
+    "archer-SSW-walk-0": {
+      "actor": "archer",
+      "x": 867,
+      "y": 1587,
+      "w": 143,
+      "h": 166,
+      "groundPivot": {
+        "x": 29.76134169471834,
+        "y": 161
+      },
+      "bodyHeight": 157
+    },
+    "archer-SW-walk-0": {
+      "actor": "archer",
+      "x": 1388,
+      "y": 1543,
+      "w": 145,
+      "h": 166,
+      "groundPivot": {
+        "x": 28.20118417511435,
+        "y": 161
+      },
+      "bodyHeight": 157
+    },
+    "archer-WSW-walk-0": {
+      "actor": "archer",
+      "x": 309,
+      "y": 1767,
+      "w": 144,
+      "h": 165,
+      "groundPivot": {
+        "x": 29.88829896499965,
+        "y": 160
+      },
+      "bodyHeight": 156
+    },
+    "archer-W-walk-0": {
+      "actor": "archer",
+      "x": 735,
+      "y": 1926,
+      "w": 143,
+      "h": 163,
+      "groundPivot": {
+        "x": 26.374186793003418,
+        "y": 158
+      },
+      "bodyHeight": 154
+    },
+    "archer-WNW-walk-0": {
+      "actor": "archer",
+      "x": 146,
+      "y": 1949,
+      "w": 133,
+      "h": 164,
+      "groundPivot": {
+        "x": 86.87906137184115,
+        "y": 160
+      },
+      "bodyHeight": 157
+    },
+    "archer-NW-walk-0": {
+      "actor": "archer",
+      "x": 789,
+      "y": 1757,
+      "w": 136,
+      "h": 165,
+      "groundPivot": {
+        "x": 75.37596928124071,
+        "y": 160
+      },
+      "bodyHeight": 156
+    },
+    "archer-NNW-walk-0": {
+      "actor": "archer",
+      "x": 929,
+      "y": 1757,
+      "w": 129,
+      "h": 165,
+      "groundPivot": {
+        "x": 69.37344073827876,
+        "y": 160
+      },
+      "bodyHeight": 156
+    },
+    "archer-N-walk-1": {
+      "actor": "archer",
+      "x": 282,
+      "y": 2271,
+      "w": 124,
+      "h": 159,
+      "groundPivot": {
+        "x": 54.62112333092506,
+        "y": 154
+      },
+      "bodyHeight": 151
+    },
+    "archer-NNE-walk-1": {
+      "actor": "archer",
+      "x": 281,
+      "y": 2447,
+      "w": 119,
+      "h": 160,
+      "groundPivot": {
+        "x": 52.418007819058346,
+        "y": 155
+      },
+      "bodyHeight": 151
+    },
+    "archer-NE-walk-1": {
+      "actor": "archer",
+      "x": 252,
+      "y": 2614,
+      "w": 119,
+      "h": 160,
+      "groundPivot": {
+        "x": 54.32976983157846,
+        "y": 155
+      },
+      "bodyHeight": 151
+    },
+    "archer-ENE-walk-1": {
+      "actor": "archer",
+      "x": 1189,
+      "y": 1884,
+      "w": 104,
+      "h": 160,
+      "groundPivot": {
+        "x": 47.152049880834966,
+        "y": 154
+      },
+      "bodyHeight": 150
+    },
+    "archer-E-walk-1": {
+      "actor": "archer",
+      "x": 1189,
+      "y": 2048,
+      "w": 102,
+      "h": 160,
+      "groundPivot": {
+        "x": 46.9480465213455,
+        "y": 155
+      },
+      "bodyHeight": 151
+    },
+    "archer-ESE-walk-1": {
+      "actor": "archer",
+      "x": 403,
+      "y": 2104,
+      "w": 135,
+      "h": 162,
+      "groundPivot": {
+        "x": 70.11218400053644,
+        "y": 157
+      },
+      "bodyHeight": 153
+    },
+    "archer-SE-walk-1": {
+      "actor": "archer",
+      "x": 2,
+      "y": 2449,
+      "w": 134,
+      "h": 162,
+      "groundPivot": {
+        "x": 64.84461743560439,
+        "y": 157
+      },
+      "bodyHeight": 153
+    },
+    "archer-SSE-walk-1": {
+      "actor": "archer",
+      "x": 568,
+      "y": 1939,
+      "w": 130,
+      "h": 163,
+      "groundPivot": {
+        "x": 61.737395772736136,
+        "y": 157
+      },
+      "bodyHeight": 153
+    },
+    "archer-S-walk-1": {
+      "actor": "archer",
+      "x": 2,
+      "y": 2615,
+      "w": 129,
+      "h": 162,
+      "groundPivot": {
+        "x": 76.29164591977869,
+        "y": 157
+      },
+      "bodyHeight": 153
+    },
+    "archer-SSW-walk-1": {
+      "actor": "archer",
+      "x": 141,
+      "y": 2283,
+      "w": 137,
+      "h": 160,
+      "groundPivot": {
+        "x": 66.60828846762882,
+        "y": 155
+      },
+      "bodyHeight": 151
+    },
+    "archer-SW-walk-1": {
+      "actor": "archer",
+      "x": 139,
+      "y": 2117,
+      "w": 138,
+      "h": 162,
+      "groundPivot": {
+        "x": 68.82064322386907,
+        "y": 157
+      },
+      "bodyHeight": 153
+    },
+    "archer-WSW-walk-1": {
+      "actor": "archer",
+      "x": 140,
+      "y": 2449,
+      "w": 137,
+      "h": 161,
+      "groundPivot": {
+        "x": 67.60203381103588,
+        "y": 156
+      },
+      "bodyHeight": 152
+    },
+    "archer-W-walk-1": {
+      "actor": "archer",
+      "x": 641,
+      "y": 2589,
+      "w": 126,
+      "h": 154,
+      "groundPivot": {
+        "x": 63.67271667637999,
+        "y": 149
+      },
+      "bodyHeight": 145
+    },
+    "archer-WNW-walk-1": {
+      "actor": "archer",
+      "x": 404,
+      "y": 2434,
+      "w": 132,
+      "h": 156,
+      "groundPivot": {
+        "x": 64.42387712260722,
+        "y": 151
+      },
+      "bodyHeight": 147
+    },
+    "archer-NW-walk-1": {
+      "actor": "archer",
+      "x": 410,
+      "y": 2270,
+      "w": 130,
+      "h": 156,
+      "groundPivot": {
+        "x": 65.27088144919969,
+        "y": 151
+      },
+      "bodyHeight": 147
+    },
+    "archer-NNW-walk-1": {
+      "actor": "archer",
+      "x": 512,
+      "y": 2594,
+      "w": 125,
+      "h": 156,
+      "groundPivot": {
+        "x": 58.83306891933648,
+        "y": 151
+      },
+      "bodyHeight": 147
+    },
+    "archer-N-walk-2": {
+      "actor": "archer",
+      "x": 1070,
+      "y": 2367,
+      "w": 103,
+      "h": 147,
+      "groundPivot": {
+        "x": 49.2617986446059,
+        "y": 142
+      },
+      "bodyHeight": 138
+    },
+    "archer-NNE-walk-2": {
+      "actor": "archer",
+      "x": 1431,
+      "y": 2053,
+      "w": 103,
+      "h": 148,
+      "groundPivot": {
+        "x": 50.32590381927395,
+        "y": 143
+      },
+      "bodyHeight": 139
+    },
+    "archer-NE-walk-2": {
+      "actor": "archer",
+      "x": 963,
+      "y": 2367,
+      "w": 103,
+      "h": 149,
+      "groundPivot": {
+        "x": 49.7376868863812,
+        "y": 144
+      },
+      "bodyHeight": 140
+    },
+    "archer-ENE-walk-2": {
+      "actor": "archer",
+      "x": 1382,
+      "y": 2653,
+      "w": 121,
+      "h": 142,
+      "groundPivot": {
+        "x": 79.76055555555558,
+        "y": 137
+      },
+      "bodyHeight": 133
+    },
+    "archer-E-walk-2": {
+      "actor": "archer",
+      "x": 1295,
+      "y": 2053,
+      "w": 132,
+      "h": 148,
+      "groundPivot": {
+        "x": 88.10403375180078,
+        "y": 144
+      },
+      "bodyHeight": 139
+    },
+    "archer-ESE-walk-2": {
+      "actor": "archer",
+      "x": 825,
+      "y": 2406,
+      "w": 134,
+      "h": 149,
+      "groundPivot": {
+        "x": 83.10198665595158,
+        "y": 144
+      },
+      "bodyHeight": 140
+    },
+    "archer-SE-walk-2": {
+      "actor": "archer",
+      "x": 957,
+      "y": 2214,
+      "w": 134,
+      "h": 149,
+      "groundPivot": {
+        "x": 83.41273284687236,
+        "y": 144
+      },
+      "bodyHeight": 140
+    },
+    "archer-SSE-walk-2": {
+      "actor": "archer",
+      "x": 823,
+      "y": 2251,
+      "w": 130,
+      "h": 151,
+      "groundPivot": {
+        "x": 79.53473553522849,
+        "y": 146
+      },
+      "bodyHeight": 142
+    },
+    "archer-S-walk-2": {
+      "actor": "archer",
+      "x": 1141,
+      "y": 2667,
+      "w": 114,
+      "h": 145,
+      "groundPivot": {
+        "x": 57.76527579509022,
+        "y": 140
+      },
+      "bodyHeight": 136
+    },
+    "archer-SSW-walk-2": {
+      "actor": "archer",
+      "x": 1141,
+      "y": 2518,
+      "w": 129,
+      "h": 145,
+      "groundPivot": {
+        "x": 35.95801960784314,
+        "y": 140
+      },
+      "bodyHeight": 136
+    },
+    "archer-SW-walk-2": {
+      "actor": "archer",
+      "x": 1269,
+      "y": 2357,
+      "w": 131,
+      "h": 146,
+      "groundPivot": {
+        "x": 34.230205588783974,
+        "y": 141
+      },
+      "bodyHeight": 137
+    },
+    "archer-WSW-walk-2": {
+      "actor": "archer",
+      "x": 1274,
+      "y": 2507,
+      "w": 132,
+      "h": 142,
+      "groundPivot": {
+        "x": 38.233389659883414,
+        "y": 137
+      },
+      "bodyHeight": 133
+    },
+    "archer-W-walk-2": {
+      "actor": "archer",
+      "x": 1410,
+      "y": 2507,
+      "w": 124,
+      "h": 142,
+      "groundPivot": {
+        "x": 32.66889598722301,
+        "y": 137
+      },
+      "bodyHeight": 133
+    },
+    "archer-WNW-walk-2": {
+      "actor": "archer",
+      "x": 1295,
+      "y": 2205,
+      "w": 123,
+      "h": 148,
+      "groundPivot": {
+        "x": 60.16584944644893,
+        "y": 143
+      },
+      "bodyHeight": 139
+    },
+    "archer-NW-walk-2": {
+      "actor": "archer",
+      "x": 1143,
+      "y": 2212,
+      "w": 122,
+      "h": 148,
+      "groundPivot": {
+        "x": 58.743371872819694,
+        "y": 143
+      },
+      "bodyHeight": 139
+    },
+    "archer-NNW-walk-2": {
+      "actor": "archer",
+      "x": 908,
+      "y": 2559,
+      "w": 110,
+      "h": 149,
+      "groundPivot": {
+        "x": 55.1063630160354,
+        "y": 144
+      },
+      "bodyHeight": 141
+    },
+    "archer-N-walk-3": {
+      "actor": "archer",
+      "x": 135,
+      "y": 2615,
+      "w": 113,
+      "h": 162,
+      "groundPivot": {
+        "x": 40.156451034317826,
+        "y": 156
+      },
+      "bodyHeight": 152
+    },
+    "archer-NNE-walk-3": {
+      "actor": "archer",
+      "x": 882,
+      "y": 1926,
+      "w": 119,
+      "h": 163,
+      "groundPivot": {
+        "x": 43.63358852135394,
+        "y": 158
+      },
+      "bodyHeight": 154
+    },
+    "archer-NE-walk-3": {
+      "actor": "archer",
+      "x": 283,
+      "y": 2104,
+      "w": 116,
+      "h": 163,
+      "groundPivot": {
+        "x": 42.86312198169196,
+        "y": 158
+      },
+      "bodyHeight": 154
+    },
+    "archer-ENE-walk-3": {
+      "actor": "archer",
+      "x": 1430,
+      "y": 1371,
+      "w": 104,
+      "h": 162,
+      "groundPivot": {
+        "x": 43.68908941755535,
+        "y": 157
+      },
+      "bodyHeight": 153
+    },
+    "archer-E-walk-3": {
+      "actor": "archer",
+      "x": 1258,
+      "y": 1543,
+      "w": 126,
+      "h": 167,
+      "groundPivot": {
+        "x": 54.94693268186754,
+        "y": 163
+      },
+      "bodyHeight": 160
+    },
+    "archer-ESE-walk-3": {
+      "actor": "archer",
+      "x": 725,
+      "y": 1426,
+      "w": 138,
+      "h": 170,
+      "groundPivot": {
+        "x": 53.52271973466003,
+        "y": 165
+      },
+      "bodyHeight": 161
+    },
+    "archer-SE-walk-3": {
+      "actor": "archer",
+      "x": 1293,
+      "y": 1371,
+      "w": 133,
+      "h": 168,
+      "groundPivot": {
+        "x": 49.2929694823456,
+        "y": 163
+      },
+      "bodyHeight": 160
+    },
+    "archer-SSE-walk-3": {
+      "actor": "archer",
+      "x": 508,
+      "y": 1593,
+      "w": 134,
+      "h": 169,
+      "groundPivot": {
+        "x": 51.230764148866,
+        "y": 164
+      },
+      "bodyHeight": 160
+    },
+    "archer-S-walk-3": {
+      "actor": "archer",
+      "x": 1156,
+      "y": 1714,
+      "w": 138,
+      "h": 166,
+      "groundPivot": {
+        "x": 56.45575893213973,
+        "y": 161
+      },
+      "bodyHeight": 158
+    },
+    "archer-SSW-walk-3": {
+      "actor": "archer",
+      "x": 646,
+      "y": 1600,
+      "w": 139,
+      "h": 166,
+      "groundPivot": {
+        "x": 53.881824362814484,
+        "y": 161
+      },
+      "bodyHeight": 157
+    },
+    "archer-SW-walk-3": {
+      "actor": "archer",
+      "x": 1388,
+      "y": 1713,
+      "w": 144,
+      "h": 166,
+      "groundPivot": {
+        "x": 52.877190617417114,
+        "y": 161
+      },
+      "bodyHeight": 158
+    },
+    "archer-WSW-walk-3": {
+      "actor": "archer",
+      "x": 1298,
+      "y": 1883,
+      "w": 138,
+      "h": 166,
+      "groundPivot": {
+        "x": 50.57207504855728,
+        "y": 161
+      },
+      "bodyHeight": 157
+    },
+    "archer-W-walk-3": {
+      "actor": "archer",
+      "x": 2,
+      "y": 2283,
+      "w": 135,
+      "h": 162,
+      "groundPivot": {
+        "x": 76.2945405758712,
+        "y": 157
+      },
+      "bodyHeight": 153
+    },
+    "archer-WNW-walk-3": {
+      "actor": "archer",
+      "x": 2,
+      "y": 1959,
+      "w": 133,
+      "h": 164,
+      "groundPivot": {
+        "x": 71.21175012288688,
+        "y": 159
+      },
+      "bodyHeight": 155
+    },
+    "archer-NW-walk-3": {
+      "actor": "archer",
+      "x": 438,
+      "y": 1936,
+      "w": 126,
+      "h": 164,
+      "groundPivot": {
+        "x": 71.72754926301195,
+        "y": 159
+      },
+      "bodyHeight": 155
+    },
+    "archer-NNW-walk-3": {
+      "actor": "archer",
+      "x": 1062,
+      "y": 1884,
+      "w": 123,
+      "h": 165,
+      "groundPivot": {
+        "x": 82.36768450922841,
+        "y": 160
+      },
+      "bodyHeight": 156
+    },
+    "archer-N-attack-0": {
+      "actor": "archer",
+      "x": 646,
+      "y": 1223,
+      "w": 129,
+      "h": 182,
+      "groundPivot": {
+        "x": 68.29773766578606,
+        "y": 177
+      },
+      "bodyHeight": 150
+    },
+    "archer-NNE-attack-0": {
+      "actor": "archer",
+      "x": 1122,
+      "y": 849,
+      "w": 136,
+      "h": 198,
+      "groundPivot": {
+        "x": 86.3396734008465,
+        "y": 193
+      },
+      "bodyHeight": 155
+    },
+    "archer-NE-attack-0": {
+      "actor": "archer",
+      "x": 2,
+      "y": 243,
+      "w": 145,
+      "h": 201,
+      "groundPivot": {
+        "x": 92.20379024203794,
+        "y": 196
+      },
+      "bodyHeight": 159
+    },
+    "archer-ENE-attack-0": {
+      "actor": "archer",
+      "x": 953,
+      "y": 1242,
+      "w": 174,
+      "h": 167,
+      "groundPivot": {
+        "x": 96.32360688468975,
+        "y": 162
+      },
+      "bodyHeight": 158
+    },
+    "archer-E-attack-0": {
+      "actor": "archer",
+      "x": 365,
+      "y": 1411,
+      "w": 180,
+      "h": 171,
+      "groundPivot": {
+        "x": 72.57537080892433,
+        "y": 166
+      },
+      "bodyHeight": 161
+    },
+    "archer-ESE-attack-0": {
+      "actor": "archer",
+      "x": 2,
+      "y": 1246,
+      "w": 171,
+      "h": 181,
+      "groundPivot": {
+        "x": 95.66165738052263,
+        "y": 177
+      },
+      "bodyHeight": 173
+    },
+    "archer-SE-attack-0": {
+      "actor": "archer",
+      "x": 478,
+      "y": 1035,
+      "w": 155,
+      "h": 183,
+      "groundPivot": {
+        "x": 77.89647903734931,
+        "y": 179
+      },
+      "bodyHeight": 175
+    },
+    "archer-SSE-attack-0": {
+      "actor": "archer",
+      "x": 643,
+      "y": 1027,
+      "w": 150,
+      "h": 192,
+      "groundPivot": {
+        "x": 110.19205084882128,
+        "y": 187
+      },
+      "bodyHeight": 183
+    },
+    "archer-S-attack-0": {
+      "actor": "archer",
+      "x": 166,
+      "y": 1599,
+      "w": 139,
+      "h": 177,
+      "groundPivot": {
+        "x": 78.3649841017488,
+        "y": 172
+      },
+      "bodyHeight": 168
+    },
+    "archer-SSW-attack-0": {
+      "actor": "archer",
+      "x": 307,
+      "y": 1049,
+      "w": 167,
+      "h": 186,
+      "groundPivot": {
+        "x": 117.43025186825355,
+        "y": 181
+      },
+      "bodyHeight": 177
+    },
+    "archer-SW-attack-0": {
+      "actor": "archer",
+      "x": 549,
+      "y": 1411,
+      "w": 172,
+      "h": 178,
+      "groundPivot": {
+        "x": 93.90020525500836,
+        "y": 173
+      },
+      "bodyHeight": 169
+    },
+    "archer-WSW-attack-0": {
+      "actor": "archer",
+      "x": 2,
+      "y": 1058,
+      "w": 179,
+      "h": 184,
+      "groundPivot": {
+        "x": 112.48532859105967,
+        "y": 179
+      },
+      "bodyHeight": 176
+    },
+    "archer-W-attack-0": {
+      "actor": "archer",
+      "x": 177,
+      "y": 1426,
+      "w": 179,
+      "h": 169,
+      "groundPivot": {
+        "x": 81.23974620145583,
+        "y": 164
+      },
+      "bodyHeight": 160
+    },
+    "archer-WNW-attack-0": {
+      "actor": "archer",
+      "x": 185,
+      "y": 1239,
+      "w": 176,
+      "h": 183,
+      "groundPivot": {
+        "x": 75.05476938882839,
+        "y": 178
+      },
+      "bodyHeight": 166
+    },
+    "archer-NW-attack-0": {
+      "actor": "archer",
+      "x": 1262,
+      "y": 1047,
+      "w": 155,
+      "h": 191,
+      "groundPivot": {
+        "x": 76.7767703594053,
+        "y": 186
+      },
+      "bodyHeight": 158
+    },
+    "archer-NNW-attack-0": {
+      "actor": "archer",
+      "x": 1262,
+      "y": 850,
+      "w": 145,
+      "h": 193,
+      "groundPivot": {
+        "x": 76.8980269181468,
+        "y": 188
+      },
+      "bodyHeight": 158
+    },
+    "archer-N-attack-1": {
+      "actor": "archer",
+      "x": 161,
+      "y": 242,
+      "w": 138,
+      "h": 219,
+      "groundPivot": {
+        "x": 59.650528031436295,
+        "y": 214
+      },
+      "bodyHeight": 151
+    },
+    "archer-NNE-attack-1": {
+      "actor": "archer",
+      "x": 161,
+      "y": 2,
+      "w": 140,
+      "h": 236,
+      "groundPivot": {
+        "x": 54.30874184849756,
+        "y": 231
+      },
+      "bodyHeight": 169
+    },
+    "archer-NE-attack-1": {
+      "actor": "archer",
+      "x": 305,
+      "y": 218,
+      "w": 191,
+      "h": 224,
+      "groundPivot": {
+        "x": 113.59659330329646,
+        "y": 219
+      },
+      "bodyHeight": 179
+    },
+    "archer-ENE-attack-1": {
+      "actor": "archer",
+      "x": 486,
+      "y": 629,
+      "w": 206,
+      "h": 206,
+      "groundPivot": {
+        "x": 108.56540073162614,
+        "y": 201
+      },
+      "bodyHeight": 175
+    },
+    "archer-E-attack-1": {
+      "actor": "archer",
+      "x": 713,
+      "y": 421,
+      "w": 209,
+      "h": 201,
+      "groundPivot": {
+        "x": 97.72221246707639,
+        "y": 196
+      },
+      "bodyHeight": 177
+    },
+    "archer-ESE-attack-1": {
+      "actor": "archer",
+      "x": 1127,
+      "y": 2,
+      "w": 217,
+      "h": 200,
+      "groundPivot": {
+        "x": 90.79848878809798,
+        "y": 195
+      },
+      "bodyHeight": 191
+    },
+    "archer-SE-attack-1": {
+      "actor": "archer",
+      "x": 500,
+      "y": 421,
+      "w": 209,
+      "h": 204,
+      "groundPivot": {
+        "x": 90.08573257263924,
+        "y": 199
+      },
+      "bodyHeight": 195
+    },
+    "archer-SSE-attack-1": {
+      "actor": "archer",
+      "x": 1127,
+      "y": 206,
+      "w": 166,
+      "h": 216,
+      "groundPivot": {
+        "x": 128.69304478580057,
+        "y": 210
+      },
+      "bodyHeight": 206
+    },
+    "archer-S-attack-1": {
+      "actor": "archer",
+      "x": 863,
+      "y": 850,
+      "w": 159,
+      "h": 194,
+      "groundPivot": {
+        "x": 101.77433548850576,
+        "y": 188
+      },
+      "bodyHeight": 184
+    },
+    "archer-SSW-attack-1": {
+      "actor": "archer",
+      "x": 303,
+      "y": 446,
+      "w": 179,
+      "h": 208,
+      "groundPivot": {
+        "x": 124.86507694651834,
+        "y": 203
+      },
+      "bodyHeight": 199
+    },
+    "archer-SW-attack-1": {
+      "actor": "archer",
+      "x": 544,
+      "y": 215,
+      "w": 228,
+      "h": 202,
+      "groundPivot": {
+        "x": 104.86486108195118,
+        "y": 197
+      },
+      "bodyHeight": 193
+    },
+    "archer-WSW-attack-1": {
+      "actor": "archer",
+      "x": 544,
+      "y": 2,
+      "w": 230,
+      "h": 209,
+      "groundPivot": {
+        "x": 88.14114055985715,
+        "y": 204
+      },
+      "bodyHeight": 200
+    },
+    "archer-W-attack-1": {
+      "actor": "archer",
+      "x": 1297,
+      "y": 223,
+      "w": 213,
+      "h": 201,
+      "groundPivot": {
+        "x": 109.61952695195899,
+        "y": 196
+      },
+      "bodyHeight": 185
+    },
+    "archer-WNW-attack-1": {
+      "actor": "archer",
+      "x": 305,
+      "y": 2,
+      "w": 235,
+      "h": 212,
+      "groundPivot": {
+        "x": 115.21243483340498,
+        "y": 207
+      },
+      "bodyHeight": 179
+    },
+    "archer-NW-attack-1": {
+      "actor": "archer",
+      "x": 944,
+      "y": 2,
+      "w": 179,
+      "h": 218,
+      "groundPivot": {
+        "x": 116.46078334355889,
+        "y": 213
+      },
+      "bodyHeight": 173
+    },
+    "archer-NNW-attack-1": {
+      "actor": "archer",
+      "x": 2,
+      "y": 2,
+      "w": 155,
+      "h": 237,
+      "groundPivot": {
+        "x": 94.90580749238211,
+        "y": 233
+      },
+      "bodyHeight": 179
+    },
+    "archer-N-attack-2": {
+      "actor": "archer",
+      "x": 185,
+      "y": 1051,
+      "w": 115,
+      "h": 182,
+      "groundPivot": {
+        "x": 56.913388239110446,
+        "y": 176
+      },
+      "bodyHeight": 138
+    },
+    "archer-NNE-attack-2": {
+      "actor": "archer",
+      "x": 212,
+      "y": 658,
+      "w": 122,
+      "h": 194,
+      "groundPivot": {
+        "x": 85.15950445218738,
+        "y": 189
+      },
+      "bodyHeight": 146
+    },
+    "archer-NE-attack-2": {
+      "actor": "archer",
+      "x": 778,
+      "y": 2,
+      "w": 162,
+      "h": 230,
+      "groundPivot": {
+        "x": 111.7017388578488,
+        "y": 225
+      },
+      "bodyHeight": 180
+    },
+    "archer-ENE-attack-2": {
+      "actor": "archer",
+      "x": 1348,
+      "y": 2,
+      "w": 180,
+      "h": 217,
+      "groundPivot": {
+        "x": 109.16756397756012,
+        "y": 212
+      },
+      "bodyHeight": 177
+    },
+    "archer-E-attack-2": {
+      "actor": "archer",
+      "x": 1340,
+      "y": 639,
+      "w": 188,
+      "h": 207,
+      "groundPivot": {
+        "x": 99.4505677441797,
+        "y": 203
+      },
+      "bodyHeight": 178
+    },
+    "archer-ESE-attack-2": {
+      "actor": "archer",
+      "x": 926,
+      "y": 646,
+      "w": 192,
+      "h": 200,
+      "groundPivot": {
+        "x": 94.25845123551846,
+        "y": 195
+      },
+      "bodyHeight": 191
+    },
+    "archer-SE-attack-2": {
+      "actor": "archer",
+      "x": 926,
+      "y": 441,
+      "w": 195,
+      "h": 201,
+      "groundPivot": {
+        "x": 91.89492371557856,
+        "y": 197
+      },
+      "bodyHeight": 193
+    },
+    "archer-SSE-attack-2": {
+      "actor": "archer",
+      "x": 944,
+      "y": 224,
+      "w": 179,
+      "h": 213,
+      "groundPivot": {
+        "x": 131.87050607986043,
+        "y": 208
+      },
+      "bodyHeight": 204
+    },
+    "archer-S-attack-2": {
+      "actor": "archer",
+      "x": 477,
+      "y": 839,
+      "w": 162,
+      "h": 192,
+      "groundPivot": {
+        "x": 95.32785667205945,
+        "y": 187
+      },
+      "bodyHeight": 183
+    },
+    "archer-SSW-attack-2": {
+      "actor": "archer",
+      "x": 1125,
+      "y": 644,
+      "w": 180,
+      "h": 201,
+      "groundPivot": {
+        "x": 126.30073124227374,
+        "y": 196
+      },
+      "bodyHeight": 192
+    },
+    "archer-SW-attack-2": {
+      "actor": "archer",
+      "x": 713,
+      "y": 626,
+      "w": 209,
+      "h": 197,
+      "groundPivot": {
+        "x": 100.93861335526242,
+        "y": 192
+      },
+      "bodyHeight": 188
+    },
+    "archer-WSW-attack-2": {
+      "actor": "archer",
+      "x": 2,
+      "y": 465,
+      "w": 206,
+      "h": 199,
+      "groundPivot": {
+        "x": 67.8477207613962,
+        "y": 194
+      },
+      "bodyHeight": 190
+    },
+    "archer-W-attack-2": {
+      "actor": "archer",
+      "x": 1340,
+      "y": 428,
+      "w": 191,
+      "h": 207,
+      "groundPivot": {
+        "x": 84.70969464326944,
+        "y": 203
+      },
+      "bodyHeight": 183
+    },
+    "archer-WNW-attack-2": {
+      "actor": "archer",
+      "x": 1127,
+      "y": 428,
+      "w": 209,
+      "h": 212,
+      "groundPivot": {
+        "x": 90.0234071386173,
+        "y": 208
+      },
+      "bodyHeight": 177
+    },
+    "archer-NW-attack-2": {
+      "actor": "archer",
+      "x": 776,
+      "y": 236,
+      "w": 139,
+      "h": 181,
+      "groundPivot": {
+        "x": 109.10585927379054,
+        "y": 176
+      },
+      "bodyHeight": 146
+    },
+    "archer-NNW-attack-2": {
+      "actor": "archer",
+      "x": 154,
+      "y": 856,
+      "w": 149,
+      "h": 191,
+      "groundPivot": {
+        "x": 103.15903267597514,
+        "y": 186
+      },
+      "bodyHeight": 151
+    },
+    "archer-N-attack-3": {
+      "actor": "archer",
+      "x": 600,
+      "y": 1770,
+      "w": 131,
+      "h": 165,
+      "groundPivot": {
+        "x": 73.94585361496897,
+        "y": 160
+      },
+      "bodyHeight": 156
+    },
+    "archer-NNE-attack-3": {
+      "actor": "archer",
+      "x": 338,
+      "y": 658,
+      "w": 135,
+      "h": 193,
+      "groundPivot": {
+        "x": 84.45804028132994,
+        "y": 188
+      },
+      "bodyHeight": 166
+    },
+    "archer-NE-attack-3": {
+      "actor": "archer",
+      "x": 2,
+      "y": 865,
+      "w": 144,
+      "h": 189,
+      "groundPivot": {
+        "x": 92.53673536944439,
+        "y": 184
+      },
+      "bodyHeight": 166
+    },
+    "archer-ENE-attack-3": {
+      "actor": "archer",
+      "x": 2,
+      "y": 1431,
+      "w": 160,
+      "h": 178,
+      "groundPivot": {
+        "x": 92.69286618712795,
+        "y": 173
+      },
+      "bodyHeight": 169
+    },
+    "archer-E-attack-3": {
+      "actor": "archer",
+      "x": 360,
+      "y": 1586,
+      "w": 144,
+      "h": 177,
+      "groundPivot": {
+        "x": 71.69194963643986,
+        "y": 172
+      },
+      "bodyHeight": 168
+    },
+    "archer-ESE-attack-3": {
+      "actor": "archer",
+      "x": 965,
+      "y": 1051,
+      "w": 165,
+      "h": 187,
+      "groundPivot": {
+        "x": 78.6524905183312,
+        "y": 182
+      },
+      "bodyHeight": 179
+    },
+    "archer-SE-attack-3": {
+      "actor": "archer",
+      "x": 307,
+      "y": 856,
+      "w": 165,
+      "h": 189,
+      "groundPivot": {
+        "x": 77.66869609335367,
+        "y": 184
+      },
+      "bodyHeight": 180
+    },
+    "archer-SSE-attack-3": {
+      "actor": "archer",
+      "x": 696,
+      "y": 827,
+      "w": 163,
+      "h": 196,
+      "groundPivot": {
+        "x": 82.92966394537211,
+        "y": 191
+      },
+      "bodyHeight": 188
+    },
+    "archer-S-attack-3": {
+      "actor": "archer",
+      "x": 2,
+      "y": 1613,
+      "w": 146,
+      "h": 173,
+      "groundPivot": {
+        "x": 81.62850765306123,
+        "y": 168
+      },
+      "bodyHeight": 164
+    },
+    "archer-SSW-attack-3": {
+      "actor": "archer",
+      "x": 797,
+      "y": 1048,
+      "w": 164,
+      "h": 189,
+      "groundPivot": {
+        "x": 114.45961710334444,
+        "y": 184
+      },
+      "bodyHeight": 180
+    },
+    "archer-SW-attack-3": {
+      "actor": "archer",
+      "x": 779,
+      "y": 1241,
+      "w": 170,
+      "h": 181,
+      "groundPivot": {
+        "x": 87.52688694132212,
+        "y": 175
+      },
+      "bodyHeight": 171
+    },
+    "archer-WSW-attack-3": {
+      "actor": "archer",
+      "x": 478,
+      "y": 1223,
+      "w": 164,
+      "h": 184,
+      "groundPivot": {
+        "x": 56.88889600204857,
+        "y": 179
+      },
+      "bodyHeight": 175
+    },
+    "archer-W-attack-3": {
+      "actor": "archer",
+      "x": 953,
+      "y": 1413,
+      "w": 148,
+      "h": 170,
+      "groundPivot": {
+        "x": 66.18346577216178,
+        "y": 165
+      },
+      "bodyHeight": 161
+    },
+    "archer-WNW-attack-3": {
+      "actor": "archer",
+      "x": 1131,
+      "y": 1242,
+      "w": 158,
+      "h": 170,
+      "groundPivot": {
+        "x": 76.43156648826675,
+        "y": 165
+      },
+      "bodyHeight": 161
+    },
+    "archer-NW-attack-3": {
+      "actor": "archer",
+      "x": 1105,
+      "y": 1416,
+      "w": 149,
+      "h": 167,
+      "groundPivot": {
+        "x": 75.12378358366834,
+        "y": 161
+      },
+      "bodyHeight": 157
+    },
+    "archer-NNW-attack-3": {
+      "actor": "archer",
+      "x": 2,
+      "y": 668,
+      "w": 148,
+      "h": 193,
+      "groundPivot": {
+        "x": 82.32955771305296,
+        "y": 189
+      },
+      "bodyHeight": 164
+    }
+  }
+}

@@ -50,8 +50,8 @@ export function drawFactionAdornment(c: Ctx, faction: FactionId, team: number, k
     poly(c, [-9,-30,9,-30,9,-10,0,-5,-9,-10], p.banner, material.color, 1.2);
     crest(c, faction, -8, -28, 16);
   } else {
-    // Small side standards remain legible without covering faces or weapons.
-    const large = kind === 'commander', x = large ? -21 : -15, y = large ? -44 : -31, size = large ? 15 : 11;
+    // Ground-side standards keep faction identity clear of faces and weapons.
+    const large = kind === 'commander', x = large ? -32 : -25, y = 9, size = large ? 12 : 10;
     if (faction === 'ironhold') {
       poly(c, [x-2,y-2,x+size+2,y-2,x+size+2,y+size,x+size*.5,y+size+4,x-2,y+size], material.dark, material.color, 1);
       ellipse(c, x, y, 1, 1, material.color); ellipse(c, x+size, y, 1, 1, material.color);

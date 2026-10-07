@@ -1,6 +1,7 @@
 import type { Entity, GameEvent, GameMap, GameState, Point, ResourceNode, RushSupply, TerrainType } from '../sim/types';
 import { TILE_W, TILE_H, building, diamond, drawTeamGlyph, ellipse, flag, hash, line, palette, poly, rock, shadow, tree, unit, type Ctx } from './art';
-import { SpriteAtlas } from './SpriteAtlas';
+import { SpriteAtlas, type AtlasFrame, type SpriteBounds } from './SpriteAtlas';
+import { spriteAlphaHit } from './sprite-hit';
 import { AnimationAtlas } from './AnimationAtlas';
 import { DirectionalAtlas } from './DirectionalAtlas';
 import { VISUAL_THEMES, type VisualThemeId } from './visualThemes';
@@ -22,6 +23,7 @@ interface TerrainCache {map:GameMap;signature:string;canvas:HTMLCanvasElement;ox
 interface RenderItem {x:number;y:number;order:number;kind:'decor'|'node'|'entity'|'supply'|'casualty';value:Decoration|ResourceNode|Entity|RushSupply|Casualty;}
 const TAU=Math.PI*2;
 const CIRCLE_X=TILE_W/Math.SQRT2,CIRCLE_Y=TILE_H/Math.SQRT2;
+const mobileGroundRadius=(e:Entity)=>e.kind==='commander'?29:e.type==='siege'||e.type==='cavalry'?20:15;
 const terrainCode:Record<TerrainType,number>={grass:1,forest:2,water:3,rock:4,sand:5,snow:6,road:7,marsh:8};
 const terrainColors:Record<string,Record<TerrainType,string[]>> = {
  grasslands:{grass:['#78996d','#7e9d70','#829f73','#78976b'],forest:['#597b59','#64855e','#61815e'],water:['#426f7a','#467782','#507f86'],rock:['#829385','#8b9885'],sand:['#b7ac7e','#c0b487'],snow:['#d1ded4','#c5d6cd'],road:['#a59d76','#b0a681'],marsh:['#668779','#6c8e7b']},
@@ -49,6 +51,9 @@ export class Battlefield {
  private lastState:GameState|null=null;
  private lastOptions:RenderOptions={};
  private spriteCache=new Map<string,HTMLCanvasElement>();
+ private entityHits=new Map<string,{image:HTMLImageElement;frame:AtlasFrame;bounds:SpriteBounds;matrix:DOMMatrix;opacity:number}>();
+ private readableActors:RenderItem[]=[];
+ private fadedNodes=new Set<string>();
  private lastTime=0;
  private visualPositions=new Map<string,Point>();
  private rememberedNodes=new Map<string,ResourceNode>();
@@ -114,12 +119,23 @@ export class Battlefield {
  private inFrame(x:number,y:number,padding=160){const p=this.worldToScreen(x,y);return p.x>-padding&&p.x<this.width+padding&&p.y>-padding&&p.y<this.height+padding;}
  pick(state:GameState,x:number,y:number):Entity|ResourceNode|undefined{
   const z=this.camera.zoom,tolerance=6/z;
-  const hits:{value:Entity|ResourceNode;depth:number;distance:number}[]=[];
+  const hits:{value:Entity|ResourceNode;depth:number;distance:number;opaque:boolean}[]=[];
   for(const e of state.entities){
    if(e.hp<=0||e.respawnAt!==null||!(e.team===(this.lastOptions.team??0)||this.visible(state,e.x,e.y)))continue;
    const visual=this.lastState?.map===state.map?(this.visualPositions.get(e.id)??e):e,p=this.worldToScreen(visual.x,visual.y);
    const w=(e.kind==='building'?e.type==='keep'?64:43:e.type==='siege'||e.type==='cavalry'?27:e.kind==='commander'?40:24)*z,h=(e.kind==='building'?90:e.kind==='commander'?60:44)*z;
-   if(x>p.x-w&&x<p.x+w&&y>p.y-h&&y<p.y+12*z)hits.push({value:e,depth:visual.x+visual.y+.1,distance:Math.hypot(x-p.x,y-(p.y-h*.45))});
+   const sprite=this.lastState?.map===state.map?this.entityHits?.get(e.id):undefined;
+   let hit=false,opaque=false;
+   if(sprite){
+    const m=sprite.matrix,det=m.a*m.d-m.b*m.c,px=x-m.e,py=y-m.f;
+    if(det){const localX=(m.d*px-m.c*py)/det,localY=(-m.b*px+m.a*py)/det;
+     opaque=sprite.opacity===1&&spriteAlphaHit(sprite.image,sprite.frame,sprite.bounds,localX,localY);
+     hit=opaque||spriteAlphaHit(sprite.image,sprite.frame,sprite.bounds,localX,localY,tolerance);
+    }
+   }else hit=opaque=x>p.x-w&&x<p.x+w&&y>p.y-h&&y<p.y+12*z;
+   // The painted ground marker remains a forgiving native selection target below opaque sprite pixels.
+   if(!hit&&e.kind!=='building'){const radius=mobileGroundRadius(e)*z;hit=((x-p.x)/radius)**2+((y-p.y-2*z)/(radius*.43))**2<=1;}
+   if(hit)hits.push({value:e,depth:visual.x+visual.y+.1,distance:Math.hypot(x-p.x,y-(p.y-h*.45)),opaque});
   }
   const nodes=state.map.nodes.filter(n=>this.visible(state,n.x,n.y,true));
   for(const n of nodes){
@@ -127,10 +143,10 @@ export class Battlefield {
    const art=nodeVisual(shown),p=this.worldToScreen(n.x,n.y),localX=(x-p.x)/z,localY=(y-p.y)/z;
    const bounds=this.atlas.bounds(art.frame,art.width,art.height)??art.fallback;
    const hit=this.atlas.bounds(art.frame,art.width,art.height)?this.atlas.hitTest(art.frame,art.width,art.height,localX,localY,tolerance):localX>=bounds.x-tolerance&&localX<=bounds.x+bounds.width+tolerance&&localY>=bounds.y-tolerance&&localY<=bounds.y+bounds.height+tolerance;
-   if(hit)hits.push({value:n,depth:n.x+n.y+.08,distance:Math.hypot(localX-(bounds.x+bounds.width/2),localY-(bounds.y+bounds.height/2))*z});
+   if(hit)hits.push({value:n,depth:n.x+n.y+.08,distance:Math.hypot(localX-(bounds.x+bounds.width/2),localY-(bounds.y+bounds.height/2))*z,opaque:!this.fadedNodes?.has(n.id)&&this.atlas.hitTest(art.frame,art.width,art.height,localX,localY)});
   }
-  // Match the actual paint order, with nearest visual centre breaking equal-depth ties.
-  hits.sort((a,b)=>b.depth-a.depth||a.distance-b.distance||a.value.id.localeCompare(b.value.id));
+  // Visible sprite pixels outrank forgiving padding. Opaque overlaps follow paint order. Faded structures allow troops beneath them to be targeted.
+  hits.sort((a,b)=>Number(b.opaque)-Number(a.opaque)||b.depth-a.depth||a.distance-b.distance||a.value.id.localeCompare(b.value.id));
   if(hits.length)return hits[0].value;
   const world=this.screenToWorld(x,y);
   // Keep the generous ground capture radius, but pick the nearest node rather than array order.
@@ -139,6 +155,7 @@ export class Battlefield {
 
  render(state:GameState,selection:Iterable<string|number>=[],options:RenderOptions={}){
   if(this.lastState&&this.lastState.map!==state.map){this.visualPositions.clear();this.rememberedNodes.clear();}
+  this.entityHits.clear();this.fadedNodes.clear();
   this.lastState=state;this.lastOptions=options;const selected=new Set(Array.from(selection,String));const c=this.context,z=this.camera.zoom,o=this.origin();
   const t=options.reducedMotion?state.time:options.time??state.time;this.lastTime=t;
   const now=performance.now(),dt=Math.min(.1,Math.max(0,(now-this.frameTime)/1000));this.frameTime=now;
@@ -168,16 +185,17 @@ export class Battlefield {
   }
   for(const id of this.visualPositions.keys())if(!liveIds.has(id))this.visualPositions.delete(id);
   items.sort((a,b)=>a.order-b.order);
-  // Friendly commanders and selected troops should remain readable behind tall deposits.
-  const protectedActors=items.filter(item=>item.kind==='entity'&&(item.value as Entity).team===(options.team??0)&&((item.value as Entity).kind==='commander'||(item.value as Entity).kind==='unit'&&selected.has((item.value as Entity).id)));
+  // Every currently visible troop must remain readable and targetable behind structures.
+  const protectedActors=items.filter(item=>item.kind==='entity'&&(item.value as Entity).kind!=='building');
+  this.readableActors=protectedActors;
   // Ground orders and command markers stay below the silhouettes.
   for(const e of state.entities)if(selected.has(e.id)&&e.hp>0)this.drawOrder(c,e,z);
   for(const item of items){const p=this.worldToScreen(item.x,item.y);c.save();c.translate(p.x,p.y);c.scale(z,z);
    if(item.kind==='decor')this.drawDecoration(c,item.value as Decoration,state.map.biome);
-   else if(item.kind==='node')this.drawNode(c,item.value as ResourceNode,state,selected.has((item.value as ResourceNode).id),t,options,this.nodeOpacity(item,protectedActors));
+   else if(item.kind==='node'){const opacity=this.nodeOpacity(item,protectedActors);if(opacity<1)this.fadedNodes.add((item.value as ResourceNode).id);this.drawNode(c,item.value as ResourceNode,state,selected.has((item.value as ResourceNode).id),t,options,opacity);}
    else if(item.kind==='casualty')this.drawCasualty(c,item.value as Casualty,options);
    else if(item.kind==='supply')this.drawSupply(c,item.value as RushSupply,state,t,options);
-   else this.drawEntity(c,item.value as Entity,selected.has((item.value as Entity).id),t,state,options);
+   else this.drawEntity(c,item.value as Entity,selected.has((item.value as Entity).id),t,state,options,(item.value as Entity).kind==='building'?this.nodeOpacity(item,protectedActors):1);
    c.restore();
   }
   for(const event of state.events)if(this.visible(state,event.x,event.y,false,options))this.drawEvent(c,event,state,t,options);
@@ -274,7 +292,9 @@ export class Battlefield {
   }c.drawImage(sprite,-50*d.size,-99*d.size,100*d.size,110*d.size);
  }
  private nodeOpacity(node:RenderItem,actors:readonly RenderItem[]):number{
-  const art=nodeVisual(node.value as ResourceNode),bounds=this.atlas.bounds(art.frame,art.width,art.height)??art.fallback;
+  const value=node.value as Entity|ResourceNode,structure='team' in value;
+  const art=structure?{frame:value.type==='turret'?'tower':value.type,width:value.type==='keep'?132:value.type==='tower'?66:value.type==='house'?87:103,height:undefined,fallback:{x:-50,y:-90,width:100,height:102}}:nodeVisual(value);
+  const bounds=this.atlas.bounds(art.frame,art.width,art.height)??art.fallback;
   for(const actor of actors){
    if(actor.order>=node.order||Math.abs(actor.x-node.x)>4||Math.abs(actor.y-node.y)>4)continue;
    const e=actor.value as Entity,height=e.kind==='commander'?59:e.type==='cavalry'?48:e.type==='siege'?44:45;
@@ -287,6 +307,21 @@ export class Battlefield {
    }
   }
   return 1;
+ }
+ private recordEntityHit(c:Ctx,e:Entity,image:HTMLImageElement|null,frame:AtlasFrame|undefined,bounds:SpriteBounds|undefined,opacity=1){
+  if(!image||!frame||!bounds)return;
+  const m=c.getTransform(),d=this.dpr;
+  this.entityHits.set(e.id,{image,frame,bounds,matrix:new DOMMatrix([m.a/d,m.b/d,m.c/d,m.d/d,m.e/d,m.f/d]),opacity});
+ }
+ private nodeCaptionPosition(n:ResourceNode,width:number,defaultY:number):Point|undefined{
+  const z=this.camera.zoom,p=this.worldToScreen(n.x,n.y);
+  for(const candidate of [{x:0,y:defaultY},{x:0,y:24},{x:-width/2-50,y:-24},{x:width/2+50,y:-24}]){
+   const left=p.x+(candidate.x-width/2)*z,top=p.y+(candidate.y-11)*z,right=left+width*z,bottom=top+16*z;
+   if(left<4||right>this.width-4||top<4||bottom>this.height-4)continue;
+   const overlaps=this.readableActors.some(item=>{const e=item.value as Entity,a=this.worldToScreen(item.x,item.y),h=e.kind==='commander'?75:65,w=e.type==='cavalry'||e.type==='siege'?35:28;return left<a.x+w*z&&right>a.x-w*z&&top<a.y+12*z&&bottom>a.y-h*z;});
+   if(!overlaps)return candidate;
+  }
+  return undefined;
  }
  private drawNode(c:Ctx,n:ResourceNode,state:GameState,selected:boolean,t:number,options:RenderOptions,artOpacity=1){
   const p=palette(n.owner??-1),capturing=n.captureTeam!==null&&n.captureProgress>0,art=nodeVisual(n);
@@ -320,11 +355,22 @@ export class Battlefield {
   // Resource balances are visible only while that point is currently observable.
   if(this.visible(state,n.x,n.y,false,options)){
    const text=n.kind==='relic'?(n.owner===null?'ANCIENT RELIC':n.owner===(options.team??0)?'YOUR RELIC':'RIVAL RELIC'):remaining<=0?'DEPLETED':`${n.kind==='gold'?'◆':'▥'} ${remaining>=1000?`${(remaining/1000).toFixed(1)}k`:Math.round(remaining)}`;
-   const labelY=n.kind==='relic'?-94:n.kind==='wood'?-90:-75;c.font='600 9px system-ui, sans-serif';const w=c.measureText(text).width+12;
-   c.fillStyle='#11252bd9';c.beginPath();c.roundRect(-w/2,labelY-11,w,16,4);c.fill();c.strokeStyle=n.kind==='relic'?'#b9a76a88':`${p.main}55`;c.lineWidth=.6;c.stroke();c.fillStyle=n.kind==='relic'?'#ffe8ad':n.kind==='gold'?'#ebcc8a':'#c8deb2';c.textAlign='center';c.fillText(text,0,labelY);
+   const labelY=n.kind==='relic'?-94:n.kind==='wood'?-90:-75;c.font='600 9px system-ui, sans-serif';const w=c.measureText(text).width+12,caption=this.nodeCaptionPosition(n,w,labelY);
+   if(caption){c.save();c.translate(caption.x,caption.y);c.fillStyle='#11252bd9';c.beginPath();c.roundRect(-w/2,-11,w,16,4);c.fill();c.strokeStyle=n.kind==='relic'?'#b9a76a88':`${p.main}55`;c.lineWidth=.6;c.stroke();c.fillStyle=n.kind==='relic'?'#ffe8ad':n.kind==='gold'?'#ebcc8a':'#c8deb2';c.textAlign='center';c.fillText(text,0,0);c.restore();}
   }
  }
- private drawEntity(c:Ctx,e:Entity,selected:boolean,t:number,state:GameState,options:RenderOptions){
+ /** Static unit identity overlays share bounded rasters when the adaptive renderer lowers quality. */
+ private drawCachedOverlay(c:Ctx,key:string,bounds:SpriteBounds,paint:(target:Ctx)=>void){
+  const resolution=Math.min(5,Math.max(1,Math.ceil(this.dpr*this.camera.zoom))),cacheKey=`unit-overlay/${key}/${resolution}`;
+  let sprite=this.spriteCache.get(cacheKey);
+  if(!sprite){
+   sprite=document.createElement('canvas');sprite.width=Math.ceil(bounds.width*resolution);sprite.height=Math.ceil(bounds.height*resolution);
+   const target=sprite.getContext('2d');if(!target)return paint(c);
+   target.scale(resolution,resolution);target.translate(-bounds.x,-bounds.y);paint(target);this.spriteCache.set(cacheKey,sprite);
+  }
+  c.drawImage(sprite,bounds.x,bounds.y,sprite.width/resolution,sprite.height/resolution);
+ }
+ private drawEntity(c:Ctx,e:Entity,selected:boolean,t:number,state:GameState,options:RenderOptions,artOpacity=1){
   const team=options.team??0,p=palette(e.team),buildingEntity=e.kind==='building',commander=e.kind==='commander';
   const damaged=e.hp<e.maxHp;
   const pose=this.combat.pose(e,state.entities,state.time),hit=this.combat.hitStrength(e.id);
@@ -332,17 +378,22 @@ export class Battlefield {
   const locomotion=this.combat.locomotion.get(e.id),move=!!locomotion?.moving;
   const travel=(locomotion?.distance??0)+(locomotion?.speed??0)*Math.max(0,this.combat.time-state.time);
   const phase=hash(e.id.length,e.id.charCodeAt(e.id.length-1))*TAU;
-  const rw=buildingEntity?e.radius*TILE_W/2+12:commander?29:e.type==='siege'||e.type==='cavalry'?20:15;
+  const rw=buildingEntity?e.radius*TILE_W/2+12:mobileGroundRadius(e);
   // Team identity combines six independent glyphs with colored, two-tone ground markers.
   if(selected||commander){ellipse(c,0,2,rw+4,(rw+4)*.48,`${p.main}12`,selected?p.light:`${p.main}b0`,selected?1.8:1.1);}
-  if(!buildingEntity){ellipse(c,0,2,rw,rw*.43,`${p.dark}b0`,p.main,1.3);drawTeamGlyph(c,e.team,0,4,4,p.light);}
+  if(!buildingEntity){
+   if(!commander&&options.quality==='low')this.drawCachedOverlay(c,`ground/${e.team}/${rw}`,{x:-rw-2,y:2-rw*.43-3,width:rw*2+4,height:rw*.86+6},target=>{ellipse(target,0,2,rw,rw*.43,`${p.dark}b0`,p.main,1.3);drawTeamGlyph(target,e.team,0,4,4,p.light);});
+   else{ellipse(c,0,2,rw,rw*.43,`${p.dark}b0`,p.main,1.3);drawTeamGlyph(c,e.team,0,4,4,p.light);}
+  }
   if(e.buffUntil>state.time){ellipse(c,0,1,rw+8+Math.sin(t*2)*2,(rw+8)*.48,'#ffdd7a10','#ffe0a777',1.1);}
   if(e.invulnerableUntil>state.time){ellipse(c,0,-20,rw+6,32,'#b6f6ff15','#b6f6ff77',1);}
   if(buildingEntity){
-   c.save();if(e.buildProgress<1)c.globalAlpha=.35+e.buildProgress*.65;
+   c.save();c.globalAlpha*=artOpacity;if(e.buildProgress<1)c.globalAlpha*=.35+e.buildProgress*.65;
    const drawWidth=e.type==='keep'?132:e.type==='tower'?66:e.type==='house'?87:103;
    const drawHeight=e.type==='keep'?123:e.type==='tower'?99:e.type==='house'?78:90;
-   const drawn=this.atlas.draw(c,e.type==='turret'?'tower':e.type,drawWidth);
+   const frameName=e.type==='turret'?'tower':e.type;
+   this.recordEntityHit(c,e,this.atlas.image,this.atlas.frames[frameName],this.atlas.bounds(frameName,drawWidth),artOpacity);
+   const drawn=this.atlas.draw(c,frameName,drawWidth);
    if(!drawn)building(c,e.type==='turret'?'tower':e.type,e.team,t);else flag(c,e.type==='keep'?34:24,-drawHeight*.49,e.team,t,e.type!=='keep');
    c.restore();
    if(e.buildProgress<1){for(let sx=-1;sx<=1;sx+=2){line(c,[sx*35,0,sx*35,-44],'#cfb782',2);line(c,[-35,-14,-35,-30,35,-30,35,-14,-35,-14,35,-39],'#ba9b68',1.3);}this.bar(c,0,11,58,4,e.buildProgress,'#edcf85');}
@@ -368,6 +419,12 @@ export class Battlefield {
    if(move&&!options.reducedMotion&&!authored){const stride=Math.sin(travel*9+phase);c.scale(1+stride*.015,1-stride*.022);}
    const width=e.type==='siege'?55:e.type==='cavalry'?51:commander?47:36;const height=e.type==='siege'?44:e.type==='cavalry'?48:commander?59:45;
 
+   const directionalSource=directionalFrame?directional.data?.frames[directionalFrame]:undefined;
+   const attackDefinition=this.attackAtlas.data?.actors[e.type],attackSource=authoredFrame?this.attackAtlas.data?.frames[authoredFrame]:undefined;
+   const source=directionalSource??attackSource;
+   if(source){const scale=directionalSource?height/directionalSource.bodyHeight:attackDefinition!.suggestedHeight/attackDefinition!.referenceBodyHeight;
+    this.recordEntityHit(c,e,directionalSource?directional.image:this.attackAtlas.image,source,{x:-source.groundPivot.x*scale,y:-source.groundPivot.y*scale,width:source.w*scale,height:source.h*scale});
+   }else this.recordEntityHit(c,e,this.atlas.image,this.atlas.frames[e.type],this.atlas.bounds(e.type,width,height));
    const drewAuthored=directionalFrame?directional.draw(c,e.type,directionalFrame,height):authoredFrame?this.attackAtlas.draw(c,e.type,authoredFrame):false;
    if(!drewAuthored&&!this.atlas.draw(c,e.type,width,height))unit(c,e.type,e.team,attacking?pose.age*3:t+phase,move,attacking&&!options.reducedMotion,e.facing,pose.age/.3);
    c.restore();
@@ -375,7 +432,12 @@ export class Battlefield {
    if(commander){flag(c,-19,-14,e.team,t,true);c.font='bold 10px system-ui';c.textAlign='center';c.fillStyle='#efd990';c.fillText('★',0,-73);}
   }
   const faction=state.players[e.team]?.faction;
-  if(faction&&!state.players[e.team]?.neutral)drawFactionAdornment(c,faction,e.team,e.kind==='building'?'building':commander?'commander':'unit',e.type==='keep');
+  if(faction&&!state.players[e.team]?.neutral){
+   c.save();if(buildingEntity)c.globalAlpha*=artOpacity;
+   if(!buildingEntity&&!commander&&options.quality==='low')this.drawCachedOverlay(c,`faction/${faction}/${e.team}`,{x:-31,y:0,width:23,height:28},target=>drawFactionAdornment(target,faction,e.team,'unit'));
+   else drawFactionAdornment(c,faction,e.team,e.kind==='building'?'building':commander?'commander':'unit',e.type==='keep');
+   c.restore();
+  }
   if(hit>0){c.save();c.globalAlpha=hit*(options.reducedMotion?.38:.62);c.globalCompositeOperation='screen';ellipse(c,0,buildingEntity?-28:-24,buildingEntity?26:14,buildingEntity?20:18,'#ffe4b577');c.restore();}
   if(selected||commander||damaged||options.showHealth||options.hoverId===e.id){
    const y=buildingEntity?e.type==='keep'?-133:e.type==='tower'?-107:-98:commander?-82:-58;

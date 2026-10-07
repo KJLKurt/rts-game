@@ -5347,5 +5347,1118 @@
     "remainingFamilyFrames": 1008,
     "remainingActors": 7,
     "physicalPhonePerformanceClaim": false
+  },
+  "archerDirectional20261006": {
+    "tool": "Authorized built-in ImageGen",
+    "identity": "Approved Mythic static Archer crop; teal hood/cape, auburn hair, brass trim, cream skirt, leather gear, anatomical-left recurve bow, anatomical-right draw hand, feathered quiver. Verified Ranger images used only as pose references.",
+    "selectedFrames": 144,
+    "headings": 16,
+    "idlePerHeading": 1,
+    "walkPerHeading": 4,
+    "attackPerHeading": 4,
+    "sourceOriginalCount": 25,
+    "packing": {
+      "atlasDimensions": [
+        1536,
+        2816
+      ],
+      "decodedBytes": 17301504,
+      "decodedMiB": 16.5,
+      "initial16MiBSelfTargetMet": false,
+      "hard20MiBCapMet": true,
+      "all144FrameRGBAUnique": true,
+      "allSourceCroppedPackedAndPNGReadbackRGBAExact": true,
+      "allRectanglesDisjoint": true,
+      "noPixelResizingMirroringMaskingRecoloring": true
+    },
+    "assetHashes": {
+      "archer-directional.png": "c797395fddc20d8b20707373ef385da2075e0cd30317b7e27f5043738c198c09",
+      "archer-directional.json": "4b9adb5e5c4d36c568912183b4bf2b51172afa038f1e716395ab5b8ebea8e3f3"
+    },
+    "selectedSourceInputs": [
+      {
+        "label": "compact-idle",
+        "original": "/workspace/generated_images/exec-e2a0d53f-8dc8-4788-bdb4-ee4cfb4f9c42.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/compact-idle-original.png",
+        "sourceSHA256": "272041523fdfdf21711b5d9ed6f82371186cf5aa8d1e0a3f1d011f2db14ce15d"
+      },
+      {
+        "label": "compact-walk-0",
+        "original": "/workspace/generated_images/exec-3e7571da-2618-4981-be83-a67317a68f17.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/compact-walk-0-original.png",
+        "sourceSHA256": "77bae6567dfcaaa654f2d3060e6ef350710b00667f261fd02d163eaa8fb022b4"
+      },
+      {
+        "label": "compact-walk-1",
+        "original": "/workspace/generated_images/exec-87b2b31e-3b93-4fbe-9fb1-994cd9d5acaa.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/compact-walk-1-original.png",
+        "sourceSHA256": "2dad34f3e5250e22e245b5448e52ad0130685a9fd886708c7c92b5e74e06d1c1"
+      },
+      {
+        "label": "compact-walk-2",
+        "original": "/workspace/generated_images/exec-93d3c84b-f23a-4b8b-8d0b-b6cca2db250e.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/compact-walk-2-original.png",
+        "sourceSHA256": "b697b41d4737d66d54ff976cc61ee9df646319f5e08e55ad32e2618fae327a9a"
+      },
+      {
+        "label": "compact-walk-3",
+        "original": "/workspace/generated_images/exec-6671db02-5d65-4119-a24e-40f81dfc196e.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/compact-walk-3-original.png",
+        "sourceSHA256": "b8751346b26a58cdbc859cc9c78603062756212fef6d5d2b60e5cadbac14a82d"
+      },
+      {
+        "label": "pose-guided-attack-0",
+        "original": "/workspace/generated_images/exec-3006053d-61b2-44f7-b0f2-d96d53f8cda0.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/pose-guided-attack-0-original.png",
+        "sourceSHA256": "43649f415e1d33d3aaae31ddf352f6689b840d5b3df7849dcfdaddd042f66a5d"
+      },
+      {
+        "label": "pose-guided-attack-1",
+        "original": "/workspace/generated_images/exec-84db1ee8-ee69-45dc-bbb9-f0bab707b74c.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/pose-guided-attack-1-original.png",
+        "sourceSHA256": "59ddbafa14d24f1547432adc43451da8cc5b2be026f269c8c897ea56cba2c30d"
+      },
+      {
+        "label": "pose-guided-attack-2",
+        "original": "/workspace/generated_images/exec-4b3f8b08-3723-4031-9a74-ce9719de6ba6.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/pose-guided-attack-2-original.png",
+        "sourceSHA256": "bf8186d2639265f7201a12f1fe5b4647a0c1462343ecb7c895c41d2e02355556"
+      },
+      {
+        "label": "pose-guided-attack-3",
+        "original": "/workspace/generated_images/exec-c2907230-b1f4-413b-a2d5-58e943a0ec75.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/pose-guided-attack-3-original.png",
+        "sourceSHA256": "a1fecc25a19ef7896405e5de53f902b61d2d0739dd4adcb99fec2b33a514d542"
+      },
+      {
+        "label": "aim-corrected-attack-1",
+        "original": "/workspace/generated_images/exec-eb4c960b-a26b-4ca6-9478-ec91b51a1907.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/aim-corrected-attack-1-original.png",
+        "sourceSHA256": "eea80593782a72c7170c346b4a4f5b7f0b170f6faaf92b04874d9102d118038b"
+      },
+      {
+        "label": "aim-matched-release-attack-2",
+        "original": "/workspace/generated_images/exec-38541e14-56cf-4876-8cff-e84b7725fba4.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/aim-matched-release-attack-2-original.png",
+        "sourceSHA256": "c6a2daf980cc271f943a7c95a5c4f345eb00b7786c135802708934aef752b452"
+      }
+    ],
+    "originalGenerationRecords": [
+      {
+        "label": "aim-corrected-attack-1",
+        "original": "/workspace/generated_images/exec-eb4c960b-a26b-4ca6-9478-ec91b51a1907.png",
+        "sha256": "eea80593782a72c7170c346b4a4f5b7f0b170f6faaf92b04874d9102d118038b",
+        "request": {
+          "label": "aim-corrected-attack-1",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/verified-ranger-attack-1-pose-guide.png",
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/pose-guided-attack-1-original.png",
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/approved-mythic-archer-static-reference.png"
+          ],
+          "prompt": "Correct the SECOND image's Archer full-draw sprite sheet using the FIRST image as a mandatory exact bow/arm/arrow geometry guide. Keep the Archer identity from the SECOND and THIRD: small female teal-hood/teal-cape, auburn hair, gold trim, cream skirt, leather bracers/boots, quiver, ONE recurve bow in anatomical LEFT hand, RIGHT fingers at cheek pulling string. First image is pose-only Ranger reference. Redraw 16 Archer full-draw attack figures, 4x4, transparent1280x1280. Preserve full-draw poses and each EXACT target projection of first image, never flatten front shots sideways. Row1 N straightUP, NNE steepUP-RIGHT, NE diagonalUP-RIGHT, ENE shallowUP-RIGHT. Row2 E straightRIGHT, ESE shallowDOWN-RIGHT, SE diagonalDOWN-RIGHT, SSE steepDOWN-RIGHT. Row3 S straightDOWN towardviewer with foreshortened shaft, SSW steepDOWN-LEFT, SW diagonalDOWN-LEFT, WSW shallowDOWN-LEFT. Row4 W straightLEFT, WNW shallowUP-LEFT, NW diagonalUP-LEFT, NNW steepUP-LEFT. The arrow shaft follows those SCREEN directions from right hand at cheek THROUGH left fist/bow grip to sharp silver arrow tip; exact arm and bow geometry of corresponding FIRST reference cell is mandatory. In S the left fist must extend down toward camera, arrow tip below fist toward boots, never sideways. In SE both bow grip and arrow tip lower and farther RIGHT than cheek. In SW lower and fartherLEFT. Use isometric foreshortening and twist so each of16headings is distinct. Bow tension visible, one nockedarrow only, no detached projectile, no second bow. Both boots planted. Keep small body, hood-to-sole around160pixels, roots near local160,250 per320cell, don't fill gutters. All figures complete with generous transparent padding, same costume/camera/light/scale. No text/grid/effects/shadow."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "aim-matched-release-attack-2",
+        "original": "/workspace/generated_images/exec-38541e14-56cf-4876-8cff-e84b7725fba4.png",
+        "sha256": "c6a2daf980cc271f943a7c95a5c4f345eb00b7786c135802708934aef752b452",
+        "request": {
+          "label": "aim-matched-release-attack-2",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/aim-corrected-attack-1-original.png",
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/pose-guided-attack-2-original.png"
+          ],
+          "prompt": "Create RELEASE phase2 for this Archer cycle. FIRST image is the accepted-for-orientation FULL DRAW pose guide. Copy exactly its sixteen body headings, planted feet and target aim projection, LEFT bow-arm position and one gold recurve bow position for each corresponding cell. SECOND is only a release-hand example. In every FIRST-image figure remove the entire nocked arrow and its silver tip (the arrow is now in flight and game creates it separately). Relax drawn string to its ordinary straight line, relax bow limbs slightly. Open anatomical RIGHT drawing fingers at cheek and pull right hand slightly backward in the shot follow-through; LEFT hand stays on same grip aiming at the SAME target direction as first reference. Never introduce a second bow or arrow. This is firing release100ms immediately after full draw, not a new relaxed ready pose. Compass reading4x4: N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. N bow arm aimedUP, NNE/NE/ENE upRIGHT, E right, ESE/SE/SSE downRIGHT, S towardviewerDOWN andforeshortened, SSW/SW/WSW downLEFT, W left, WNW/NW/NNW upLEFT. Crucial: SE andSSE left wrist/bow stay lower-right of face; S left fist stays down toward camera, never horizontal right; SW/SSW stay down-left. Preserve each first reference body turn/arm geometry. Archer identity female teal hood/cape, short auburn face strands and rear hair, gold trim, cream skirt, leather boots/bracers, quiver white feather arrows. Scale bodies slightly SMALLER than first reference: hood-to-boot body150px maximum with generous transparent gutter. Fixed elevated isometriccamera warmtop-leftlight. Sixteen separate fullfigures transparent1280square4x4, each320cell, rootlocal160,250. NO nocked arrow, detachedprojectile, text, shadows, effects, extra weapons or cropping."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "compact-idle",
+        "original": "/workspace/generated_images/exec-e2a0d53f-8dc8-4788-bdb4-ee4cfb4f9c42.png",
+        "sha256": "272041523fdfdf21711b5d9ed6f82371186cf5aa8d1e0a3f1d011f2db14ce15d",
+        "request": {
+          "label": "compact-idle",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/pose-guided-idle-selected-small-edit-guide.png"
+          ],
+          "prompt": "Make ONE precise sprite-sheet editing change: reduce ALL SIXTEEN Archer drawings in this reference to65% of their current drawn size, keeping the same body proportions, costume, camera, sixteen compass projections and exact idle gait/idle pose. This is an artwork scale edit to save texture memory, NOT a character redesign. Keep original 4x4 reading order N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW and anatomical LEFT bow hand. NEVER flip/reverse views, replace poses with another heading, alias adjacent views, invent/remove a held bow, duplicate a bow or change which leg supports weight. Head-to-boot BODY HEIGHT must be110\u2013140PIXELS ONLY (current reference180\u2013225px); shrink complete figures INCLUDING weapons/quiver/feet proportionally. Each of16cells320square must contain a tiny figure surrounded by HUGE transparent gutters. Boot-contact root localx160,y275 exactly, cape/feet endthere; bodyhood starts near140\u2013155 ratherthanat80. Most space in eachcell must stayempty. Complete figure bounds roughlyx90..230,y100..280. Never enlarge the figure to fill the320cell. Every figure stays same specified singleidle phase as reference. Keep detailed polished toy3D teal hood/cape, auburn hair, brassgold trim, cream skirt, leather bracers/belt/boots, backquiverwithwhitefeathers, ONE recurvebow, warmupper-leftlight. Preserve anatomicalhands and walkingfootphase. Output exactly4x4 transparent1280square. No labels/grid/shadows/newprops/effects/projectiles. The ONLY requested change is smaller complete figures with the original poses and root positioning retained."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "compact-walk-0",
+        "original": "/workspace/generated_images/exec-3e7571da-2618-4981-be83-a67317a68f17.png",
+        "sha256": "77bae6567dfcaaa654f2d3060e6ef350710b00667f261fd02d163eaa8fb022b4",
+        "request": {
+          "label": "compact-walk-0",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/pose-guided-walk-0-selected-small-edit-guide.png"
+          ],
+          "prompt": "Make ONE precise sprite-sheet editing change: reduce ALL SIXTEEN Archer drawings in this reference to65% of their current drawn size, keeping the same body proportions, costume, camera, sixteen compass projections and exact walk-0 gait/idle pose. This is an artwork scale edit to save texture memory, NOT a character redesign. Keep original 4x4 reading order N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW and anatomical LEFT bow hand. NEVER flip/reverse views, replace poses with another heading, alias adjacent views, invent/remove a held bow, duplicate a bow or change which leg supports weight. Head-to-boot BODY HEIGHT must be110\u2013140PIXELS ONLY (current reference180\u2013225px); shrink complete figures INCLUDING weapons/quiver/feet proportionally. Each of16cells320square must contain a tiny figure surrounded by HUGE transparent gutters. Boot-contact root localx160,y275 exactly, cape/feet endthere; bodyhood starts near140\u2013155 ratherthanat80. Most space in eachcell must stayempty. Complete figure bounds roughlyx90..230,y100..280. Never enlarge the figure to fill the320cell. Every figure stays same specified singlewalk-0 phase as reference. Keep detailed polished toy3D teal hood/cape, auburn hair, brassgold trim, cream skirt, leather bracers/belt/boots, backquiverwithwhitefeathers, ONE recurvebow, warmupper-leftlight. Preserve anatomicalhands and walkingfootphase. Output exactly4x4 transparent1280square. No labels/grid/shadows/newprops/effects/projectiles. The ONLY requested change is smaller complete figures with the original poses and root positioning retained."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "compact-walk-1",
+        "original": "/workspace/generated_images/exec-87b2b31e-3b93-4fbe-9fb1-994cd9d5acaa.png",
+        "sha256": "2dad34f3e5250e22e245b5448e52ad0130685a9fd886708c7c92b5e74e06d1c1",
+        "request": {
+          "label": "compact-walk-1",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/pose-guided-walk-1-selected-small-edit-guide.png"
+          ],
+          "prompt": "Make ONE precise sprite-sheet editing change: reduce ALL SIXTEEN Archer drawings in this reference to65% of their current drawn size, keeping the same body proportions, costume, camera, sixteen compass projections and exact walk-1 gait/idle pose. This is an artwork scale edit to save texture memory, NOT a character redesign. Keep original 4x4 reading order N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW and anatomical LEFT bow hand. NEVER flip/reverse views, replace poses with another heading, alias adjacent views, invent/remove a held bow, duplicate a bow or change which leg supports weight. Head-to-boot BODY HEIGHT must be110\u2013140PIXELS ONLY (current reference180\u2013225px); shrink complete figures INCLUDING weapons/quiver/feet proportionally. Each of16cells320square must contain a tiny figure surrounded by HUGE transparent gutters. Boot-contact root localx160,y275 exactly, cape/feet endthere; bodyhood starts near140\u2013155 ratherthanat80. Most space in eachcell must stayempty. Complete figure bounds roughlyx90..230,y100..280. Never enlarge the figure to fill the320cell. Every figure stays same specified singlewalk-1 phase as reference. Keep detailed polished toy3D teal hood/cape, auburn hair, brassgold trim, cream skirt, leather bracers/belt/boots, backquiverwithwhitefeathers, ONE recurvebow, warmupper-leftlight. Preserve anatomicalhands and walkingfootphase. Output exactly4x4 transparent1280square. No labels/grid/shadows/newprops/effects/projectiles. The ONLY requested change is smaller complete figures with the original poses and root positioning retained."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "compact-walk-2",
+        "original": "/workspace/generated_images/exec-93d3c84b-f23a-4b8b-8d0b-b6cca2db250e.png",
+        "sha256": "b697b41d4737d66d54ff976cc61ee9df646319f5e08e55ad32e2618fae327a9a",
+        "request": {
+          "label": "compact-walk-2",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/pose-guided-walk-2-selected-small-edit-guide.png"
+          ],
+          "prompt": "Make ONE precise sprite-sheet editing change: reduce ALL SIXTEEN Archer drawings in this reference to65% of their current drawn size, keeping the same body proportions, costume, camera, sixteen compass projections and exact walk-2 gait/idle pose. This is an artwork scale edit to save texture memory, NOT a character redesign. Keep original 4x4 reading order N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW and anatomical LEFT bow hand. NEVER flip/reverse views, replace poses with another heading, alias adjacent views, invent/remove a held bow, duplicate a bow or change which leg supports weight. Head-to-boot BODY HEIGHT must be110\u2013140PIXELS ONLY (current reference180\u2013225px); shrink complete figures INCLUDING weapons/quiver/feet proportionally. Each of16cells320square must contain a tiny figure surrounded by HUGE transparent gutters. Boot-contact root localx160,y275 exactly, cape/feet endthere; bodyhood starts near140\u2013155 ratherthanat80. Most space in eachcell must stayempty. Complete figure bounds roughlyx90..230,y100..280. Never enlarge the figure to fill the320cell. Every figure stays same specified singlewalk-2 phase as reference. Keep detailed polished toy3D teal hood/cape, auburn hair, brassgold trim, cream skirt, leather bracers/belt/boots, backquiverwithwhitefeathers, ONE recurvebow, warmupper-leftlight. Preserve anatomicalhands and walkingfootphase. Output exactly4x4 transparent1280square. No labels/grid/shadows/newprops/effects/projectiles. The ONLY requested change is smaller complete figures with the original poses and root positioning retained."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "compact-walk-3",
+        "original": "/workspace/generated_images/exec-6671db02-5d65-4119-a24e-40f81dfc196e.png",
+        "sha256": "b8751346b26a58cdbc859cc9c78603062756212fef6d5d2b60e5cadbac14a82d",
+        "request": {
+          "label": "compact-walk-3",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/pose-guided-walk-3-selected-small-edit-guide.png"
+          ],
+          "prompt": "Make ONE precise sprite-sheet editing change: reduce ALL SIXTEEN Archer drawings in this reference to65% of their current drawn size, keeping the same body proportions, costume, camera, sixteen compass projections and exact walk-3 gait/idle pose. This is an artwork scale edit to save texture memory, NOT a character redesign. Keep original 4x4 reading order N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW and anatomical LEFT bow hand. NEVER flip/reverse views, replace poses with another heading, alias adjacent views, invent/remove a held bow, duplicate a bow or change which leg supports weight. Head-to-boot BODY HEIGHT must be110\u2013140PIXELS ONLY (current reference180\u2013225px); shrink complete figures INCLUDING weapons/quiver/feet proportionally. Each of16cells320square must contain a tiny figure surrounded by HUGE transparent gutters. Boot-contact root localx160,y275 exactly, cape/feet endthere; bodyhood starts near140\u2013155 ratherthanat80. Most space in eachcell must stayempty. Complete figure bounds roughlyx90..230,y100..280. Never enlarge the figure to fill the320cell. Every figure stays same specified singlewalk-3 phase as reference. Keep detailed polished toy3D teal hood/cape, auburn hair, brassgold trim, cream skirt, leather bracers/belt/boots, backquiverwithwhitefeathers, ONE recurvebow, warmupper-leftlight. Preserve anatomicalhands and walkingfootphase. Output exactly4x4 transparent1280square. No labels/grid/shadows/newprops/effects/projectiles. The ONLY requested change is smaller complete figures with the original poses and root positioning retained."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "pose-guided-attack-0",
+        "original": "/workspace/generated_images/exec-3006053d-61b2-44f7-b0f2-d96d53f8cda0.png",
+        "sha256": "43649f415e1d33d3aaae31ddf352f6689b840d5b3df7849dcfdaddd042f66a5d",
+        "request": {
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/verified-ranger-attack-0-pose-guide.png",
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/approved-mythic-archer-static-reference.png"
+          ],
+          "prompt": "Create a NEW production sheet for Frontier Command's MYTHIC ARCHER. FIRST image is REFERENCE-ONLY: its already verified Ranger body turns, compass projections, ground roots and phase-specific limb motion are the pose guide. Preserve those16 projections and that single phase, but REDRAW the character as the SECOND image's approved ARCHER identity, not the Ranger: warm fair female face, auburn hair strands beneath deep teal hood, teal cape/torso with brass-gold trim, cream skirt/leggings accents, brown leather gloves/bracers/belt/boots, brown back quiver with white-feather arrows, ornate brown/gold recurve bow in anatomical LEFT hand, RIGHT hand handling the string. Keep the approved Archer's short hair details; do not add Ranger's long orange braid or commander ornament. Polished toy3D strategy art, fixed elevated isometric camera, warm upper-left light.\nRender EXACTLY16 full figures, FOUR columns and FOUR rows on a true RGBA transparent1280square. One SINGLE synchronized phase in every cell. Reading order N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. Copy the FIRST guide's body-facing projections exactly: rear-right atNNE/NE/ENE, right profileE, progressively frontal ESE/SE/SSE, frontalS, front-leftSSW/SW/WSW, leftprofileW, rear-leftWNW/NW/NNW. Do not reverse rear-right views, alias adjacent headings or mirror pixels. Anatomical bow hand stays LEFT.\nMake ARCHER figures much smaller in raw pixels than the pose guide: hood-to-bootBODY HEIGHT105\u2013130pixels only, roughly60% of the guide figure's body pixels. Each outputcell320square has huge empty gutters. Ground boot-root localx160,y250; hood about125. Complete silhouette including bow/quiver fits x60..260,y50..260. Never enlarge tofillgutters or shrinkbody only tofitweapon. Keep complete weapons/boots and fixedroot whilelimbs move. No labels, grids, backgrounds, cast shadows, auras, effects, detachedprojectiles or clipping. Preserve costume and fixedcamera/lighting uniformly.\nATTACK PHASE 0 READY: feet plant into slightly widened archer stance. LEFT hand raises the bow ahead ALONG OWN HEADING, RIGHT hand places a single nocked arrow at string, little draw tension yet. Arrow shaft is connected to hand/bow and points along own heading. N aims UP/away, E RIGHT, S DOWN/towardviewer, W LEFT; interpolate16 diagonals. No detached projectile. Ready pose distinct from idle."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "pose-guided-attack-1",
+        "original": "/workspace/generated_images/exec-84db1ee8-ee69-45dc-bbb9-f0bab707b74c.png",
+        "sha256": "59ddbafa14d24f1547432adc43451da8cc5b2be026f269c8c897ea56cba2c30d",
+        "request": {
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/verified-ranger-attack-1-pose-guide.png",
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/approved-mythic-archer-static-reference.png"
+          ],
+          "prompt": "Create a NEW production sheet for Frontier Command's MYTHIC ARCHER. FIRST image is REFERENCE-ONLY: its already verified Ranger body turns, compass projections, ground roots and phase-specific limb motion are the pose guide. Preserve those16 projections and that single phase, but REDRAW the character as the SECOND image's approved ARCHER identity, not the Ranger: warm fair female face, auburn hair strands beneath deep teal hood, teal cape/torso with brass-gold trim, cream skirt/leggings accents, brown leather gloves/bracers/belt/boots, brown back quiver with white-feather arrows, ornate brown/gold recurve bow in anatomical LEFT hand, RIGHT hand handling the string. Keep the approved Archer's short hair details; do not add Ranger's long orange braid or commander ornament. Polished toy3D strategy art, fixed elevated isometric camera, warm upper-left light.\nRender EXACTLY16 full figures, FOUR columns and FOUR rows on a true RGBA transparent1280square. One SINGLE synchronized phase in every cell. Reading order N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. Copy the FIRST guide's body-facing projections exactly: rear-right atNNE/NE/ENE, right profileE, progressively frontal ESE/SE/SSE, frontalS, front-leftSSW/SW/WSW, leftprofileW, rear-leftWNW/NW/NNW. Do not reverse rear-right views, alias adjacent headings or mirror pixels. Anatomical bow hand stays LEFT.\nMake ARCHER figures much smaller in raw pixels than the pose guide: hood-to-bootBODY HEIGHT105\u2013130pixels only, roughly60% of the guide figure's body pixels. Each outputcell320square has huge empty gutters. Ground boot-root localx160,y250; hood about125. Complete silhouette including bow/quiver fits x60..260,y50..260. Never enlarge tofillgutters or shrinkbody only tofitweapon. Keep complete weapons/boots and fixedroot whilelimbs move. No labels, grids, backgrounds, cast shadows, auras, effects, detachedprojectiles or clipping. Preserve costume and fixedcamera/lighting uniformly.\nATTACK PHASE 1 FULL DRAW: LEFT bowarm extended FORWARD ALONG OWN HEADING, RIGHT drawhand pulled BACK to own cheek, string taut and bow limbs visibly flexed. One connected nocked arrow aims along own heading, not backward. Feet plant, torso aligns with aimed shot; N UP, E RIGHT, S DOWN, W LEFT with correct interpolation. Drawn pose distinct from ready. Never swap bow hands."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "pose-guided-attack-2",
+        "original": "/workspace/generated_images/exec-4b3f8b08-3723-4031-9a74-ce9719de6ba6.png",
+        "sha256": "bf8186d2639265f7201a12f1fe5b4647a0c1462343ecb7c895c41d2e02355556",
+        "request": {
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/verified-ranger-attack-2-pose-guide.png",
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/approved-mythic-archer-static-reference.png"
+          ],
+          "prompt": "Create a NEW production sheet for Frontier Command's MYTHIC ARCHER. FIRST image is REFERENCE-ONLY: its already verified Ranger body turns, compass projections, ground roots and phase-specific limb motion are the pose guide. Preserve those16 projections and that single phase, but REDRAW the character as the SECOND image's approved ARCHER identity, not the Ranger: warm fair female face, auburn hair strands beneath deep teal hood, teal cape/torso with brass-gold trim, cream skirt/leggings accents, brown leather gloves/bracers/belt/boots, brown back quiver with white-feather arrows, ornate brown/gold recurve bow in anatomical LEFT hand, RIGHT hand handling the string. Keep the approved Archer's short hair details; do not add Ranger's long orange braid or commander ornament. Polished toy3D strategy art, fixed elevated isometric camera, warm upper-left light.\nRender EXACTLY16 full figures, FOUR columns and FOUR rows on a true RGBA transparent1280square. One SINGLE synchronized phase in every cell. Reading order N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. Copy the FIRST guide's body-facing projections exactly: rear-right atNNE/NE/ENE, right profileE, progressively frontal ESE/SE/SSE, frontalS, front-leftSSW/SW/WSW, leftprofileW, rear-leftWNW/NW/NNW. Do not reverse rear-right views, alias adjacent headings or mirror pixels. Anatomical bow hand stays LEFT.\nMake ARCHER figures much smaller in raw pixels than the pose guide: hood-to-bootBODY HEIGHT105\u2013130pixels only, roughly60% of the guide figure's body pixels. Each outputcell320square has huge empty gutters. Ground boot-root localx160,y250; hood about125. Complete silhouette including bow/quiver fits x60..260,y50..260. Never enlarge tofillgutters or shrinkbody only tofitweapon. Keep complete weapons/boots and fixedroot whilelimbs move. No labels, grids, backgrounds, cast shadows, auras, effects, detachedprojectiles or clipping. Preserve costume and fixedcamera/lighting uniformly.\nATTACK PHASE 2 REAL PROJECTILE RELEASE: LEFT bowarm remains forward ALONG OWN HEADING, RIGHT hand opens and follows back slightly beside cheek after string release, bow limbs/string relax toward undrawn shape, subtle forward follow-through. NO arrow remains nocked, NO loosearrow/projectile/effect: the engine already draws its actual projectile separately. The pose begins ONLY on the existing game projectile event. Same planted stance/root/headings, visibly distinct from drawn phase."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "pose-guided-attack-3",
+        "original": "/workspace/generated_images/exec-c2907230-b1f4-413b-a2d5-58e943a0ec75.png",
+        "sha256": "a1fecc25a19ef7896405e5de53f902b61d2d0739dd4adcb99fec2b33a514d542",
+        "request": {
+          "label": "pose-guided-attack-3",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/verified-ranger-attack-3-pose-guide.png",
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/approved-mythic-archer-static-reference.png"
+          ],
+          "prompt": "Create a NEW production sheet for Frontier Command's MYTHIC ARCHER. FIRST image is REFERENCE-ONLY: its already verified Ranger body turns, compass projections, ground roots and phase-specific limb motion are the pose guide. Preserve those16 projections and that single phase, but REDRAW the character as the SECOND image's approved ARCHER identity, not the Ranger: warm fair female face, auburn hair strands beneath deep teal hood, teal cape/torso with brass-gold trim, cream skirt/leggings accents, brown leather gloves/bracers/belt/boots, brown back quiver with white-feather arrows, ornate brown/gold recurve bow in anatomical LEFT hand, RIGHT hand handling the string. Keep the approved Archer's short hair details; do not add Ranger's long orange braid or commander ornament. Polished toy3D strategy art, fixed elevated isometric camera, warm upper-left light.\nRender EXACTLY16 full figures, FOUR columns and FOUR rows on a true RGBA transparent1280square. One SINGLE synchronized phase in every cell. Reading order N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. Copy the FIRST guide's body-facing projections exactly: rear-right atNNE/NE/ENE, right profileE, progressively frontal ESE/SE/SSE, frontalS, front-leftSSW/SW/WSW, leftprofileW, rear-leftWNW/NW/NNW. Do not reverse rear-right views, alias adjacent headings or mirror pixels. Anatomical bow hand stays LEFT.\nMake ARCHER figures much smaller in raw pixels than the pose guide: hood-to-bootBODY HEIGHT105\u2013130pixels only, roughly60% of the guide figure's body pixels. Each outputcell320square has huge empty gutters. Ground boot-root localx160,y250; hood about125. Complete silhouette including bow/quiver fits x60..260,y50..260. Never enlarge tofillgutters or shrinkbody only tofitweapon. Keep complete weapons/boots and fixedroot whilelimbs move. No labels, grids, backgrounds, cast shadows, auras, effects, detachedprojectiles or clipping. Preserve costume and fixedcamera/lighting uniformly.\nATTACK PHASE 3 RECOVERY: LEFT hand lowers bow toward guard, RIGHT hand relaxes back from cheek and starts returning toward quiver/ready position, torso returns upright, both feet still planted. Bow undrawn, NO nockedarrow, NO invented second shot or projectile. Distinct recovery after release, same headings and ground root."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "pose-guided-idle",
+        "original": "/workspace/generated_images/exec-5eabe21f-e448-4090-a805-e44803bcf1ed.png",
+        "sha256": "ee4e1699ba5dda0ac7051944740b5cbb78097679cfdd2b0cd142a14b7c45d724",
+        "request": {
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/verified-ranger-idle-pose-guide.png",
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/approved-mythic-archer-static-reference.png"
+          ],
+          "prompt": "Create a NEW production sheet for Frontier Command's MYTHIC ARCHER. FIRST image is REFERENCE-ONLY: its already verified Ranger body turns, compass projections, ground roots and phase-specific limb motion are the pose guide. Preserve those16 projections and that single phase, but REDRAW the character as the SECOND image's approved ARCHER identity, not the Ranger: warm fair female face, auburn hair strands beneath deep teal hood, teal cape/torso with brass-gold trim, cream skirt/leggings accents, brown leather gloves/bracers/belt/boots, brown back quiver with white-feather arrows, ornate brown/gold recurve bow in anatomical LEFT hand, RIGHT hand handling the string. Keep the approved Archer's short hair details; do not add Ranger's long orange braid or commander ornament. Polished toy3D strategy art, fixed elevated isometric camera, warm upper-left light.\nRender EXACTLY16 full figures, FOUR columns and FOUR rows on a true RGBA transparent1280square. One SINGLE synchronized phase in every cell. Reading order N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. Copy the FIRST guide's body-facing projections exactly: rear-right atNNE/NE/ENE, right profileE, progressively frontal ESE/SE/SSE, frontalS, front-leftSSW/SW/WSW, leftprofileW, rear-leftWNW/NW/NNW. Do not reverse rear-right views, alias adjacent headings or mirror pixels. Anatomical bow hand stays LEFT.\nMake ARCHER figures much smaller in raw pixels than the pose guide: hood-to-bootBODY HEIGHT105\u2013130pixels only, roughly60% of the guide figure's body pixels. Each outputcell320square has huge empty gutters. Ground boot-root localx160,y250; hood about125. Complete silhouette including bow/quiver fits x60..260,y50..260. Never enlarge tofillgutters or shrinkbody only tofitweapon. Keep complete weapons/boots and fixedroot whilelimbs move. No labels, grids, backgrounds, cast shadows, auras, effects, detachedprojectiles or clipping. Preserve costume and fixedcamera/lighting uniformly.\nIDLE ONLY: calmly planted feet, bow carried undrawn in LEFT hand, right hand relaxed nearstring, no nocked arrow. Match the pose guide's stationary stance and exact16 rotations."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "pose-guided-walk-0",
+        "original": "/workspace/generated_images/exec-91b3a4d9-4706-4733-90e7-70a4976fbae4.png",
+        "sha256": "d688e60f69b3da8daa1a5cf39473e4ff685979a98bf9a59343ba58a8e8f12253",
+        "request": {
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/verified-ranger-walk-0-pose-guide.png",
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/approved-mythic-archer-static-reference.png"
+          ],
+          "prompt": "Create a NEW production sheet for Frontier Command's MYTHIC ARCHER. FIRST image is REFERENCE-ONLY: its already verified Ranger body turns, compass projections, ground roots and phase-specific limb motion are the pose guide. Preserve those16 projections and that single phase, but REDRAW the character as the SECOND image's approved ARCHER identity, not the Ranger: warm fair female face, auburn hair strands beneath deep teal hood, teal cape/torso with brass-gold trim, cream skirt/leggings accents, brown leather gloves/bracers/belt/boots, brown back quiver with white-feather arrows, ornate brown/gold recurve bow in anatomical LEFT hand, RIGHT hand handling the string. Keep the approved Archer's short hair details; do not add Ranger's long orange braid or commander ornament. Polished toy3D strategy art, fixed elevated isometric camera, warm upper-left light.\nRender EXACTLY16 full figures, FOUR columns and FOUR rows on a true RGBA transparent1280square. One SINGLE synchronized phase in every cell. Reading order N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. Copy the FIRST guide's body-facing projections exactly: rear-right atNNE/NE/ENE, right profileE, progressively frontal ESE/SE/SSE, frontalS, front-leftSSW/SW/WSW, leftprofileW, rear-leftWNW/NW/NNW. Do not reverse rear-right views, alias adjacent headings or mirror pixels. Anatomical bow hand stays LEFT.\nMake ARCHER figures much smaller in raw pixels than the pose guide: hood-to-bootBODY HEIGHT105\u2013130pixels only, roughly60% of the guide figure's body pixels. Each outputcell320square has huge empty gutters. Ground boot-root localx160,y250; hood about125. Complete silhouette including bow/quiver fits x60..260,y50..260. Never enlarge tofillgutters or shrinkbody only tofitweapon. Keep complete weapons/boots and fixedroot whilelimbs move. No labels, grids, backgrounds, cast shadows, auras, effects, detachedprojectiles or clipping. Preserve costume and fixedcamera/lighting uniformly.\nWALK PHASE 0 LEFT CONTACT: anatomical LEFT boot extended FORWARD along the actor's own heading, firmly planted; RIGHT boot extended BACK with heel lifted. Clear split stance. Bow stays in LEFT hand carried low-undrawn; right hand balances by the string, no nocked arrow. Arms/cloak counterbalance naturally; all 16 show same left-contact phase."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "pose-guided-walk-1",
+        "original": "/workspace/generated_images/exec-93d8a0cb-3606-4269-bb82-28a18314f729.png",
+        "sha256": "2ab61c568a26cca99095adcbbdc4d918c9341da344c876de7cc52d76475a446d",
+        "request": {
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/verified-ranger-walk-1-pose-guide.png",
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/approved-mythic-archer-static-reference.png"
+          ],
+          "prompt": "Create a NEW production sheet for Frontier Command's MYTHIC ARCHER. FIRST image is REFERENCE-ONLY: its already verified Ranger body turns, compass projections, ground roots and phase-specific limb motion are the pose guide. Preserve those16 projections and that single phase, but REDRAW the character as the SECOND image's approved ARCHER identity, not the Ranger: warm fair female face, auburn hair strands beneath deep teal hood, teal cape/torso with brass-gold trim, cream skirt/leggings accents, brown leather gloves/bracers/belt/boots, brown back quiver with white-feather arrows, ornate brown/gold recurve bow in anatomical LEFT hand, RIGHT hand handling the string. Keep the approved Archer's short hair details; do not add Ranger's long orange braid or commander ornament. Polished toy3D strategy art, fixed elevated isometric camera, warm upper-left light.\nRender EXACTLY16 full figures, FOUR columns and FOUR rows on a true RGBA transparent1280square. One SINGLE synchronized phase in every cell. Reading order N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. Copy the FIRST guide's body-facing projections exactly: rear-right atNNE/NE/ENE, right profileE, progressively frontal ESE/SE/SSE, frontalS, front-leftSSW/SW/WSW, leftprofileW, rear-leftWNW/NW/NNW. Do not reverse rear-right views, alias adjacent headings or mirror pixels. Anatomical bow hand stays LEFT.\nMake ARCHER figures much smaller in raw pixels than the pose guide: hood-to-bootBODY HEIGHT105\u2013130pixels only, roughly60% of the guide figure's body pixels. Each outputcell320square has huge empty gutters. Ground boot-root localx160,y250; hood about125. Complete silhouette including bow/quiver fits x60..260,y50..260. Never enlarge tofillgutters or shrinkbody only tofitweapon. Keep complete weapons/boots and fixedroot whilelimbs move. No labels, grids, backgrounds, cast shadows, auras, effects, detachedprojectiles or clipping. Preserve costume and fixedcamera/lighting uniformly.\nWALK PHASE 1 LEFT SUPPORT / RIGHT PASSING: LEFT boot planted UNDER pelvis; RIGHT knee raised and RIGHT boot moving FORWARD, clear of ground. Distinct passing pose from contact. Bow left carried low and undrawn, right hand balances. Keep torso height and ground root steady; all 16 show same passing phase."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "pose-guided-walk-2",
+        "original": "/workspace/generated_images/exec-05128370-4a56-4a19-a1f9-c449ccc2f90a.png",
+        "sha256": "23c1e4852fca331f95602d79c31006cb2c0ff8b6996d2835a380020dc59ef029",
+        "request": {
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/verified-ranger-walk-2-pose-guide.png",
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/approved-mythic-archer-static-reference.png"
+          ],
+          "prompt": "Create a NEW production sheet for Frontier Command's MYTHIC ARCHER. FIRST image is REFERENCE-ONLY: its already verified Ranger body turns, compass projections, ground roots and phase-specific limb motion are the pose guide. Preserve those16 projections and that single phase, but REDRAW the character as the SECOND image's approved ARCHER identity, not the Ranger: warm fair female face, auburn hair strands beneath deep teal hood, teal cape/torso with brass-gold trim, cream skirt/leggings accents, brown leather gloves/bracers/belt/boots, brown back quiver with white-feather arrows, ornate brown/gold recurve bow in anatomical LEFT hand, RIGHT hand handling the string. Keep the approved Archer's short hair details; do not add Ranger's long orange braid or commander ornament. Polished toy3D strategy art, fixed elevated isometric camera, warm upper-left light.\nRender EXACTLY16 full figures, FOUR columns and FOUR rows on a true RGBA transparent1280square. One SINGLE synchronized phase in every cell. Reading order N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. Copy the FIRST guide's body-facing projections exactly: rear-right atNNE/NE/ENE, right profileE, progressively frontal ESE/SE/SSE, frontalS, front-leftSSW/SW/WSW, leftprofileW, rear-leftWNW/NW/NNW. Do not reverse rear-right views, alias adjacent headings or mirror pixels. Anatomical bow hand stays LEFT.\nMake ARCHER figures much smaller in raw pixels than the pose guide: hood-to-bootBODY HEIGHT105\u2013130pixels only, roughly60% of the guide figure's body pixels. Each outputcell320square has huge empty gutters. Ground boot-root localx160,y250; hood about125. Complete silhouette including bow/quiver fits x60..260,y50..260. Never enlarge tofillgutters or shrinkbody only tofitweapon. Keep complete weapons/boots and fixedroot whilelimbs move. No labels, grids, backgrounds, cast shadows, auras, effects, detachedprojectiles or clipping. Preserve costume and fixedcamera/lighting uniformly.\nWALK PHASE 2 RIGHT CONTACT: anatomical RIGHT boot extended FORWARD along own heading, firmly planted; LEFT boot extended BACK with heel lifted. Opposite contact tophase0, not a duplicatedstance. Bow LEFT carried low and undrawn; right hand counterbalances, no nocked arrow. All16 same right-contact phase."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "pose-guided-walk-3",
+        "original": "/workspace/generated_images/exec-cf55ffba-73b8-4c9b-89e3-09d786f84bcc.png",
+        "sha256": "d10849f9d25388e134af7edccd64e78aa955ed3d53181e48af54722254ea87a6",
+        "request": {
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/verified-ranger-walk-3-pose-guide.png",
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/approved-mythic-archer-static-reference.png"
+          ],
+          "prompt": "Create a NEW production sheet for Frontier Command's MYTHIC ARCHER. FIRST image is REFERENCE-ONLY: its already verified Ranger body turns, compass projections, ground roots and phase-specific limb motion are the pose guide. Preserve those16 projections and that single phase, but REDRAW the character as the SECOND image's approved ARCHER identity, not the Ranger: warm fair female face, auburn hair strands beneath deep teal hood, teal cape/torso with brass-gold trim, cream skirt/leggings accents, brown leather gloves/bracers/belt/boots, brown back quiver with white-feather arrows, ornate brown/gold recurve bow in anatomical LEFT hand, RIGHT hand handling the string. Keep the approved Archer's short hair details; do not add Ranger's long orange braid or commander ornament. Polished toy3D strategy art, fixed elevated isometric camera, warm upper-left light.\nRender EXACTLY16 full figures, FOUR columns and FOUR rows on a true RGBA transparent1280square. One SINGLE synchronized phase in every cell. Reading order N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. Copy the FIRST guide's body-facing projections exactly: rear-right atNNE/NE/ENE, right profileE, progressively frontal ESE/SE/SSE, frontalS, front-leftSSW/SW/WSW, leftprofileW, rear-leftWNW/NW/NNW. Do not reverse rear-right views, alias adjacent headings or mirror pixels. Anatomical bow hand stays LEFT.\nMake ARCHER figures much smaller in raw pixels than the pose guide: hood-to-bootBODY HEIGHT105\u2013130pixels only, roughly60% of the guide figure's body pixels. Each outputcell320square has huge empty gutters. Ground boot-root localx160,y250; hood about125. Complete silhouette including bow/quiver fits x60..260,y50..260. Never enlarge tofillgutters or shrinkbody only tofitweapon. Keep complete weapons/boots and fixedroot whilelimbs move. No labels, grids, backgrounds, cast shadows, auras, effects, detachedprojectiles or clipping. Preserve costume and fixedcamera/lighting uniformly.\nWALK PHASE 3 RIGHT SUPPORT / LEFT PASSING: RIGHT boot planted UNDER pelvis; LEFT knee raised and LEFT boot moving FORWARD, clear of ground. Opposite passing pose to phase 1. Bow LEFT low and undrawn, right hand balances. Steady torso/root; all 16 same left-passing phase."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "single-bow-corrected-walk-0",
+        "original": "/workspace/generated_images/exec-53eeb7c6-de7e-4fc4-82da-d48f90a15eb9.png",
+        "sha256": "72327086c71a21aae35bae4495157d4cf7fdaa7d86e292c11f2456f45218c045",
+        "request": {
+          "label": "single-bow-corrected-walk-0",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/pose-guided-walk-0-original.png"
+          ],
+          "prompt": "Edit this transparent 4x4 Archer walking sprite sheet. Critical localized correction: TOP LEFT NORTH figure mistakenly has TWO large gold curved bows, one at each side. Remove the duplicate gold bow on her anatomical RIGHT / screen RIGHT, including its string; that right hand should swing naturally by her leather hip belt. Keep exactly ONE gold/brown recurve bow held in her anatomical LEFT hand / screen LEFT. Her back quiver is brown leather with white-feather arrows, never a second bow. Preserve the TOP LEFT rear-facing N head/cape/back/quiver, left bow, foot contact gait, size and elevated camera. Preserve other15figures, compass order and left-hand bows. Output whole4x4 transparent1280x1280sheet, same phase, original small body pixels and unchanged gutter layout. No new prop, background or ground shadow."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "front-right-idle",
+        "original": "/workspace/generated_images/exec-e01412ac-2c33-48cb-bd34-8d1eab9dd3db.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/front-right-idle-original.png",
+        "sha256": "2762bc4e00371c6102bb477709cbc611194f88a106c30823046a583e64cd4ce4",
+        "rejectedInitialOrientationOrScale": true,
+        "request": {
+          "label": "front-right-idle",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/approved-mythic-archer-static-reference.png"
+          ],
+          "prompt": "Create four original stationary IDLE views of this exact female MYTHIC ARCHER on a true RGBA transparent TWO-column TWO-row sprite sheet. Teal hood/cape with brass-gold trim, auburn hair, warm fair face, cream short skirt/leggings accents, brown bracers/gloves/belt/boots and back quiver with white-feather arrows, ornate brown/gold recurve bow held in anatomical LEFT hand; RIGHT hand near UNDRAWN string. Same polished toy3D art, fixed elevated isometric camera and warm upper-left light, proportions and identity in allfour. Four directions in reading order: topLEFT=ESE (faces mostly SCREENRIGHT and slightly toward viewer); topRIGHT=SE (front-RIGHT three-quarter, face/body point DOWN-RIGHT); bottomLEFT=SSE (mostly FRONT view with subtle SCREENRIGHT bias, face and full chest almost toward viewer); bottomRIGHT=S (full FRONT view, looks down toward viewer, nose centered and both eyes visible). Rotate the actor under the same camera: each step progressively shows more of the front chest and face, SSE MUST BE MUCH MORE FRONTAL than ESE. Bow remains anatomicalLEFT hand, never swap hands. Feet planted, calm idle carrying bow undrawn, no nocked arrow/projectile. Small figures with hood-to-boot BODY HEIGHT125\u2013145pixels, not large portraits: canvas1280square, each cell640square, rootlocalx320,y440, hood top around300, full silhouette x225..420,y275..450. Huge empty gutters, never enlarge to fill cells. No labels, grids, shadows, background, effects or clipped body/weapons."
+        },
+        "requestEvidence": "evidence/focused-idle-corrections-generation-requests.json"
+      },
+      {
+        "label": "front-right-small",
+        "original": "/workspace/generated_images/exec-0c3696d4-f16e-423b-8625-6bbe53d57092.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/front-right-small-original.png",
+        "sha256": "b30d12bdec439a3e490f6baadcfa410ba5bbef5b95dffc447d859da2ccf65b68",
+        "rejectedInitialOrientationOrScale": true,
+        "request": {
+          "label": "front-right-small",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/generated_images/exec-e01412ac-2c33-48cb-bd34-8d1eab9dd3db.png"
+          ],
+          "prompt": "Scale correction ONLY for this exact four-view MYTHIC ARCHER idle sheet. Preserve every heading, weapon hand, pose, costume, lighting, proportions and camera. Same1280\u00d71280 transparentRGBA canvas and TWO-by-TWO grid. SHRINK each entire figure to 30% of its current pixel size, through ImageGen. Current hood-to-boot about430px; corrected hood-to-boot ONLY120\u2013140px. Each640square cell should be mostly EMPTY: ground boot-root cell-local x320,y440, hood top about305, entire silhouette x230..410,y275..450. Keep FOUR TINY FIGURES; never enlarge to fill the space. The immense blank gutters are required for a production pixel texture budget. Preserve exact directions and anatomicalLEFT bow hand/RIGHT string hand, stationary undrawn idle. No added arrows, text, labels, grids, backgrounds, cast shadows, effects, clipped bowtips/boots or pose changes. Only scale/layout, drawn crisply at new small pixel size."
+        },
+        "requestEvidence": "evidence/focused-idle-size-generation-requests.json"
+      },
+      {
+        "label": "idle16-corrected",
+        "original": "/workspace/generated_images/exec-b84869fd-1547-4cf6-af7d-af16492cfda6.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/idle16-corrected-original.png",
+        "sha256": "f5ef6378934c56446c390d48d8d28bdcf46e85ae1a00952bbdf90a03a2168851",
+        "rejectedInitialOrientationOrScale": true,
+        "request": {
+          "prompt": "Correct this MYTHIC ARCHER idle sheet using ImageGen. Preserve the exact female teal-hood/auburn-hair/brown-leather/cream-skirt/gold-trim identity, polished toy3D isometric camera and fixed light. Bow always in anatomical LEFT hand; RIGHT hand near string, undrawn idle. True RGBA transparency, four columns and four rows, exactly16 whole figures. No labels/grid/background/shadows/effects/projectiles.\nCRITICAL SCALE CORRECTION: EVERY whole figure must become EXACTLY HALF (50%) OF ITS CURRENT PIXEL SIZE. Current hood-to-boot height about220px; corrected hood-to-boot ONLY110\u2013120px. Keep canvas1280\u00d71280 with each cell320square. New ground-root local x160,y250; hood top around135. The entire body,bow,quiver in each cell fits x95..225,y110..255. Empty gutters should be HUGE. DO NOT enlarge to fill gutters. Uniform corrected body scale and same camera all16. This scale correction must be drawn by ImageGen with crisp edges and correct anatomy.\nCRITICAL DIRECTION CORRECTION: row1 col2 NNE,row1 col3 NE,row1 col4 ENE currently turn LEFT. They must turn toward SCREEN RIGHT and AWAY: NNE predominantly rear with slight right bias; NE rear-right three-quarter, face sliver at RIGHT edge of hood; ENE almost RIGHT profile but slightly away, nose points RIGHT/UP. DO NOT reuse the left-facing WNW views here. Row1col1 N rear remains correct. Row2 headings E,ESE,SE,SSE must progressively turn from right profile toward predominantly FRONT-facing at SSE, not four almost-right profiles. SSE chest/front-face aimed slightly to screen right and down. Row3 S,SSW,SW,WSW rotate front view toward LEFT while showing front-side face at WSW; row4 W,WNW,NW,NNW rotates left profile toward rear-left. WNW shows back-left hood, NNW predominantly rear with left bias. This is a fixed-camera actor turntable. Compass order remains N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. Idle pose stationary, bothfeet planted, complete bow and boots, bow carried undrawn naturally, no loose arrow. Correct headings and scale only, maintain the character's anatomical left bow hand across every view.",
+          "referenced_image_paths": [
+            "/workspace/generated_images/exec-73a913c8-174e-4f86-bec2-d52911c2395e.png",
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/approved-mythic-archer-static-reference.png"
+          ],
+          "transparent_background": true
+        },
+        "requestEvidence": "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/idle16-corrected-generation-request.json"
+      },
+      {
+        "label": "idle16-first",
+        "original": "/workspace/generated_images/exec-73a913c8-174e-4f86-bec2-d52911c2395e.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/idle16-first-original.png",
+        "sha256": "520487bb8c27a75dad874b52aba7b60be8252c939dbd81edd38072bc89a33c48",
+        "rejectedInitialOrientationOrScale": true,
+        "request": {
+          "status": "Prepared; generation has not started",
+          "tool": "image_gen.imagegen",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/approved-mythic-archer-static-reference.png"
+          ],
+          "prompt": "Create a production sprite sheet for Frontier Command's MYTHIC ARCHER, matching this exact approved character identity: compact female archer with warm fair face, auburn hair under deep teal hood, teal cloak and torso with brass/gold trim, brown leather gloves/bracers/belt/boots, cream-white short skirt/leggings accents, back quiver with white-feather arrows, ornate brown/gold recurve bow. Polished toy-like 3D isometric strategy-game art, crisp clean silhouette, warm upper-left lighting. Anatomical LEFT hand always holds the bow; anatomical RIGHT hand rests near the bowstring. Preserve costume, proportions, materials and camera across every sprite. No character redesign.\nExactly SIXTEEN full-body figures in FOUR columns and FOUR rows, one stationary IDLE pose for each compass heading. All sprites are small and the vast empty gutters are intentional. On a roughly1254square canvas each cell is about313px square. Hood-to-boot BODY HEIGHT only110\u2013125pixels; whole body INCLUDING complete bow/quiver must fit inside local x75..240,y95..245. Boot ground-root near local x156,y235. Do not enlarge figures to fill cells. Uniform body size across all sixteen. True transparent RGBA background, no cast shadows, labels, text, grid, decorations, effects, detached arrows, clipped bow tips or cropped boots.\nRead headings left-to-right, top-to-bottom: N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. Rotate the same actor beneath a fixed elevated isometric camera, never rotate the camera. These are SCREEN-space directions: N faces away toward top (back of hood and cape, quiver visible); E faces screen RIGHT in right-facing profile; S faces toward viewer/bottom (face/chest visible); W faces screen LEFT in left-facing profile. NNE/NNW are predominantly back views biased right/left; ENE/WNW look partly away; ESE/WSW look partly toward viewer; SSE/SSW are mostly front views. Each of16 genuinely differs from its adjacent heading; no duplicated or mirrored views. In particular WSW must show front-left face/chest, and WNW must show back-left hood/cape.\nIDLE: relaxed planted feet, alert slightly bent knees, bow held ready but undrawn in LEFT hand, RIGHT hand near the string with no loose projectile. The torso, feet and gaze face that cell's compass heading; the bow is carried naturally ahead to the actor's anatomical left. Keep right/left hands anatomically correct through the back views. Calm single stationary phase in every cell. Clean transparent edges and readable teal hood/cream accents at actual game size."
+        },
+        "requestEvidence": null
+      },
+      {
+        "label": "rear-right-idle",
+        "original": "/workspace/generated_images/exec-a575a3a9-6927-4c68-bb29-3b2df67cdd3d.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/rear-right-idle-original.png",
+        "sha256": "8304f5616b12df2d0374f3bc6dd69e23dde8a8f83ed4848fc4ad9ccc635a3b5f",
+        "rejectedInitialOrientationOrScale": true,
+        "request": {
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/approved-mythic-archer-static-reference.png"
+          ],
+          "prompt": "Create FOUR original directional idle sprites of this exact female MYTHIC ARCHER on a 640\u00d7640 true RGBA transparent sheet, TWO columns and TWO rows. Deep teal hood and cape with gold trim, auburn hair, warm fair face, brown leather bracers/gloves/belt/boots, cream short skirt/leggings accents, back quiver with white-feather arrows, ornate brown/gold recurve bow held in anatomical LEFT hand. RIGHT hand rests near the undrawn string. Polished toy 3D art under a fixed elevated isometric camera and fixed warm light. Small production figures: hood-to-boot BODY HEIGHT 120\u2013140 pixels only; ground root at cell-local x160,y250. Each cell is 320\u00d7320, with huge empty gutters. No labels, grid, background, shadows, effects or loose projectiles. Complete body/bow/boots unclipped.\nFOUR views in reading order: TOP LEFT=NNE (back mostly visible, faces away and 22.5 degrees toward SCREEN RIGHT); TOP RIGHT=NE (rear-RIGHT three-quarter, faces away and 45 degrees toward SCREEN RIGHT); BOTTOM LEFT=ENE (nearly RIGHT-facing profile with a slight back view, faces away and 67.5 degrees toward SCREEN RIGHT); BOTTOM RIGHT=E (pure RIGHT-facing profile, facing horizontally SCREEN RIGHT). ALL FOUR face RIGHT or UP-RIGHT, NEVER LEFT. Any visible nose or cheek must be at the RIGHT edge of the hood, nose pointing RIGHT. At ENE/E the cape and quiver trail on the LEFT side, behind the actor; bow is ahead to the RIGHT. Do not substitute left-facing back views for NNE/NE/ENE. Start from the reference's right-facing orientation and rotate AWAY from the viewer while remaining biased RIGHT. Anatomical LEFT bow hand stays correct through all four rotations. Stationary idle pose, planted feet and undrawn bow, steady ground root and body size. Adjacent views must visibly differ in shoulders, hood, face and foot projection."
+        },
+        "requestEvidence": "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/rear-right-idle-generation-request.json"
+      },
+      {
+        "label": "rear-right-small",
+        "original": "/workspace/generated_images/exec-d5629948-29e4-40f8-813d-b8f22aa5d8bc.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/rear-right-small-original.png",
+        "sha256": "31fed55e55870a22553af5a0bf788c7db356d1a85b2e08803e60d696591b060e",
+        "rejectedInitialOrientationOrScale": true,
+        "request": {
+          "label": "rear-right-small",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/generated_images/exec-a575a3a9-6927-4c68-bb29-3b2df67cdd3d.png"
+          ],
+          "prompt": "Edit ONLY SCALE and spacing of these exact four MYTHIC ARCHER idle sprites. Preserve their four correct rear-RIGHT to RIGHT headings, stationary poses, anatomical LEFT bow hand / RIGHT string hand, exact teal hood/cape, auburn hair, gold/brown bow, cream accents, brown boots, lighting and elevated camera. Same true RGBA transparent1280\u00d71280 sheet, TWO columns and TWO rows. Each640square cell must contain one tiny sprite. SHRINK EACH COMPLETE FIGURE TO30% (three-tenths) OF ITS CURRENT SIZE: current hood-to-boot about420pixels, new hood-to-boot BODY HEIGHT125\u2013140pixels ONLY. Whole body/bow/quiver about145pixels wide. Foot-ground midpoint cell-local x320,y440; hood top about300. All silhouette pixels must fit inside cell-local x230..410,y280..450. VAST EMPTY GUTTERS ARE INTENTIONAL. Do not enlarge figures to fill the space. Same corrected scale allfour. No direction or pose changes, no new objects, no labels/grid/background/shadows/effects or cropped bow tips/boots. Scale/layout correction only, drawn crisply by ImageGen."
+        },
+        "requestEvidence": "evidence/focused-idle-corrections-generation-requests.json"
+      },
+      {
+        "label": "rear-right-small2",
+        "original": "/workspace/generated_images/exec-84050c73-da29-4baf-96d1-bc1076a03790.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/rear-right-small2-original.png",
+        "sha256": "3cd36012f7968c658c8edf0f94a8e227707fcc236dba0ee68f8562933d7e969b",
+        "rejectedInitialOrientationOrScale": true,
+        "request": {
+          "label": "rear-right-small2",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/generated_images/exec-d5629948-29e4-40f8-813d-b8f22aa5d8bc.png"
+          ],
+          "prompt": "Scale correction ONLY for this exact four-view MYTHIC ARCHER idle sheet. Preserve every heading, weapon hand, pose, costume, lighting, proportions and camera. Same1280\u00d71280 transparentRGBA canvas and TWO-by-TWO grid. SHRINK each entire figure to 50% of its current pixel size, through ImageGen. Current hood-to-boot about240px; corrected hood-to-boot ONLY120\u2013140px. Each640square cell should be mostly EMPTY: ground boot-root cell-local x320,y440, hood top about305, entire silhouette x230..410,y275..450. Keep FOUR TINY FIGURES; never enlarge to fill the space. The immense blank gutters are required for a production pixel texture budget. Preserve exact directions and anatomicalLEFT bow hand/RIGHT string hand, stationary undrawn idle. No added arrows, text, labels, grids, backgrounds, cast shadows, effects, clipped bowtips/boots or pose changes. Only scale/layout, drawn crisply at new small pixel size."
+        },
+        "requestEvidence": "evidence/focused-idle-size-generation-requests.json"
+      },
+      {
+        "label": "uniform-idle16",
+        "original": "/workspace/generated_images/exec-73042470-fff5-400c-a4f4-6c836b53e206.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/uniform-idle16-original.png",
+        "sha256": "1654c8246ca63f063e002d222751d22b9a43c741da2eea5ac23f3e870a2fbf95",
+        "rejectedInitialOrientationOrScale": true,
+        "request": {
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/provisional-assembled-idle16-source-review.png",
+            "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/approved-mythic-archer-static-reference.png"
+          ],
+          "prompt": "Create a uniform-scale production IDLE sheet from this assembled source review for the exact female MYTHIC ARCHER. Correct the inconsistent source pixel sizes, preserving each cell's compass facing and anatomical LEFT bow hand / RIGHT string hand. Character identity, teal hood/cape with gold trim, auburn hair, cream skirt accents, brown leather boots/bracers/belt/quiver, white-feather arrows, ornate brown/gold bow, fixed elevated isometric camera and warm upper-left lighting stay exactly consistent. True transparent RGBA1280square, FOUR columns by FOUR rows, exactly16 complete stationary figures. Body HEIGHT from hood to boot sole ONLY125\u2013145pixels for EVERY figure, with full silhouette no more than175pixels tall. Each320squarecell is mostly empty: rootlocalx160,y250, hoodaround110, entirebody/bow/quiverinside x65..255,y75..260. SHRINK the oversized RIGHT-facing views especially: row1cols2\u20134 and row2cols1\u20134 currently much larger than other cells. Match the small FRONT S sprite in row3col1 in actual pixel scale. VAST gutters required; never fill them with bigger figures. No labels, grids, backgrounds, cast shadows, effects, loose projectiles or clipping.\nPreserve clockwise facing order N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. Row1 rear views face away while increasingly RIGHT-biased; any visible nose at RIGHT hood edge, never LEFT. Row2 turns from RIGHT profile progressively toward FRONT: E has side profile, ESE a slight front-right view, SE clear front-right three-quarter, SSE mostly frontal with subtle right bias. Row3 S is fully frontal (centered nose, both eyes/chest), then front-left SSW/SW/WSW. Row4 left profile turns toward rear-left and finally predominantly rear at NNW. Do not turn row1 back toward LEFT again. Do not make ESE,SE,SSE duplicate front views; interpolate clear shoulders/face/boot projection. Idle undrawn bow carried calmly; bothfeet planted and same ground root. Make one consistent toy3D body style at uniform small production size; improve only scale and orderly direction interpolation."
+        },
+        "requestEvidence": "/workspace/rts-browser-qa/mythic-archer-animation-20261006/evidence/uniform-idle16-generation-request.json"
+      }
+    ],
+    "packingSemantics": "Selected original ImageGen RGBA crops copied unchanged; alpha8 threshold only discovers contained bounds, does not edit pixels. Metadata calibration changes numbers only. Compact figures were redrawn through ImageGen; no Python resampling, mirroring, masking or recoloring.",
+    "rejectionBoundary": [
+      "Initial idle orientations/size attempts remain unshipped",
+      "First144 source selection rejected before production atlas because no20MiB packing found",
+      "All80 first pose-guided idle/walk sources replaced by compact ImageGen originals",
+      "Full-draw first sheet excluded for flattened front aim; corrected all16 selected",
+      "N walk0 duplicate bow corrected in compact-sheet reference; first sheet excluded",
+      "Release N,NNE,NW,NNW from first clean release sheet;12corrected front/side release poses selected; retained arrow tips in four correction cells excluded"
+    ],
+    "gameplayBoundary": "Real existing projectile events/cooldown drive presentation. No unit-stat, simulation, audio or damage changes. External QA report records actual browser/event acceptance.",
+    "publishedBaselineParentReported": "40b4a3db7477b56ac726b8eb7c626dfe3339fa05",
+    "remainingFamilyFrames": 864,
+    "remainingMythicActors": 6,
+    "physicalPhoneMemoryFPSUnmeasured": true,
+    "initialRejectedOriginals": 8
+  },
+  "spearmanDirectional20261006": {
+    "tool": "Authorized built-in ImageGen",
+    "identity": "Approved Mythic static female Spearman: fair face, auburn hair, teal hood/cape with gold trim, cream skirt, brown leather gear and feathered quiver; right-hand gold-brown spear/silver-lavender point, left-hand round blue/gold sun shield. Swordsman images used only as pose references.",
+    "selectedFrames": 144,
+    "headings": 16,
+    "idlePerHeading": 1,
+    "walkPerHeading": 4,
+    "attackPerHeading": 4,
+    "sourceOriginalCount": 11,
+    "packing": {
+      "atlasDimensions": [
+        2560,
+        1664
+      ],
+      "decodedBytes": 17039360,
+      "decodedMiB": 16.25,
+      "initial16MiBSelfTargetMet": false,
+      "hard20MiBCapMet": true,
+      "all144FrameRGBAUnique": true,
+      "allSourceCroppedPackedAndPNGReadbackRGBAExact": true,
+      "allRectanglesDisjoint": true,
+      "noPixelResizingMirroringMaskingRecoloring": true
+    },
+    "assetHashes": {
+      "spearman-directional.png": "4991106bfcce3694ef46ca3e6e11add6db2ae1d5d292b15aec1b3bfdddcaa2e8",
+      "spearman-directional.json": "c600ff146a7c0450b6eadfde8c6b5e3669f5d0a7f455db43369dfe91afb8bd23"
+    },
+    "selectedSourceInputs": [
+      {
+        "label": "reduced-idle",
+        "original": "evidence/reduced-idle-original.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/reduced-idle-original.png",
+        "sourceSHA256": "89d3bb1b659fe692fd8d5ba166d309b0d3e1cd93ed66a26253d67018a5ba1881"
+      },
+      {
+        "label": "reduced-walk-0",
+        "original": "evidence/reduced-walk-0-original.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/reduced-walk-0-original.png",
+        "sourceSHA256": "5f394ecd6bf5cd7f14f97da2510d278ccb391839c423e1e4f5243e6968758be2"
+      },
+      {
+        "label": "small-walk-1",
+        "original": "evidence/small-walk-1-original.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/small-walk-1-original.png",
+        "sourceSHA256": "e51ea4b3a0f848fc2e72abe69794f7645202e9f52c77c6b2a67c8c2b2ae93a1f"
+      },
+      {
+        "label": "small-walk-2",
+        "original": "evidence/small-walk-2-original.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/small-walk-2-original.png",
+        "sourceSHA256": "7b4aed1f068f9ad0e7ee5294637f9c865b0054dbf4b7caa46392f0ca25410208"
+      },
+      {
+        "label": "small-walk-3",
+        "original": "evidence/small-walk-3-original.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/small-walk-3-original.png",
+        "sourceSHA256": "800a6a75b0a1a0c95b0ef6215c74db2f8e448cece194f601dd1283adc0e407fc"
+      },
+      {
+        "label": "small-attack-0",
+        "original": "evidence/small-attack-0-original.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/small-attack-0-original.png",
+        "sourceSHA256": "619ce9bdec5123b513809be72d99e5f1ca59410504fcb480008d6364e2a3f9a7"
+      },
+      {
+        "label": "small-attack-1",
+        "original": "evidence/small-attack-1-original.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/small-attack-1-original.png",
+        "sourceSHA256": "c8914c5a15ad8f9f9b37e8231a7e8c32901489ab2cebfb1fbdc3a494f24ed0a5"
+      },
+      {
+        "label": "small-attack-2",
+        "original": "evidence/small-attack-2-original.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/small-attack-2-original.png",
+        "sourceSHA256": "0b64bb23abbbc750602c023233cef4ce6211ef32ea7faec8b1b55ecf8ba0a417"
+      },
+      {
+        "label": "small-attack-3",
+        "original": "evidence/small-attack-3-original.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/small-attack-3-original.png",
+        "sourceSHA256": "73b699da24474096c2b063207652580ba64a88b7f66fc6d14581c5acdd2f6d41"
+      }
+    ],
+    "originalGenerationRecords": [
+      {
+        "label": "compact-idle",
+        "original": "/workspace/generated_images/exec-d823c6b6-7f77-45af-8028-4823d7aee24f.png",
+        "sha256": "d966b64ff9adc639f0cc6dc48712514e15c2ef743fb49588644e9b85d6a2ca03",
+        "request": {
+          "prompt": "Use the FIRST image only for character identity: a small stylized toy-3D female Spearman, fair face, auburn hair, pointed teal hood and flowing teal cape with gold edges, cream tunic/skirt, brown leather gloves/bracers/boots, feathered quiver behind shoulder. ONE long gold-brown spear with a sharp silver/lavender diamond point in anatomical RIGHT hand. ONE round blue shield with gold rim and gold sun emblem in anatomical LEFT hand. No bow, no sword, no extra spear or duplicate shield. The SECOND image is an approved Swordsman POSE/FACING guide only: do not copy its male knight identity, armor or sword. Use every corresponding cell's body/face direction. The guide uses unchanged originals and one figure in walk1 is much bigger; ignore all guide pixel sizes. ALL output Spearman bodies must be uniformly110-118 pixels hood-to-boot, with weapon/cloth kept complete. Create exactly16 isolated complete figures, one per4x4 cell, transparent1280x1280 PNG, each cell320x320, boot contact near local(160,275). No text, no numbers, no grid, no scenery, no floor, no cut-off tip, no touch/overlap between cells. Keep each entire figure+spear inside its cell with generous transparent margins, preferably within240x235px. Crisp polished mythic toon toy-3D material and readable small hands/boots, neutral illumination, subtle contact shadow only. Match the first image's female identity and blue sun-shield across all16 rotations. Row1 N,NNE,NE,ENE; row2 E,ESE,SE,SSE; row3 S,SSW,SW,WSW; row4 W,WNW,NW,NNW. N is rear-facing up-screen, E right profile, S faces toward viewer down-screen, W left profile; intermediate angles are distinct22.5-degree turns. Keep actual left/right handedness through rotations; never mirror or repeat a view. Relaxed guard idle, both boots grounded; carry the spear upright/diagonal near the right shoulder and shield naturally in left hand. Do not aim or attack. Follow the second image's sixteen idle body directions.",
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/approved-mythic-spearman-static-reference.png",
+            "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/verified-swordsman-idle-pose-guide.png"
+          ],
+          "transparent_background": true
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "compact-walk-0",
+        "original": "/workspace/generated_images/exec-67d825cc-d713-47df-acd6-5c402e177b08.png",
+        "sha256": "6a9e5ba743c177595aa8ef04f81b8258bf52bbf4e43ce802ecaf4f60a306bbf2",
+        "request": {
+          "prompt": "Use the FIRST image only for character identity: a small stylized toy-3D female Spearman, fair face, auburn hair, pointed teal hood and flowing teal cape with gold edges, cream tunic/skirt, brown leather gloves/bracers/boots, feathered quiver behind shoulder. ONE long gold-brown spear with a sharp silver/lavender diamond point in anatomical RIGHT hand. ONE round blue shield with gold rim and gold sun emblem in anatomical LEFT hand. No bow, no sword, no extra spear or duplicate shield. The SECOND image is an approved Swordsman POSE/FACING guide only: do not copy its male knight identity, armor or sword. Use every corresponding cell's body/face direction. The guide uses unchanged originals and one figure in walk1 is much bigger; ignore all guide pixel sizes. ALL output Spearman bodies must be uniformly110-118 pixels hood-to-boot, with weapon/cloth kept complete. Create exactly16 isolated complete figures, one per4x4 cell, transparent1280x1280 PNG, each cell320x320, boot contact near local(160,275). No text, no numbers, no grid, no scenery, no floor, no cut-off tip, no touch/overlap between cells. Keep each entire figure+spear inside its cell with generous transparent margins, preferably within240x235px. Crisp polished mythic toon toy-3D material and readable small hands/boots, neutral illumination, subtle contact shadow only. Match the first image's female identity and blue sun-shield across all16 rotations. Row1 N,NNE,NE,ENE; row2 E,ESE,SE,SSE; row3 S,SSW,SW,WSW; row4 W,WNW,NW,NNW. N is rear-facing up-screen, E right profile, S faces toward viewer down-screen, W left profile; intermediate angles are distinct22.5-degree turns. Keep actual left/right handedness through rotations; never mirror or repeat a view. Walking cycle phase0: right leg forward and left leg back, right boot contacts ground, subtle forward weight; spear and shield held securely while walking. Use corresponding cell's gait and body direction from second image.",
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/approved-mythic-spearman-static-reference.png",
+            "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/verified-swordsman-walk-0-pose-guide.png"
+          ],
+          "transparent_background": true
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "reduced-idle",
+        "original": "/workspace/generated_images/exec-b2510559-5c1d-439b-b6d0-92f882c36328.png",
+        "sha256": "89d3bb1b659fe692fd8d5ba166d309b0d3e1cd93ed66a26253d67018a5ba1881",
+        "request": {
+          "label": "reduced-idle",
+          "phase": "idle",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/compact-idle-original.png"
+          ],
+          "prompt": "Make ONE precise sprite-sheet artwork edit: reduce ALL SIXTEEN female Spearman drawings in this reference to 55 percent of their CURRENT drawn size. Retain every corresponding cell's exact body proportions, female identity, teal hood/cape, auburn hair, cream skirt, brown boots/gloves, feathered quiver, right-hand spear, left-hand blue gold sun shield, 16 distinct compass views and the idle guard pose. This is only an artwork-size edit to save texture memory. Head-to-boot BODY HEIGHT must be 110\u2013130 PIXELS ONLY, down from the reference's 205\u2013236 pixels. Shrink complete figures INCLUDING spear, shield, cape and feet proportionally; keep every long spear point intact. Output a 4 by 4 transparent 1280 square sprite sheet, each cell 320 square. Each tiny drawing has huge transparent gutters: boot-contact root local x160,y275, hood around y150; most of each cell stays empty. Do not enlarge drawings to fill cells. Reading order N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW exactly as the reference. Preserve handedness and distinct camera/body projections; never mirror, exchange, alias or repeat cells. No redesign, extra weapons, grid, text, numbers, scenery, background, floor or new effects. THE ONLY CHANGE IS 55 percent artwork size, with the same corresponding pose and root positioning."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "reduced-walk-0",
+        "original": "/workspace/generated_images/exec-f85ded7d-2ef0-47fc-a843-7b9820387899.png",
+        "sha256": "5f394ecd6bf5cd7f14f97da2510d278ccb391839c423e1e4f5243e6968758be2",
+        "request": {
+          "label": "reduced-walk-0",
+          "phase": "walk-0",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/compact-walk-0-original.png"
+          ],
+          "prompt": "Make ONE precise sprite-sheet artwork edit: reduce ALL SIXTEEN female Spearman drawings in this reference to 55 percent of their CURRENT drawn size. Retain every corresponding cell's exact body proportions, female identity, teal hood/cape, auburn hair, cream skirt, brown boots/gloves, feathered quiver, right-hand spear, left-hand blue gold sun shield, 16 distinct compass views and the right-leg-forward walking phase. This is only an artwork-size edit to save texture memory. Head-to-boot BODY HEIGHT must be 110\u2013130 PIXELS ONLY, down from the reference's 205\u2013236 pixels. Shrink complete figures INCLUDING spear, shield, cape and feet proportionally; keep every long spear point intact. Output a 4 by 4 transparent 1280 square sprite sheet, each cell 320 square. Each tiny drawing has huge transparent gutters: boot-contact root local x160,y275, hood around y150; most of each cell stays empty. Do not enlarge drawings to fill cells. Reading order N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW exactly as the reference. Preserve handedness and distinct camera/body projections; never mirror, exchange, alias or repeat cells. No redesign, extra weapons, grid, text, numbers, scenery, background, floor or new effects. THE ONLY CHANGE IS 55 percent artwork size, with the same corresponding pose and root positioning."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "small-attack-0",
+        "original": "/workspace/generated_images/exec-866f130a-6795-44e8-be30-ce5528f14754.png",
+        "sha256": "619ce9bdec5123b513809be72d99e5f1ca59410504fcb480008d6364e2a3f9a7",
+        "request": {
+          "label": "small-attack-0",
+          "phase": "attack-0",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/reduced-idle-unchanged-root-guide.png",
+            "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/verified-swordsman-attack-0-pose-guide.png"
+          ],
+          "prompt": "Edit the FIRST female Spearman sprite sheet to the new animation phase below. Keep the same sixteen corresponding body/face directions, identity, costume, weapons, small pixel size and 4x4 reading order. First reference is the identity and size authority: female fair face/auburn hair, pointed teal hood/cape with gold trim, cream skirt/tunic, brown leather gloves/bracers/boots, feathered back quiver, exactly ONE gold-brown shaft spear with silver/lavender diamond point in anatomical RIGHT hand and ONE round blue gold sun shield in LEFT hand. No bow/sword. SECOND reference is a male Swordsman gait/body-direction guide ONLY: do not copy male armor, sword, shield identity or its large sizes (one guide WSW is oversized). All output female bodies uniformly about130\u2013145 pixels hood-to-boots, same tiny drawings as FIRST reference, huge transparent margins; never enlarge to fill cells. Entire spear point/cape/feet intact. Output transparent1280square,16 isolated figures4x4,cell320,boot-contact root local160,275. No text/grid/number/floor/scenery/shadow/newprop/projectile/effect. Directions rows N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. N rear upscreen, E rightprofile, S front downscreen, W leftprofile; ALL intermediate views differ by22.5degrees. Preserve real handedness through rotations; no mirroring/copy/alias. Keep identity and SMALL BODY SIZE from first reference; use second only for corresponding rotation and body-gait. NEW PHASE: Melee spear-thrust phase0 READY: planted two-boot guard, left blue sun shield in front of torso, right hand holds spear near shoulder ready to draw back. Spear is held in hand, no sword slash."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "small-attack-1",
+        "original": "/workspace/generated_images/exec-0c26fa5e-f719-4c18-b948-2d01fbf46152.png",
+        "sha256": "c8914c5a15ad8f9f9b37e8231a7e8c32901489ab2cebfb1fbdc3a494f24ed0a5",
+        "request": {
+          "label": "small-attack-1",
+          "phase": "attack-1",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/reduced-idle-unchanged-root-guide.png",
+            "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/verified-swordsman-attack-1-pose-guide.png"
+          ],
+          "prompt": "Edit the FIRST female Spearman sprite sheet to the new animation phase below. Keep the same sixteen corresponding body/face directions, identity, costume, weapons, small pixel size and 4x4 reading order. First reference is the identity and size authority: female fair face/auburn hair, pointed teal hood/cape with gold trim, cream skirt/tunic, brown leather gloves/bracers/boots, feathered back quiver, exactly ONE gold-brown shaft spear with silver/lavender diamond point in anatomical RIGHT hand and ONE round blue gold sun shield in LEFT hand. No bow/sword. SECOND reference is a male Swordsman gait/body-direction guide ONLY: do not copy male armor, sword, shield identity or its large sizes (one guide WSW is oversized). All output female bodies uniformly about130\u2013145 pixels hood-to-boots, same tiny drawings as FIRST reference, huge transparent margins; never enlarge to fill cells. Entire spear point/cape/feet intact. Output transparent1280square,16 isolated figures4x4,cell320,boot-contact root local160,275. No text/grid/number/floor/scenery/shadow/newprop/projectile/effect. Directions rows N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. N rear upscreen, E rightprofile, S front downscreen, W leftprofile; ALL intermediate views differ by22.5degrees. Preserve real handedness through rotations; no mirroring/copy/alias. Keep identity and SMALL BODY SIZE from first reference; use second only for corresponding rotation and body-gait. NEW PHASE: Melee spear-thrust phase1 WINDUP: shoulders coil, right elbow/spear drawn back near right shoulder, left blue sun shield protects front. Distinct from READY, prepare straight forward thrust, not overhead slash."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "small-attack-2",
+        "original": "/workspace/generated_images/exec-7a95329d-8349-4983-ac96-33fd01bfd657.png",
+        "sha256": "0b64bb23abbbc750602c023233cef4ce6211ef32ea7faec8b1b55ecf8ba0a417",
+        "request": {
+          "label": "small-attack-2",
+          "phase": "attack-2",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/reduced-idle-unchanged-root-guide.png",
+            "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/verified-swordsman-attack-2-pose-guide.png"
+          ],
+          "prompt": "Edit the FIRST female Spearman sprite sheet to the new animation phase below. Keep the same sixteen corresponding body/face directions, identity, costume, weapons, small pixel size and 4x4 reading order. First reference is the identity and size authority: female fair face/auburn hair, pointed teal hood/cape with gold trim, cream skirt/tunic, brown leather gloves/bracers/boots, feathered back quiver, exactly ONE gold-brown shaft spear with silver/lavender diamond point in anatomical RIGHT hand and ONE round blue gold sun shield in LEFT hand. No bow/sword. SECOND reference is a male Swordsman gait/body-direction guide ONLY: do not copy male armor, sword, shield identity or its large sizes (one guide WSW is oversized). All output female bodies uniformly about130\u2013145 pixels hood-to-boots, same tiny drawings as FIRST reference, huge transparent margins; never enlarge to fill cells. Entire spear point/cape/feet intact. Output transparent1280square,16 isolated figures4x4,cell320,boot-contact root local160,275. No text/grid/number/floor/scenery/shadow/newprop/projectile/effect. Directions rows N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. N rear upscreen, E rightprofile, S front downscreen, W leftprofile; ALL intermediate views differ by22.5degrees. Preserve real handedness through rotations; no mirroring/copy/alias. Keep identity and SMALL BODY SIZE from first reference; use second only for corresponding rotation and body-gait. NEW PHASE: Melee spear-thrust phase2 IMPACT: small forward lunge, extend anatomical right arm and spear straight toward the target direction of each body. Spear point projections MUST follow headings: N UP; NNE steep UP-RIGHT; NE diagonal UP-RIGHT; ENE shallow UP-RIGHT; E RIGHT horizontal; ESE shallow DOWN-RIGHT; SE diagonal DOWN-RIGHT; SSE steep DOWN-RIGHT; S DOWN toward viewer with strong foreshortening; SSW steep DOWN-LEFT; SW diagonal DOWN-LEFT; WSW shallow DOWN-LEFT; W LEFT horizontal; WNW shallow UP-LEFT; NW diagonal UP-LEFT; NNW steep UP-LEFT. Spear never leaves hand. One straight held spear, no projectile, effects, extra spear, overhead slash or upward upright carry. Left shield protects body. Each projection is unique."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "small-attack-3",
+        "original": "/workspace/generated_images/exec-3322eb61-1da4-46de-8ecf-201b7c3dc7dd.png",
+        "sha256": "73b699da24474096c2b063207652580ba64a88b7f66fc6d14581c5acdd2f6d41",
+        "request": {
+          "label": "small-attack-3",
+          "phase": "attack-3",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/reduced-idle-unchanged-root-guide.png",
+            "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/verified-swordsman-attack-3-pose-guide.png"
+          ],
+          "prompt": "Edit the FIRST female Spearman sprite sheet to the new animation phase below. Keep the same sixteen corresponding body/face directions, identity, costume, weapons, small pixel size and 4x4 reading order. First reference is the identity and size authority: female fair face/auburn hair, pointed teal hood/cape with gold trim, cream skirt/tunic, brown leather gloves/bracers/boots, feathered back quiver, exactly ONE gold-brown shaft spear with silver/lavender diamond point in anatomical RIGHT hand and ONE round blue gold sun shield in LEFT hand. No bow/sword. SECOND reference is a male Swordsman gait/body-direction guide ONLY: do not copy male armor, sword, shield identity or its large sizes (one guide WSW is oversized). All output female bodies uniformly about130\u2013145 pixels hood-to-boots, same tiny drawings as FIRST reference, huge transparent margins; never enlarge to fill cells. Entire spear point/cape/feet intact. Output transparent1280square,16 isolated figures4x4,cell320,boot-contact root local160,275. No text/grid/number/floor/scenery/shadow/newprop/projectile/effect. Directions rows N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. N rear upscreen, E rightprofile, S front downscreen, W leftprofile; ALL intermediate views differ by22.5degrees. Preserve real handedness through rotations; no mirroring/copy/alias. Keep identity and SMALL BODY SIZE from first reference; use second only for corresponding rotation and body-gait. NEW PHASE: Melee spear-thrust phase3 RECOVERY: right arm retracts spear after forward straight thrust, body eases back toward guard, left blue sun shield still protects. Visibly different from IMPACT and READY. Spear never thrown."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "small-walk-1",
+        "original": "/workspace/generated_images/exec-29df46e5-1dd2-48a2-98e7-2fb262ca6b5a.png",
+        "sha256": "e51ea4b3a0f848fc2e72abe69794f7645202e9f52c77c6b2a67c8c2b2ae93a1f",
+        "request": {
+          "label": "small-walk-1",
+          "phase": "walk-1",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/reduced-walk-0-unchanged-root-guide.png",
+            "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/verified-swordsman-walk-1-pose-guide.png"
+          ],
+          "prompt": "Edit the FIRST female Spearman sprite sheet to the new animation phase below. Keep the same sixteen corresponding body/face directions, identity, costume, weapons, small pixel size and 4x4 reading order. First reference is the identity and size authority: female fair face/auburn hair, pointed teal hood/cape with gold trim, cream skirt/tunic, brown leather gloves/bracers/boots, feathered back quiver, exactly ONE gold-brown shaft spear with silver/lavender diamond point in anatomical RIGHT hand and ONE round blue gold sun shield in LEFT hand. No bow/sword. SECOND reference is a male Swordsman gait/body-direction guide ONLY: do not copy male armor, sword, shield identity or its large sizes (one guide WSW is oversized). All output female bodies uniformly about130\u2013145 pixels hood-to-boots, same tiny drawings as FIRST reference, huge transparent margins; never enlarge to fill cells. Entire spear point/cape/feet intact. Output transparent1280square,16 isolated figures4x4,cell320,boot-contact root local160,275. No text/grid/number/floor/scenery/shadow/newprop/projectile/effect. Directions rows N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. N rear upscreen, E rightprofile, S front downscreen, W leftprofile; ALL intermediate views differ by22.5degrees. Preserve real handedness through rotations; no mirroring/copy/alias. Keep identity and SMALL BODY SIZE from first reference; use second only for corresponding rotation and body-gait. NEW PHASE: Walking phase1 PASSING: right leg moves under torso and left heel lifts. This must differ from the reference right-leg-forward footfall. Feet remain visible; secure spear/right and shield/left."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "small-walk-2",
+        "original": "/workspace/generated_images/exec-ab4125aa-dc63-4ca5-9d57-997ab7ff8115.png",
+        "sha256": "7b4aed1f068f9ad0e7ee5294637f9c865b0054dbf4b7caa46392f0ca25410208",
+        "request": {
+          "label": "small-walk-2",
+          "phase": "walk-2",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/reduced-walk-0-unchanged-root-guide.png",
+            "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/verified-swordsman-walk-2-pose-guide.png"
+          ],
+          "prompt": "Edit the FIRST female Spearman sprite sheet to the new animation phase below. Keep the same sixteen corresponding body/face directions, identity, costume, weapons, small pixel size and 4x4 reading order. First reference is the identity and size authority: female fair face/auburn hair, pointed teal hood/cape with gold trim, cream skirt/tunic, brown leather gloves/bracers/boots, feathered back quiver, exactly ONE gold-brown shaft spear with silver/lavender diamond point in anatomical RIGHT hand and ONE round blue gold sun shield in LEFT hand. No bow/sword. SECOND reference is a male Swordsman gait/body-direction guide ONLY: do not copy male armor, sword, shield identity or its large sizes (one guide WSW is oversized). All output female bodies uniformly about130\u2013145 pixels hood-to-boots, same tiny drawings as FIRST reference, huge transparent margins; never enlarge to fill cells. Entire spear point/cape/feet intact. Output transparent1280square,16 isolated figures4x4,cell320,boot-contact root local160,275. No text/grid/number/floor/scenery/shadow/newprop/projectile/effect. Directions rows N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. N rear upscreen, E rightprofile, S front downscreen, W leftprofile; ALL intermediate views differ by22.5degrees. Preserve real handedness through rotations; no mirroring/copy/alias. Keep identity and SMALL BODY SIZE from first reference; use second only for corresponding rotation and body-gait. NEW PHASE: Walking phase2 OPPOSITE FOOTFALL: left leg forward and right leg back, left boot grounded. Opposite gait to the primary reference, no mirrored art. Secure spear/right and shield/left."
+        },
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "small-walk-3",
+        "original": "/workspace/generated_images/exec-f23de78e-19ec-4f8a-9c0f-b17652c29336.png",
+        "sha256": "800a6a75b0a1a0c95b0ef6215c74db2f8e448cece194f601dd1283adc0e407fc",
+        "request": {
+          "label": "small-walk-3",
+          "phase": "walk-3",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/reduced-walk-0-unchanged-root-guide.png",
+            "/workspace/rts-browser-qa/mythic-spearman-animation-20261006/evidence/verified-swordsman-walk-3-pose-guide.png"
+          ],
+          "prompt": "Edit the FIRST female Spearman sprite sheet to the new animation phase below. Keep the same sixteen corresponding body/face directions, identity, costume, weapons, small pixel size and 4x4 reading order. First reference is the identity and size authority: female fair face/auburn hair, pointed teal hood/cape with gold trim, cream skirt/tunic, brown leather gloves/bracers/boots, feathered back quiver, exactly ONE gold-brown shaft spear with silver/lavender diamond point in anatomical RIGHT hand and ONE round blue gold sun shield in LEFT hand. No bow/sword. SECOND reference is a male Swordsman gait/body-direction guide ONLY: do not copy male armor, sword, shield identity or its large sizes (one guide WSW is oversized). All output female bodies uniformly about130\u2013145 pixels hood-to-boots, same tiny drawings as FIRST reference, huge transparent margins; never enlarge to fill cells. Entire spear point/cape/feet intact. Output transparent1280square,16 isolated figures4x4,cell320,boot-contact root local160,275. No text/grid/number/floor/scenery/shadow/newprop/projectile/effect. Directions rows N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. N rear upscreen, E rightprofile, S front downscreen, W leftprofile; ALL intermediate views differ by22.5degrees. Preserve real handedness through rotations; no mirroring/copy/alias. Keep identity and SMALL BODY SIZE from first reference; use second only for corresponding rotation and body-gait. NEW PHASE: Walking phase3 OPPOSITE PASSING: left leg moves under torso while right heel lifts, distinct from phase1. Secure spear/right and shield/left."
+        },
+        "sourceLevelOnly": true
+      }
+    ],
+    "rightsBoundary": "Generation does not establish CC0, public-domain status, commercial redistribution clearance or a project-wide license grant."
+  },
+  "cavalryDirectional20261006": {
+    "tool": "Authorized built-in ImageGen",
+    "identity": "Approved Mythic mounted silver/gold closed-visor knight, cobalt/navy plume/cape, chestnut horse with dark mane/tail and blue/gold barding. One right-hand blue/gold striped lance, left hand reins. Original static source crop retained.",
+    "selectedFrames": 144,
+    "headings": 16,
+    "idlePerHeading": 1,
+    "walkPerHeading": 4,
+    "attackPerHeading": 4,
+    "sourceOriginalCount": 13,
+    "packing": {
+      "atlasDimensions": [
+        1536,
+        2432
+      ],
+      "decodedBytes": 14942208,
+      "decodedMiB": 14.25,
+      "initial16MiBSelfTargetMet": true,
+      "hard20MiBCapMet": true,
+      "all144FrameRGBAUnique": true,
+      "allSourceCroppedPackedAndPNGReadbackRGBAExact": true,
+      "allRectanglesDisjoint": true,
+      "noPixelResizingMirroringMaskingRecoloring": true
+    },
+    "assetHashes": {
+      "cavalry-directional.png": "c3de79fbf2055e6e6454fc89b00a6561d4d817fdcb684dc6856a580e69320977",
+      "cavalry-directional.json": "fac045bfdfb77f4f04641133acbd486fa079600c9533cea909e8ddb0e943ac0f"
+    },
+    "selectedSourceInputs": [
+      {
+        "label": "tiny-idle",
+        "original": "/workspace/generated_images/exec-c7c26f12-c369-4ac3-8a7f-18d2f7b5198b.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-idle-original.png",
+        "sourceSHA256": "089886a2234321a0782463f19c228eb1357d5aed5cd5365f9cac3ca7d797f144"
+      },
+      {
+        "label": "tiny-walk-0",
+        "original": "/workspace/generated_images/exec-7dcd4dc3-d97f-4e53-be86-f6dc057fd2b1.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-walk-0-original.png",
+        "sourceSHA256": "2167f733e16140f8584f3a967f7ebf4f50745d0b922561e9b916072b7e5f08ba"
+      },
+      {
+        "label": "tiny-walk-1",
+        "original": "/workspace/generated_images/exec-732db1e3-475d-446a-a20a-6f82596106b2.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-walk-1-original.png",
+        "sourceSHA256": "ed878e00747dc7c0b7601ddb08b7e3599fa6bf73a36962b706164bf40b26b76e"
+      },
+      {
+        "label": "tiny-walk-2",
+        "original": "/workspace/generated_images/exec-6d133797-916d-4a92-8d15-026607dc2a98.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-walk-2-original.png",
+        "sourceSHA256": "f19aef472717bb2c3c42c72d7814e0606801a4c8312ab66e5ff8ed71c55d3b5f"
+      },
+      {
+        "label": "tiny-walk-3",
+        "original": "/workspace/generated_images/exec-83cfcebf-5dcc-4208-bcb7-6db4dfc2114a.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-walk-3-original.png",
+        "sourceSHA256": "f4025aeab0cc840282931c3ebd904ecf045c64b92cf00eb51e95a857c86294dd"
+      },
+      {
+        "label": "tiny-attack-0",
+        "original": "/workspace/generated_images/exec-13e7de43-5008-4241-91fa-59c2df213e8c.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-attack-0-original.png",
+        "sourceSHA256": "2ab2de555f29e82065561cc5e640098917f8b53df65e2240f602842546784459"
+      },
+      {
+        "label": "tiny-attack-1",
+        "original": "/workspace/generated_images/exec-d0ee8d2e-bef4-4da6-a942-aba4c9b0c9e3.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-attack-1-original.png",
+        "sourceSHA256": "9253db77e4fdff55488c049dae2c74b3e89eee50e824c6ddb4889b4d674c0067"
+      },
+      {
+        "label": "tiny-attack-2",
+        "original": "/workspace/generated_images/exec-c3c39bbb-9a07-417a-8661-c516b4d9837a.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-attack-2-original.png",
+        "sourceSHA256": "771ecd4f42f9416e03a6622af8b9fd14aaec2fe50946ace57c1aeefad6893376"
+      },
+      {
+        "label": "tiny-attack-3",
+        "original": "/workspace/generated_images/exec-a8c3d600-f6e5-4f95-b7a6-030473f48186.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-attack-3-original.png",
+        "sourceSHA256": "f4b8d6f1dd4af5ec17cac6e9c1e7b2aa6933cceeb5f0685cae50e56898e53fa3"
+      }
+    ],
+    "originalGenerationRecords": [
+      {
+        "label": "compact-idle",
+        "original": "/workspace/generated_images/exec-1993fb59-2f1a-4b42-9c3f-46bf9cd09bf6.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/compact-idle-original.png",
+        "sha256": "cd777ca0799f5e5b21615fe48e9b429c87f597f682f825c4ba27b013a88204ca",
+        "request": {
+          "label": "compact-idle",
+          "phase": "idle",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/approved-mythic-cavalry-static-reference.png"
+          ],
+          "prompt": "Create a compact transparent game sprite sheet of the EXACT mounted Cavalry unit in the reference, one idle pose from sixteen body/horse facing directions. Keep reference identity: closed-visor silver/steel armored knight with gold armor edging, cobalt/navy plume and blue cape, seated on a chestnut brown horse with dark mane/tail, expressive brown face, blue/navy saddlecloth and barding with gold edging, gold bridle trim and horseshoes. Preserve its ONE long blue-and-gold striped shaft pole weapon with slim gold-edged point, carried in anatomical RIGHT hand; LEFT hand controls reins. Horse and rider are one coherent mounted unit. No added sword, bow, shield, extra rider, extra animal, effects, background, floor or shadow. Rider sits upright, horse stands calmly on four grounded hooves, weapon in raised carry position as reference. Whole weapon point, plume, cape, reins, horse ears, tail and hooves fully intact within each cell. Produce exactly16 isolated uniformly TINY detailed figures in4x4 reading order on transparent1280x1280 canvas, each cell320x320, hoof-contact root near local160,275. CRITICAL compact size: rider plume-top to grounded hooves105\u2013120pixels, horse including tail typically110\u2013140pixels wide in side view, maximum whole weapon+horse bounds about180x185pixels; huge transparent margins, never enlarge to fill cells. Same camera altitude as reference, isometric3/4 game view. Rows facing N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. N is rear horse/rider facing straight upscreen, E right profile, S front facing downscreen, W left profile. All sixteen horse bodies/heads and mounted riders MUST rotate together in22.5degree increments, sixteen distinct views; no repeated or mirrored art. Preserve anatomical handedness through rotations. No text, labels, grid, borders or numbers. Idle only, no gallop or attack. Keep mounted chibi proportions and polished painterly outlines of reference while obeying very small drawing size."
+        },
+        "referenceSHA256": [
+          {
+            "path": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/approved-mythic-cavalry-static-reference.png",
+            "sha256": "cc7104a37800b0888611227efa8d3f333d99f7a09c744096e92d9b599204dd79"
+          }
+        ],
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "reduced-idle",
+        "original": "/workspace/generated_images/exec-fe3e2d4b-372b-4b2a-aa05-c68b45409d66.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/reduced-idle-original.png",
+        "sha256": "113531b6a76bd68e1e7fb6b19dee567314ba65bc0976e72011c6700f31b29d1c",
+        "request": {
+          "label": "reduced-idle",
+          "phase": "idle",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/compact-idle-original.png"
+          ],
+          "prompt": "Edit this exact transparent Cavalry sixteen-view sprite sheet. CRITICAL: redraw each mounted unit at ONLY50percent of its current artwork width and height, keeping1280x1280 canvas and4x4 positions. Actual reference mounted bodies are over200px tall; output knight plume-to-hooves MUST105\u2013115px, whole weapon+horse bounds about120\u2013150px. Very tiny coherent miniature drawings with huge transparent margins. Do not just return original or enlarge to fill cells. Preserve all16 mounted rider/horse facings and reference identity, anatomical right-hand blue/gold striped lance, left-hand reins, silver closed-visor/gold armor, cobalt plume/cape, chestnut horse dark mane/tail, blue/gold barding and gold bridle/horseshoes. Complete isolated weapon point, plume, horse ears, tail and hooves. Place each miniature hoof-root near local160,275 in320x320 cells. Rows N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW: refine intermediate horse/head/body views to visibly distinct22.5degree rotations while preserving handedness; N rear, E rightprofile,S front,W leftprofile. Keep one idle calm standing horse/rider percell. No new props, second weapon, shield, animal, effects, shadow, floor, labels or grid. Transparent background. Pixel size reduction is the main requested edit."
+        },
+        "referenceSHA256": [
+          {
+            "path": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/compact-idle-original.png",
+            "sha256": "cd777ca0799f5e5b21615fe48e9b429c87f597f682f825c4ba27b013a88204ca"
+          }
+        ],
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "small-attack-2",
+        "original": "/workspace/generated_images/exec-592070c3-8198-49ba-bda8-c7a88374800f.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/small-attack-2-original.png",
+        "sha256": "61b106a9e8d25c2f4960eca6cee75b6c99b97fa7724c6b0fe80e3cb16042412e",
+        "request": {
+          "label": "small-attack-2",
+          "phase": "attack-2",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/reduced-idle-original.png"
+          ],
+          "prompt": "Edit this exact compact Cavalry sheet to the animation phase below. Preserve same tiny mounted-unit scale, identity, all sixteen horse AND rider body facings, anatomical handedness and4x4 reading order. Silver closed-visor/gold-edged armored knight with cobalt/navy plume/cape; chestnut brown horse dark mane/tail, blue/gold saddlecloth and barding, gold bridle/horseshoes. ONE blue-and-gold striped lance in anatomical RIGHT hand; LEFT hand reins. Never add shield, sword, extra rider/horse/weapon, projectile, effect, ground or shadow. Keep complete lance point, plume, ears, four real horse legs/hooves, reins/cape/tail without clipping. Output transparent1280square,4x4 cells320; hoofroot near local160,275. Uniform TINY mounted bodies same as reference, approximately120\u2013145px plume-to-hooves, never enlarge tofillcell; fullbounds\u2264230wide\u00d7200high even horizontal lance. Huge transparent margins. Rows N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. N rear upscreen,E rightprofile,S front downscreen,W leftprofile,intermediates distinct22.5degree body/horse turns. No mirrored/copy/alias, labels, numbers or grid. NEW PHASE mounted MELEE LANCE IMPACT2: knight leans forward in saddle and extends right lance in a straight strong thrust toward the target in the horse's exact facing direction; left hand keeps reins. Horse makes small forward planted lunge, not flight. Lance projections MUST follow N UP; NNE steepUP-RIGHT;NE diagonalUP-RIGHT;ENE shallowUP-RIGHT;E RIGHT horizontal;ESE shallowDOWN-RIGHT;SE diagonalDOWN-RIGHT;SSE steepDOWN-RIGHT;S DOWN toward viewer foreshortened;SSW steepDOWN-LEFT;SW diagonalDOWN-LEFT;WSW shallowDOWN-LEFT;W LEFT horizontal;WNW shallowUP-LEFT;NW diagonalUP-LEFT;NNW steepUP-LEFT. Each mounted body and held lance aim corresponds, sixteen distinct orientations. LANCE STAYS ATTACHED TO RIGHT HAND; no upright carry atimpact, overhead slash or thrown projectile. Entire horizontal lance fits inside230px whole-art width."
+        },
+        "referenceSHA256": [
+          {
+            "path": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/reduced-idle-original.png",
+            "sha256": "113531b6a76bd68e1e7fb6b19dee567314ba65bc0976e72011c6700f31b29d1c"
+          }
+        ],
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "small-walk-0",
+        "original": "/workspace/generated_images/exec-5d81c5e1-3a0a-4e10-a184-87ae22004f0b.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/small-walk-0-original.png",
+        "sha256": "fe7a5073a11bf3a88189e3c21a4d3f7c5ae2ccc594f208b3f5c639d9b15f8a5c",
+        "request": {
+          "label": "small-walk-0",
+          "phase": "walk-0",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/reduced-idle-original.png"
+          ],
+          "prompt": "Edit this exact compact Cavalry sheet to the animation phase below. Preserve same tiny mounted-unit scale, identity, all sixteen horse AND rider body facings, anatomical handedness and4x4 reading order. Silver closed-visor/gold-edged armored knight with cobalt/navy plume/cape; chestnut brown horse dark mane/tail, blue/gold saddlecloth and barding, gold bridle/horseshoes. ONE blue-and-gold striped lance in anatomical RIGHT hand; LEFT hand reins. Never add shield, sword, extra rider/horse/weapon, projectile, effect, ground or shadow. Keep complete lance point, plume, ears, four real horse legs/hooves, reins/cape/tail without clipping. Output transparent1280square,4x4 cells320; hoofroot near local160,275. Uniform TINY mounted bodies same as reference, approximately120\u2013145px plume-to-hooves, never enlarge tofillcell; fullbounds\u2264230wide\u00d7200high even horizontal lance. Huge transparent margins. Rows N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW. N rear upscreen,E rightprofile,S front downscreen,W leftprofile,intermediates distinct22.5degree body/horse turns. No mirrored/copy/alias, labels, numbers or grid. NEW PHASE horse controlled TROT footfall0: horse LEFT FORELEG and RIGHT HINDLEG advance as diagonal pair; RIGHT FORELEG and LEFT HINDLEG trail. Four leg anatomy remains coherent from everyview; occlusion is natural. Rider lightly rises/flexes with trot while right lance stays safely upright in carry position and left hand reins. Visibly walking/trotting rather than idle standing. No feet detached."
+        },
+        "referenceSHA256": [
+          {
+            "path": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/reduced-idle-original.png",
+            "sha256": "113531b6a76bd68e1e7fb6b19dee567314ba65bc0976e72011c6700f31b29d1c"
+          }
+        ],
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "tiny-attack-0",
+        "original": "/workspace/generated_images/exec-13e7de43-5008-4241-91fa-59c2df213e8c.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-attack-0-original.png",
+        "sha256": "2ab2de555f29e82065561cc5e640098917f8b53df65e2240f602842546784459",
+        "request": {
+          "label": "tiny-attack-0",
+          "phase": "attack-0",
+          "prompt": "Edit FIRST reference tiny Cavalry sixteen-view sheet to newphase. FIRST is exact mountedidentity and SMALL PIXEL SIZE authority: silver closed-visor knight with gold armortrim,cobalt/navy plume/cape; chestnut brown horse dark mane/tail,blue/gold barding/saddlecloth,gold bridle/horseshoes. One anatomical RIGHT-hand blue/gold striped lance,LEFT-hand reins. Horse+rider rotate together at16 corresponding headings. Keep all output mounted bodies uniformly100\u2013115pixels plume-to-hooves, the same genuinely tiny source drawings, never enlarge to fill cell. Whole weapon/horse\u2264190wide\u00d7180high,entire point/plume/ears/cape/tail/hooves intact. Transparent1280square,4x4 cells320,hoofroot local160,275;huge clear margins. Rows N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW;N rear,E rightprofile,S front,W leftprofile,intermediatesdistinct22.5degree mountedbody/horse views. Keep anatomical handedness, no mirrors/copy/alias. No sword/shield/extraanimal/rider/weapon/projectile/effects/floor/shadow/text/grid/number. NEW PHASE: Mounted melee lance phase0 READY: horse planted alert stance,knight lowers held right lance from uprightcarry toward front atabout45degrees, sittingreadywithslight forwardlean,left hand reins. Distinct from fully extended horizontalimpact and quietidle. Preserve16 bodyaims.",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-walk-0-original.png"
+          ]
+        },
+        "referenceSHA256": [
+          {
+            "path": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-walk-0-original.png",
+            "sha256": "2167f733e16140f8584f3a967f7ebf4f50745d0b922561e9b916072b7e5f08ba"
+          }
+        ],
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "tiny-attack-1",
+        "original": "/workspace/generated_images/exec-d0ee8d2e-bef4-4da6-a942-aba4c9b0c9e3.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-attack-1-original.png",
+        "sha256": "9253db77e4fdff55488c049dae2c74b3e89eee50e824c6ddb4889b4d674c0067",
+        "request": {
+          "label": "tiny-attack-1",
+          "phase": "attack-1",
+          "prompt": "Edit FIRST reference tiny Cavalry sixteen-view sheet to newphase. FIRST is exact mountedidentity and SMALL PIXEL SIZE authority: silver closed-visor knight with gold armortrim,cobalt/navy plume/cape; chestnut brown horse dark mane/tail,blue/gold barding/saddlecloth,gold bridle/horseshoes. One anatomical RIGHT-hand blue/gold striped lance,LEFT-hand reins. Horse+rider rotate together at16 corresponding headings. Keep all output mounted bodies uniformly100\u2013115pixels plume-to-hooves, the same genuinely tiny source drawings, never enlarge to fill cell. Whole weapon/horse\u2264190wide\u00d7180high,entire point/plume/ears/cape/tail/hooves intact. Transparent1280square,4x4 cells320,hoofroot local160,275;huge clear margins. Rows N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW;N rear,E rightprofile,S front,W leftprofile,intermediatesdistinct22.5degree mountedbody/horse views. Keep anatomical handedness, no mirrors/copy/alias. No sword/shield/extraanimal/rider/weapon/projectile/effects/floor/shadow/text/grid/number. NEW PHASE: Mounted melee lance phase1 WINDUP: knight coils torso/right shoulder and draws right-hand lance rearward beside shoulder before forwardthrust,horse braces with flexed forelegs,left hand reins. Visiblydistinct preparatorywithdrawal versus READY and IMPACT. Lance remainsheld, not swordslash.",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-walk-0-original.png"
+          ]
+        },
+        "referenceSHA256": [
+          {
+            "path": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-walk-0-original.png",
+            "sha256": "2167f733e16140f8584f3a967f7ebf4f50745d0b922561e9b916072b7e5f08ba"
+          }
+        ],
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "tiny-attack-2",
+        "original": "/workspace/generated_images/exec-c3c39bbb-9a07-417a-8661-c516b4d9837a.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-attack-2-original.png",
+        "sha256": "771ecd4f42f9416e03a6622af8b9fd14aaec2fe50946ace57c1aeefad6893376",
+        "request": {
+          "label": "tiny-attack-2",
+          "phase": "attack-2",
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/small-attack-2-unchanged-large-margin-guide.png"
+          ],
+          "transparent_background": true,
+          "prompt": "Edit this sixteen-view Cavalry guide into a compact transparent1280x1280 sprite sheet. The guide canvas is2048 with512px cells and unchanged large source figures. CRITICAL: redraw EACH horse-and-rider figure at50percent of its actual reference pixel width and height, not just crop the big canvas. Mounted knight plume-to-hooves105\u2013115px, complete overall weapon/horse bounds generally120\u2013160px and maximum180x170px. Sixteen very tiny finely drawn miniatures amid huge transparent margins,4x4 cells320px,hoof-root near local160,275. Do not enlarge figures to fill cells. Keep every corresponding direction and attack-2 pose exactly: the same actual forward lance thrust impact, each held right-hand lance following its body/horse target direction, including E horizontalright,W horizontalleft,Nup,Sdown foreshortened. Do not replace thrust with upright carry. Preserve closed-visor silver/gold armored knight, cobalt/navy plume/cape, chestnut horse dark mane/tail, blue/gold barding,saddlecloth,gold bridle/hooves. Preserve anatomical right lance/left reins through allrotations. Same16 head/body facings in row order N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW, distinct22.5degree horse and mounted rider views. Complete weapon point,cape,plume,ears,tail,hooves; no clipping/overlaps, background, shadow, floor, grid, label, number, extra animal/rider/weapon/shield/projectile/effects. Main edit is halving artwork pixel dimensions; all phase and identity stay."
+        },
+        "referenceSHA256": [
+          {
+            "path": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/small-attack-2-unchanged-large-margin-guide.png",
+            "sha256": "bd1d5782a63b5d9862e2865ef39382b9dd78a641091453c03e3c47d623b65321"
+          }
+        ],
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "tiny-attack-3",
+        "original": "/workspace/generated_images/exec-a8c3d600-f6e5-4f95-b7a6-030473f48186.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-attack-3-original.png",
+        "sha256": "f4b8d6f1dd4af5ec17cac6e9c1e7b2aa6933cceeb5f0685cae50e56898e53fa3",
+        "request": {
+          "label": "tiny-attack-3",
+          "phase": "attack-3",
+          "prompt": "Edit FIRST reference tiny Cavalry sixteen-view sheet to newphase. FIRST is exact mountedidentity and SMALL PIXEL SIZE authority: silver closed-visor knight with gold armortrim,cobalt/navy plume/cape; chestnut brown horse dark mane/tail,blue/gold barding/saddlecloth,gold bridle/horseshoes. One anatomical RIGHT-hand blue/gold striped lance,LEFT-hand reins. Horse+rider rotate together at16 corresponding headings. Keep all output mounted bodies uniformly100\u2013115pixels plume-to-hooves, the same genuinely tiny source drawings, never enlarge to fill cell. Whole weapon/horse\u2264190wide\u00d7180high,entire point/plume/ears/cape/tail/hooves intact. Transparent1280square,4x4 cells320,hoofroot local160,275;huge clear margins. Rows N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW;N rear,E rightprofile,S front,W leftprofile,intermediatesdistinct22.5degree mountedbody/horse views. Keep anatomical handedness, no mirrors/copy/alias. No sword/shield/extraanimal/rider/weapon/projectile/effects/floor/shadow/text/grid/number. NEW PHASE: Mounted melee lance phase3 RECOVERY after forwardthrust: knight withdraws right arm and lance tohalf-raisedguard, settles backinsaddle,horse eases to stable stance,left hand reins. Distinct from IMPACT extendedlance,READY,andIDLE. No projectile.",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-walk-0-original.png"
+          ]
+        },
+        "referenceSHA256": [
+          {
+            "path": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-walk-0-original.png",
+            "sha256": "2167f733e16140f8584f3a967f7ebf4f50745d0b922561e9b916072b7e5f08ba"
+          }
+        ],
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "tiny-idle",
+        "original": "/workspace/generated_images/exec-c7c26f12-c369-4ac3-8a7f-18d2f7b5198b.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-idle-original.png",
+        "sha256": "089886a2234321a0782463f19c228eb1357d5aed5cd5365f9cac3ca7d797f144",
+        "request": {
+          "label": "tiny-idle",
+          "phase": "idle",
+          "prompt": "Edit FIRST reference tiny Cavalry sixteen-view sheet to newphase. FIRST is exact mountedidentity and SMALL PIXEL SIZE authority: silver closed-visor knight with gold armortrim,cobalt/navy plume/cape; chestnut brown horse dark mane/tail,blue/gold barding/saddlecloth,gold bridle/horseshoes. One anatomical RIGHT-hand blue/gold striped lance,LEFT-hand reins. Horse+rider rotate together at16 corresponding headings. Keep all output mounted bodies uniformly100\u2013115pixels plume-to-hooves, the same genuinely tiny source drawings, never enlarge to fill cell. Whole weapon/horse\u2264190wide\u00d7180high,entire point/plume/ears/cape/tail/hooves intact. Transparent1280square,4x4 cells320,hoofroot local160,275;huge clear margins. Rows N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW;N rear,E rightprofile,S front,W leftprofile,intermediatesdistinct22.5degree mountedbody/horse views. Keep anatomical handedness, no mirrors/copy/alias. No sword/shield/extraanimal/rider/weapon/projectile/effects/floor/shadow/text/grid/number. NEW PHASE: Idle quiet standing: all four horse legs form natural planted stance, mounted knight sits calmly upright, right-hand lance raised in safe carry, left reins. Distinct from trotting legs and impact lean.",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-walk-0-original.png"
+          ]
+        },
+        "referenceSHA256": [
+          {
+            "path": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-walk-0-original.png",
+            "sha256": "2167f733e16140f8584f3a967f7ebf4f50745d0b922561e9b916072b7e5f08ba"
+          }
+        ],
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "tiny-walk-0",
+        "original": "/workspace/generated_images/exec-7dcd4dc3-d97f-4e53-be86-f6dc057fd2b1.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-walk-0-original.png",
+        "sha256": "2167f733e16140f8584f3a967f7ebf4f50745d0b922561e9b916072b7e5f08ba",
+        "request": {
+          "label": "tiny-walk-0",
+          "phase": "walk-0",
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/small-walk-0-unchanged-large-margin-guide.png"
+          ],
+          "transparent_background": true,
+          "prompt": "Edit this sixteen-view Cavalry guide into a compact transparent1280x1280 sprite sheet. The guide canvas is2048 with512px cells and unchanged large source figures. CRITICAL: redraw EACH horse-and-rider figure at50percent of its actual reference pixel width and height, not just crop the big canvas. Mounted knight plume-to-hooves105\u2013115px, complete overall weapon/horse bounds generally120\u2013160px and maximum180x170px. Sixteen very tiny finely drawn miniatures amid huge transparent margins,4x4 cells320px,hoof-root near local160,275. Do not enlarge figures to fill cells. Keep every corresponding direction and walk-0 pose exactly: the same diagonal-pair trot footfall, ONE right-hand lance carried upright, left hand reins. Preserve closed-visor silver/gold armored knight, cobalt/navy plume/cape, chestnut horse dark mane/tail, blue/gold barding,saddlecloth,gold bridle/hooves. Preserve anatomical right lance/left reins through allrotations. Same16 head/body facings in row order N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW, distinct22.5degree horse and mounted rider views. Complete weapon point,cape,plume,ears,tail,hooves; no clipping/overlaps, background, shadow, floor, grid, label, number, extra animal/rider/weapon/shield/projectile/effects. Main edit is halving artwork pixel dimensions; all phase and identity stay."
+        },
+        "referenceSHA256": [
+          {
+            "path": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/small-walk-0-unchanged-large-margin-guide.png",
+            "sha256": "69583b0daaf0f7a3af9ebc2573691c96baec1d74410db4e553f1739966c384b6"
+          }
+        ],
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "tiny-walk-1",
+        "original": "/workspace/generated_images/exec-732db1e3-475d-446a-a20a-6f82596106b2.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-walk-1-original.png",
+        "sha256": "ed878e00747dc7c0b7601ddb08b7e3599fa6bf73a36962b706164bf40b26b76e",
+        "request": {
+          "label": "tiny-walk-1",
+          "phase": "walk-1",
+          "prompt": "Edit FIRST reference tiny Cavalry sixteen-view sheet to newphase. FIRST is exact mountedidentity and SMALL PIXEL SIZE authority: silver closed-visor knight with gold armortrim,cobalt/navy plume/cape; chestnut brown horse dark mane/tail,blue/gold barding/saddlecloth,gold bridle/horseshoes. One anatomical RIGHT-hand blue/gold striped lance,LEFT-hand reins. Horse+rider rotate together at16 corresponding headings. Keep all output mounted bodies uniformly100\u2013115pixels plume-to-hooves, the same genuinely tiny source drawings, never enlarge to fill cell. Whole weapon/horse\u2264190wide\u00d7180high,entire point/plume/ears/cape/tail/hooves intact. Transparent1280square,4x4 cells320,hoofroot local160,275;huge clear margins. Rows N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW;N rear,E rightprofile,S front,W leftprofile,intermediatesdistinct22.5degree mountedbody/horse views. Keep anatomical handedness, no mirrors/copy/alias. No sword/shield/extraanimal/rider/weapon/projectile/effects/floor/shadow/text/grid/number. NEW PHASE: Trot phase1 PASSING after left-fore/right-hind footfall: that diagonal pair passes beneath body, opposite pair begins lifting/advancing. Horse knees/hocks flex; rider gently follows saddle motion. Upright safe right-hand lance and left reins. Distinct from phase0 extended footfall, four-leg anatomy coherent.",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-walk-0-original.png"
+          ]
+        },
+        "referenceSHA256": [
+          {
+            "path": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-walk-0-original.png",
+            "sha256": "2167f733e16140f8584f3a967f7ebf4f50745d0b922561e9b916072b7e5f08ba"
+          }
+        ],
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "tiny-walk-2",
+        "original": "/workspace/generated_images/exec-6d133797-916d-4a92-8d15-026607dc2a98.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-walk-2-original.png",
+        "sha256": "f19aef472717bb2c3c42c72d7814e0606801a4c8312ab66e5ff8ed71c55d3b5f",
+        "request": {
+          "label": "tiny-walk-2",
+          "phase": "walk-2",
+          "prompt": "Edit FIRST reference tiny Cavalry sixteen-view sheet to newphase. FIRST is exact mountedidentity and SMALL PIXEL SIZE authority: silver closed-visor knight with gold armortrim,cobalt/navy plume/cape; chestnut brown horse dark mane/tail,blue/gold barding/saddlecloth,gold bridle/horseshoes. One anatomical RIGHT-hand blue/gold striped lance,LEFT-hand reins. Horse+rider rotate together at16 corresponding headings. Keep all output mounted bodies uniformly100\u2013115pixels plume-to-hooves, the same genuinely tiny source drawings, never enlarge to fill cell. Whole weapon/horse\u2264190wide\u00d7180high,entire point/plume/ears/cape/tail/hooves intact. Transparent1280square,4x4 cells320,hoofroot local160,275;huge clear margins. Rows N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW;N rear,E rightprofile,S front,W leftprofile,intermediatesdistinct22.5degree mountedbody/horse views. Keep anatomical handedness, no mirrors/copy/alias. No sword/shield/extraanimal/rider/weapon/projectile/effects/floor/shadow/text/grid/number. NEW PHASE: Trot phase2 OPPOSITE FOOTFALL: RIGHT FORELEG and LEFT HINDLEG advance, LEFT FORELEG and RIGHT HINDLEG trail, reverse diagonal-pair gait from phase0 without mirroring artwork. Horse/rider lightly bob, lance upright/right,reins left.",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-walk-0-original.png"
+          ]
+        },
+        "referenceSHA256": [
+          {
+            "path": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-walk-0-original.png",
+            "sha256": "2167f733e16140f8584f3a967f7ebf4f50745d0b922561e9b916072b7e5f08ba"
+          }
+        ],
+        "sourceLevelOnly": true
+      },
+      {
+        "label": "tiny-walk-3",
+        "original": "/workspace/generated_images/exec-83cfcebf-5dcc-4208-bcb7-6db4dfc2114a.png",
+        "preservedCopy": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-walk-3-original.png",
+        "sha256": "f4025aeab0cc840282931c3ebd904ecf045c64b92cf00eb51e95a857c86294dd",
+        "request": {
+          "label": "tiny-walk-3",
+          "phase": "walk-3",
+          "prompt": "Edit FIRST reference tiny Cavalry sixteen-view sheet to newphase. FIRST is exact mountedidentity and SMALL PIXEL SIZE authority: silver closed-visor knight with gold armortrim,cobalt/navy plume/cape; chestnut brown horse dark mane/tail,blue/gold barding/saddlecloth,gold bridle/horseshoes. One anatomical RIGHT-hand blue/gold striped lance,LEFT-hand reins. Horse+rider rotate together at16 corresponding headings. Keep all output mounted bodies uniformly100\u2013115pixels plume-to-hooves, the same genuinely tiny source drawings, never enlarge to fill cell. Whole weapon/horse\u2264190wide\u00d7180high,entire point/plume/ears/cape/tail/hooves intact. Transparent1280square,4x4 cells320,hoofroot local160,275;huge clear margins. Rows N,NNE,NE,ENE / E,ESE,SE,SSE / S,SSW,SW,WSW / W,WNW,NW,NNW;N rear,E rightprofile,S front,W leftprofile,intermediatesdistinct22.5degree mountedbody/horse views. Keep anatomical handedness, no mirrors/copy/alias. No sword/shield/extraanimal/rider/weapon/projectile/effects/floor/shadow/text/grid/number. NEW PHASE: Trot phase3 OPPOSITE PASSING: right-fore/left-hind pair passes beneath body, left-fore/right-hind begins advancing, distinct from phase1. Rider gently follows saddle, coherent fourleg horse, right lance safelyupright,left reins.",
+          "transparent_background": true,
+          "referenced_image_paths": [
+            "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-walk-0-original.png"
+          ]
+        },
+        "referenceSHA256": [
+          {
+            "path": "/workspace/rts-browser-qa/mythic-cavalry-animation-20261006/evidence/tiny-walk-0-original.png",
+            "sha256": "2167f733e16140f8584f3a967f7ebf4f50745d0b922561e9b916072b7e5f08ba"
+          }
+        ],
+        "sourceLevelOnly": true
+      }
+    ],
+    "rightsBoundary": "Generation does not establish CC0, public-domain status, commercial redistribution clearance or a project-wide license grant."
   }
 }

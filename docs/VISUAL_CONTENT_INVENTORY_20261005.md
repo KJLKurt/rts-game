@@ -1,5 +1,7 @@
 # Visual content requirements and actual delivery
 
+Current checkpoint: **fc-0f1a6b425705**, with the complete final **400-pass / 18-intentional-skip / zero-failure** 418-case gate. Prior candidate, publication-hold and pending-gate statements below retain their historical context. Later UI design and campaign work are separate. See the current [README](../README.md).
+
 This inventory separates the recovered original 56-section brief from later active commitments. It describes shipped files, not reference pictures or proposed packs. The 5 October visual batch extends the locally verified ranged-stance source; the lead integrates and publishes it separately.
 
 ## Original scope and qualifiers
@@ -46,3 +48,34 @@ Production PNGs and manifests are under `public/assets/render/`. Their selected-
 ## Acceptance evidence
 
 The separate final visual QA report records exact build/runtime/cache identifiers, unit/browser totals, native gameplay inputs, screenshots, theme persistence, unchanged earned history, offline/subpath behavior and any limitations. Native-size art-gallery fixtures are labeled as renderer pixel evidence, not naturally played matches or proof that the game is fun. The existing simulation rules and owned eight-game/three-win profile are preserved.
+
+## Archer candidate addendum — 6 October 2026
+
+The current Mythic candidate includes Ranger, Swordsman and Archer:432/1296 authored family frames, each16 headings × (idle1/walk4/attack4). Six actors864 frames remain. The Archer actor-owned atlas is1536×2816,144 unique frames,16.5 MiB decoded. All three textures load atomically with the full static theme; portraits still use the approved static role. Ranger and Swordsman pixels are unchanged. Existing source projectile/damage events drive Archer firing; pause and reduced motion retain existing behavior. The earlier two-actor inventory is the previous batch, superseded for current coverage by this addendum. No other theme/style/music or authored hit/death completion is implied.
+
+Actual native galleries, mouse/touch attacks, three natural human-team firing continuations and exact online/offline saves are recorded in [ARCHER_ANIMATION_QA_20261006.md](ARCHER_ANIMATION_QA_20261006.md). A separate full364 receipt records broad regression. Total directional decode is65.9375 MiB plus static art; physical-device memory/FPS and novice fun remain unverified.
+
+
+### Spearman inventory addition — 6 October 2026
+
+Mythic Spearman has 144 unique frames: sixteen headings with one idle, four walk and four spear-thrust phases. Unchanged ImageGen source crops pack into 2560×1664 RGBA, 16.25 MiB decoded. The initial 16 MiB target misses by 0.25 MiB; the 20 MiB cap passes. Eleven originals with exact prompts include two oversized rejected pilots. Six prior Ranger/Swordsman/Archer assets stay byte-identical. Four complete actors cover 576/1296 family frames; cavalry, siege, support, warlord and engineer still require 720 frames. All four directional textures total 82.1875 MiB decoded plus roughly 6 MiB static art; physical-phone memory and frame rate are unmeasured. Native galleries, real source/input/natural combat evidence, building/crest/caption occlusion and publication-gate limits are in `SPEARMAN_ANIMATION_QA_20261006.md`.
+
+
+## Cavalry directional animation — local reviewed candidate 2026-10-06
+
+Cavalry adds 144 original frames at sixteen headings, 14.25 MiB decoded, bringing five complete actors to 720/1296 frames. Candidate fc-fe6ef97ce9bd has 588 unit passes, 52 focused browser passes, three cache upgrades and 48 real native combat scenes. Three owned match continuations produced 39/34/41 human attack hits with exact online/offline saves; all recruits died by the final screenshots. Full 376-case receipt is required separately. Depot/crest/caption occlusion and dense picking remain visible quality issues. See [Cavalry local QA](CAVALRY_ANIMATION_QA_20261006.md). Accepted source does not imply publication; parent main remains last confirmed 40b4a3d. Preserve existing publication history and locator cleanup when merging this append-only addition.
+
+
+## 2026-10-06 visibility/picking integration candidate
+
+No new art or animation frames. A separate Swordsman-baseline renderer/HUD candidate improves scenery overlap, ground faction identity, body-clear deposit captions and actual sprite-alpha picking; it preserves all existing actor assets. Native desktop/portrait/landscape input and actual saved combat are documented in [visibility review](VISIBILITY_PICKING_QA_20261006.md). Full regression and lead publication remain separate gates.
+
+
+### Superseding visibility ground-marker correction — 2026-10-06
+
+Hold first-stage `fc-9708c3913116`: native commander ground-marker taps queued a tiny Move. Corrected `fc-48ef95e814c0` preserves painted ground-marker selection below opaque sprite pixels; 21 targeted native checks pass, including all three commanders/both themes/three widths, and three earned continuations each produce eight Ranger damage hits with exact offline restoration. Full394 acceptance is reported separately. No new actor art. See [corrected review](VISIBILITY_PICKING_QA_20261006.md).
+
+
+## Combined actor and corrected visibility candidate — 2026-10-06
+
+Frozen pre-full buildfc-4a71fd4dca98 passes588units/64files,8missions,TS/build,40exactrepeat outputs and3first-attempt earned native targeting/offline continuations. Five unchanged actor packs cover720/1296frames; corrected visibility code is combined without sim/content/audio changes. Full412 gate remains separately required. See docs/COMBINED_ACTOR_VISIBILITY_QA_20261006.md (repository root) and COMBINED_REQUIREMENTS_AUDIT_20261006.md. No publication; four UI boards remain proposals.

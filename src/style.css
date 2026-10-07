@@ -3957,3 +3957,10 @@ footer .build-identifier {
   min-width: 44px;
   min-height: 44px;
 }
+
+/* Pause status shares the clock slot; Resume stays in the existing HUD button. */
+.hud-clock { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
+.hud-clock #paused-ribbon { position: static; transform: none; width: auto; max-width: none; padding: 0; background: none; border: 0; box-shadow: none; color: var(--gold); white-space: nowrap; pointer-events: none; flex-direction: column; align-items: flex-end; gap: 0; font-size: 8px; line-height: 9px; }
+.hud-clock #paused-ribbon.visible { display: flex; }
+.hud-clock #paused-ribbon.visible.hint-visible { display: none; }
+.hud-clock #paused-ribbon > span, .hud-clock #paused-ribbon > small { font-size: 8px; line-height: 9px; font-weight: 600; }

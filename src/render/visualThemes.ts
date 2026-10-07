@@ -12,7 +12,12 @@ export const VISUAL_THEMES = {
     atlas: 'assets/render/themes/mythic-toon/atlas.json',
     attackAtlas: null,
     directionalAtlas: 'assets/render/themes/mythic-toon/ranger-directional.json',
-    additionalDirectionalAtlases: ['assets/render/themes/mythic-toon/swordsman-directional.json'],
+    additionalDirectionalAtlases: [
+      'assets/render/themes/mythic-toon/swordsman-directional.json',
+      'assets/render/themes/mythic-toon/archer-directional.json',
+      'assets/render/themes/mythic-toon/spearman-directional.json',
+      'assets/render/themes/mythic-toon/cavalry-directional.json',
+    ],
   },
 } as const;
 

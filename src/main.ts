@@ -1,5 +1,5 @@
 import { observeControlDeck, battlefieldCenterY } from "./ui/deck-layout";
-import type { ScreenRect } from "./render/troop-summary";
+import { troopSummaryPosition, type ScreenRect } from "./render/troop-summary";
 import { aboutHTML } from "./ui/about";
 import { BUILD_ID } from "./platform/build-info";
 import { renderResearchTree } from "./ui/research";
@@ -315,6 +315,8 @@ function planningState() {
 }
 const hudHTML = new Map<string, string>();
 let playfieldCenterY = innerHeight / 2;
+let commanderFocusFitted = false;
+let commanderFrameCache: { key: string; point: Point | undefined } | undefined;
 let stopDeckObservation = () => {};
 const debugEnabled = new URLSearchParams(location.search).has("debug");
 let debugReveal = false;
@@ -483,6 +485,8 @@ function launchGame(
   planningSnapshot = null;
   planningSignature = "";
   deckCollapsed = true;
+  commanderFocusFitted = false;
+  commanderFrameCache = undefined;
   recruitBatch = 1;
   learningProgress = state.settings.learning
     ? restoreLearning(state, null)
@@ -556,7 +560,7 @@ function launchGame(
 function renderGameShell() {
   stopDeckObservation();
   hudHTML.clear();
-  screen.innerHTML = `<header class="hud"><button class="brand-button" data-action="pause-menu" aria-label="Battle menu">${icon("crown")}</button><div class="resources"><button data-action="economy" title="Gold and income sources" aria-label="Gold and income sources">${icon("gold")}<b id="gold">0</b></button><button data-action="economy" title="Wood and income sources" aria-label="Wood and income sources">${icon("wood")}<b id="wood">0</b></button><button data-action="economy" title="Population and maximum capacity" aria-label="Population and maximum capacity">${icon("flag")}<b id="population">0</b></button></div><div class="hud-time" id="match-time">0:00</div><button class="pause-button" data-action="pause" aria-label="Tactical pause">${icon("pause")}</button></header><div class="objective-bar" id="objective"></div><div class="battle-hint" id="battle-hint"></div><div class="map-controls">${button("Focus commander", "focus", "square", "crosshair")}${button("Zoom in", "zoom-in", "square", "plus")}${button("Zoom out", "zoom-out", "square", "minus")}</div><div class="minimap-wrap"><button class="minimap-toggle" data-action="toggle-minimap" aria-label="Minimize minimap">Map −</button><canvas id="minimap" width="160" height="120" aria-label="Minimap: tap to move camera"></canvas><span id="map-seed"></span></div><div class="commander-strip" id="commander-strip"></div><div id="joystick" aria-label="Drag to move commander" role="application"><div class="joystick-ring"></div><div class="joystick-stick">${icon("crosshair")}</div></div><div class="ability-dock" id="abilities"></div><section class="command-deck"><div class="selection-row"><div class="selection-info" id="selection-info"></div><div class="selection-tools">${button("Minimize panel", "toggle-deck", "deck-toggle", "minus")}${button("Commander", "select-commander", "", "crown")}${button("Army", "select-army", "", "flag")}${button("Relic", "march-relic", "relic-command", "spark", 'aria-label="March to relic"')}${button("Hold", "hold", "", "hold")}</div></div><nav class="deck-tabs">${button("Details", "panel-inspect", "", "book")}${button("Recruit", "panel-army", "active", "sword")}${button("Build", "panel-build", "", "house")}${button("Research", "panel-research", "", "spark")}${button("Orders", "panel-orders", "", "flag")}</nav><div class="deck-content" id="deck-content"></div></section><div id="placement-controls"></div><div class="paused-ribbon" id="paused-ribbon"></div>`;
+  screen.innerHTML = `<header class="hud"><button class="brand-button" data-action="pause-menu" aria-label="Battle menu">${icon("crown")}</button><div class="resources"><button data-action="economy" title="Gold and income sources" aria-label="Gold and income sources">${icon("gold")}<b id="gold">0</b></button><button data-action="economy" title="Wood and income sources" aria-label="Wood and income sources">${icon("wood")}<b id="wood">0</b></button><button data-action="economy" title="Population and maximum capacity" aria-label="Population and maximum capacity">${icon("flag")}<b id="population">0</b></button></div><div class="hud-clock"><div class="hud-time" id="match-time">0:00</div><div class="paused-ribbon" id="paused-ribbon"></div></div><button class="pause-button" data-action="pause" aria-label="Tactical pause">${icon("pause")}</button></header><div class="objective-bar" id="objective"></div><div class="battle-hint" id="battle-hint"></div><div class="map-controls">${button("Focus commander", "focus", "square", "crosshair")}${button("Zoom in", "zoom-in", "square", "plus")}${button("Zoom out", "zoom-out", "square", "minus")}</div><div class="minimap-wrap"><button class="minimap-toggle" data-action="toggle-minimap" aria-label="Minimize minimap">Map −</button><canvas id="minimap" width="160" height="120" aria-label="Minimap: tap to move camera"></canvas><span id="map-seed"></span></div><div class="commander-strip" id="commander-strip"></div><div id="joystick" aria-label="Drag to move commander" role="application"><div class="joystick-ring"></div><div class="joystick-stick">${icon("crosshair")}</div></div><div class="ability-dock" id="abilities"></div><section class="command-deck"><div class="selection-row"><div class="selection-info" id="selection-info"></div><div class="selection-tools">${button("Minimize panel", "toggle-deck", "deck-toggle", "minus")}${button("Commander", "select-commander", "", "crown")}${button("Army", "select-army", "", "flag")}${button("Relic", "march-relic", "relic-command", "spark", 'aria-label="March to relic"')}${button("Hold", "hold", "", "hold")}</div></div><nav class="deck-tabs">${button("Details", "panel-inspect", "", "book")}${button("Recruit", "panel-army", "active", "sword")}${button("Build", "panel-build", "", "house")}${button("Research", "panel-research", "", "spark")}${button("Orders", "panel-orders", "", "flag")}</nav><div class="deck-content" id="deck-content"></div></section><div id="placement-controls"></div>`;
   if (workshopTest.active)
     screen.insertAdjacentHTML(
       "beforeend",
@@ -936,7 +940,7 @@ function updateHUD() {
   set(
     "paused-ribbon",
     state.paused
-      ? `${icon("pause")} TACTICAL PAUSE <span>Plan your next move. ${state.pendingCommands.length} orders queued.</span>${button("Resume", "pause", "", "play")}`
+      ? `<span>Paused</span><small>${state.pendingCommands.length} queued</small>`
       : "",
   );
   document
@@ -1288,6 +1292,8 @@ async function continueGame(checkpoint?: unknown) {
     resultShown = false;
     lastEvent = state.nextEventId;
     selection = new Set(commander() ? [commander()!.id] : []);
+    commanderFocusFitted = false;
+    commanderFrameCache = undefined;
     document.body.classList.add("in-game");
     renderer.camera.zoom =
       innerHeight < 500 && innerWidth > 600
@@ -2265,7 +2271,7 @@ async function performAction(action: string, id?: string) {
       const c = commander();
       if (c) {
         selection = new Set([c.id]);
-        centerCommander(c);
+        centerCommander(c, true);
         followCommander = true;
         placement = null;
         audio.play("select");
@@ -3346,18 +3352,48 @@ function measurePlayfield() {
   });
   measureTroopSummaryObstacles();
 }
+/** Include the commander's silhouette, health bar and banner in the clear area.
+ * Reuse the existing control exclusions and cache layout work between HUD changes. */
+function commanderFrame(): Point | undefined {
+  const zoom = renderer.camera.zoom;
+  const key = `${innerWidth}/${innerHeight}/${zoom}/${troopSummaryObstacles.map(r => `${r.x},${r.y},${r.w},${r.h}`).join(";")}`;
+  if (commanderFrameCache?.key === key) return commanderFrameCache.point;
+  const above = 86 * zoom, below = 30 * zoom, halfWidth = 44 * zoom;
+  const rect = troopSummaryPosition(
+    { x: innerWidth / 2, y: playfieldCenterY + below },
+    { w: halfWidth * 2, h: above + below },
+    { w: innerWidth, h: innerHeight }, troopSummaryObstacles, [], [],
+  );
+  const point = rect ? { x: rect.x + halfWidth, y: rect.y + above } : undefined;
+  commanderFrameCache = { key, point };
+  return point;
+}
 function cameraFocus(point: Point): Point {
+  const framed = (point as Partial<Entity>).kind === "commander" && commanderFocusFitted
+    ? commanderFrame() : undefined;
   const middle = renderer.screenToWorld(innerWidth / 2, innerHeight / 2),
     shifted = renderer.screenToWorld(
-      innerWidth / 2,
-      innerHeight - playfieldCenterY,
+      innerWidth - (framed?.x ?? innerWidth / 2),
+      innerHeight - (framed?.y ?? playfieldCenterY),
     );
   return {
     x: point.x + shifted.x - middle.x,
     y: point.y + shifted.y - middle.y,
   };
 }
-function centerCommander(point: Point) {
+function centerCommander(point: Point, revealCommander = false) {
+  if (revealCommander && (point as Partial<Entity>).kind === "commander" && renderer.camera.zoom > 1.35) {
+    commanderFocusFitted = true;
+    measurePlayfield();
+    // Explicit Focus should reveal the actor. Keep the chosen zoom when it fits;
+    // otherwise free the panel space before fitting the largest clear view.
+    if (!commanderFrame() && !deckCollapsed) {
+      deckCollapsed = true;
+      updateDeckLayout();
+    }
+    while (!commanderFrame() && renderer.camera.zoom > .42)
+      renderer.camera.zoom = Math.max(.42, Math.round((renderer.camera.zoom - .05) * 100) / 100);
+  }
   const focus = cameraFocus(point);
   renderer.centerOn(focus.x, focus.y);
 }
