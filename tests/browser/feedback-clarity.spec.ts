@@ -86,9 +86,35 @@ test('restored guidance clears on Resume and stays clear of large-text troop con
   await expect(page.locator('#toast')).toHaveText('Battle restored. Resume when you’re ready.');
   const before = await snapshot(page), toastNode = await page.locator('#toast').elementHandle();
   await picker(page); await assertDialogFeedbackClear(page);
+  await expect(page.locator('.dialog-feedback-slot > #toast.show')).toBeVisible();
+  const roster = await page.locator('.troop-picker-dialog').evaluate(el => {
+    const dialog = el.getBoundingClientRect();
+    const body = el.querySelector<HTMLElement>('.troop-picker-body')!, rect = body.getBoundingClientRect();
+    const footer = el.querySelector('.troop-picker-footer')!.getBoundingClientRect();
+    const top = Math.max(0, dialog.top, rect.top), bottom = Math.min(innerHeight, dialog.bottom, rect.bottom, footer.top);
+    const first = body.querySelector<HTMLInputElement>('[data-troop-type]')!, checkbox = first.getBoundingClientRect();
+    const row = first.closest('label')!.getBoundingClientRect();
+    const hit = document.elementFromPoint(checkbox.x + checkbox.width / 2, checkbox.y + checkbox.height / 2);
+    return {
+      shortLandscape: innerWidth >= 601 && innerHeight <= 500,
+      noticeShown: !!el.querySelector('#toast.show'),
+      visibleBodyHeight: Math.max(0, bottom - top),
+      overflowY: getComputedStyle(body).overflowY,
+      firstRowFullyVisible: row.top >= top && row.bottom <= bottom,
+      firstCheckboxVisible: checkbox.top >= top && checkbox.bottom <= bottom && checkbox.left >= 0 && checkbox.right <= innerWidth,
+      firstCheckboxExposed: hit?.closest('label') === first.closest('label'),
+      targetHeights: [...el.querySelectorAll('header button,.troop-picker-toolbar button,.troop-type-row,summary,.troop-picker-footer button')].map(control => control.getBoundingClientRect().height),
+    };
+  });
+  await test.info().attach('restored-roster-clearance', { body: JSON.stringify(roster, null, 2), contentType: 'application/json' });
+  await page.screenshot({ path: test.info().outputPath('restored-feedback-inside-troop-sheet.png') });
+  expect(roster.noticeShown).toBe(true);
+  if (roster.shortLandscape) expect(roster.visibleBodyHeight, 'At least two 44px target-heights of roster remain visible with the notice').toBeGreaterThanOrEqual(88);
+  expect(roster.overflowY).toBe('auto');
+  expect(roster.firstRowFullyVisible).toBe(true); expect(roster.firstCheckboxVisible).toBe(true); expect(roster.firstCheckboxExposed).toBe(true);
+  for (const height of roster.targetHeights) expect(height).toBeGreaterThanOrEqual(44);
   const controls = () => page.locator('.troop-picker-dialog').evaluate(el => [...el.querySelectorAll('header button,.troop-picker-toolbar button,.troop-picker-footer button')].map(control => control.getBoundingClientRect().toJSON()));
   const positions = await controls();
-  await page.screenshot({ path: test.info().outputPath('restored-feedback-inside-troop-sheet.png') });
   await expect(page.locator('#toast')).not.toHaveClass(/show/, { timeout: 5000 });
   expect(await controls()).toEqual(positions);
   expect(await snapshot(page)).toBe(before);
