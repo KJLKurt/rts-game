@@ -33,3 +33,12 @@ Correction candidate **fc-cb9c10dfdc4f** restores the original small-element hea
 Run37742847961 selected only the portrait enlarged-text matrix and landscape Ironwatch Retry, with one worker and zero retries. Ironwatch passed unchanged; its prior failure is retained and its cause remains unproven. The portrait matrix timed out waiting for Upgrades after the test unnecessarily reselected the already-selected Keep and touch landed on Focus. Native screenshots showed the commander selected. This is not a full-suite pass.
 
 Candidate **fc-45389cdde446** switches tabs on the already-selected building and asserts that identity. Visual inspection also exposed clipped large health numbers at360px/130% text. Portrait now shows the exact current HP compactly; the meter accessibility value and expanded Details retain the full current/maximum pair. Cancel retires only its matching placement instruction, preserving concurrent battle warnings. Type/content/build and614 unit tests pass. The same two-case scoped verification is required before restoring the normal full gate. No clarity candidate is deployed.
+
+
+## Scoped correction verified; full acceptance pending
+
+Run 37744368115 on QA commit 100688b61e63415c6d534f1957bbcbeb3de239c7 passed both scoped cases on their first attempts, with zero retries (36.4 seconds). This covers the portrait 360/390/430px enlarged-text sheet matrix and landscape Ironwatch Retry only. The native image artifact was downloaded and SHA256 verified as b64fbd42071807ffe1d1fd39afc98d1021a7f39bea1740f7159369361aed6f78.
+
+Actual screenshots confirm compact current HP, explicit wood prices and removal of stale placement instructions. Long selected-building names still truncate in the smallest dock; expanded Details retains the full name. This is Chromium touch emulation, not physical-phone acceptance.
+
+The original unfiltered Playwright configuration is restored for the final 475-identity gate. Runtime remains fc-45389cdde446; simulation and public asset bytes remain unchanged. No main or Pages deployment is included.
