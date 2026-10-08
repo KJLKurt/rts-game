@@ -1,5 +1,14 @@
 import { areAllied } from "../sim/alliances";
 import type { GameState, Point, ResourceNode } from "../sim/types";
+/** Describe the current rules without implying that score wins a scripted mission. */
+export function relicControlDescription(state: GameState): string {
+  if (state.rush || state.settings.mode === "rush") return "Relics do not score in Rush";
+  if (state.settings.mode === "conquest") return "Hold for gold and wood income";
+  if (state.settings.learning) return "Capture and defend in peaceful practice";
+  if (state.settings.scriptedVictory) return "Capture and defend · follow mission objectives";
+  return "Hold to earn victory points";
+}
+
 export function relicSummary(state: GameState, team = 0) {
   const relics = state.map.nodes.filter((n) => n.kind === "relic");
   const owned = relics.filter(

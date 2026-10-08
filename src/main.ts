@@ -57,7 +57,7 @@ import {
   technologyCost,
   nextBuildingUpgrade,
 } from "./sim/progression";
-import { relicSummary, nearestRelic } from "./ui/objectives";
+import { relicSummary, nearestRelic, relicControlDescription } from "./ui/objectives";
 import { battleDefeatAdvice, battleResultReason } from "./ui/results";
 import { buildingUnderAttack } from "./ui/battle-guidance";
 import { advanceTutorial, restoreTutorial } from "./ui/tutorial";
@@ -164,12 +164,14 @@ import { icon, unitIcons } from "./ui/icons";
 import { resourceCostHTML, selectionName, selectionHealthHTML, placementFeedback, isPlacementInstruction } from "./ui/battle-readouts";
 import { selectableTroops, pruneTroopSelection, toggleTroop, setTroopTypeSelection, troopSelectionGroups } from "./ui/troop-selection";
 import { troopPickerHTML } from "./ui/troop-picker";
+import { feedbackHasExpired, troopSelectionFeedback, armySelectionFeedback, type FeedbackLifetime } from "./ui/feedback";
 
 const app = document.querySelector<HTMLDivElement>("#app")!;
-app.innerHTML = `<canvas id="world" aria-label="Isometric battlefield"></canvas><div id="screen"></div><div id="modal-root"></div><div id="suspension-root"></div><div id="toast" role="status" aria-live="polite"></div><div id="update"></div>`;
+app.innerHTML = `<canvas id="world" aria-label="Isometric battlefield"></canvas><div id="screen"></div><div id="modal-root"></div><div id="suspension-root"></div><div id="toast" role="status" aria-live="polite" aria-atomic="true"></div><div id="update"></div>`;
 const canvas = document.querySelector<HTMLCanvasElement>("#world")!,
   screen = document.querySelector<HTMLDivElement>("#screen")!,
   modal = document.querySelector<HTMLDivElement>("#modal-root")!;
+const toastElement = document.querySelector<HTMLDivElement>("#toast")!;
 const renderer = new Battlefield(canvas),
   audio = new AudioDirector();
 const battleSuspension = new BattleSuspension();
@@ -218,7 +220,7 @@ let state: GameState,
   tutorialStep = 0,
   tutorialSupplyCaptured = false,
   uiAction = "move";
-let toastBattleMatchId: string | null = null;
+let toastLifetime: FeedbackLifetime | null = null;
 let troopSelectionDraft: Set<string> | null = null;
 let armedOrder: "move" | "attack" | "attackMove" | null = null;
 let targetError = "", selectedResourceId: string | null = null;
@@ -378,9 +380,30 @@ function positionBattleGuide() {
   }
 }
 
+function resetToastPosition() {
+  ["top", "left", "width", "max-width", "transform", "transition-property", "padding"].forEach(name => toastElement.style.removeProperty(name));
+}
+/** Keep the sole live region alive before a dialog's HTML is replaced. */
+function releaseDialogToast() {
+  if (!modal.contains(toastElement)) return;
+  app.append(toastElement);
+  resetToastPosition();
+  delete toastElement.dataset.positionKey;
+}
 function positionBattleToast() {
-  const el = document.querySelector<HTMLDivElement>("#toast")!;
-  const reset = () => ["top", "left", "width", "max-width", "transform", "transition-property", "padding"].forEach(name => el.style.removeProperty(name));
+  const el = toastElement;
+  const reset = resetToastPosition;
+  const slot = el.closest<HTMLElement>(".dialog-feedback-slot");
+  if (slot) {
+    reset();
+    delete el.dataset.positionKey;
+    if (el.classList.contains("show")) {
+      slot.dataset.hasFeedback = "true";
+      // Expiry must not move a dialog control beneath an ongoing touch.
+      slot.style.minHeight = `${Math.max(parseFloat(slot.style.minHeight) || 0, Math.ceil(el.getBoundingClientRect().height) + 12)}px`;
+    }
+    return;
+  }
   if (!playing || editing) { reset(); delete el.dataset.positionKey; return; }
   if (!el.classList.contains("show")) return;
   const controls = [...document.querySelectorAll<HTMLElement>(".hud,.objective-bar,.battle-hint,.minimap-wrap,.map-controls,.commander-strip,#joystick,.ability-dock,.command-deck,.paused-ribbon,.placement-toolbar,.target-toolbar,#update")].flatMap(node => {
@@ -389,7 +412,7 @@ function positionBattleToast() {
   });
   const key = [battleMatchId, el.textContent, innerWidth, innerHeight, ...controls.map(r => `${r.x},${r.y},${r.w},${r.h}`)].join("/");
   if (el.dataset.positionKey === key) return;
-  el.dataset.positionKey = key; reset(); el.style.transitionProperty = "opacity";
+  reset(); el.dataset.positionKey = key; el.style.transitionProperty = "opacity";
   const z = renderer.camera.zoom;
   const silhouettes = state.entities.filter(e => e.hp > 0 && e.kind !== "building" && (e.team === 0 || state.fog.visible[0]?.[Math.floor(e.y) * state.map.width + Math.floor(e.x)])).map(e => {
     const p = renderer.worldToScreen(e.x,e.y); return {x:p.x-44*z,y:p.y-86*z,w:88*z,h:116*z};
@@ -419,20 +442,22 @@ function clearToast() {
   el.className = "";
   el.textContent = "";
   delete el.dataset.positionKey;
-  toastBattleMatchId = null;
+  toastLifetime = null;
 }
 function clearObsoleteBattleToast(nextMatchId: string | null) {
-  if (toastBattleMatchId !== null && toastBattleMatchId !== nextMatchId)
+  if (feedbackHasExpired(toastLifetime, { battleMatchId: nextMatchId, paused: !!state?.paused }))
     clearToast();
 }
-function toast(text: string, tone = "") {
+function toast(text: string, tone = "", options: { untilResume?: boolean } = {}) {
   const el = document.querySelector<HTMLDivElement>("#toast")!;
-  toastBattleMatchId = playing && !editing ? battleMatchId : null;
+  toastLifetime = { battleMatchId: playing && !editing ? battleMatchId : null, untilResume: options.untilResume === true };
   el.textContent = text;
   el.className = `show ${tone}`;
   clearTimeout(toastTimer);
   toastTimer = window.setTimeout(clearToast, 3500);
   positionBattleToast();
+  // A save/error can arrive while a long dialog is scrolled to its actions.
+  if (el.closest(".dialog-feedback-slot")) el.scrollIntoView({ block: "nearest" });
   measureTroopSummaryObstacles();
 }
 function commander() {
@@ -464,6 +489,7 @@ function showMenu(page = "home") {
   cancelMapTargeting();
   menuPage = page;
   modalOpen = false;
+  releaseDialogToast();
   modal.innerHTML = "";
   placement = null;
   audio.start("menu");
@@ -886,12 +912,14 @@ function dispatch(
   if (result.queued)
     toast(
       `Order queued · ${state.pendingCommands.length} ready when you resume`,
+      "", { untilResume: true },
     );
   updateHUD();
   return true;
 }
 function updateHUD() {
   if (!playing) return;
+  clearObsoleteBattleToast(battleMatchId);
   if (armedOrder && !state.entities.some(e => selection.has(e.id) && e.team === 0 && e.kind !== "building" && e.hp > 0)) {
     cancelMapTargeting();
     toast("Selected troops are no longer available. Order canceled.", "warning");
@@ -1014,9 +1042,9 @@ function updateHUD() {
     }
   }
   const resource = state.map.nodes.find(n => n.id === selectedResourceId);
-  set("resource-actions", resource ? `<div class="resource-context"><span><b>${esc(resourceTargetName(resource))}</b><small>${resource.kind === "relic" ? "Hold to earn victory points" : "Captured deposits gather automatically"}</small></span>${button("Capture", "capture-resource", "primary", "flag")}</div>` : "");
+  set("resource-actions", resource ? `<div class="resource-context"><span><b>${esc(resourceTargetName(resource))}</b><small>${resource.kind === "relic" ? relicControlDescription(state) : "Captured deposits gather automatically"}</small></span>${button("Capture", "capture-resource", "primary", "flag")}</div>` : "");
   const targetInstruction = uiAction === "rally" && rallyBuildingId ? "Rally · tap clear terrain" : armedOrder === "attack" ? "Attack · tap an enemy" : armedOrder === "attackMove" ? "Attack-move · tap a destination" : armedOrder ? "Move · tap a destination" : "";
-  const targetControlsChanged = set("target-controls", targetInstruction ? `<div class="target-toolbar"><span><b>${icon(armedOrder === "attack" ? "sword" : "arrow")}${targetInstruction}</b><small>${esc(targetError || "Drag to pan · pinch to zoom")}</small></span>${button("Cancel", "cancel-order", "", "close", 'aria-label="Cancel destination order"')}</div>` : "");
+  const targetControlsChanged = set("target-controls", targetInstruction ? `<div class="target-toolbar"><span role="status" aria-live="polite" aria-atomic="true"><b>${icon(armedOrder === "attack" ? "sword" : "arrow")}${targetInstruction}</b><small>${esc(targetError || "Drag to pan · pinch to zoom")}</small></span>${button("Cancel", "cancel-order", "", "close", 'aria-label="Cancel destination order"')}</div>` : "");
   const queuedBuildings = planningState().entities.filter(e => e.team === 0 && e.kind === "building" && e.hp > 0 && e.queue.length);
   const firstJob = queuedBuildings[0]?.queue[0];
   set("compact-production", firstJob ? `${icon("clock")}<span>${queuedBuildings.reduce((n,b) => n + b.queue.length, 0)} queued · ${Math.ceil(firstJob.remaining)}s next</span>` : "");
@@ -1263,7 +1291,10 @@ function showDialog(title: string, body: string, cls = "") {
   joystickVector = { x: 0, y: 0 };
   if (!modalOpen) previousFocus = document.activeElement as HTMLElement;
   modalOpen = true;
-  modal.innerHTML = `<div class="modal-backdrop"><section class="dialog ${cls}" role="dialog" aria-modal="true" aria-label="${esc(title)}"><header><h2>${esc(title)}</h2>${button("Close", "close-dialog", "square", "close", 'aria-label="Close dialog"')}</header>${body}</section></div>`;
+  releaseDialogToast();
+  modal.innerHTML = `<div class="modal-backdrop"><section class="dialog ${cls}" role="dialog" aria-modal="true" aria-label="${esc(title)}"><header><h2>${esc(title)}</h2>${button("Close", "close-dialog", "square", "close", 'aria-label="Close dialog"')}</header><div class="dialog-feedback-slot"></div>${body}</section></div>`;
+  modal.querySelector(".dialog-feedback-slot")!.append(toastElement);
+  positionBattleToast();
   modal.querySelector<HTMLButtonElement>("button")?.focus();
 }
 function closeDialog() {
@@ -1273,7 +1304,10 @@ function closeDialog() {
   }
   troopSelectionDraft = null;
   modalOpen = false;
+  releaseDialogToast();
   modal.innerHTML = "";
+  positionBattleToast();
+  measureTroopSummaryObstacles();
   if (previousFocus?.isConnected) previousFocus.focus();
 }
 function showTroopPicker() {
@@ -1468,7 +1502,7 @@ async function continueGame(checkpoint?: unknown) {
     renderGameShell();
     audio.start("exploration");
     if (!canPlayerContinue(state)) showResult();
-    else toast("Battle restored. Resume when you’re ready.");
+    else toast("Battle restored. Resume when you’re ready.", "", { untilResume: true });
   } catch (error) {
     toast(
       "This save could not be loaded. Your record is still safe.",
@@ -2159,6 +2193,7 @@ async function performAction(action: string, id?: string) {
           state.paused
             ? `${BUILDINGS[building].name} planned. Resume to build.`
             : `${BUILDINGS[building].name} under construction.`,
+          "", { untilResume: state.paused },
         );
         if (repeatPlacement && learningProgress?.step !== 5)
           targetPoint = snapConstruction({
@@ -2286,7 +2321,7 @@ async function performAction(action: string, id?: string) {
       uiAction = "rally";
       deckCollapsed = true;
       updateDeckLayout();
-      toast("Tap open ground to set this building’s rally point.");
+      updateHUD();
       break;
     case "upgrade-building":
       if (id)
@@ -2518,6 +2553,7 @@ async function performAction(action: string, id?: string) {
               : state.settings.mode === "conquest"
                 ? `${resourceTargetName(target)}: capture and defend to fund your siege.`
                 : `${resourceTargetName(target)}: capture and defend for victory points.`,
+            "", { untilResume: state.paused },
           );
         }
       }
@@ -2545,7 +2581,7 @@ async function performAction(action: string, id?: string) {
         // Applying may rebuild Orders; restore focus to the new opener node.
         screen.querySelector<HTMLButtonElement>('[data-action="choose-troops"]')?.focus();
         audio.play("select");
-        toast(next.size ? `${next.size} troops selected. Choose Move, Attack, or Hold.` : "Selection cleared.");
+        toast(troopSelectionFeedback(next.size));
       }
       break;
     case "select-army":
@@ -2557,7 +2593,7 @@ async function performAction(action: string, id?: string) {
       );
       placement = null;
       audio.play("select");
-      toast(`${selection.size} units ready. Choose Move, Attack, or Hold.`);
+      toast(armySelectionFeedback(selection.size));
       updateHUD();
       break;
     case "hold":
@@ -2586,6 +2622,7 @@ async function performAction(action: string, id?: string) {
           state.paused
             ? `${UNITS[id as UnitId].name} order queued`
             : `${UNITS[id as UnitId].name} queued for training`,
+          "", { untilResume: state.paused },
         );
       break;
     case "learning-house-site":
@@ -2669,6 +2706,7 @@ async function performAction(action: string, id?: string) {
           state.paused
             ? `${TECHNOLOGIES[id as TechId].name} order queued`
             : `${TECHNOLOGIES[id as TechId].name} research started`,
+          "", { untilResume: state.paused },
         );
       renderDeck();
       break;
@@ -2683,7 +2721,7 @@ async function performAction(action: string, id?: string) {
           { type: "ability", team: 0, ability: id!, x: point.x, y: point.y },
           "ability",
         );
-        if (used && id === "breach") toast(state.paused ? "Breach Charge queued. Resume to strike the enemy structure." : "Breach Charge struck the enemy structure.");
+        if (used && id === "breach") toast(state.paused ? "Breach Charge queued. Resume to strike the enemy structure." : "Breach Charge struck the enemy structure.", "", { untilResume: state.paused });
       }
       break;
     }
@@ -2707,14 +2745,13 @@ async function performAction(action: string, id?: string) {
       uiAction = armedOrder;
       renderDeck();
       updateHUD();
-      toast(armedOrder === "attack" ? "Attack: tap an enemy, or Cancel." : `${armedOrder === "attackMove" ? "Attack-move" : "Move"}: tap a map destination, or Cancel to select again.`);
       break;
     }
     case "ranged-spacing": {
       const enabled = !planningState().players[0].rangedSpacing;
       if (dispatch({ type: "rangedSpacing", team: 0, enabled })) {
         renderDeck();
-        toast(`Keep distance ${enabled ? "on" : "off"}${state.paused ? " when you resume" : ""}. Applies to current and future ranged troops; Move and Hold take priority.`);
+        toast(`Keep distance ${enabled ? "on" : "off"}${state.paused ? " when you resume" : ""}. Applies to current and future ranged troops; Move and Hold take priority.`, "", { untilResume: state.paused });
       }
       break;
     }

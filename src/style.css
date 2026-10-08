@@ -4372,6 +4372,10 @@ footer .build-identifier {
 }
 
 /* Troop subsets live in an optional Orders sheet, never another battlefield HUD row. */
+.dialog-feedback-slot { box-sizing: border-box; flex-shrink: 0; min-width: 0; }
+.dialog-feedback-slot[data-has-feedback] { padding-bottom: 12px; }
+.dialog-feedback-slot > #toast { position: static; width: 100%; max-width: none; transform: none; padding: 10px 12px; text-align: left; font-size: calc(12px * var(--ui-scale, 1)); overflow-wrap: anywhere; box-shadow: none; transition-property: opacity; }
+.dialog-feedback-slot > #toast:not(.show) { display: none; }
 .dialog.troop-picker-dialog { width: min(580px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); display: flex; flex-direction: column; overflow: hidden; }
 .troop-picker-dialog > header { flex-shrink: 0; margin-bottom: 12px; }
 .troop-picker { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }

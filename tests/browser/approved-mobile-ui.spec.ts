@@ -90,9 +90,11 @@ test('approved explicit commands keep neutral taps, panning, invalid Attack and 
  expect(await page.evaluate(()=>window.__FRONTIER__.state.pendingCommands)).toEqual([]);
  await action(page,'select-commander').click();await action(page,'order-move').click();
  await expect(page.locator('.target-toolbar')).toContainText('Move · tap a destination');
- const toast=page.locator('#toast.show');await expect(toast).toBeVisible();
- const feedback=await toast.boundingBox(),hud=(await page.locator('.hud').boundingBox())!;
- expect(feedback!.y,'Transient order feedback must remain below the full measured HUD').toBeGreaterThanOrEqual(hud.y+hud.height+7);
+ const guidance=page.locator('.target-toolbar [role="status"]');await expect(guidance).toHaveAttribute('aria-live','polite');
+ await expect(guidance).toContainText('Move · tap a destination');
+ await expect(page.locator('#toast')).not.toContainText('Move: tap a map destination');
+ const feedback=await guidance.boundingBox(),hud=(await page.locator('.hud').boundingBox())!;
+ expect(feedback!.y,'Persistent order guidance must remain below the full measured HUD').toBeGreaterThanOrEqual(hud.y+hud.height);
 
  const ground=await clearGround(page),before=await page.evaluate(()=>({...window.__FRONTIER__.renderer.camera}));
  await drag(page,context,ground);

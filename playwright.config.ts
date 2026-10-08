@@ -2,23 +2,22 @@ import {defineConfig, devices} from '@playwright/test';
 
 /** Run against the production build: Vite dev deliberately does not register a worker. */
 const external = process.env.FRONTIER_TEST_URL;
-const subsetQA = !!process.env.CI && process.env.GITHUB_REF_NAME === 'qa-browser-check' && process.env.FRONTIER_FULL_BROWSER_QA !== '1';
 export default defineConfig({
-  testMatch: subsetQA ? /(?:troop-selection|defeat-guidance)\.spec\.ts$/ : undefined,
-  grep: subsetQA ? /(?:troop-selection\.spec\.ts|explicit Move over a friendly sprite preserves the army and queues a destination|Cancel and Army restore contextual selection after an explicit order|Attack-move takes one destination then restores friendly selection)/ : undefined,
   testDir: './tests/browser',
+  // Isolated QA-only feedback gate; released configuration remains unfiltered.
+  testMatch: /(?:feedback-clarity|approved-mobile-ui|battle-feedback-lifecycle|toast-placement|commander-framing|commander-selection-framing|troop-selection)\.spec\.ts$/,
   timeout: 35_000,
   expect: {timeout: 8_000},
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: subsetQA ? 0 : process.env.CI ? 1 : 0,
-  maxFailures: subsetQA ? 4 : process.env.CI ? 6 : 0,
+  retries: 0,
+  maxFailures: 0,
   // Canvas-heavy games should not spawn one browser per reported host CPU.
   workers: process.env.FRONTIER_TEST_WORKERS ? Math.max(1, Number(process.env.FRONTIER_TEST_WORKERS)) : 2,
-  reporter: [['list'], ['html', {open: 'never', outputFolder: 'playwright-report'}], ['json', {outputFile:'playwright-report/subset-recheck.json'}]],
+  reporter: [['list'], ['html', {open: 'never', outputFolder: 'playwright-report'}]],
   use: {
     baseURL: external || 'http://127.0.0.1:4181/rts-game/',
-    trace: subsetQA ? 'off' : 'on-first-retry', screenshot: 'only-on-failure', video: 'off',
+    trace: 'on-first-retry', screenshot: 'only-on-failure', video: 'off',
     launchOptions: process.env.PLAYWRIGHT_EXECUTABLE_PATH ? {executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH} : {},
   },
   projects: [
