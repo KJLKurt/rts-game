@@ -64,6 +64,7 @@ import { advanceTutorial, restoreTutorial } from "./ui/tutorial";
 import { getEconomyRates } from "./sim/economy";
 import { encodeMapCode } from "./ui/map-code";
 import { chooseAbilityTarget } from "./ui/targeting";
+import { findBreachTarget } from "./sim/ability-targeting";
 import { plannedBuildResult } from "./ui/placement";
 import { findLearningHouseSite, houseHasRoom, learningHouseGuidance } from "./ui/learning-placement";
 import {
@@ -1093,7 +1094,7 @@ function updateAbilities(c: Entity | undefined) {
     dock.innerHTML = definitions
       .map(
         (ability, index) =>
-          `<button class="ability" data-action="ability" data-id="${ability.id}" aria-label="${ability.name}" title="${esc(ability.description)}">${icon(index === 0 ? "lightning" : state.settings.commander === "engineer" ? "gear" : "flag")}<b>${ability.name}</b><kbd>${index === 0 ? "Q" : "E"}</kbd></button>`,
+          `<button class="ability" data-action="ability" data-id="${ability.id}" aria-label="${ability.name}" title="${esc(ability.description)}">${icon(ability.id === "breach" ? "siege" : index === 0 ? "lightning" : state.settings.commander === "engineer" ? "gear" : "flag")}<b>${ability.name}</b><kbd>${esc(ability.key)}</kbd></button>`,
       )
       .join("");
     dock.dataset.commander = state.settings.commander;
@@ -1113,11 +1114,14 @@ function updateAbilities(c: Entity | undefined) {
       );
     control.disabled = !c || remaining > 0 || queued;
     control.classList.toggle("cooling", remaining > 0 || queued);
+    const lacksStructure = ability.id === "breach" && !!c && !findBreachTarget(state, c);
+    control.title = ability.description + (ability.id === "breach" ? " Uses your current building Attack target, otherwise the nearest eligible structure." : "") + (lacksStructure ? " Move within 6 tiles of a visible enemy building. No cooldown is spent without a valid target." : "");
+    control.setAttribute("aria-description", control.title);
     const text = queued
       ? "Queued"
       : remaining > 0
         ? String(Math.ceil(remaining))
-        : ability.name;
+        : lacksStructure ? "Buildings only" : ability.name;
     const label = control.querySelector("b")!;
     if (label.textContent !== text) label.textContent = text;
   }
@@ -1127,7 +1131,7 @@ function showFirstBriefing() {
   writeLocal("preferences", preferences);
   showDialog(
     "Your first frontier",
-    `<span class="eyebrow">THE BATTLE WAITS WHILE YOU GET YOUR BEARINGS</span><div class="help-grid"><article>${icon("flag")}<h3>Lead together</h3><p>Select Army, choose Move, then tap a destination for your commander and soldiers. Idle troops guard their position.</p></article><article>${icon("gold")}<h3>Claim and grow</h3><p>Capture gold and timber for steady income. Recruit soldiers, then claim a relic. Build Houses for more troops and Watchtowers to defend your base.</p></article><article>${icon("spark")}<h3>Take the center</h3><p>Relics earn victory points; gold and wood fund your army. The gold Relic button sends your army toward an objective. Use both abilities in close fights.</p></article><article>${icon("pause")}<h3>Take your time</h3><p>${state.settings.difficulty === "easy" ? "Easy opponents spend the first minute consolidating their own side. " : ""}Use the pause button to plan orders${state.settings.difficulty === "hard" ? " (three tactical pauses on Hard)" : state.settings.difficulty === "brutal" ? " (tactical pause is disabled on Brutal)" : ""}.</p></article></div>${button("Start battle", "begin-briefing", "primary large", "play")}`,
+    `<span class="eyebrow">THE BATTLE WAITS WHILE YOU GET YOUR BEARINGS</span><div class="help-grid"><article>${icon("flag")}<h3>Lead together</h3><p>Select Army, choose Move, then tap a destination for your commander and soldiers. Idle troops guard their position.</p></article><article>${icon("gold")}<h3>Claim and grow</h3><p>Capture gold and timber for steady income. Recruit soldiers, then claim a relic. Build Houses for more troops and Watchtowers to defend your base.</p></article><article>${icon("spark")}<h3>Take the center</h3><p>Relics earn victory points; gold and wood fund your army. The gold Relic button sends your army toward an objective. Use your commander’s abilities in close fights. The Engineer’s Breach Charge strikes nearby enemy buildings.</p></article><article>${icon("pause")}<h3>Take your time</h3><p>${state.settings.difficulty === "easy" ? "Easy opponents spend the first minute consolidating their own side. " : ""}Use the pause button to plan orders${state.settings.difficulty === "hard" ? " (three tactical pauses on Hard)" : state.settings.difficulty === "brutal" ? " (tactical pause is disabled on Brutal)" : ""}.</p></article></div>${button("Start battle", "begin-briefing", "primary large", "play")}`,
     "wide",
   );
 }
@@ -1275,7 +1279,7 @@ function showBriefing(index: number) {
 function showHelp() {
   showDialog(
     "Command the frontier",
-    `<div class="help-grid"><article>${icon("crosshair")}<h3>Lead from the front</h3><p>Select your commander, choose Move, then tap a destination. Drag the lower-left thumbstick on phones. On desktop, use WASD or arrow keys.</p></article><article>${icon("gold")}<h3>Claim your economy</h3><p>Stand near gold and timber to capture them. Held deposits generate resources until depleted. Enemy troops can contest them.</p></article><article>${icon("flag")}<h3>Build a fighting force</h3><p>Recruit troops from your keep and military buildings. Houses raise your population cap. Spearmen beat cavalry; cavalry hunt archers; siege breaks walls.</p></article><article>${icon("spark")}<h3>Turn the tide</h3><p>Hold relics to gain victory points. In Conquest, relics instead fund your siege; destroy every enemy keep to win. Commander abilities Q and E can win a close fight.</p></article><article>${icon("pause")}<h3>Take a breath</h3><p>Tactical pause freezes the fight. Queue movement, recruitment, and construction, then resume. Space pauses; Escape opens the menu.</p></article><article>${icon("save")}<h3>Make it yours</h3><p>Battles autosave every 30 seconds and when leaving the app. Load once online to play offline after the cache installs.</p></article></div>${learningGuideSkipped ? button("Replay practice guide", "replay-guide", "", "book") : ""}${button("Ready to lead", "close-dialog", "primary", "check")}`,
+    `<div class="help-grid"><article>${icon("crosshair")}<h3>Lead from the front</h3><p>Select your commander, choose Move, then tap a destination. Drag the lower-left thumbstick on phones. On desktop, use WASD or arrow keys.</p></article><article>${icon("gold")}<h3>Claim your economy</h3><p>Stand near gold and timber to capture them. Held deposits generate resources until depleted. Enemy troops can contest them.</p></article><article>${icon("flag")}<h3>Build a fighting force</h3><p>Recruit troops from your keep and military buildings. Houses raise your population cap. Spearmen beat cavalry; cavalry hunt archers; siege breaks walls.</p></article><article>${icon("spark")}<h3>Turn the tide</h3><p>Hold relics to gain victory points. In Conquest, relics instead fund your siege; destroy every enemy keep to win. Commander abilities Q and E can win a close fight. Engineer’s C Breach Charge damages a nearby visible enemy building; bring an escort.</p></article><article>${icon("pause")}<h3>Take a breath</h3><p>Tactical pause freezes the fight. Queue movement, recruitment, and construction, then resume. Space pauses; Escape opens the menu.</p></article><article>${icon("save")}<h3>Make it yours</h3><p>Battles autosave every 30 seconds and when leaving the app. Load once online to play offline after the cache installs.</p></article></div>${learningGuideSkipped ? button("Replay practice guide", "replay-guide", "", "book") : ""}${button("Ready to lead", "close-dialog", "primary", "check")}`,
     "wide",
   );
 }
@@ -1597,7 +1601,7 @@ function showRushSetup() {
       )
       .join(
         "",
-      )}</div><p class="muted">Move to dodge the marked strikes. Your commander attacks nearby enemies automatically. Use both abilities often.</p>${button("Enter the arena", "launch-rush", "primary large", "lightning")}`,
+      )}</div><p class="muted">Move to dodge the marked strikes. Your commander attacks nearby enemies automatically. Use your abilities often. Engineer’s Breach Charge only targets buildings.</p>${button("Enter the arena", "launch-rush", "primary large", "lightning")}`,
   );
 }
 function showRushUpgrade() {
@@ -2618,11 +2622,15 @@ async function performAction(action: string, id?: string) {
     case "ability": {
       const c = commander();
       if (c) {
-        const point = chooseAbilityTarget(state, c, id!, targetPoint);
-        dispatch(
+        // A stale movement/build point must never redirect a siege strike.
+        const aimingState = id === "breach" ? planningState() : state;
+        const aimingCommander = aimingState.entities.find(entity => entity.id === c.id) ?? c;
+        const point = chooseAbilityTarget(aimingState, aimingCommander, id!, targetPoint);
+        const used = dispatch(
           { type: "ability", team: 0, ability: id!, x: point.x, y: point.y },
           "ability",
         );
+        if (used && id === "breach") toast(state.paused ? "Breach Charge queued. Resume to strike the enemy structure." : "Breach Charge struck the enemy structure.");
       }
       break;
     }
@@ -3367,16 +3375,8 @@ window.addEventListener("keydown", (e) => {
     e.preventDefault();
     void handleAction("pause");
   }
-  if (e.key.toLowerCase() === "q")
-    void handleAction(
-      "ability",
-      COMMANDERS[state.settings.commander].abilities[0].id,
-    );
-  if (e.key.toLowerCase() === "e")
-    void handleAction(
-      "ability",
-      COMMANDERS[state.settings.commander].abilities[1].id,
-    );
+  const shortcutAbility = COMMANDERS[state.settings.commander].abilities.find(ability => ability.key.toLowerCase() === e.key.toLowerCase());
+  if (shortcutAbility && !e.ctrlKey && !e.metaKey && !e.altKey && !e.isComposing) void handleAction("ability", shortcutAbility.id);
   if (e.key.toLowerCase() === "m") void handleAction("order-move");
   if (e.key.toLowerCase() === "f") void handleAction("order-attack");
   if (e.key.toLowerCase() === "h") void handleAction("hold");

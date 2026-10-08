@@ -42,3 +42,17 @@ Run 37744368115 on QA commit 100688b61e63415c6d534f1957bbcbeb3de239c7 passed bot
 Actual screenshots confirm compact current HP, explicit wood prices and removal of stale placement instructions. Long selected-building names still truncate in the smallest dock; expanded Details retains the full name. This is Chromium touch emulation, not physical-phone acceptance.
 
 The original unfiltered Playwright configuration is restored for the final 475-identity gate. Runtime remains fc-45389cdde446; simulation and public asset bytes remain unchanged. No main or Pages deployment is included.
+
+
+## Final multipart browser acceptance
+
+Runtime **fc-45389cdde446** is covered by two complementary runs, with every one of the 475 identities reconciled exactly once:
+
+- Full run [37745260925](https://github.com/KJLKurt/rts-game/actions/runs/37745260925), QA commit 926d6c1bb6967c5e60128529a3f23ebc24f37351: 366 first-attempt passes and 20 skips before the existing 25-minute job limit cancelled it. No failure or retry event was observed; 89 identities lacked terminal evidence. Its artifact step was skipped by job cancellation.
+- Exact remainder run [37748319688](https://github.com/KJLKurt/rts-game/actions/runs/37748319688), test-config-only commit d3378d9969b673eac587f5b335418847bf5278d7: 85 first-attempt passes and 4 skips in 6.9 minutes, zero retries. The 89 selected identities were verified to have no overlap with the first run's terminal results.
+
+Combined: **451 first-attempt passes, 24 skips, zero failures, zero retries, zero unaccounted identities**. This is multipart coverage, not a single clean full run. Skips retain the existing 21 viewport/input conditions and 3 previous-dist upgrade cases. All four ordinary PWA cases passed. Physical-device/Safari and previous-production-cache migration remain outside this evidence.
+
+The release uses the full original Playwright configuration, with no diagnostic filter. Local 614 unit tests, TypeScript, content validation and production build passed. All 15 simulation files and all 35 public asset files remain byte-identical to production 493a475. That production commit is the direct rollback target for this milestone.
+
+Actual downloaded Chromium phone screenshots were reviewed at 360/390/430px and enlarged text. The native placement preview shows explicit resource cost, legal-location feedback and large Confirm controls. The compact health line fits current HP; Details retains full health and identity. Long names still truncate in the smallest compact dock. The milestone improves clarity and does not claim complete concept fidelity, physical-phone acceptance or completion of the original 56-section scope.
