@@ -47,6 +47,8 @@ import {
   recruitProducer,
   trainingSeconds,
   capacityGainText,
+  constructionProgressText,
+  inspectionAvailabilitySignature,
 } from "./ui/inspection";
 import { updateLiveHTML } from "./ui/live-html";
 import { expeditionOpeningGuidance, rallyDestination, recruitDestination, resourceTargetName, selectedOrderDescription, rangedSpacingDescription } from "./ui/command-guidance";
@@ -157,6 +159,8 @@ import {
   ACHIEVEMENT_CATEGORIES,
 } from "./ui/progression/view";
 import { icon, unitIcons } from "./ui/icons";
+
+import { resourceCostHTML, selectionName, selectionHealthHTML, placementFeedback, isPlacementInstruction } from "./ui/battle-readouts";
 
 const app = document.querySelector<HTMLDivElement>("#app")!;
 app.innerHTML = `<canvas id="world" aria-label="Isometric battlefield"></canvas><div id="screen"></div><div id="modal-root"></div><div id="suspension-root"></div><div id="toast" role="status" aria-live="polite"></div><div id="update"></div>`;
@@ -433,7 +437,7 @@ function commander() {
   );
 }
 function cost(c: { gold: number; wood: number }) {
-  return `<span class="cost">${c.gold ? `<span>${icon("gold")}${c.gold}</span>` : ""}${c.wood ? `<span>${icon("wood")}${c.wood}</span>` : ""}</span>`;
+  return resourceCostHTML(c);
 }
 function affordable(c: { gold: number; wood: number }) {
   const player = planningState().players[0];
@@ -645,7 +649,7 @@ function launchGame(
 function renderGameShell() {
   stopDeckObservation();
   hudHTML.clear();
-  screen.innerHTML = `<header class="hud"><button class="brand-button" data-action="pause-menu" aria-label="Battle menu">${icon("crown")}</button><div class="resources"><button data-action="economy" title="Gold and income sources" aria-label="Gold and income sources">${icon("gold")}<b id="gold">0</b></button><button data-action="economy" title="Wood and income sources" aria-label="Wood and income sources">${icon("wood")}<b id="wood">0</b></button><button data-action="economy" title="Population and maximum capacity" aria-label="Population and maximum capacity">${icon("flag")}<b id="population">0</b></button></div><div class="hud-clock"><div class="hud-time" id="match-time">0:00</div><div class="paused-ribbon" id="paused-ribbon"></div></div><button class="pause-button" data-action="pause" aria-label="Tactical pause">${icon("pause")}<span>Pause</span></button></header><div class="objective-bar" id="objective"></div><div class="battle-hint" id="battle-hint"></div><div class="map-controls">${button("Focus commander", "focus", "square", "crosshair")}${button("Zoom in", "zoom-in", "square", "plus")}${button("Zoom out", "zoom-out", "square", "minus")}</div><div class="minimap-wrap"><button class="minimap-toggle" data-action="toggle-minimap" aria-label="Minimize minimap">Map −</button><canvas id="minimap" width="160" height="120" aria-label="Minimap: tap to move camera"></canvas><span id="map-seed"></span></div><div class="commander-strip" id="commander-strip"></div><div id="joystick" aria-label="Drag to move commander" role="application"><div class="joystick-ring"></div><div class="joystick-stick">${icon("crosshair")}</div></div><div class="ability-dock" id="abilities"></div><section class="command-deck"><div class="selection-row"><div class="selection-info" id="selection-info"></div><div class="selection-tools">${button("Minimize panel", "toggle-deck", "deck-toggle", "minus")}${button("Commander", "select-commander", "", "crown")}${button("Army", "select-army", "", "flag")}${button("Relic", "march-relic", "relic-command", "spark", 'aria-label="March to relic"')}</div></div><div class="primary-orders">${button("Move", "order-move", "", "arrow")}${button("Attack", "order-attack", "", "sword")}${button("Hold", "hold", "", "hold")}</div><div id="resource-actions"></div><div id="compact-production"></div><nav class="deck-tabs">${button("Details", "panel-inspect", "", "book")}${button("Recruit", "panel-army", "active", "sword")}${button("Build", "panel-build", "", "house")}${button("Research", "panel-research", "", "spark")}${button("Orders", "panel-orders", "", "flag")}</nav><div class="deck-content" id="deck-content"></div></section><div id="target-controls"></div><div id="placement-controls"></div>`;
+  screen.innerHTML = `<header class="hud"><button class="brand-button" data-action="pause-menu" aria-label="Battle menu">${icon("crown")}</button><div class="resources"><button data-action="economy" data-resource="gold" title="Gold and income sources" aria-label="Gold and income sources">${icon("gold")}<b id="gold">0</b></button><button data-action="economy" data-resource="wood" title="Wood and income sources" aria-label="Wood and income sources">${icon("wood")}<b id="wood">0</b></button><button data-action="economy" data-resource="population" title="Population and maximum capacity" aria-label="Population and maximum capacity">${icon("population")}<b id="population">0</b></button></div><div class="hud-clock"><div class="hud-time" id="match-time">0:00</div><div class="paused-ribbon" id="paused-ribbon"></div></div><button class="pause-button" data-action="pause" aria-label="Tactical pause">${icon("pause")}<span>Pause</span></button></header><div class="objective-bar" id="objective"></div><div class="battle-hint" id="battle-hint"></div><div class="map-controls">${button("Focus commander", "focus", "square", "crosshair")}${button("Zoom in", "zoom-in", "square", "plus")}${button("Zoom out", "zoom-out", "square", "minus")}</div><div class="minimap-wrap"><button class="minimap-toggle" data-action="toggle-minimap" aria-label="Minimize minimap">Map −</button><canvas id="minimap" width="160" height="120" aria-label="Minimap: tap to move camera"></canvas><span id="map-seed"></span></div><div class="commander-strip" id="commander-strip"></div><div id="joystick" aria-label="Drag to move commander" role="application"><div class="joystick-ring"></div><div class="joystick-stick">${icon("crosshair")}</div></div><div class="ability-dock" id="abilities"></div><section class="command-deck"><div class="selection-row"><div class="selection-info" id="selection-info"></div><div class="selection-tools">${button("Minimize panel", "toggle-deck", "deck-toggle", "minus")}${button("Commander", "select-commander", "", "crown")}${button("Army", "select-army", "", "flag")}${button("Relic", "march-relic", "relic-command", "spark", 'aria-label="March to relic"')}</div></div><div class="primary-orders">${button("Move", "order-move", "", "arrow")}${button("Attack", "order-attack", "", "crossedSwords")}${button("Hold", "hold", "", "hold")}</div><div id="resource-actions"></div><div id="compact-production"></div><nav class="deck-tabs">${button("Details", "panel-inspect", "", "book")}${button("Recruit", "panel-army", "active", "sword")}${button("Build", "panel-build", "", "house")}${button("Research", "panel-research", "", "spark")}${button("Orders", "panel-orders", "", "flag")}</nav><div class="deck-content" id="deck-content"></div></section><div id="target-controls"></div><div id="placement-controls"></div>`;
   if (workshopTest.active)
     screen.insertAdjacentHTML(
       "beforeend",
@@ -688,6 +692,7 @@ function currentDeckSignature(): string {
     player.maxPopulation,
     player.rangedSpacing,
     state.pendingCommands.length,
+    panel === "inspect" ? inspectionAvailabilitySignature(planningState(), selection, state.paused && state.pendingCommands.length >= 60) : null,
     renderer.atlas.ready,
     renderer.atlas.image?.src,
     state.entities
@@ -754,7 +759,7 @@ function renderDeck() {
     return hint ? `<p class="deck-tip learning-panel-hint">${hint}</p>` : "";
   };
   if (panel === "inspect")
-    el.innerHTML = inspectionHTML(planningState(), selection, learningStep, inspectTab);
+    el.innerHTML = inspectionHTML(planningState(), selection, learningStep, inspectTab, state.paused && state.pendingCommands.length >= 60);
   else if (panel === "army")
     el.innerHTML = `${lessonHint("army")}${learningActionAvailable(learningStep, "recruit", "swordsman") ? `<div class="recruit-controls"><span>Queue at a time</span>${[1, 3, 5].map((n) => button(String(n), "recruit-batch", recruitBatch === n ? "active" : "", undefined, `data-id="${n}" aria-label="Queue ${n} at a time"`)).join("")}<small>Tap a troop to add ${recruitBatch} to production.</small></div>` : ""}<div class="action-cards">${Object.values(
       UNITS,
@@ -919,7 +924,7 @@ function updateHUD() {
     "population",
     state.rush
       ? `${p.population}<small> squad</small>`
-      : `${p.population}<small>/${p.populationCap} · max ${p.maxPopulation}</small>`,
+      : `${p.population}/${p.populationCap}<small>max ${p.maxPopulation}</small>`,
   );
   const populationButton = document.querySelector("#population")?.parentElement;
   const populationLabel = state.rush
@@ -984,11 +989,13 @@ function updateHUD() {
   const chosen = state.entities.filter((e) => selection.has(e.id) && e.hp > 0);
   const currentOrder = armedOrder
     ? armedOrder === "attack" ? "Choose an enemy to attack" : `Choose ${armedOrder === "attackMove" ? "attack-move" : "move"} destination`
-    : selectedOrderDescription(planningState(), selection);
+    : chosen.length === 1 && chosen[0].kind === "building" && chosen[0].buildProgress < 1
+      ? constructionProgressText(chosen[0])
+      : selectedOrderDescription(planningState(), selection);
   const spacingDescription = rangedSpacingDescription(planningState(), selection);
   set(
     "selection-info",
-    `${chosen.length === 1 ? cardArt(chosen[0].type) : icon("flag")}<div><strong>${placement ? `Place ${BUILDINGS[placement].name}` : chosen.length === 1 ? (UNITS as any)[chosen[0].type]?.name || (BUILDINGS as any)[chosen[0].type]?.name || (COMMANDERS as any)[chosen[0].type]?.name || "Commander" : chosen.length ? `${chosen.length} units selected` : "Select a unit"}</strong><small>${placement ? "Tap open ground near your frontier" : chosen.length === 1 ? `${Math.ceil(chosen[0].hp)} / ${Math.ceil(chosen[0].maxHp)} health${chosen[0].queue.length ? ` · ${chosen[0].queue.length} queued` : ""}` : ""}</small>${!placement ? `<small class="current-order" title="${esc(currentOrder)}">${esc(currentOrder)}</small>${spacingDescription ? `<small class="ranged-spacing-status" title="${esc(spacingDescription)}">${esc(spacingDescription)}</small>` : ""}` : ""}</div>${""}`,
+    `${chosen.length === 1 ? cardArt(chosen[0].type) : icon("flag")}<div><strong>${placement ? `Place ${BUILDINGS[placement].name}` : chosen.length === 1 ? selectionName(chosen[0]) : chosen.length ? `${chosen.length} units selected` : "Select a unit"}</strong>${placement ? "<small>Tap open ground near your frontier</small>" : chosen.length === 1 ? selectionHealthHTML(chosen[0], planningState().entities.find(e => e.id === chosen[0].id)?.queue.length ?? 0) : "<small></small>"}${!placement ? `<small class="current-order" title="${esc(currentOrder)}">${esc(currentOrder)}</small>${spacingDescription ? `<small class="ranged-spacing-status" title="${esc(spacingDescription)}">${esc(spacingDescription)}</small>` : ""}` : ""}</div>${""}`,
   );
   const mobileSelection = chosen.some(e => e.team === 0 && e.kind !== "building");
   document.querySelector(".command-deck")?.classList.toggle("building-selected", !!selectedBuilding());
@@ -1013,15 +1020,11 @@ function updateHUD() {
       ? plannedBuildResult(state, 0, placement, targetPoint.x, targetPoint.y)
       : null;
   const houseLesson = learningProgress?.step === 5 && placement === "house";
-  const siteText = site?.ok
-    ? houseLesson && targetPoint && !houseHasRoom(state, targetPoint)
-      ? "Legal, but no room for a neighbor. Use Find pair site."
-      : "✓ Valid location · Confirm to spend."
-    : `✕ ${site?.error ?? "Choose a location"}. Nothing spent yet.`;
+  const siteFeedback = placementFeedback(site, !!(houseLesson && targetPoint && !houseHasRoom(state, targetPoint)));
   const placementControlsChanged = set(
     "placement-controls",
     placement
-      ? `<div class="placement-toolbar"><div><span class="placement-art">${cardArt(placement)}</span><b>Place ${BUILDINGS[placement].name}</b>${cost(BUILDINGS[placement].cost)}<small>${BUILDINGS[placement].buildTime}s · ${esc(BUILDINGS[placement].description)}</small><small role="status">${siteText}</small></div><div class="placement-modes">${button("Place", "placement-place", placementMode === "place" ? "active" : "", "crosshair", `aria-pressed="${placementMode === "place"}"`)}${button("Pan", "placement-pan", placementMode === "pan" ? "active" : "", "map", `aria-pressed="${placementMode === "pan"}"`)}</div><div class="placement-actions">${button("Cancel", "cancel-build", "", "close")}${houseLesson ? button("Find pair site", "learning-house-site", "", "crosshair") : button(repeatPlacement ? "Repeat on" : "Repeat off", "repeat-placement", repeatPlacement ? "active" : "")}${button("Confirm build", "confirm-placement", "primary", site?.ok ? "check" : "shield", site?.ok ? "" : "disabled")}</div></div>`
+      ? `<div class="placement-toolbar"><div><span class="placement-art">${cardArt(placement)}</span><b>Place ${BUILDINGS[placement].name}</b>${cost(BUILDINGS[placement].cost)}<small>${BUILDINGS[placement].buildTime}s · ${esc(BUILDINGS[placement].population ? capacityGainText(planningState(), BUILDINGS[placement].population) : BUILDINGS[placement].description)}</small><small class="placement-status" role="status" data-placement-state="${siteFeedback.state}">${icon(siteFeedback.icon)}<span>${esc(siteFeedback.text)}</span></small></div><div class="placement-modes">${button("Place", "placement-place", placementMode === "place" ? "active" : "", "crosshair", `aria-pressed="${placementMode === "place"}"`)}${button("Pan", "placement-pan", placementMode === "pan" ? "active" : "", "map", `aria-pressed="${placementMode === "pan"}"`)}</div><div class="placement-actions">${button("Cancel", "cancel-build", "", "close")}${houseLesson ? button("Find pair site", "learning-house-site", "", "crosshair") : button(repeatPlacement ? "Repeat on" : "Repeat off", "repeat-placement", repeatPlacement ? "active" : "")}${button("Confirm build", "confirm-placement", "primary", site?.ok ? "check" : "shield", site?.ok ? "" : "disabled")}</div></div>`
       : "",
   );
   document.body.classList.toggle("placing-building", !!placement);
@@ -2585,6 +2588,7 @@ async function performAction(action: string, id?: string) {
       break;
     }
     case "cancel-build":
+      if (placement && isPlacementInstruction(document.querySelector("#toast")?.textContent ?? "", BUILDINGS[placement].name)) clearToast();
       placement = null;
       targetPoint = null;
       renderDeck();
