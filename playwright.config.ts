@@ -1,12 +1,10 @@
+// Isolated queued-plan acceptance gate. Release uses the preserved full default config.
 import {defineConfig, devices} from '@playwright/test';
 
 /** Run against the production build: Vite dev deliberately does not register a worker. */
 const external = process.env.FRONTIER_TEST_URL;
 export default defineConfig({
   testDir: './tests/browser',
-  // Isolated QA-only feedback gate; released configuration remains unfiltered.
-  testMatch: /(?:feedback-clarity|approved-mobile-ui|battle-feedback-lifecycle|toast-placement|commander-framing|commander-selection-framing|troop-selection)\.spec\.ts$/,
-  grep: /restored guidance clears on Resume|troop sheet fits narrow and large-text viewports/,
   timeout: 35_000,
   expect: {timeout: 8_000},
   fullyParallel: true,
@@ -18,15 +16,16 @@ export default defineConfig({
   reporter: [['list'], ['html', {open: 'never', outputFolder: 'playwright-report'}]],
   use: {
     baseURL: external || 'http://127.0.0.1:4181/rts-game/',
-    trace: 'on-first-retry', screenshot: 'only-on-failure', video: 'off',
+    trace: 'off', screenshot: 'only-on-failure', video: 'off',
     launchOptions: process.env.PLAYWRIGHT_EXECUTABLE_PATH ? {executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH} : {},
   },
+  grep: /Repeat keeps two paused plans|queued footprints retain|save and Continue restore plans|real troop picking and native Move|workshop Undo and a new battle|paused construction rejects an invalid site|Escape cancels placement and dismisses|HUD pause leaves a native ground order/,
   projects: [
     {name: 'desktop', use: {...devices['Desktop Chrome'], viewport: {width: 1440, height: 900}}, testIgnore: /pwa\.spec\.ts/},
     {name: 'phone-portrait', use: {...devices['Pixel 7'], viewport: {width: 390, height: 844}}, testIgnore: /pwa\.spec\.ts/},
     {name: 'phone-landscape', use: {...devices['Pixel 7'], viewport: {width: 844, height: 390}}, testIgnore: /pwa\.spec\.ts/},
     {name: 'pwa', use: {...devices['Desktop Chrome']}, testMatch: /pwa\.spec\.ts/},
-  ].filter(project => project.name === 'phone-portrait' || project.name === 'phone-landscape').map(project => ({...project, grepInvert: project.name === 'phone-portrait' ? /troop sheet fits/ : undefined})),
+  ],
   webServer: external ? undefined : {
     command: 'npm run build && node tests/browser/serve-production.mjs',
     url: 'http://127.0.0.1:4181/rts-game/',

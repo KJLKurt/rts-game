@@ -10,10 +10,13 @@ import { drawFactionAdornment } from './factionIdentity';
 import { CombatFeedback, type Casualty } from './CombatFeedback';
 import { visibleTroopSummaries, troopSummaryPosition, type VisibleTroop, type ScreenRect } from './troop-summary';
 import type { UnitId } from '../sim/types';
+import type { PlannedConstruction } from '../ui/queued-construction';
+import { drawPlannedConstructionMarkers, plannedConstructionMarkers, QUEUED_CONSTRUCTION_STYLE } from './queued-construction';
 
 export interface RenderOptions {
  time?:number; reveal?:boolean; quality?:'low'|'high'; reducedMotion?:boolean; team?:number;
  placement?:{type:string;x:number;y:number;valid:boolean;size?:number;reason?:string};
+ plannedConstruction?:readonly PlannedConstruction[];
  target?:{x:number;y:number;radius?:number}; dragRect?:{x:number;y:number;w:number;h:number};
  hoverId?:string|null; showHealth?:boolean;
  screenObstacles?:readonly ScreenRect[];
@@ -189,6 +192,7 @@ export class Battlefield {
   const protectedActors=items.filter(item=>item.kind==='entity'&&(item.value as Entity).kind!=='building');
   this.readableActors=protectedActors;
   // Ground orders and command markers stay below the silhouettes.
+  this.drawPlannedConstruction(c,state,options);
   for(const e of state.entities)if(selected.has(e.id)&&e.hp>0)this.drawOrder(c,e,z);
   for(const item of items){const p=this.worldToScreen(item.x,item.y);c.save();c.translate(p.x,p.y);c.scale(z,z);
    if(item.kind==='decor')this.drawDecoration(c,item.value as Decoration,state.map.biome);
@@ -209,6 +213,18 @@ export class Battlefield {
   const dusk=(1-Math.cos(state.time/600))*.025;c.fillStyle=`rgba(35,52,92,${dusk})`;c.fillRect(0,0,this.width,this.height);
   // Gentle edge falloff keeps the centre readable on small screens.
   const vignette=c.createRadialGradient(this.width*.5,this.height*.5,this.height*.15,this.width*.5,this.height*.5,Math.max(this.width,this.height)*.7);vignette.addColorStop(0,'#06121d00');vignette.addColorStop(1,'#06121d44');c.fillStyle=vignette;c.fillRect(0,0,this.width,this.height);
+ }
+ private drawPlannedConstruction(c:Ctx,state:GameState,options:RenderOptions){
+  if(!options.plannedConstruction?.length)return;
+  c.save();c.font=QUEUED_CONSTRUCTION_STYLE.font;
+  const markers=plannedConstructionMarkers(options.plannedConstruction,{
+   zoom:this.camera.zoom,width:this.width,height:this.height,
+   project:(x,y)=>this.worldToScreen(x,y),
+   visible:(x,y)=>this.visible(state,x,y,false,options),
+   measureLabel:text=>c.measureText(text).width,
+   obstacles:options.screenObstacles,
+  });
+  drawPlannedConstructionMarkers(c,markers);c.restore();
  }
  private drawTroopSummaries(c:Ctx,items:RenderItem[],state:GameState,options:RenderOptions){
   const troops:VisibleTroop[]=[];
