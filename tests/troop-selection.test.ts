@@ -271,6 +271,13 @@ describe("accessible troop picker markup", () => {
       expect(html).toContain(`data-action="${action}"`);
   });
 
+  it("uses singular copy for a roster containing only one troop", () => {
+    const { state, hero } = fixture();
+    state.entities = [hero];
+    expect(troopPickerHTML(state, [hero.id])).toContain("1 of 1 troop selected");
+    expect(troopPickerHTML(state, [])).toContain("0 of 1 troop selected");
+  });
+
   it("escapes IDs in attributes and supports an empty roster", () => {
     const { state, archers } = fixture();
     archers[0].id = 'troop"<script>&';

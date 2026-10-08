@@ -1,3 +1,5 @@
+> **Superseded initial preview receipt.** Current work is documented in [FEEDBACK_CLARITY_20261008.md](FEEDBACK_CLARITY_20261008.md), including subsequent Engineer and troop-selection milestones, scoped native evidence and actual earned progression. The initial candidate and qualifications below are preserved as history.
+
 > Evidence update: the unchanged production runtime fc-194c08936126 subsequently passed 448 browser cases with 24 qualified skips in run 37732161638, using the precise test-only selector revision da887be1. No failed, interrupted, unrun or retried cases remained in that invocation. See [current original-requirements reconciliation](REQUIREMENTS_RECONCILIATION_20261008.md). The publication-time record below is retained as history.
 
 # Testing preview checkpoint — 8 October 2026

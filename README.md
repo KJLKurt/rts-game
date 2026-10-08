@@ -1,3 +1,7 @@
+> **Current testing preview: fc-3fdc0658bda9 (8 October 2026).** Includes Engineer Breach, tactical troop subsets, and contextual feedback with accessible dialog layouts. The current local gate has 697 passing unit tests plus type/content/build checks. Focused native acceptance and the real Conquest defeat / Outpost victory are recorded with exact revisions and limits in [the feedback and natural-play receipt](docs/FEEDBACK_CLARITY_20261008.md). The complete 523-case browser collection has not been rerun as a single final-build matrix. Wider campaign, art, device-performance and usability scope remains open.
+
+### Initial restored-preview notice (historical, superseded)
+
 > **Current testing candidate: fc-194c08936126 (8 October 2026).** The newer phone interface and material pass are deployed for hosted browser QA. Type/build and 588 unit tests pass; browser acceptance remains pending, including the documented native-touch fixture issue. See [current testing status](docs/TESTING_PREVIEW_20261008.md). The prior published checkpoint and its evidence remain below as history.
 
 # Frontier Command
@@ -19,7 +23,7 @@ npm run preview -- --host 127.0.0.1
 
 Open `/rts-game/` on the development or preview server. Production paths target `https://kjlkurt.github.io/rts-game/`.
 
-## Current checkpoint
+## Earlier frozen Focus checkpoint (historical)
 
 Build **`fc-0f1a6b425705`** combines the reviewed Mythic Archer, Spearman and Cavalry packs with corrected troop visibility, sprite-body and ground-marker selection, lower-quality overlay caching, and explicit Focus framing outside HUD controls. Focus retains enlarged zoom when the commander and health bar fit; short landscape layouts can minimize the panel and reduce zoom. All fifteen simulation files, campaign rules, costs and audio remain unchanged. Later campaign work and UI redesign are outside this frozen checkpoint.
 

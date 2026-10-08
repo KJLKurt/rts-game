@@ -1,6 +1,47 @@
 import { describe, it, expect } from "vitest";
 import { createGame } from "../src/sim";
-import { relicSummary, nearestRelic } from "../src/ui/objectives";
+import { relicSummary, nearestRelic, relicControlDescription } from "../src/ui/objectives";
+import { getEconomyRates } from "../src/sim/economy";
+import { STORY_CAMPAIGNS } from "../src/ui/campaigns/authored";
+
+describe("selected relic guidance", () => {
+  it("describes Conquest income, matching the economy's actual gold and wood stipend", () => {
+    const state = createGame({ mode: "conquest" });
+    const before = getEconomyRates(state);
+    state.map.nodes.find(node => node.kind === "relic")!.owner = 0;
+    const after = getEconomyRates(state);
+    expect(after.goldPerSecond).toBeGreaterThan(before.goldPerSecond);
+    expect(after.woodPerSecond).toBeGreaterThan(before.woodPerSecond);
+    expect(relicControlDescription(state)).toBe("Hold for gold and wood income");
+    expect(relicSummary(state).pointsPerSecond).toBe(0);
+  });
+  it.each(["domination", "relic"] as const)("retains victory points under ordinary %s rules", mode => {
+    expect(relicControlDescription(createGame({ mode }))).toBe("Hold to earn victory points");
+  });
+  it("does not promise score victory in authored campaigns, practice or Rush", () => {
+    for (const mission of STORY_CAMPAIGNS.flatMap(campaign => campaign.missions)) {
+      const state = createGame(mission.settings);
+      expect(relicControlDescription(state)).toBe(state.settings.mode === "conquest"
+        ? "Hold for gold and wood income"
+        : "Capture and defend · follow mission objectives");
+    }
+    expect(relicControlDescription(createGame({ learning: true }))).toBe("Capture and defend in peaceful practice");
+    expect(relicControlDescription(createGame({ mode: "rush" }))).toBe("Relics do not score in Rush");
+  });
+  it("follows the custom map's normalized mode rather than the requested setup mode", () => {
+    const map = createGame().map;
+    map.scenario = {
+      version: 1,
+      slots: [0, 1].map(team => ({ name: `Team ${team}`, controller: team === 0 ? "human" : "ai", alliance: team, faction: "ironhold", commander: "warlord", personality: "defensive", difficulty: "easy" })),
+      rules: { mode: "conquest", duration: 18, populationCap: 80, startingGold: 300, startingWood: 300, startingForces: "standard" },
+      startingEntities: [], camps: [],
+    };
+    const state = createGame({ customMap: map, mode: "domination" });
+    expect(state.settings.mode).toBe("conquest");
+    expect(relicControlDescription(state)).toBe("Hold for gold and wood income");
+  });
+});
+
 describe("objective clarity", () => {
   it("reports actual controlled relics and score income", () => {
     const s = createGame(),
