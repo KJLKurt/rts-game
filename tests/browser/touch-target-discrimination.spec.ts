@@ -15,7 +15,9 @@ for (const theme of ['christmas', 'mythic']) {
     }));
     await action(page, 'order-move').click();
     await expect(page.locator('.target-toolbar')).toContainText('Move');
-    const focus = await action(page, 'focus').boundingBox();
+    const focusControl = page.locator('.map-controls [data-action="focus"]');
+    await expect(focusControl).toHaveCount(1);
+    const focus = await focusControl.boundingBox();
     expect(focus).not.toBeNull();
     await tap(page, {x: focus!.x + focus!.width / 2, y: focus!.y + focus!.height / 2});
     await expect(page.locator('.target-toolbar')).toHaveCount(0);
