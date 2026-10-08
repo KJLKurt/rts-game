@@ -162,6 +162,8 @@ import {
 import { icon, unitIcons } from "./ui/icons";
 
 import { resourceCostHTML, selectionName, selectionHealthHTML, placementFeedback, isPlacementInstruction } from "./ui/battle-readouts";
+import { selectableTroops, pruneTroopSelection, toggleTroop, setTroopTypeSelection, troopSelectionGroups } from "./ui/troop-selection";
+import { troopPickerHTML } from "./ui/troop-picker";
 
 const app = document.querySelector<HTMLDivElement>("#app")!;
 app.innerHTML = `<canvas id="world" aria-label="Isometric battlefield"></canvas><div id="screen"></div><div id="modal-root"></div><div id="suspension-root"></div><div id="toast" role="status" aria-live="polite"></div><div id="update"></div>`;
@@ -217,6 +219,7 @@ let state: GameState,
   tutorialSupplyCaptured = false,
   uiAction = "move";
 let toastBattleMatchId: string | null = null;
+let troopSelectionDraft: Set<string> | null = null;
 let armedOrder: "move" | "attack" | "attackMove" | null = null;
 let targetError = "", selectedResourceId: string | null = null;
 let placementMode: "place" | "pan" = "place", draggingPreview = false;
@@ -450,6 +453,7 @@ function resourceShortfall(c: { gold: number; wood: number }) {
   return missing.length ? `Need more ${missing.join(" and ")}` : "";
 }
 function showMenu(page = "home") {
+  troopSelectionDraft = null;
   stopDeckObservation();
   resetAppSuspension();
   navigationVersion++;
@@ -596,6 +600,7 @@ function launchGame(
   document.body.classList.toggle("rush-mode", !!state.rush);
   resultShown = false;
   lastEvent = 0;
+  troopSelectionDraft = null;
   selection.clear();
   if (commander()) {
     selection.add(commander()!.id);
@@ -795,7 +800,7 @@ function renderDeck() {
       : renderResearchTree(planningState(), 0, selectedBuilding()?.id);
   else {
     const spacing = !!planningState().players[0].rangedSpacing;
-    el.innerHTML = `<div class="order-cards">${button("Attack-move", "order-attackMove", armedOrder === "attackMove" ? "chosen" : "", "sword")}${button(`Keep distance: ${spacing ? "on" : "off"}`, "ranged-spacing", spacing ? "chosen" : "", "shield", `aria-pressed="${spacing}"`)}${button("Rally current producers here", "rally-all", "", "flag")}${button("Save battle", "save", "", "save")}${button(`${speed}× speed`, "speed", "", "clock")}</div><p class="deck-tip">Keep distance lets your current and future archers, Menders and ranged commander step back between shots when melee troops approach. Their damage, speed and range stay the same. Move, Hold and direct commander control take priority; they advance normally against buildings. Short retreats stay near the engagement. Move and Attack-move use your next valid map tap as a destination. Attack requires an enemy target. Cancel returns to selection. Ordinary taps select friendly units and buildings; empty terrain clears selection. Choose Attack before tapping an enemy. Select a deposit and choose Capture to send troops. Hold does not pursue. Rally current producers here sets a fixed point for existing buildings. New buildings need their own rally point; it does not follow the commander.</p>`;
+    el.innerHTML = `<div class="order-cards">${button("Choose troops", "choose-troops", "", "population")}${button("Attack-move", "order-attackMove", armedOrder === "attackMove" ? "chosen" : "", "sword")}${button(`Keep distance: ${spacing ? "on" : "off"}`, "ranged-spacing", spacing ? "chosen" : "", "shield", `aria-pressed="${spacing}"`)}${button("Rally current producers here", "rally-all", "", "flag")}${button("Save battle", "save", "", "save")}${button(`${speed}× speed`, "speed", "", "clock")}</div><p class="deck-tip">Keep distance lets your current and future archers, Menders and ranged commander step back between shots when melee troops approach. Their damage, speed and range stay the same. Move, Hold and direct commander control take priority; they advance normally against buildings. Short retreats stay near the engagement. Move and Attack-move use your next valid map tap as a destination. Attack requires an enemy target. Cancel returns to selection. Ordinary taps select friendly units and buildings; empty terrain clears selection. Choose troops lets you pick types or individual troops. On desktop, Shift-click adds or removes a friendly troop; Shift-click empty ground keeps your group. Choose Attack before tapping an enemy. Select a deposit and choose Capture to send troops. Hold does not pursue. Rally current producers here sets a fixed point for existing buildings. New buildings need their own rally point; it does not follow the commander.</p>`;
   }
   if (productionStrip) {
     el.append(productionStrip);
@@ -1251,6 +1256,7 @@ function updateTutorial() {
   }
 }
 function showDialog(title: string, body: string, cls = "") {
+  troopSelectionDraft = null;
   if (playing && commander()?.directControl)
     issueCommand(state, { type: "steer", team: 0, dx: 0, dy: 0 });
   keys.clear();
@@ -1265,9 +1271,31 @@ function closeDialog() {
     void persistResult();
     return;
   }
+  troopSelectionDraft = null;
   modalOpen = false;
   modal.innerHTML = "";
   if (previousFocus?.isConnected) previousFocus.focus();
+}
+function showTroopPicker() {
+  if (!playing || state.winner !== null) return;
+  const draft = new Set(pruneTroopSelection(state, selection));
+  showDialog("Choose troops", troopPickerHTML(state, draft), "troop-picker-dialog");
+  troopSelectionDraft = draft;
+  refreshTroopPicker();
+}
+function refreshTroopPicker() {
+  if (!troopSelectionDraft) return;
+  troopSelectionDraft = new Set(pruneTroopSelection(state, troopSelectionDraft));
+  const count = modal.querySelector("#troop-selection-count");
+  if (count) count.textContent = `${troopSelectionDraft.size} selected`;
+  for (const group of troopSelectionGroups(state, troopSelectionDraft)) {
+    const control = modal.querySelector<HTMLInputElement>(`[data-troop-type="${group.typeKey}"]`);
+    if (control) { control.checked = group.checked; control.indeterminate = group.indeterminate; }
+    const label = modal.querySelector(`[data-troop-type-count="${group.typeKey}"]`);
+    if (label) label.textContent = `${group.selectedCount} / ${group.total} selected`;
+  }
+  for (const control of modal.querySelectorAll<HTMLInputElement>("[data-troop-id]"))
+    control.checked = troopSelectionDraft.has(control.dataset.troopId!);
 }
 function showBriefing(index: number) {
   const m = activeCampaign.missions[index];
@@ -1279,7 +1307,7 @@ function showBriefing(index: number) {
 function showHelp() {
   showDialog(
     "Command the frontier",
-    `<div class="help-grid"><article>${icon("crosshair")}<h3>Lead from the front</h3><p>Select your commander, choose Move, then tap a destination. Drag the lower-left thumbstick on phones. On desktop, use WASD or arrow keys.</p></article><article>${icon("gold")}<h3>Claim your economy</h3><p>Stand near gold and timber to capture them. Held deposits generate resources until depleted. Enemy troops can contest them.</p></article><article>${icon("flag")}<h3>Build a fighting force</h3><p>Recruit troops from your keep and military buildings. Houses raise your population cap. Spearmen beat cavalry; cavalry hunt archers; siege breaks walls.</p></article><article>${icon("spark")}<h3>Turn the tide</h3><p>Hold relics to gain victory points. In Conquest, relics instead fund your siege; destroy every enemy keep to win. Commander abilities Q and E can win a close fight. Engineer’s C Breach Charge damages a nearby visible enemy building; bring an escort.</p></article><article>${icon("pause")}<h3>Take a breath</h3><p>Tactical pause freezes the fight. Queue movement, recruitment, and construction, then resume. Space pauses; Escape opens the menu.</p></article><article>${icon("save")}<h3>Make it yours</h3><p>Battles autosave every 30 seconds and when leaving the app. Load once online to play offline after the cache installs.</p></article></div>${learningGuideSkipped ? button("Replay practice guide", "replay-guide", "", "book") : ""}${button("Ready to lead", "close-dialog", "primary", "check")}`,
+    `<div class="help-grid"><article>${icon("crosshair")}<h3>Lead from the front</h3><p>Select your commander, choose Move, then tap a destination. Orders → Choose troops selects a subset by type or individual; desktop Shift-click toggles troops. Drag the lower-left thumbstick on phones. On desktop, use WASD or arrow keys.</p></article><article>${icon("gold")}<h3>Claim your economy</h3><p>Stand near gold and timber to capture them. Held deposits generate resources until depleted. Enemy troops can contest them.</p></article><article>${icon("flag")}<h3>Build a fighting force</h3><p>Recruit troops from your keep and military buildings. Houses raise your population cap. Spearmen beat cavalry; cavalry hunt archers; siege breaks walls.</p></article><article>${icon("spark")}<h3>Turn the tide</h3><p>Hold relics to gain victory points. In Conquest, relics instead fund your siege; destroy every enemy keep to win. Commander abilities Q and E can win a close fight. Engineer’s C Breach Charge damages a nearby visible enemy building; bring an escort.</p></article><article>${icon("pause")}<h3>Take a breath</h3><p>Tactical pause freezes the fight. Queue movement, recruitment, and construction, then resume. Space pauses; Escape opens the menu.</p></article><article>${icon("save")}<h3>Make it yours</h3><p>Battles autosave every 30 seconds and when leaving the app. Load once online to play offline after the cache installs.</p></article></div>${learningGuideSkipped ? button("Replay practice guide", "replay-guide", "", "book") : ""}${button("Ready to lead", "close-dialog", "primary", "check")}`,
     "wide",
   );
 }
@@ -2495,6 +2523,31 @@ async function performAction(action: string, id?: string) {
       }
       break;
     }
+    case "choose-troops":
+      showTroopPicker();
+      break;
+    case "troop-select-all":
+    case "troop-select-none":
+      if (troopSelectionDraft) {
+        troopSelectionDraft = new Set(action === "troop-select-all" ? selectableTroops(state).map(entity => entity.id) : []);
+        refreshTroopPicker();
+      }
+      break;
+    case "troop-select-apply":
+      if (troopSelectionDraft) {
+        const next = new Set(pruneTroopSelection(state, troopSelectionDraft));
+        cancelMapTargeting();
+        if (placement) { placement = null; targetPoint = null; }
+        selection = next;
+        followCommander = false;
+        closeDialog();
+        renderDeck(); updateHUD();
+        // Applying may rebuild Orders; restore focus to the new opener node.
+        screen.querySelector<HTMLButtonElement>('[data-action="choose-troops"]')?.focus();
+        audio.play("select");
+        toast(next.size ? `${next.size} troops selected. Choose Move, Attack, or Hold.` : "Selection cleared.");
+      }
+      break;
     case "select-army":
       cancelMapTargeting();
       selection = new Set(
@@ -3031,6 +3084,15 @@ app.addEventListener("submit", (e) => {
 });
 app.addEventListener("input", (e) => {
   const t = e.target as HTMLInputElement;
+  if (troopSelectionDraft && t.closest(".troop-picker")) {
+    if (t.dataset.troopType) troopSelectionDraft = new Set(setTroopTypeSelection(state, troopSelectionDraft, t.dataset.troopType, t.checked));
+    else if (t.dataset.troopId) {
+      if (t.checked) troopSelectionDraft.add(t.dataset.troopId); else troopSelectionDraft.delete(t.dataset.troopId);
+      troopSelectionDraft = new Set(pruneTroopSelection(state, troopSelectionDraft));
+    }
+    refreshTroopPicker();
+    return;
+  }
   if (t.id === "ui-scale") {
     preferences.uiScale = Math.max(1, Math.min(1.3, Number(t.value)));
     document.documentElement.style.setProperty(
@@ -3062,6 +3124,7 @@ app.addEventListener("input", (e) => {
 });
 app.addEventListener("change", async (e) => {
   const input = e.target as HTMLInputElement;
+  if (input.closest(".troop-picker")) return;
   if (input.id === "visual-theme") {
     const id = normalizeVisualTheme(input.value), status = document.querySelector("#theme-status");
     input.disabled = true;
@@ -3222,9 +3285,21 @@ function releasePointer(e: PointerEvent) {
     } else {
       const item = renderer.pick(state, point.x, point.y);
       cancelMapTargeting();
+      const additive = e.pointerType === "mouse" && e.shiftKey;
       if (item && "team" in item && item.team === 0) {
-        selection = new Set([item.id]); audio.play("select");
-        followCommander = item.kind === "commander";
+        if (additive && item.kind !== "building" && item.hp > 0) {
+          selection = new Set(toggleTroop(state, selection, item.id));
+          followCommander = false;
+        } else if (additive && item.kind === "building") {
+          toast("Shift-click adds troops. Use an ordinary click to inspect a building.");
+          renderDeck(); updateHUD();
+          pointerDown = null; pointerLast = null; pinchDistance = 0; pinchCenter = null;
+          return;
+        } else {
+          selection = new Set([item.id]);
+          followCommander = item.kind === "commander";
+        }
+        audio.play("select");
         if (item.kind === "building") {
           if (learningProgress && item.type === "keep") learningProgress.inspectedKeep = true;
           inspectTab = BUILDINGS[item.type as BuildingId]?.recruits.length ? "train" : "upgrades";
@@ -3234,7 +3309,7 @@ function releasePointer(e: PointerEvent) {
         selectedResourceId = item.id;
       } else if (item && "team" in item) {
         toast(areAllied(state, 0, item.team) ? "Your ally commands these forces." : "Choose Attack, then tap this enemy.");
-      } else {
+      } else if (!additive) {
         selection.clear(); followCommander = false;
       }
       renderDeck();
@@ -3330,9 +3405,15 @@ window.addEventListener("keydown", (e) => {
   if (modalOpen && e.key === "Tab") {
     const focusables = [
       ...modal.querySelectorAll<HTMLElement>(
-        'button:not([disabled]),input,select,textarea,[tabindex="0"]',
+        'button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),summary,[tabindex="0"]',
       ),
-    ];
+    ].filter(element => {
+      if (!element.getClientRects().length) return false;
+      for (let ancestor = element.parentElement; ancestor && ancestor !== modal; ancestor = ancestor.parentElement) {
+        if (ancestor instanceof HTMLDetailsElement && !ancestor.open && !ancestor.querySelector(":scope > summary")?.contains(element)) return false;
+      }
+      return true;
+    });
     const first = focusables[0],
       last = focusables[focusables.length - 1];
     if (e.shiftKey && document.activeElement === first) {
@@ -3413,7 +3494,8 @@ window.addEventListener("keyup", (e) => {
     )
   ) {
     const c = commander();
-    if (c) issueCommand(state, { type: "steer", team: 0, dx: 0, dy: 0 });
+    // A key released while scrolling a dialog is not a steering command.
+    if (c?.directControl) issueCommand(state, { type: "steer", team: 0, dx: 0, dy: 0 });
   }
 });
 function clearInterruptedInput() {

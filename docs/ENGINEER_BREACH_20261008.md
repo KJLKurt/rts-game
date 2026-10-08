@@ -11,3 +11,15 @@ Local verification: 664 unit tests in 67 files passed, including 48 focused Brea
 Planned browser gate: 61 identities from Engineer Breach, ability allegiance, HUD collisions, commander framing/selection and ordinary PWA suites, using the existing isolated QA workflow with zero retries. This is a focused regression gate, not a new full-matrix acceptance. Native input includes missing-target feedback, keyboard/button casts, queued save/reload execution, three portrait widths with 130% text, and explicit Attack targeting of a farther structure. Mechanic fixtures are labeled and do not count as natural progression.
 
 Runtime, actual screenshot review and unmodified-state natural Engineer siege play remain pending. The previous deployed release is 7e5090af1786d7f9ac7d200e8a0e7c3e07dd19cd / fc-45389cdde446. No broader 56-section completion is claimed.
+
+
+## Focused runtime gate completed
+
+The 61 planned identities are now accounted for: **60 first-attempt passes on their final test revision and 1 conditional viewport skip**, with zero retry-only passes. This is focused multipart coverage, not a new full 490-case run.
+
+- [37752262986](https://github.com/KJLKurt/rts-game/actions/runs/37752262986): 29 passes, 4 new-test failures, 1 interrupted, 27 unexecuted. Settings used an ambiguous close selector; two save tests reloaded before asynchronous Save & leave returned to the menu.
+- [37753401336](https://github.com/KJLKurt/rts-game/actions/runs/37753401336): exact 32-case continuation, 30 passes, 1 conditional skip, 1 landscape native-target failure. Corrected save tests wait for the durable return to the menu and pass on all viewports.
+- [37754541818](https://github.com/KJLKurt/rts-game/actions/runs/37754541818): one-case diagnostic reproduced the target miss. The native pointer hit canvas, but the temporary Attack hint retired and the camera moved between captured pixel and input. Downloaded screenshots corroborate it.
+- [37755134064](https://github.com/KJLKurt/rts-game/actions/runs/37755134064): that one case passed after the test waited for the hint to retire and observed camera stability before choosing a painted target. Native down/up/click each resolved to the intended building; the queued Attack and Breach coordinates matched it. No production gameplay change was made for these test corrections.
+
+Runtime remains **fc-cd4082ff52f9**. The release restores the full unfiltered Playwright configuration. Actual downloaded landscape screenshots were reviewed; the third ability remains readable and separately tappable. Portrait/landscape native-input and 360/390/430px large-text assertions passed, but these are Chromium emulation rather than physical-device acceptance. Natural hosted conquest and legacy-save upgrade observations will be recorded separately after deployment.
