@@ -15,6 +15,12 @@ type RendererProbe = Window['__FRONTIER__']['renderer'] & {
   lastOptions: RenderOptions;
   context: CanvasRenderingContext2D;
   visualTheme: string;
+  entityHits: Map<string, {
+    image: HTMLImageElement;
+    frame: { x: number; y: number; w: number; h: number };
+    bounds: { x: number; y: number; width: number; height: number };
+    matrix: DOMMatrix;
+  }>;
 };
 const houseCost = BUILDINGS.house.cost;
 const placementStatus = (page: Page) => page.locator('#placement-controls [data-placement-state]');
@@ -51,7 +57,33 @@ async function openRepeat(page: Page) {
   await expect(action(page, 'repeat-placement')).toHaveText('Repeat on');
   // Make room through normal controls, particularly for the short-landscape bar.
   const zoomSteps = page.viewportSize()!.width < 1000 ? 2 : 1;
-  for (let i = 0; i < zoomSteps; i++) await action(page, 'zoom-out').click();
+  if (await action(page, 'zoom-out').isVisible()) {
+    for (let i = 0; i < zoomSteps; i++) await action(page, 'zoom-out').click();
+  } else {
+    await expect(page.locator('#toast')).not.toHaveClass(/show/);
+    // Portrait CSS intentionally hides zoom buttons; there is no control expander.
+    // Use the supported native two-finger pinch, never force a hidden control.
+    const center = await page.evaluate(() => {
+      const candidates: Point[] = [];
+      for (let y = 160; y < innerHeight - 100; y += 12) for (let x = 92; x < innerWidth - 92; x += 12) {
+        if ([-70, -48, 48, 70].every(dx => [-20, 0, 20].every(dy => document.elementFromPoint(x + dx, y + dy)?.id === 'world'))) candidates.push({ x, y });
+      }
+      candidates.sort((a, b) => Math.hypot(a.x - innerWidth / 2, a.y - innerHeight * .4) - Math.hypot(b.x - innerWidth / 2, b.y - innerHeight * .4));
+      if (!candidates.length) throw new Error('No unobscured native two-finger pinch region.');
+      return candidates[0];
+    });
+    const before = await page.evaluate(() => window.__FRONTIER__.renderer.camera.zoom);
+    const cdp = await page.context().newCDPSession(page);
+    try {
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: center.x - 70, y: center.y }, { x: center.x + 70, y: center.y }] });
+      const radius = 70 / 1.2 ** zoomSteps;
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: center.x - radius, y: center.y }, { x: center.x + radius, y: center.y }] });
+    } finally {
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+      await cdp.detach();
+    }
+    await expect.poll(() => page.evaluate(() => window.__FRONTIER__.renderer.camera.zoom)).toBeLessThan(before);
+  }
   await expect(page.locator('#toast')).not.toHaveClass(/show/);
   await nextFrame(page);
 }
@@ -299,41 +331,62 @@ test('real troop picking and native Move take precedence over noninteractive pla
   const unit = initial.entities.find(e => e.team === 0 && e.type === 'swordsman' && e.hp > 0);
   expect(unit, 'A native starting swordsman is available').toBeDefined();
   const unitId = unit!.id;
-  let troopPoint: Point | undefined;
-  for (const [dx, dy] of [[1.5, 1.5], [1.75, 1.75], [2, 2], [2, 1], [1, 2], [2.5, 1], [1, 2.5], [2.5, 1.5], [1.5, 2.5]]) {
-    const position = { x: sites[0].x + dx, y: sites[0].y + dy };
-    const candidate = structuredClone(initial), soldier = candidate.entities.find(e => e.id === unitId)!;
-    Object.assign(soldier, position);
-    if (houses(projectPendingCommands(candidate)).length !== houses(initial).length + 2) continue;
-    await page.evaluate(({ id, position }) => Object.assign(window.__FRONTIER__.state.entities.find(e => e.id === id)!, position), { id: unitId, position });
-    await nextFrame(page);
-    troopPoint = await page.evaluate(({ id, sites }) => {
-      const { state, renderer } = window.__FRONTIER__;
-      const center = renderer.worldToScreen(sites[0].x, sites[0].y), other = renderer.worldToScreen(sites[1].x, sites[1].y);
-      if (renderer.pick(state, other.x, other.y)) return undefined;
-      const rx = 64 * renderer.camera.zoom, ry = 32 * renderer.camera.zoom, clearance = navigator.maxTouchPoints ? 22 : 4;
-      for (let dy = -ry; dy <= ry; dy += 2) for (let dx = -rx; dx <= rx; dx += 2) {
-        if (Math.abs(dx / rx) + Math.abs(dy / ry) > .95) continue;
-        const p = { x: center.x + dx, y: center.y + dy };
-        if ((renderer.pick(state, p.x, p.y) as { id?: string } | undefined)?.id !== id) continue;
-        if ([-clearance, 0, clearance].every(x => [-clearance, 0, clearance].every(y => document.elementFromPoint(p.x + x, p.y + y)?.id === 'world'))) return p;
-      }
-      return undefined;
-    }, { id: unitId, sites });
+  let troopPoint: Point | undefined, moveSite = sites[1];
+  const tried: { footprint: number; offset: Point; builds: number; picked: boolean }[] = [];
+  // Either footprint may be the rear one. Inspect both instead of assuming the
+  // first site's foreground remains free of the second reserved House.
+  for (const footprint of [0, 1]) {
+    for (const [dx, dy] of [[1.5, 1.5], [1.75, 1.75], [2, 2], [2, 1], [1, 2], [2.5, 1], [1, 2.5], [2.5, 1.5], [1.5, 2.5]]) {
+      const position = { x: sites[footprint].x + dx, y: sites[footprint].y + dy };
+      const candidate = structuredClone(initial), soldier = candidate.entities.find(e => e.id === unitId)!;
+      Object.assign(soldier, position);
+      const projectedBuilds = houses(projectPendingCommands(candidate)).length - houses(initial).length;
+      const attempt = { footprint, offset: { x: dx, y: dy }, builds: projectedBuilds, picked: false };
+      tried.push(attempt);
+      if (projectedBuilds !== 2) continue;
+      await page.evaluate(({ id, position }) => Object.assign(window.__FRONTIER__.state.entities.find(e => e.id === id)!, position), { id: unitId, position });
+      await nextFrame(page);
+      troopPoint = await page.evaluate(({ id, sites }) => {
+        const { state, renderer } = window.__FRONTIER__;
+        const center = renderer.worldToScreen(sites[0].x, sites[0].y), other = renderer.worldToScreen(sites[1].x, sites[1].y);
+        if (renderer.pick(state, other.x, other.y)) return undefined;
+        const hit = (renderer as RendererProbe).entityHits.get(id);
+        if (!hit) return undefined;
+        const bitmap = document.createElement('canvas');
+        bitmap.width = hit.frame.w; bitmap.height = hit.frame.h;
+        const pixels = bitmap.getContext('2d', { willReadFrequently: true })!;
+        pixels.drawImage(hit.image, hit.frame.x, hit.frame.y, hit.frame.w, hit.frame.h, 0, 0, bitmap.width, bitmap.height);
+        const alpha = pixels.getImageData(0, 0, bitmap.width, bitmap.height).data, inverse = hit.matrix.inverse();
+        const rx = 64 * renderer.camera.zoom, ry = 32 * renderer.camera.zoom, clearance = navigator.maxTouchPoints ? 22 : 4;
+        for (let dy = -ry; dy <= ry; dy += 2) for (let dx = -rx; dx <= rx; dx += 2) {
+          if (Math.abs(dx / rx) + Math.abs(dy / ry) > .95) continue;
+          const p = { x: center.x + dx, y: center.y + dy };
+          const local = new DOMPoint(p.x, p.y).matrixTransform(inverse), b = hit.bounds;
+          const px = Math.floor((local.x - b.x) / b.width * bitmap.width), py = Math.floor((local.y - b.y) / b.height * bitmap.height);
+          if (px < 0 || py < 0 || px >= bitmap.width || py >= bitmap.height || alpha[(py * bitmap.width + px) * 4 + 3] < 96) continue;
+          if ((renderer.pick(state, p.x, p.y) as { id?: string } | undefined)?.id !== id) continue;
+          if ([-clearance, 0, clearance].every(x => [-clearance, 0, clearance].every(y => document.elementFromPoint(p.x + x, p.y + y)?.id === 'world'))) return p;
+        }
+        return undefined;
+      }, { id: unitId, sites: [sites[footprint], sites[1 - footprint]] });
+      attempt.picked = !!troopPoint;
+      if (troopPoint) { moveSite = sites[1 - footprint]; break; }
+    }
     if (troopPoint) break;
   }
+  await test.info().attach('occlusion-fixture-candidates', { body: JSON.stringify({ sites: sites.slice(0, 2), tried }), contentType: 'application/json' });
   expect(troopPoint, 'Real troop art must remain pickable inside a queued ground diamond').toBeDefined();
   await tap(page, troopPoint!);
   await expect(page.locator('#selection-info')).toContainText('Swordsman');
   expect(builds(await snapshot(page))).toHaveLength(2);
-  const emptyPlan = await nativePoint(page, sites[1]);
+  const emptyPlan = await nativePoint(page, moveSite);
   expect(await page.evaluate(p => window.__FRONTIER__.renderer.pick(window.__FRONTIER__.state, p.x, p.y) ?? null, emptyPlan)).toBeNull();
   await action(page, 'order-move').click();
-  await tap(page, await nativePoint(page, sites[1]));
+  await tap(page, await nativePoint(page, moveSite));
   await expect.poll(() => page.evaluate(() => window.__FRONTIER__.state.pendingCommands.at(-1))).toMatchObject({ type: 'move', entityIds: [unitId] });
   const queued = await snapshot(page), move = queued.pendingCommands.at(-1)!;
   if (move.type !== 'move') throw new Error('Expected the native Move command.');
-  expect(move.x).toBeCloseTo(sites[1].x, 1); expect(move.y).toBeCloseTo(sites[1].y, 1);
+  expect(move.x).toBeCloseTo(moveSite.x, 1); expect(move.y).toBeCloseTo(moveSite.y, 1);
   expect(queued.pendingCommands.map(c => c.type)).toEqual(['build', 'build', 'move']);
   expect((await rendered(page)).plans).toEqual(plans);
   await expect(page.getByRole('button', { name: /queued house|planned house/i })).toHaveCount(0);
