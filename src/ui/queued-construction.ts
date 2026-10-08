@@ -1,4 +1,4 @@
-import { isCompetitivePlayer } from "../sim/alliances";
+import { hasBattleEnded, isCompetitivePlayer } from "../sim/alliances";
 import { BUILDINGS } from "../sim/content";
 import { projectPendingCommands } from "../sim/engine";
 import type { BuildingId, GameCommand, GameState } from "../sim/types";
@@ -29,7 +29,7 @@ export function queuedConstructionPlans(
   const player = state.players[team];
   if (
     !state.paused ||
-    state.winner !== null ||
+    hasBattleEnded(state) ||
     !Number.isInteger(team) ||
     !isCompetitivePlayer(player) ||
     player.defeated

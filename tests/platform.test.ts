@@ -100,6 +100,20 @@ describe('PWA update coordinator with mocked browser events',()=>{
   const f=workerFixture(),offer=vi.fn();const {setupPWA}=await import('../src/platform/pwa');await setupPWA(offer,async()=>{throw new Error('Storage full');});
   await expect(offer.mock.calls[0][0]()).rejects.toThrow('Storage full');expect(f.worker.postMessage).not.toHaveBeenCalled();f.serviceWorker.dispatchEvent(new Event('controllerchange'));expect(f.reload).not.toHaveBeenCalled();
  });
+ it('rejects a stale update instead of silently leaving the application locked',async()=>{
+  const f=workerFixture(),offer=vi.fn();let release!:()=>void;
+  const saved=new Promise<void>(resolve=>{release=resolve;});
+  const {setupPWA,UpdateUnavailableError}=await import('../src/platform/pwa');await setupPWA(offer,()=>saved);
+  const applying=offer.mock.calls[0][0]();f.registration.waiting=null;release();
+  await expect(applying).rejects.toBeInstanceOf(UpdateUnavailableError);
+  expect(f.worker.postMessage).not.toHaveBeenCalled();f.serviceWorker.dispatchEvent(new Event('controllerchange'));expect(f.reload).not.toHaveBeenCalled();
+ });
+ it('does not leave reload armed when activation messaging fails',async()=>{
+  const f=workerFixture(),offer=vi.fn();f.worker.postMessage.mockImplementation(()=>{throw new Error('Worker unavailable');});
+  const {setupPWA}=await import('../src/platform/pwa');await setupPWA(offer,vi.fn());
+  await expect(offer.mock.calls[0][0]()).rejects.toThrow('Worker unavailable');
+  f.serviceWorker.dispatchEvent(new Event('controllerchange'));expect(f.reload).not.toHaveBeenCalled();
+ });
  it('offers an installed update discovered during play',async()=>{
   const f=workerFixture(false),offer=vi.fn();const {setupPWA}=await import('../src/platform/pwa');await setupPWA(offer,vi.fn());expect(offer).not.toHaveBeenCalled();
   f.registration.installing=f.worker;f.serviceWorker.controller={};f.registration.dispatchEvent(new Event('updatefound'));

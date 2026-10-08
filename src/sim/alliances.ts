@@ -1,5 +1,15 @@
 import type { GameState, Player } from './types';
 
+/** Reserved terminal reason, paired with a validated local surrender command in saves. */
+export const SURRENDER_REASON = 'You surrendered.';
+export function hasPlayerSurrendered(state: GameState, team = 0): boolean {
+    return team === 0 && state.victoryReason === SURRENDER_REASON;
+}
+/** A concession can end a battle without a rival eligible to win it. */
+export function hasBattleEnded(state: GameState): boolean {
+    return state.winner !== null || hasPlayerSurrendered(state);
+}
+
 /** Ownership and orders use player indices. Alliances group combat and victory. */
 export function isCompetitivePlayer(player: Player | undefined): player is Player {
     return !!player && !player.neutral && !player.closed;
@@ -27,6 +37,7 @@ export function competitivePlayers(state: GameState): Player[] {
     return state.players.filter(isCompetitivePlayer);
 }
 export function playerAllianceWon(state: GameState, team = 0): boolean {
+    if (hasPlayerSurrendered(state, team)) return false;
     if (state.settings.scriptedVictory && team === 0 && state.players[0]?.defeated) return false;
     return state.winner !== null && areAllied(state, state.winner, team);
 }
@@ -35,11 +46,11 @@ export function playerAllianceDefeated(state: GameState, team = 0): boolean {
     return !members.length || members.every(player => player.defeated);
 }
 export function canPlayerContinue(state: GameState, team = 0): boolean {
-    return state.winner === null && !(state.settings.scriptedVictory && team === 0 && state.players[0]?.defeated) && !playerAllianceDefeated(state, team);
+    return !hasBattleEnded(state) && !(state.settings.scriptedVictory && team === 0 && state.players[0]?.defeated) && !playerAllianceDefeated(state, team);
 }
 export function playerOutcomeStatus(state: GameState, team = 0): 'playing' | 'spectating' | 'won' | 'lost' {
     if (state.settings.scriptedVictory && team === 0 && state.players[0]?.defeated) return 'lost';
-    if (state.winner !== null) return playerAllianceWon(state, team) ? 'won' : 'lost';
+    if (hasBattleEnded(state)) return playerAllianceWon(state, team) ? 'won' : 'lost';
     if (playerAllianceDefeated(state, team)) return 'lost';
     return state.players[team].defeated ? 'spectating' : 'playing';
 }

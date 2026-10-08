@@ -1,4 +1,4 @@
-import { areHostile, isCompetitivePlayer } from './alliances';
+import { areHostile, hasBattleEnded, isCompetitivePlayer } from './alliances';
 import { distance, tileIndex } from './maps';
 import type { Entity, GameState, Point } from './types';
 
@@ -13,7 +13,7 @@ export function findBreachTarget(state: GameState, commander: Entity, point?: Po
     const player = state.players[commander.team];
     const onMap = (position: Point) => Number.isFinite(position.x) && Number.isFinite(position.y)
         && position.x >= 0 && position.y >= 0 && position.x < state.map.width && position.y < state.map.height;
-    if (state.winner !== null || !isCompetitivePlayer(player) || player.defeated || commander.kind !== 'commander' || commander.type !== 'engineer' || commander.hp <= 0 || !onMap(commander))
+    if (hasBattleEnded(state) || !isCompetitivePlayer(player) || player.defeated || commander.kind !== 'commander' || commander.type !== 'engineer' || commander.hp <= 0 || !onMap(commander))
         return undefined;
     const eligible = (target: Entity) => target.kind === 'building' && target.hp > 0 && onMap(target)
         && !state.players[target.team]?.defeated && areHostile(state, commander.team, target.team)

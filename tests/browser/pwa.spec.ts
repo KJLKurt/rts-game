@@ -84,3 +84,78 @@ test('an update waits for a finished result commit and reloads its command recor
  await expect(action(page,'continue')).toHaveCount(0);
  await expect(page.locator('#apply-update')).toHaveCount(0);
 });
+
+test('an update already saving rejects native surrender and restores the unfinished battle',async({page,request})=>{
+ test.skip(!!process.env.FRONTIER_TEST_URL,'Needs the local test-only release endpoint.');
+ test.info().annotations.push({type:'controlled-fixture',description:'IndexedDB success delivery is held during the real update save. Battle setup, surrender attempt, update consent and Continue use native controls; no battle, result or profile data is injected.'});
+ await launch(page,{difficulty:'easy'});await pause(page);await ready(page);
+ await action(page,'pause-menu').click();await action(page,'save').click();
+ await expect(page.locator('#toast')).toContainText('Battle saved on this device.');
+ await page.getByRole('button',{name:'Surrender battle',exact:true}).click();
+ const confirmation=page.getByRole('dialog',{name:'Surrender this battle?',exact:true});
+ await expect(confirmation).toBeVisible();
+ const snapshot=()=>page.evaluate(()=>{
+  const f=window.__FRONTIER__ as typeof window.__FRONTIER__ & {readonly matchId:string},s=f.state;
+  return {matchId:f.matchId,seed:s.settings.seed,tick:s.tick,time:s.time,paused:s.paused,
+   winner:s.winner,reason:s.victoryReason,defeated:s.players[0].defeated,
+   gold:s.players[0].gold,wood:s.players[0].wood,stats:s.players[0].stats,
+   queue:s.pendingCommands,commands:s.commandLog,profile:f.profile};
+ });
+ const before=await snapshot();expect(before.winner).toBeNull();
+ expect(before.commands.some(entry=>entry.command.type==='surrender')).toBe(false);
+ const oldCaches=await page.evaluate(async()=>(await caches.keys()).filter(name=>name.startsWith('frontier-command-rts-game-')));
+ expect(oldCaches.length).toBeGreaterThan(0);
+ expect((await request.post('/__qa/release')).ok()).toBe(true);
+ await page.evaluate(async()=>{await (await navigator.serviceWorker.getRegistration())!.update();});
+ await expect(page.locator('#apply-update')).toBeVisible();
+ await expect.poll(()=>page.evaluate(async()=>(await navigator.serviceWorker.getRegistration())?.waiting?.state)).toBe('installed');
+ await page.evaluate(()=>{
+  const fixture=window as Window & {__PWA_SURRENDER_DB_WAITING__?:number;__RELEASE_PWA_SURRENDER_DB__?:()=>void};
+  const originalOpen=indexedDB.open.bind(indexedDB),deferred:(()=>void)[]=[];let held=true;
+  fixture.__PWA_SURRENDER_DB_WAITING__=0;
+  fixture.__RELEASE_PWA_SURRENDER_DB__=()=>{
+   held=false;indexedDB.open=originalOpen;
+   for(const callback of deferred.splice(0))callback();
+   fixture.__PWA_SURRENDER_DB_WAITING__=0;
+  };
+  indexedDB.open=((name:string,version?:number)=>{
+   const request=version===undefined?originalOpen(name):originalOpen(name,version);
+   return new Proxy(request,{
+    get(target,key){const value=Reflect.get(target,key,target);return typeof value==='function'?value.bind(target):value;},
+    set(target,key,value){
+     if(key==='onsuccess'){
+      target.onsuccess=event=>{
+       const invoke=()=>value?.call(target,event);
+       if(held){deferred.push(invoke);fixture.__PWA_SURRENDER_DB_WAITING__=deferred.length;}
+       else invoke();
+      };
+      return true;
+     }
+     return Reflect.set(target,key,value,target);
+    },
+   });
+  }) as typeof indexedDB.open;
+ });
+ await page.getByRole('button',{name:'Update & restart',exact:true}).click();
+ await expect(page.locator('#apply-update')).toBeDisabled();
+ await expect(page.locator('#apply-update')).toHaveText('Saving & restarting…');
+ await expect.poll(()=>page.evaluate(()=>(window as Window & {__PWA_SURRENDER_DB_WAITING__?:number}).__PWA_SURRENDER_DB_WAITING__)).toBeGreaterThan(0);
+ await confirmation.getByRole('button',{name:'Confirm surrender',exact:true}).click();
+ await expect(confirmation).toBeVisible();
+ await expect(page.locator('.result-dialog')).toHaveCount(0);
+ expect(await snapshot()).toEqual(before);
+ await expect.poll(()=>page.evaluate(async()=>(await navigator.serviceWorker.getRegistration())?.waiting?.state)).toBe('installed');
+ await Promise.all([
+  page.waitForEvent('load'),
+  page.evaluate(()=>{(window as Window & {__RELEASE_PWA_SURRENDER_DB__?:()=>void}).__RELEASE_PWA_SURRENDER_DB__!();}),
+ ]);
+ await expect(action(page,'continue')).toBeVisible();await ready(page);
+ expect(await page.evaluate(()=>window.__FRONTIER__.profile)).toEqual(before.profile);
+ await expect(page.locator('#apply-update')).toHaveCount(0);
+ await action(page,'continue').click();
+ await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.playing)).toBe(true);
+ expect(await snapshot()).toEqual(before);
+ await expect(page.locator('.result-dialog')).toHaveCount(0);
+ await expect(confirmation).toHaveCount(0);
+ await expect.poll(()=>page.evaluate(async()=>(await caches.keys()).filter(name=>name.startsWith('frontier-command-rts-game-')))).not.toEqual(oldCaches);
+});

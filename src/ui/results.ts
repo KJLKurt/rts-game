@@ -1,8 +1,9 @@
-import { playerAllianceWon, playerOutcomeStatus } from "../sim/alliances";
+import { hasPlayerSurrendered, playerAllianceWon, playerOutcomeStatus, SURRENDER_REASON } from "../sim/alliances";
 import type { GameState } from "../sim/types";
 
 /** Present the result from the local player’s perspective, including early elimination. */
 export function battleResultReason(state: GameState): string {
+  if (hasPlayerSurrendered(state)) return SURRENDER_REASON;
   if (playerOutcomeStatus(state) === "spectating")
     return "Your Command Keep has fallen. Your allies are still fighting.";
   if (!state.rush && !playerAllianceWon(state) && state.players[0].defeated)
@@ -12,6 +13,7 @@ export function battleResultReason(state: GameState): string {
 
 /** Short preparation advice for the loss that actually ended this battle. */
 export function battleDefeatAdvice(state: GameState): { title: string; text: string } | null {
+  if (hasPlayerSurrendered(state)) return null;
   if (playerOutcomeStatus(state) !== "lost") return null;
   if (state.rush)
     return { title: "Keep moving", text: "Dodge the marked strikes, use your abilities, and collect supplies while your squad handles nearby enemies." };
