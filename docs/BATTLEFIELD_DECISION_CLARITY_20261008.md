@@ -21,3 +21,9 @@ Read-only review found no P0/P1 regression. Its tactical-limit gap and large-tex
 Pending the existing isolated browser workflow. No passing runtime, visual-fit or deployment claim belongs to this candidate until its own terminal evidence is appended. Keep the prior clean448-pass baseline gate and the earlier selector failures in their original records.
 
 The approved concept boards remain visual direction; no illustrative resources, costs, health or worker mechanics were copied into simulation. Original-scope reconciliation and substantive remaining work are in REQUIREMENTS_RECONCILIATION_20261008.md.
+
+## First runtime gate and correction
+
+Run37736705281 on c05e47c4 / fc-d2c8a92015e0 ended at the six-failure limit:321 passed,6 failed after their configured retries,16 skipped,1 interrupted and131 unexecuted. Three failures came from a rooted locator used inside a relative row filter in the new test. A portrait dock measured381.671875px against its368px limit; two landscape native-selection checks also regressed after the additional health-row geometry. These results remain failed evidence, not acceptance.
+
+Correction candidate **fc-cb9c10dfdc4f** restores the original small-element health line and empty multi-selection line. The visual meter is absolutely positioned within that existing box, so it adds no row or wrapping height. Native interaction/size assertions remain unchanged. Row assertions use the already-found button's immediate parent. Type/content/build and613 unit tests pass again; source review confirms the bounded correction. Its own complete runtime gate remains pending. No main/Pages deployment has occurred for either clarity candidate.

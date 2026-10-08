@@ -57,7 +57,7 @@ test('battlefield readouts distinguish costs, live health and unavailable buildi
  // Explicit balance fixtures verify presentation thresholds; purchases still use native controls below.
  await page.evaluate(()=>{const p=window.__FRONTIER__.state.players[0];p.gold=0;p.wood=0;});
  await expect(train).toBeDisabled();
- await expect(page.locator('.inspect-action').filter({has:train})).toContainText('Requires 45 gold and 10 wood total.');
+ await expect(train.locator('..')).toContainText('Requires 45 gold and 10 wood total.');
  const blockedNode=await train.elementHandle();
  await page.evaluate(()=>{const p=window.__FRONTIER__.state.players[0];p.gold=1;p.wood=1;});
  await page.waitForTimeout(300);
@@ -71,7 +71,7 @@ test('battlefield readouts distinguish costs, live health and unavailable buildi
  // Explicit full tactical-queue fixture checks live metadata separate from its projected snapshot.
  await page.evaluate(()=>{const s=window.__FRONTIER__.state,id=s.entities.find(e=>e.team===0&&e.kind==='commander')!.id;s.pendingCommands=Array.from({length:60},()=>({type:'hold',team:0,entityIds:[id]}));});
  await expect(research).toBeDisabled();await expect(action(page,'upgrade-building')).toBeDisabled();
- await expect(page.locator('.inspect-action').filter({has:research})).toContainText('Tactical queue full (60/60)');
+ await expect(research.locator('..')).toContainText('Tactical queue full (60/60)');
  await page.evaluate(()=>{window.__FRONTIER__.state.pendingCommands=[];});
  await expect(research).toBeEnabled();
  await page.locator('[data-action=inspect-tab][data-id=train]').click();

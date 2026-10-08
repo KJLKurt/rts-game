@@ -39,6 +39,7 @@ describe("truthful battlefield readouts", () => {
       { kind: "commander", type: "ranger", hp: 125, maxHp: 250 },
       2,
     );
+    expect(html).toMatch(/^<small class="selection-vitals">/);
     expect(html).toContain('role="meter"');
     expect(html).toContain('aria-valuenow="125"');
     expect(html).toContain("width:50.00%");

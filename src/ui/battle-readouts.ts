@@ -32,7 +32,7 @@ export function selectionHealthHTML(
   const maximum = Math.max(1, Math.ceil(entity.maxHp));
   const health = Math.max(0, Math.min(maximum, Math.ceil(entity.hp)));
   const ratio = Math.max(0, Math.min(1, entity.hp / Math.max(1, entity.maxHp)));
-  return `<span class="selection-vitals"><span class="selection-health-track" role="meter" aria-label="${esc(selectionName(entity))} health" aria-valuemin="0" aria-valuemax="${maximum}" aria-valuenow="${health}" aria-valuetext="${health} of ${maximum} health"><i style="width:${(ratio * 100).toFixed(2)}%"></i></span><small>${health} / ${maximum} health${queued ? ` · ${queued} queued` : ""}</small></span>`;
+  return `<small class="selection-vitals"><span class="selection-health-track" role="meter" aria-label="${esc(selectionName(entity))} health" aria-valuemin="0" aria-valuemax="${maximum}" aria-valuenow="${health}" aria-valuetext="${health} of ${maximum} health"><i style="width:${(ratio * 100).toFixed(2)}%"></i></span><span class="selection-health-value">${health} / ${maximum} health${queued ? ` · ${queued} queued` : ""}</span></small>`;
 }
 
 export function placementFeedback(
