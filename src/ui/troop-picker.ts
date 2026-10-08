@@ -17,7 +17,7 @@ export function troopPickerHTML(
     0,
   );
   return `<div class="troop-picker">
-    <p class="muted troop-picker-help">Choose troops for orders. New recruits are not added automatically. On desktop, Shift-click a troop to add or remove it.</p>
+    <p class="muted troop-picker-help">New recruits stay unselected.</p>
     <div class="troop-picker-toolbar"><button type="button" data-action="troop-select-all">All</button><button type="button" data-action="troop-select-none">None</button><p id="troop-selection-count" role="status" aria-live="polite" aria-atomic="true">${selectedCount} of ${total} troops selected</p></div>
     <div class="troop-picker-body">${
       groups.length

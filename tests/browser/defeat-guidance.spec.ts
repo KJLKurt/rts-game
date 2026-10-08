@@ -17,12 +17,26 @@ async function friendlyBuildingPoint(page:Page){
   await expect.poll(()=>page.evaluate(({x,y})=>{
     const p=window.__FRONTIER__.renderer.worldToScreen(x,y);return document.elementFromPoint(p.x,p.y)?.id;
   },target)).toBe('world');
-  const point=await page.evaluate(({x,y})=>{
-    const f=window.__FRONTIER__,p=f.renderer.worldToScreen(x,y),item=f.renderer.pick(f.state,p.x,p.y) as {id?:string};
-    return {...p,hit:document.elementFromPoint(p.x,p.y)?.id,picked:item?.id};
-  },target);
-  expect(point.hit).toBe('world');expect(point.picked).toBe(target.id);
-  return {point,target};
+  // A ground-center anchor can land in transparent sprite padding. Read a
+  // painted, unobscured body pixel instead; preserve the same native assertions.
+  let point:{x:number;y:number;hit:string|undefined;picked:string|undefined}|null=null;
+  await expect.poll(async()=>{
+    point=await page.evaluate(({x,y,id})=>{
+      const f=window.__FRONTIER__,center=f.renderer.worldToScreen(x,y);
+      for(let dy=-36;dy<=-4;dy+=4)for(let dx=-24;dx<=24;dx+=4){
+        const p={x:center.x+dx,y:center.y+dy};
+        if(![-2,0,2].every(sx=>[-2,0,2].every(sy=>(f.renderer.pick(f.state,p.x+sx,p.y+sy) as {id?:string}|undefined)?.id===id)))continue;
+        const clearance=navigator.maxTouchPoints>0?22:0;
+        if(![-clearance,0,clearance].every(sx=>[-clearance,0,clearance].every(sy=>document.elementFromPoint(p.x+sx,p.y+sy)?.id==='world')))continue;
+        return {...p,hit:document.elementFromPoint(p.x,p.y)?.id,picked:(f.renderer.pick(f.state,p.x,p.y) as {id?:string}|undefined)?.id};
+      }
+      return null;
+    },target);
+    return point?.picked;
+  }).toBe(target.id);
+  const resolved=point as unknown as {x:number;y:number;hit:string;picked:string};
+  expect(resolved.hit).toBe('world');expect(resolved.picked).toBe(target.id);
+  return {point:resolved,target};
 }
 
 test('explicit Move over a friendly sprite preserves the army and queues a destination',async({page})=>{

@@ -11,3 +11,10 @@ The simulation, renderer, public assets and save schema are byte-identical to th
 Review found an existing keyup edge case: releasing an arrow/WASD key while scrolling a modal could issue steer(0,0) and replace an ordinary movement order. Keyup now releases only actual directControl. Modal keyboard focus includes disclosure summaries, excludes closed-details descendants, and returns to the recreated opener after Apply.
 
 Local verification: 679 unit tests in 68 files, TypeScript, authored-content validation and production build pass. Fifteen new pure-helper tests cover ownership, deterministic ordering, stale/duplicate pruning, exact toggles and type groups, source immutability, escaped metadata, nonselected orders, paused snapshots and save/restore. Native browser scenarios are prepared for arbitrary subsets, separate queued orders, save reload, cancellation, live-dialog interruption, keyboard order preservation, narrow/enlarged-text layout and Shift-click precedence. Runtime and natural-play acceptance remain pending.
+
+
+## First native gate and visual review
+
+Run 37760860210 on 7b789e17291798b03baae5efaac2bd98957b696a completed 100 identities: 88 passed, 11 conditional skips, one failed, zero retries or unexecuted cases. Every new subset scenario passed. The remaining existing Attack-move case failed before input because its helper assumed a building’s world-center anchor would select the sprite. The helper now searches a verified selectable body point, retaining the same actual native input and command/selection assertions.
+
+Downloaded native screenshots at 320px enlarged text and short landscape also showed excessive explanatory text consuming roster space. The help copy is now the concise “New recruits stay unselected.” Desktop Shift-click guidance remains in Orders and Help. Header spacing is tightened and footer focus rings have room. The corrected candidate requires all 18 subset identities plus the 9 existing identities sharing the building-target helper. This is a scoped visual/test correction, not a simulation or renderer change.

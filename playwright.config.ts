@@ -4,8 +4,8 @@ import {defineConfig, devices} from '@playwright/test';
 const external = process.env.FRONTIER_TEST_URL;
 const subsetQA = !!process.env.CI && process.env.GITHUB_REF_NAME === 'qa-browser-check' && process.env.FRONTIER_FULL_BROWSER_QA !== '1';
 export default defineConfig({
-  testMatch: subsetQA ? /(?:troop-selection|defeat-guidance|first-candidate-ui|touch-target-discrimination|hud-collisions|interruption|game|pwa)\.spec\.ts$/ : undefined,
-  grep: subsetQA ? /(?:troop-selection\.spec\.ts|defeat-guidance\.spec\.ts|first-candidate-ui\.spec\.ts|touch-target-discrimination\.spec\.ts|hud-collisions\.spec\.ts|interruption\.spec\.ts|pwa\.spec\.ts|desktop keyboard movement and space pause work|phone thumbstick works in either orientation and cancels on interruption)/ : undefined,
+  testMatch: subsetQA ? /(?:troop-selection|defeat-guidance)\.spec\.ts$/ : undefined,
+  grep: subsetQA ? /(?:troop-selection\.spec\.ts|explicit Move over a friendly sprite preserves the army and queues a destination|Cancel and Army restore contextual selection after an explicit order|Attack-move takes one destination then restores friendly selection)/ : undefined,
   testDir: './tests/browser',
   timeout: 35_000,
   expect: {timeout: 8_000},
@@ -15,7 +15,7 @@ export default defineConfig({
   maxFailures: subsetQA ? 4 : process.env.CI ? 6 : 0,
   // Canvas-heavy games should not spawn one browser per reported host CPU.
   workers: process.env.FRONTIER_TEST_WORKERS ? Math.max(1, Number(process.env.FRONTIER_TEST_WORKERS)) : 2,
-  reporter: [['list'], ['html', {open: 'never', outputFolder: 'playwright-report'}], ['json', {outputFile:'playwright-report/subset-focused.json'}]],
+  reporter: [['list'], ['html', {open: 'never', outputFolder: 'playwright-report'}], ['json', {outputFile:'playwright-report/subset-recheck.json'}]],
   use: {
     baseURL: external || 'http://127.0.0.1:4181/rts-game/',
     trace: subsetQA ? 'off' : 'on-first-retry', screenshot: 'only-on-failure', video: 'off',
