@@ -1,10 +1,11 @@
-// Isolated queued-plan acceptance gate. Release uses the preserved full default config.
+// Isolated surrender/result durability gate; release preserves the full default config.
 import {defineConfig, devices} from '@playwright/test';
 
 /** Run against the production build: Vite dev deliberately does not register a worker. */
 const external = process.env.FRONTIER_TEST_URL;
 export default defineConfig({
   testDir: './tests/browser',
+  testMatch: /(?:surrender|results|pwa)\.spec\.ts/,
   timeout: 35_000,
   expect: {timeout: 8_000},
   fullyParallel: true,
@@ -19,11 +20,11 @@ export default defineConfig({
     trace: 'off', screenshot: 'only-on-failure', video: 'off',
     launchOptions: process.env.PLAYWRIGHT_EXECUTABLE_PATH ? {executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH} : {},
   },
-  grep: /Repeat keeps two paused plans|queued footprints retain|save and Continue restore plans|real troop picking and native Move|workshop Undo and a new battle|paused construction rejects an invalid site|Escape cancels placement and dismisses|HUD pause leaves a native ground order/,
   projects: [
-    {grep: /real troop picking and native Move/, testMatch: /queued-construction\.spec\.ts/, name: 'desktop', use: {...devices['Desktop Chrome'], viewport: {width: 1440, height: 900}}, testIgnore: /pwa\.spec\.ts/},
-    {testMatch: /queued-construction\.spec\.ts/, name: 'phone-portrait', use: {...devices['Pixel 7'], viewport: {width: 390, height: 844}}, testIgnore: /pwa\.spec\.ts/},
-    {grep: /real troop picking and native Move/, testMatch: /queued-construction\.spec\.ts/, name: 'phone-landscape', use: {...devices['Pixel 7'], viewport: {width: 844, height: 390}}, testIgnore: /pwa\.spec\.ts/},
+    {name: 'desktop', use: {...devices['Desktop Chrome'], viewport: {width: 1440, height: 900}}, testIgnore: /pwa\.spec\.ts/},
+    {name: 'phone-portrait', use: {...devices['Pixel 7'], viewport: {width: 390, height: 844}}, testIgnore: /pwa\.spec\.ts/},
+    {name: 'phone-landscape', use: {...devices['Pixel 7'], viewport: {width: 844, height: 390}}, testIgnore: /pwa\.spec\.ts/},
+    {name: 'pwa', use: {...devices['Desktop Chrome']}, testMatch: /pwa\.spec\.ts/},
   ],
   webServer: external ? undefined : {
     command: 'npm run build && node tests/browser/serve-production.mjs',

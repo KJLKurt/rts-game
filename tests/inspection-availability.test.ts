@@ -42,6 +42,16 @@ const fillQueue = (producer: Entity, count = PRODUCTION_QUEUE_LIMIT) => {
 };
 
 describe("building inspector availability", () => {
+  it("disables inspection actions after a null-winner surrender", () => {
+    const state = game();
+    for (const player of state.players) player.alliance = 0;
+    const producer = building(state);
+    expect(issueCommand(state, {type: "surrender", team: 0}).ok).toBe(true);
+    expect(state.winner).toBeNull();
+    expect(train(state, producer)).toEqual({available: false, reason: "The battle has ended."});
+    expect(buildingInspectionAvailability(state, producer).upgrade.available).toBe(false);
+  });
+
   it.each([
     [44, 10, "Requires 45 gold total."],
     [45, 9, "Requires 10 wood total."],

@@ -531,6 +531,9 @@ export type GameCommand = {
     x: number;
     y: number;
 } | {
+    type: 'surrender';
+    team: number;
+} | {
     type: 'pause';
     team: number;
     paused: boolean;

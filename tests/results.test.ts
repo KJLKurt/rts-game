@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createGame } from "../src/sim";
+import { createGame, issueCommand, restoreGame, serializeGame } from "../src/sim";
 import { battleDefeatAdvice, battleResultReason } from "../src/ui/results";
 describe("local battle result wording", () => {
   it.each([1, null])(
@@ -50,6 +50,22 @@ it("retains allied victory after local elimination, while scripted missions stil
 
 
 describe("defeat preparation advice", () => {
+  it.each(["domination", "conquest", "rush"] as const)("reports an explicit %s surrender without attributing a combat failure", mode => {
+    const state = createGame({ mode });
+    expect(issueCommand(state, { type: "surrender", team: 0 }).ok).toBe(true);
+    const restored = restoreGame(serializeGame(state));
+    const before = serializeGame(restored);
+    expect(battleResultReason(restored)).toBe("You surrendered.");
+    expect(battleDefeatAdvice(restored)).toBeNull();
+    expect(serializeGame(restored)).toBe(before);
+  });
+  it("keeps a voluntary concession distinct from prior personal elimination with surviving allies", () => {
+    const state = createGame({ aiPlayers: 2 });
+    state.players[1].alliance = 0; state.players[0].defeated = true;
+    expect(issueCommand(state, { type: "surrender", team: 0 }).ok).toBe(true);
+    expect(battleResultReason(state)).toBe("You surrendered.");
+    expect(battleDefeatAdvice(state)).toBeNull();
+  });
   it("responds to the local Keep loss even when the rival wins through conquest", () => {
     const state = createGame(); state.winner = 1; state.players[0].defeated = true;
     state.victoryReason = "All enemy Command Keeps destroyed";

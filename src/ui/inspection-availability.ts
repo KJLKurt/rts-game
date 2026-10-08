@@ -5,6 +5,7 @@ import {
   PRODUCTION_QUEUE_LIMIT,
   getUnitCost,
   isCompetitivePlayer,
+  hasBattleEnded,
   nextBuildingUpgrade,
   populationBreakdown,
   technologyCost,
@@ -36,7 +37,7 @@ export function buildingInspectionAvailability(
 ) {
   const player = state.players[producer.team];
   const restricted =
-    state.winner !== null
+    hasBattleEnded(state)
       ? "The battle has ended."
       : !isCompetitivePlayer(player) || player.defeated
         ? "Player is not active."

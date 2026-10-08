@@ -8,6 +8,7 @@ import type {
 } from "../../sim/types";
 import {
   canPlayerContinue,
+  hasPlayerSurrendered,
   playerAllianceWon,
   playerOutcomeStatus,
 } from "../../sim/alliances";
@@ -752,7 +753,12 @@ export function recordBattleResult(
       achievement.target,
       Math.max(record.progress, achievement.metric(profile)),
     );
-    if (!record.unlocked && record.progress >= achievement.target) {
+    // A concession records played stats, but does not grant a new reward.
+    if (
+      !hasPlayerSurrendered(state) &&
+      !record.unlocked &&
+      record.progress >= achievement.target
+    ) {
       record.unlocked = true;
       record.unlockedAt = endedAt;
       profile.unlocked.push(achievement.id);

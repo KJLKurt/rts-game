@@ -87,6 +87,7 @@ import {
   allianceMembers,
   playerAllianceWon,
   canPlayerContinue,
+  hasBattleEnded,
   playerOutcomeStatus,
 } from "./sim";
 import type {
@@ -110,7 +111,7 @@ import {
   defaultPreferences,
   loadProfile,
 } from "./platform/storage";
-import { setupPWA } from "./platform/pwa";
+import { setupPWA, UpdateUnavailableError } from "./platform/pwa";
 import { SaveQueue } from "./platform/save-queue";
 import { ResultCommit } from "./platform/result-commit";
 import { BattleSuspension } from "./platform/battle-suspension";
@@ -317,6 +318,8 @@ let learningProgress: LearningProgress | null = null,
   learningCompletionShown = false;
 let tutorialOrigin: Point | null = null;
 let previousFocus: HTMLElement | null = null;
+let surrenderConfirmationMatchId: string | null = null;
+let applyingUpdate = false;
 let frameRate = 60;
 let runtimeFailed = false;
 let lastDeckSignature = "";
@@ -338,7 +341,7 @@ let queuedConstructionSource: GameState | null = null,
   queuedConstructionProjection: GameState | null = null,
   queuedConstructionSnapshot: readonly PlannedConstruction[] = [];
 function visibleConstructionPlans(): readonly PlannedConstruction[] {
-  if (!playing || editing || !state.paused || state.winner !== null) return [];
+  if (!playing || editing || !state.paused || hasBattleEnded(state)) return [];
   const projected = planningState();
   if (queuedConstructionSource !== state || queuedConstructionProjection !== projected) {
     queuedConstructionSnapshot = queuedConstructionPlans(state, 0, projected);
@@ -907,7 +910,7 @@ function dispatch(
   command: GameCommand,
   sound: "order" | "build" | "recruit" | "ability" = "order",
 ) {
-  if (battleSuspension.suspended) return false;
+  if (battleSuspension.suspended || applyingUpdate) return false;
   const learningId = command.type === "recruit" ? command.unit
     : command.type === "build" ? command.building
       : command.type === "research" ? command.technology
@@ -1301,6 +1304,7 @@ function updateTutorial() {
   }
 }
 function showDialog(title: string, body: string, cls = "") {
+  surrenderConfirmationMatchId = null;
   troopSelectionDraft = null;
   if (playing && commander()?.directControl)
     issueCommand(state, { type: "steer", team: 0, dx: 0, dy: 0 });
@@ -1309,10 +1313,11 @@ function showDialog(title: string, body: string, cls = "") {
   if (!modalOpen) previousFocus = document.activeElement as HTMLElement;
   modalOpen = true;
   releaseDialogToast();
-  modal.innerHTML = `<div class="modal-backdrop"><section class="dialog ${cls}" role="dialog" aria-modal="true" aria-label="${esc(title)}"><header><h2>${esc(title)}</h2>${button("Close", "close-dialog", "square", "close", 'aria-label="Close dialog"')}</header><div class="dialog-feedback-slot"></div>${body}</section></div>`;
+  modal.innerHTML = `<div class="modal-backdrop"><section class="dialog ${cls}" role="dialog" aria-modal="true" aria-label="${esc(title)}"><header><h2>${esc(title)}</h2>${cls.split(" ").includes("result-dialog") ? "" : button("Close", "close-dialog", "square", "close", 'aria-label="Close dialog"')}</header><div class="dialog-feedback-slot"></div>${body}</section></div>`;
   modal.querySelector(".dialog-feedback-slot")!.append(toastElement);
   positionBattleToast();
-  modal.querySelector<HTMLButtonElement>("button")?.focus();
+  [...modal.querySelectorAll<HTMLButtonElement>("button")]
+    .find(control => !control.disabled && !control.hidden && control.getClientRects().length)?.focus();
 }
 function closeDialog() {
   if (pendingResult) {
@@ -1320,6 +1325,7 @@ function closeDialog() {
     return;
   }
   troopSelectionDraft = null;
+  surrenderConfirmationMatchId = null;
   modalOpen = false;
   releaseDialogToast();
   modal.innerHTML = "";
@@ -1328,7 +1334,7 @@ function closeDialog() {
   if (previousFocus?.isConnected) previousFocus.focus();
 }
 function showTroopPicker() {
-  if (!playing || state.winner !== null) return;
+  if (!playing || hasBattleEnded(state)) return;
   const draft = new Set(pruneTroopSelection(state, selection));
   showDialog("Choose troops", troopPickerHTML(state, draft), "troop-picker-dialog");
   troopSelectionDraft = draft;
@@ -1384,9 +1390,27 @@ function showSettings() {
 function showPauseMenu() {
   showDialog(
     "Take a breath",
-    `<p class="muted">The battle is paused. Your frontier will wait.</p><p class="mission-goal">${icon("flag")} ${esc(state.objectiveText)}</p>${activeMission() ? `<div id="mission-progress">${missionObjectivesHTML(state, activeMission()!)}</div>` : ""}<div class="menu-stack">${button("Return to battle", "resume-dialog", "primary", "play")}${workshopTest.active ? button("Return to workshop", "return-to-editor", "", "back") : ""}${button("Save battle", "save", "", "save")}${button("Copy map code", "copy-map-code", "", "map")}${button("How to play", "help", "", "book")}${button("Settings", "settings", "", "gear")}${button("Credits / About", "about", "", "book")}${button("Save & leave", "save-leave", "", "back")}</div>`,
+    `<p class="muted">The battle is paused. Your frontier will wait.</p><p class="mission-goal">${icon("flag")} ${esc(state.objectiveText)}</p>${activeMission() ? `<div id="mission-progress">${missionObjectivesHTML(state, activeMission()!)}</div>` : ""}<div class="menu-stack">${button("Return to battle", "resume-dialog", "primary", "play")}${workshopTest.active ? button("Return to workshop", "return-to-editor", "", "back") : ""}${button("Save battle", "save", "", "save")}${button("Copy map code", "copy-map-code", "", "map")}${button("How to play", "help", "", "book")}${button("Settings", "settings", "", "gear")}${button("Credits / About", "about", "", "book")}${button("Save & leave", "save-leave", "", "back")}${canOfferSurrender() ? button("Surrender battle", "surrender", "surrender-action", "flag") : ""}</div>`,
   );
   updateHUD();
+}
+function canOfferSurrender() {
+  return playing && !applyingUpdate && !editing && !workshopTest.active && !state.settings.learning &&
+    !resultShown && !pendingResult && canPlayerContinue(state);
+}
+function showSurrenderConfirmation() {
+  if (!canOfferSurrender()) return;
+  const consequence = expeditionBattleActive
+    ? "This also ends your expedition run. Your journal and earlier rewards are kept, but you will need to start a new expedition."
+    : activeMission()
+      ? "This attempt won’t complete the chapter or unlock rewards. You can try again from the result screen."
+      : "You can start a fresh battle from the result screen.";
+  showDialog(
+    "Surrender this battle?",
+    `<p>This ends the current battle and records a defeat. You won’t earn rewards.</p><p>${consequence}</p><p class="muted">Use Save &amp; leave if you want to continue this battle later.</p><div class="result-actions">${button("Cancel", "cancel-surrender", "primary", "back")}${button("Confirm surrender", "confirm-surrender", "surrender-action", "flag")}</div>`,
+    "surrender-dialog",
+  );
+  surrenderConfirmationMatchId = battleMatchId;
 }
 function battleSnapshot() {
   return {
@@ -1446,7 +1470,7 @@ async function continueGame(checkpoint?: unknown) {
   const navigation = ++navigationVersion;
   await Promise.all([battleSaves.idle(), expeditionReady]);
   const record: any = checkpoint ?? (await loadRecord("battle"));
-  if (navigation !== navigationVersion) return;
+  if (applyingUpdate || navigation !== navigationVersion) return;
   if (!record) return toast("No saved battle yet.");
   try {
     const restoredState = restoreGame(record.game);
@@ -2061,10 +2085,11 @@ async function handleAction(action: string, id?: string) {
   }
 }
 async function performAction(action: string, id?: string) {
+  if (applyingUpdate) return;
   const navigation = navigationVersion;
   // Do not replace a pending result/checkpoint with a new battle or route.
   if (pendingResult && !(await persistResult())) return;
-  if (navigation !== navigationVersion) return;
+  if (applyingUpdate || navigation !== navigationVersion) return;
   if (action.startsWith("panel-")) {
     panel = action.slice(6);
     deckCollapsed = false;
@@ -2454,6 +2479,7 @@ async function performAction(action: string, id?: string) {
       showSettings();
       break;
     case "close-dialog":
+      if (modal.querySelector(".result-dialog")) break;
       closeDialog();
       break;
     case "choose-commander":
@@ -2513,6 +2539,26 @@ async function performAction(action: string, id?: string) {
     case "pause-menu":
       showPauseMenu();
       break;
+    case "surrender":
+      showSurrenderConfirmation();
+      break;
+    case "cancel-surrender":
+      if (surrenderConfirmationMatchId === battleMatchId && canOfferSurrender()) showPauseMenu();
+      break;
+    case "confirm-surrender": {
+      if (!canOfferSurrender() || surrenderConfirmationMatchId !== battleMatchId ||
+          !modal.querySelector(".surrender-dialog") || battleSuspension.suspended) break;
+      surrenderConfirmationMatchId = null;
+      const result = issueCommand(state, { type: "surrender", team: 0 });
+      if (!result.ok) { toast(result.error || "This battle cannot be surrendered.", "warning"); break; }
+      placement = null;
+      targetPoint = null;
+      cancelMapTargeting();
+      planningSnapshot = null;
+      planningSignature = "";
+      showResult();
+      break;
+    }
     case "view-attacked-building": {
       const building = state.entities.find(
         (e) => e.id === id && e.team === 0 && e.kind === "building" && e.hp > 0,
@@ -2829,16 +2875,21 @@ async function performAction(action: string, id?: string) {
       }
       if (await persist()) toast("Battle saved on this device.");
       break;
-    case "save-leave":
+    case "save-leave": {
       if (workshopTest.active) {
         returnToEditor();
         break;
       }
+      const leavingMatch = battleMatchId;
       if (await persist()) {
+        // A newer result/navigation must not be hidden by an older save finishing.
+        if (applyingUpdate || navigation !== navigationVersion || leavingMatch !== battleMatchId ||
+            resultShown || pendingResult || !canPlayerContinue(state)) break;
         closeDialog();
         showMenu();
       }
       break;
+    }
     case "speed":
       speed =
         SETUP_SPEEDS[
@@ -3453,6 +3504,8 @@ window.addEventListener("keydown", (e) => {
   }
   if (modalOpen && e.key === "Escape") {
     e.preventDefault();
+    // Terminal screens keep their explicit retry/menu exits reachable.
+    if (modal.querySelector(".result-dialog")) return;
     closeDialog();
     return;
   }
@@ -3581,7 +3634,7 @@ function resetAppSuspension() {
 function suspendApp() {
   // Browser interruptions must work even with Brutal or exhausted Hard pauses.
   // Clear direct steering before the checkpoint so no held input survives it.
-  const interruptedBattle = playing && state.winner === null;
+  const interruptedBattle = playing && !hasBattleEnded(state);
   const changed = interruptedBattle && battleSuspension.suspend(state);
   clearInterruptedInput();
   audioInterrupted = true;
@@ -3727,13 +3780,14 @@ function frame(now: number) {
   try {
     if (playing) {
       // An async launch can finish after visibilitychange already fired.
-      if (document.hidden && state.winner === null && !battleSuspension.suspended)
+      if (document.hidden && !hasBattleEnded(state) && !battleSuspension.suspended)
         suspendApp();
       if (
         !modalOpen &&
+        !applyingUpdate &&
         !battleSuspension.suspended &&
         !document.hidden &&
-        state.winner === null
+        !hasBattleEnded(state)
       ) {
         const dx =
             (keys.has("d") || keys.has("arrowright") ? 1 : 0) -
@@ -3761,7 +3815,7 @@ function frame(now: number) {
           lastJoystick = now;
         }
       }
-      battleSuspension.step(state, dt * speed, modalOpen || document.hidden);
+      battleSuspension.step(state, dt * speed, modalOpen || applyingUpdate || document.hidden);
       if (followCommander) {
         const c = commander();
         if (c) {
@@ -3811,7 +3865,7 @@ function frame(now: number) {
         updateHUD();
         hudClock = 0;
       }
-      if (autosaveClock > 30 && state.winner === null) {
+      if (autosaveClock > 30 && !hasBattleEnded(state)) {
         void persist();
         autosaveClock = 0;
       }
@@ -3866,16 +3920,23 @@ void setupPWA(
   (apply) => {
     const el = document.querySelector("#update")!;
     el.innerHTML = `<span>A new frontier is ready.</span><button id="apply-update">Update & restart</button>`;
-    el.querySelector("button")!.addEventListener(
-      "click",
-      () =>
-        void apply().catch(() =>
-          toast(
-            "Update postponed because the battle could not be saved.",
-            "warning",
-          ),
-        ),
-    );
+    const updateButton = el.querySelector("button")!;
+    updateButton.addEventListener("click", () => {
+      if (applyingUpdate) return;
+      // Freeze new actions until activation so the durable checkpoint cannot be
+      // superseded by a surrender or another battle while the update is saving.
+      applyingUpdate = true;
+      updateButton.disabled = true;
+      updateButton.textContent = "Saving & restarting…";
+      void apply().catch((error) => {
+        applyingUpdate = false;
+        updateButton.disabled = false;
+        updateButton.textContent = "Update & restart";
+        toast(error instanceof UpdateUnavailableError
+          ? "This update is no longer waiting. Your battle is still open."
+          : "Update postponed because the battle could not be saved.", "warning");
+      });
+    });
   },
   async () => {
     if (editing || workshopTest.active) await storeEditorDraft();

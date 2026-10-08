@@ -1,3 +1,4 @@
+import { hasBattleEnded } from "../sim/alliances";
 import type { Entity, GameEvent, GameState, Point } from "../sim/types";
 
 /** Read-only, bounded presentation memory. Nothing here issues commands or deals damage. */
@@ -106,7 +107,7 @@ export class CombatFeedback {
     // Interpolate only within the simulation's 100ms step; tactical pause freezes feedback too.
     this.time =
       state.time +
-      (state.paused || state.winner !== null
+      (state.paused || hasBattleEnded(state)
         ? 0
         : Math.min(0.1, Math.max(0, wallSeconds - this.sampleWallTime)));
     for (const event of state.events) {

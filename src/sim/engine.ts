@@ -1,4 +1,4 @@
-import { areAllied, areHostile, allianceRepresentative, allianceMembers, isCompetitivePlayer } from './alliances';
+import { areAllied, areHostile, allianceRepresentative, allianceMembers, isCompetitivePlayer, canPlayerContinue, hasBattleEnded, hasPlayerSurrendered, SURRENDER_REASON } from './alliances';
 import { findBreachTarget, BREACH_DAMAGE } from './ability-targeting';
 import { evaluateScriptCondition } from './triggers';
 import { SpatialIndex } from './spatial';
@@ -302,11 +302,25 @@ export function canBuild(s: GameState, team: number, id: BuildingId, x: number, 
     return { ok: true };
 }
 export function issueCommand(s: GameState, c: GameCommand): CommandResult {
-    if (s.winner !== null)
+    if (c.type === 'surrender' && c.team === 0 && hasPlayerSurrendered(s))
+        return { ok: true };
+    if (hasBattleEnded(s))
         return { ok: false, error: 'The battle has ended.' };
     const p = s.players[c.team];
-    if (!isCompetitivePlayer(p) || p.defeated && c.type !== 'pause')
+    if (!isCompetitivePlayer(p) || p.defeated && c.type !== 'pause' && c.type !== 'surrender')
         return { ok: false, error: 'Player is not active.' };
+    if (c.type === 'surrender') {
+        if (c.team !== 0 || s.settings.learning || !canPlayerContinue(s))
+            return { ok: false, error: 'Only an ongoing player battle can be surrendered.' };
+        // A confirmed concession takes effect at this tick, including during tactical pause.
+        // Leave combat state intact: conceding does not mean that anyone's Keep fell.
+        s.winner = surrenderWinner(s);
+        s.victoryReason = SURRENDER_REASON;
+        s.pendingCommands = [];
+        s.commandLog.push({ tick: s.tick, command: { type: 'surrender', team: 0 } });
+        emit(s, { type: 'alert', subtype: 'surrender', ...s.map.spawns[0], team: 0, text: SURRENDER_REASON });
+        return { ok: true };
+    }
     if (c.type === 'pause') {
         if (s.settings.difficulty === 'brutal' && c.paused)
             return { ok: false, error: 'Tactical pause is disabled on Brutal.' };
@@ -350,11 +364,11 @@ export function issueCommand(s: GameState, c: GameCommand): CommandResult {
 export function projectPendingCommands(state: GameState): GameState {
     if (!state.paused || !state.pendingCommands.length) return structuredClone(state);
     const planned = structuredClone(state); planned.paused = false; planned.pendingCommands = [];
-    for (const command of state.pendingCommands) if (command.type !== 'pause') executeCommand(planned, command);
+    for (const command of state.pendingCommands) if (command.type !== 'pause' && command.type !== 'surrender') executeCommand(planned, command);
     return planned;
 }
 function executeCommand(s: GameState, c: Exclude<GameCommand, {
-    type: 'pause';
+    type: 'pause' | 'surrender';
 }>): CommandResult {
     const p = s.players[c.team];
     if (c.type === 'rangedSpacing') {
@@ -1056,14 +1070,17 @@ export function updateFog(s: GameState) {
     }
     s.lastFogTick = s.tick;
 }
+function surrenderWinner(s: GameState): number | null {
+    return s.players.find(player => isCompetitivePlayer(player) && !player.defeated && !areAllied(s, 0, player.team))?.team ?? null;
+}
 function endGame(s: GameState, team: number, reason: string) {
-    if (s.winner !== null || !isCompetitivePlayer(s.players[team])) return;
+    if (hasBattleEnded(s) || !isCompetitivePlayer(s.players[team])) return;
     team = allianceRepresentative(s, team);
     s.winner = team; s.victoryReason = reason;
     emit(s, { type: 'victory', x: s.map.spawns[team].x, y: s.map.spawns[team].y, team, text: reason });
 }
 function checkVictory(s: GameState) {
-    if (s.settings.learning) return;
+    if (s.settings.learning || hasBattleEnded(s)) return;
     const remaining = s.players.filter(p => isCompetitivePlayer(p) && !p.defeated);
     if (s.settings.scriptedVictory) {
         if (s.players[0].defeated) {
@@ -1096,7 +1113,7 @@ function checkVictory(s: GameState) {
 }
 function updateScripts(s: GameState) {
     for (const trigger of s.triggers) {
-        if (s.winner !== null) break;
+        if (hasBattleEnded(s)) break;
         if (!trigger.fired && evaluateScriptCondition(s, trigger.when)) {
             trigger.fired = true;
             for (const action of trigger.actions) applyScriptAction(s, action);
@@ -1138,10 +1155,10 @@ function applyScriptAction(s: GameState, a: ScriptAction) {
     }
 }
 export function stepGame(s: GameState, elapsedSeconds: number): void {
-    if (s.paused || s.winner !== null || !Number.isFinite(elapsedSeconds) || elapsedSeconds <= 0)
+    if (s.paused || hasBattleEnded(s) || !Number.isFinite(elapsedSeconds) || elapsedSeconds <= 0)
         return;
     s.accumulator += elapsedSeconds;
-    while (s.accumulator + 1e-9 >= FIXED_STEP && s.winner === null && !s.paused) {
+    while (s.accumulator + 1e-9 >= FIXED_STEP && !hasBattleEnded(s) && !s.paused) {
         s.accumulator -= FIXED_STEP;
         if (s.accumulator < 1e-9)
             s.accumulator = 0;
@@ -1567,6 +1584,16 @@ export function restoreGame(input: string | object): GameState {
     data.commandLog ??= [];
     if (!Array.isArray(data.commandLog))
         fail('command history is invalid.');
+    const surrenderCommands = data.commandLog.filter(entry => entry?.command?.type === 'surrender');
+    if (hasPlayerSurrendered(data) || surrenderCommands.length) {
+        const entry = surrenderCommands[0];
+        if (!hasPlayerSurrendered(data) || data.settings.learning || !isCompetitivePlayer(data.players[0])
+            || !canPlayerContinue({ ...data, winner: null, victoryReason: '' })
+            || surrenderCommands.length !== 1 || entry !== data.commandLog.at(-1)
+            || entry.command.team !== 0 || entry.tick !== data.tick
+            || data.winner !== surrenderWinner(data) || data.pendingCommands.length)
+            fail('surrender result is invalid.');
+    }
     data.triggers ??= [];
     const triggerErrors = validateTriggers(data.triggers, { teamCount: data.map.spawns.length, width: data.map.width, height: data.map.height });
     if (triggerErrors.length)
@@ -1602,6 +1629,7 @@ export function restoreGame(input: string | object): GameState {
 function validateStoredCommand(s: GameState, c: GameCommand): string | null {
     if (!c || typeof c !== 'object' || !Number.isInteger(c.team) || !isCompetitivePlayer(s.players[c.team]))
         return 'has an invalid player.';
+    if (c.type === 'surrender') return 'cannot queue a surrender.';
     const position = (o: {
         x?: number;
         y?: number;

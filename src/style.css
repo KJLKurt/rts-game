@@ -4407,3 +4407,9 @@ footer .build-identifier {
   .troop-picker-help { margin-bottom: 4px; }
   .troop-picker-toolbar { margin-bottom: 4px; }
 }
+
+/* A deliberate exit stays secondary to Save & leave and the safe Cancel choice. */
+.surrender-action {
+  color: #ffb5a8;
+  border-color: #c97969;
+}

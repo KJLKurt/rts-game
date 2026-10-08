@@ -1,3 +1,7 @@
+export class UpdateUnavailableError extends Error {
+  constructor() { super("The offered update is no longer waiting."); }
+}
+
 export async function setupPWA(
   onUpdate: (apply: () => Promise<void>) => void,
   beforeUpdate: () => Promise<void>,
@@ -16,8 +20,11 @@ export async function setupPWA(
       if (!registration.waiting) return;
       onUpdate(async () => {
         await beforeUpdate();
+        const waiting = registration.waiting;
+        if (!waiting) throw new UpdateUnavailableError();
         reloading = true;
-        registration.waiting?.postMessage({ type: "ACTIVATE_UPDATE" });
+        try { waiting.postMessage({ type: "ACTIVATE_UPDATE" }); }
+        catch (error) { reloading = false; throw error; }
       });
     };
     offer();

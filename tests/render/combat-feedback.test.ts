@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createGame, getCommander, spawnEntity } from "../../src/sim/engine";
+import { createGame, getCommander, spawnEntity, issueCommand } from "../../src/sim/engine";
 import { CombatFeedback } from "../../src/render/CombatFeedback";
 import type { GameEvent, GameState } from "../../src/sim/types";
 function scene() {
@@ -33,6 +33,17 @@ function add(
 }
 const visible = () => true;
 describe("bounded event-synchronized combat presentation", () => {
+  it("freezes presentation for a null-winner surrendered match", () => {
+    const state = createGame();
+    for (const player of state.players) player.alliance = 0;
+    const view = new CombatFeedback();
+    view.update(state, 100, visible);
+    expect(issueCommand(state, {type: "surrender", team: 0}).ok).toBe(true);
+    expect(state.winner).toBeNull();
+    view.update(state, 100.05, visible);
+    expect(view.time).toBe(state.time);
+  });
+
   it("does not animate a release merely because a cooldown is high", () => {
     const { state, view, hero } = scene();
     hero.attackCooldown = hero.attackPeriod;
