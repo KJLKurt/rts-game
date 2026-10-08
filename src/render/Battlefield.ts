@@ -12,6 +12,7 @@ import { visibleTroopSummaries, troopSummaryPosition, type VisibleTroop, type Sc
 import type { UnitId } from '../sim/types';
 import type { PlannedConstruction } from '../ui/queued-construction';
 import { drawPlannedConstructionMarkers, plannedConstructionMarkers, QUEUED_CONSTRUCTION_STYLE } from './queued-construction';
+import { foliageMask, foliageOpacities, foliageSilhouette, type FoliageMask, type FoliageRect } from './foliage-visibility';
 
 export interface RenderOptions {
  time?:number; reveal?:boolean; quality?:'low'|'high'; reducedMotion?:boolean; team?:number;
@@ -54,6 +55,10 @@ export class Battlefield {
  private lastState:GameState|null=null;
  private lastOptions:RenderOptions={};
  private spriteCache=new Map<string,HTMLCanvasElement>();
+ private treeMasks=new WeakMap<HTMLCanvasElement,FoliageMask>();
+ private treeOpacities=new Map<Decoration,number>();
+ private foliageSprites=new WeakMap<HTMLImageElement,Map<string,readonly FoliageRect[]>>();
+ private foliageCanvas:HTMLCanvasElement|null=null;
  private entityHits=new Map<string,{image:HTMLImageElement;frame:AtlasFrame;bounds:SpriteBounds;matrix:DOMMatrix;opacity:number}>();
  private readableActors:RenderItem[]=[];
  private fadedNodes=new Set<string>();
@@ -191,6 +196,7 @@ export class Battlefield {
   // Every currently visible troop must remain readable and targetable behind structures.
   const protectedActors=items.filter(item=>item.kind==='entity'&&(item.value as Entity).kind!=='building');
   this.readableActors=protectedActors;
+  this.updateTreeOpacities(items,protectedActors,state,t,options);
   // Ground orders and command markers stay below the silhouettes.
   this.drawPlannedConstruction(c,state,options);
   for(const e of state.entities)if(selected.has(e.id)&&e.hp>0)this.drawOrder(c,e,z);
@@ -300,12 +306,92 @@ export class Battlefield {
   this.terrain={map,signature,canvas,ox,oy,width,height,decor,water};this.fogStamp='';return this.terrain;
  }
  private drawWater(c:Ctx,points:Point[],t:number){for(const p of points){if(!this.inFrame(p.x,p.y,60)||hash(p.x,p.y)<.65)continue;const x=(p.x-p.y)*TILE_W/2,y=(p.x+p.y)*TILE_H/2,s=Math.sin(t*.9+p.x*.7+p.y);c.globalAlpha=.15+s*.07;line(c,[x-12+s*2,y+3,x+2+s*2,y+3],'#dbefdb',1.1);}c.globalAlpha=1;}
- private drawDecoration(c:Ctx,d:Decoration,biome:string){
+ private decorationSprite(d:Decoration,biome:string):HTMLCanvasElement{
   const key=`${d.kind}/${Math.floor(d.variant*3)}/${biome}/${d.kind==='tree'?d.variant:0}`;let sprite=this.spriteCache.get(key);
   if(!sprite){sprite=document.createElement('canvas');sprite.width=100;sprite.height=110;const sc=sprite.getContext('2d')!;sc.translate(50,99);
    if(d.kind==='tree')tree(sc,d.variant,biome);else if(d.kind==='rock')rock(sc,d.variant,1.25);else{shadow(sc,16,7,.15);poly(sc,[-8,0,-9,-27,3,-31,10,-25,9,-1],'#839087');poly(sc,[-9,-27,3,-31,10,-25,0,-22],'#bcc4a8');line(sc,[-7,-15,7,-20],'#536e62',1);ellipse(sc,-9,0,9,3,'#5e845a');}
    this.spriteCache.set(key,sprite);
-  }c.drawImage(sprite,-50*d.size,-99*d.size,100*d.size,110*d.size);
+  }return sprite;
+ }
+ private updateTreeOpacities(items:readonly RenderItem[],actors:readonly RenderItem[],state:GameState,t:number,options:RenderOptions){
+  this.treeOpacities.clear();
+  if(!actors.length)return;
+  const trees=items.filter(item=>item.kind==='decor'&&(item.value as Decoration).kind==='tree');
+  if(!trees.length)return;
+  const projected=trees.map(item=>{
+   const d=item.value as Decoration,sprite=this.decorationSprite(d,state.map.biome);
+   let mask=this.treeMasks.get(sprite);
+   if(!mask){
+    try{mask=foliageMask(sprite.width,sprite.height,sprite.getContext('2d')!.getImageData(0,0,sprite.width,sprite.height).data);}
+    catch{mask={width:100,height:110,bounds:{x:24,y:28,width:52,height:71}};}
+    this.treeMasks.set(sprite,mask);
+   }
+   return{x:(item.x-item.y)*TILE_W/2,y:(item.x+item.y)*TILE_H/2,order:item.order,size:d.size,mask};
+  });
+  const opacity=foliageOpacities(projected,actors.map(item=>{
+   const e=item.value as Entity;
+   return{x:(item.x-item.y)*TILE_W/2,y:(item.x+item.y)*TILE_H/2,order:item.order,width:e.type==='siege'?55:e.type==='cavalry'?51:e.kind==='commander'?47:36,height:e.kind==='commander'?59:e.type==='cavalry'?48:e.type==='siege'?44:45,groundRadius:mobileGroundRadius(e)+4,silhouette:this.mobileFoliageSilhouette(e,state,t,options)};
+  }));
+  trees.forEach((item,index)=>{if(opacity[index]<1)this.treeOpacities.set(item.value as Decoration,opacity[index]);});
+ }
+ private decorationOpacity(d:Decoration):number{return this.treeOpacities.get(d)??1;}
+ private drawDecoration(c:Ctx,d:Decoration,biome:string){
+  const sprite=this.decorationSprite(d,biome);
+  c.globalAlpha*=this.decorationOpacity(d);
+  c.drawImage(sprite,-50*d.size,-99*d.size,100*d.size,110*d.size);
+ }
+ /** Share active source/pivot selection with painting; extended weapons keep their real bounds. */
+ private mobileArt(e:Entity,pose:ReturnType<CombatFeedback['pose']>,move:boolean,travel:number,options:RenderOptions){
+  const commander=e.kind==='commander',attacking=pose.age<.43;
+  const authoredFrame=this.attackAtlas.attackFrame(e.type,pose.age,pose.anticipation,!!options.reducedMotion);
+  const facing=attacking||pose.anticipation>0?Math.atan2(pose.direction.y,pose.direction.x):e.facing;
+  const directional=this.directionalFor(e.type),directionalFrame=directional.frame(e.type,facing,{attackAge:pose.age,anticipation:pose.anticipation,moving:move,travel},!!options.reducedMotion);
+  const directionalAttack=!!directional.data?.actors[e.type]?.attackFrameMs.length;
+  const authored=!!authoredFrame||!!directionalFrame&&(!attacking&&pose.anticipation<=0||directionalAttack||!!options.reducedMotion);
+  const width=e.type==='siege'?55:e.type==='cavalry'?51:commander?47:36,height=e.type==='siege'?44:e.type==='cavalry'?48:commander?59:45;
+  const directionalSource=directionalFrame?directional.data?.frames[directionalFrame]:undefined;
+  const attackDefinition=this.attackAtlas.data?.actors[e.type],attackSource=authoredFrame?this.attackAtlas.data?.frames[authoredFrame]:undefined;
+  const source=directionalSource??attackSource;
+  const scale=source?(directionalSource?height/directionalSource.bodyHeight:attackDefinition!.suggestedHeight/attackDefinition!.referenceBodyHeight):1;
+  return{authoredFrame,directional,directionalFrame,authored,width,height,image:source?(directionalSource?directional.image:this.attackAtlas.image):this.atlas.image,frame:source??this.atlas.frames[e.type],bounds:source?{x:-source.groundPivot.x*scale,y:-source.groundPivot.y*scale,width:source.w*scale,height:source.h*scale}:this.atlas.bounds(e.type,width,height)};
+ }
+ private mobileFoliageSilhouette(e:Entity,state:GameState,t:number,options:RenderOptions):readonly FoliageRect[]|undefined{
+  const pose=this.combat.pose(e,state.entities,state.time),locomotion=this.combat.locomotion.get(e.id),move=!!locomotion?.moving;
+  const travel=(locomotion?.distance??0)+(locomotion?.speed??0)*Math.max(0,this.combat.time-state.time),art=this.mobileArt(e,pose,move,travel,options);
+  if(!art.image||!art.frame||!art.bounds)return undefined;
+  let cache=this.foliageSprites.get(art.image);if(!cache){cache=new Map();this.foliageSprites.set(art.image,cache);}
+  const {frame,bounds}=art,key=`${frame.x},${frame.y},${frame.w},${frame.h}/${bounds.x},${bounds.y},${bounds.width},${bounds.height}`;
+  let spans=cache.get(key);
+  if(!spans){
+   try{
+    const canvas=this.foliageCanvas??(this.foliageCanvas=document.createElement('canvas'));canvas.width=Math.ceil(bounds.width);canvas.height=Math.ceil(bounds.height);
+    const c=canvas.getContext('2d',{willReadFrequently:true})!;
+    c.drawImage(art.image,frame.x,frame.y,frame.w,frame.h,0,0,canvas.width,canvas.height);
+    spans=foliageSilhouette(canvas.width,canvas.height,c.getImageData(0,0,canvas.width,canvas.height).data,bounds);
+   }catch{spans=[bounds];}
+   cache.set(key,spans);
+  }
+  const mirrored=!art.directionalFrame&&(art.authoredFrame?pose.direction.x-pose.direction.y:Math.cos(e.facing)-Math.sin(e.facing))<-.05;
+  if((art.authored||options.reducedMotion)&&!mirrored)return spans;
+  // Match the existing paint transform without drawing the actor a second time.
+  let a=1,b=0,c=0,d=1,tx=0,ty=0;
+  const translate=(x:number,y:number)=>{tx+=a*x+c*y;ty+=b*x+d*y;};
+  const rawX=pose.direction.x-pose.direction.y,rawY=(pose.direction.x+pose.direction.y)*.5,length=Math.hypot(rawX,rawY)||1,dx=rawX/length,dy=rawY/length;
+  const phase=hash(e.id.length,e.id.charCodeAt(e.id.length-1))*TAU,hit=this.combat.hitStrength(e.id);
+  if(!options.reducedMotion&&!art.authored){
+   const distance=pose.ranged?(-pose.release*4+pose.recovery*1.2-pose.anticipation*1.8):(pose.release*(e.kind==='commander'?8:5)-pose.anticipation*3);
+   translate(dx*distance,dy*distance+(move?Math.sin(travel*9+phase)*1.8:Math.sin(t*1.8+phase)*.4));
+   const angle=(pose.ranged?-pose.release*.025:pose.release*.055-pose.anticipation*.025)*(dx<0?-1:1);
+   a=Math.cos(angle);b=Math.sin(angle);c=-b;d=a;
+  }
+  if(hit>0&&!options.reducedMotion&&!art.authored)translate(-dx*Math.sin(hit*Math.PI)*1.5,-hit*.6);
+  if(mirrored){a=-a;b=-b;}
+  if(move&&!options.reducedMotion&&!art.authored){const stride=Math.sin(travel*9+phase);a*=1+stride*.015;b*=1+stride*.015;c*=1-stride*.022;d*=1-stride*.022;}
+  return spans.map(rect=>{
+   const xs=[rect.x,rect.x+rect.width],ys=[rect.y,rect.y+rect.height];let left=Infinity,top=Infinity,right=-Infinity,bottom=-Infinity;
+   for(const x of xs)for(const y of ys){const px=a*x+c*y+tx,py=b*x+d*y+ty;left=Math.min(left,px);right=Math.max(right,px);top=Math.min(top,py);bottom=Math.max(bottom,py);}
+   return{x:left,y:top,width:right-left,height:bottom-top};
+  });
  }
  private nodeOpacity(node:RenderItem,actors:readonly RenderItem[]):number{
   const value=node.value as Entity|ResourceNode,structure='team' in value;
@@ -415,12 +501,7 @@ export class Battlefield {
    if(e.buildProgress<1){for(let sx=-1;sx<=1;sx+=2){line(c,[sx*35,0,sx*35,-44],'#cfb782',2);line(c,[-35,-14,-35,-30,35,-30,35,-14,-35,-14,35,-39],'#ba9b68',1.3);}this.bar(c,0,11,58,4,e.buildProgress,'#edcf85');}
    if(damaged&&e.hp/e.maxHp<.4&&!options.reducedMotion){for(let i=0;i<3;i++){const rise=(t*15+i*11)%30;ellipse(c,-10+i*12,-50-rise,5+rise*.13,6+rise*.15,`rgba(38,41,40,${.35-rise*.007})`);}}
   }else{
-   const authoredFrame=this.attackAtlas.attackFrame(e.type,pose.age,pose.anticipation,!!options.reducedMotion);
-   const facing=attacking||pose.anticipation>0?Math.atan2(pose.direction.y,pose.direction.x):e.facing;
-   const directional=this.directionalFor(e.type);
-   const directionalFrame=directional.frame(e.type,facing,{attackAge:pose.age,anticipation:pose.anticipation,moving:move,travel},!!options.reducedMotion);
-   const directionalAttack=!!directional.data?.actors[e.type]?.attackFrameMs.length;
-   const authored=!!authoredFrame||!!directionalFrame&&(!attacking&&pose.anticipation<=0||directionalAttack||!!options.reducedMotion);
+   const {authoredFrame,directional,directionalFrame,authored,width,height,image,frame,bounds}=this.mobileArt(e,pose,move,travel,options);
    const bob=options.reducedMotion?0:move?Math.sin(travel*9+phase)*1.8:Math.sin(t*1.8+phase)*.4;
    c.save();
    const rawX=(pose.direction.x-pose.direction.y),rawY=(pose.direction.x+pose.direction.y)*.5,length=Math.hypot(rawX,rawY)||1;
@@ -433,14 +514,7 @@ export class Battlefield {
    if(hit>0&&!options.reducedMotion&&!authored)c.translate(-dx*Math.sin(hit*Math.PI)*1.5,-hit*.6);
    if(!directionalFrame&&(authoredFrame?pose.direction.x-pose.direction.y:Math.cos(e.facing)-Math.sin(e.facing))<-.05)c.scale(-1,1);
    if(move&&!options.reducedMotion&&!authored){const stride=Math.sin(travel*9+phase);c.scale(1+stride*.015,1-stride*.022);}
-   const width=e.type==='siege'?55:e.type==='cavalry'?51:commander?47:36;const height=e.type==='siege'?44:e.type==='cavalry'?48:commander?59:45;
-
-   const directionalSource=directionalFrame?directional.data?.frames[directionalFrame]:undefined;
-   const attackDefinition=this.attackAtlas.data?.actors[e.type],attackSource=authoredFrame?this.attackAtlas.data?.frames[authoredFrame]:undefined;
-   const source=directionalSource??attackSource;
-   if(source){const scale=directionalSource?height/directionalSource.bodyHeight:attackDefinition!.suggestedHeight/attackDefinition!.referenceBodyHeight;
-    this.recordEntityHit(c,e,directionalSource?directional.image:this.attackAtlas.image,source,{x:-source.groundPivot.x*scale,y:-source.groundPivot.y*scale,width:source.w*scale,height:source.h*scale});
-   }else this.recordEntityHit(c,e,this.atlas.image,this.atlas.frames[e.type],this.atlas.bounds(e.type,width,height));
+   this.recordEntityHit(c,e,image,frame,bounds);
    const drewAuthored=directionalFrame?directional.draw(c,e.type,directionalFrame,height):authoredFrame?this.attackAtlas.draw(c,e.type,authoredFrame):false;
    if(!drewAuthored&&!this.atlas.draw(c,e.type,width,height))unit(c,e.type,e.team,attacking?pose.age*3:t+phase,move,attacking&&!options.reducedMotion,e.facing,pose.age/.3);
    c.restore();
