@@ -2,7 +2,9 @@ const paths: Record<string, string> = {
   sword: "M5 19 19 5M13 4h7v7M4 14l6 6M4 20l3-3",
   shield: "M12 3 20 6v7c0 5-8 8-8 8s-8-3-8-8V6Z",
   gold: "m12 3 8 5v8l-8 5-8-5V8Zm-8 5 8 5 8-5m-8 5v8",
-  wood: "m12 3-7 9h4l-5 6h7v3h2v-3h7l-5-6h4Z",
+  wood: "m4 9 12-5 4 3-12 5Zm0 6 12-5 4 3-12 5ZM4 9v6m4-3v6m12-11v6M4 15v4l4 3 12-5v-4m-12 5v4",
+  population: "M9 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm8-1a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM3 21v-5a6 6 0 0 1 12 0v5Zm14 0v-5a8 8 0 0 0-2-5c4-1 7 1 7 5v5Z",
+  alert: "m12 3 10 18H2ZM12 9v5m0 3v.1",
   house: "m3 11 9-8 9 8M5 9v12h14V9M10 21v-7h4v7",
   flag: "M5 22V3m0 1c6-4 8 4 14 0v10c-6 4-8-4-14 0",
   pause: "M8 5v14M16 5v14",
@@ -30,7 +32,8 @@ const paths: Record<string, string> = {
   check: "m4 12 5 5L20 6",
   book: "M12 5q-5-4-10-1v16q5-3 10 1 5-4 10-1V4q-5-3-10 1Zm0 0v16",
   clock: "M12 7v6l4 2M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z",
-  hold: "M6 3h12v18H6ZM3 8h18M3 16h18",
+  hold: "M12 3 20 6v7c0 5-8 8-8 8s-8-3-8-8V6Z",
+  crossedSwords: "m3 3 4 1 13 13-3 3L4 7Zm18 0-4 1-5 5m-3 3-6 5 3 3 6-6M2 16l6 6m8-20 6 6M2 22l3-3m14 0 3 3",
   lightning: "m13 2-8 12h6l-1 8 9-13h-6Z",
 };
 export function icon(name: string, cls = "") {
@@ -55,4 +58,5 @@ export const unitIcons: Record<string, string> = {
   tower: "shield",
   depot: "wood",
   blacksmith: "gear",
+  turret: "siege",
 };

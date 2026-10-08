@@ -17,7 +17,6 @@ import {
 } from "../sim";
 import type {
   BuildingId,
-  Cost,
   Entity,
   GameState,
   ProductionItem,
@@ -27,9 +26,16 @@ import type {
 import { escapeText as esc } from "./escape";
 import { icon } from "./icons";
 import { rallyDestination, orderDescription, selectedOrderDescription } from "./command-guidance";
+import { resourceCostHTML } from "./battle-readouts";
+import { buildingInspectionAvailability } from "./inspection-availability";
+import type { InspectionActionAvailability } from "./inspection-availability";
+export { inspectionAvailabilitySignature } from "./inspection-availability";
 
-const money = (cost: Cost) =>
-  `<span class="cost"><span>${icon("gold")}${cost.gold}</span><span>${icon("wood")}${cost.wood}</span></span>`;
+const availabilityHTML = (status: InspectionActionAvailability) => status.reason
+  ? `<small class="availability-reason">${esc(status.reason)}</small>`
+  : "";
+const availabilityAttributes = (status: InspectionActionAvailability, label: string) =>
+  `${status.available ? "" : "disabled"} aria-label="${esc(`${label}${status.reason ? `. ${status.reason}` : ""}`)}"`;
 const action = (text: string, name: string, id = "", extra = "") =>
   `<button data-action="${name}" data-id="${esc(id)}" ${extra}>${esc(text)}</button>`;
 export function productionName(item: ProductionItem, building: Entity): string {
@@ -122,6 +128,7 @@ export function inspectionHTML(
   selection: Iterable<string>,
   learningStep?: number | null,
   selectedTab: "train" | "upgrades" | "info" = "info",
+  tacticalQueueFull = state.paused && state.pendingCommands.length >= 60,
 ): string {
   const chosen = new Set(selection),
     entities = state.entities.filter((e) => chosen.has(e.id) && e.hp > 0);
@@ -134,11 +141,12 @@ export function inspectionHTML(
       next = nextBuildingUpgrade(e),
       max = 1 + BUILDING_UPGRADES[e.type as BuildingId].length;
     const construction = e.buildProgress < 1;
+    const available = buildingInspectionAvailability(state, e, tacticalQueueFull);
     const recruits = definition.recruits
       .filter((id) => learningActionAvailable(learningStep, "recruit", id))
       .map((id) => {
-        const u = UNITS[id];
-        return `<div class="inspect-action"><span><b>${u.name}</b><small>${u.population} population · ${Math.ceil(trainingSeconds(state, id, e))}s</small>${money(getUnitCost(state, e.team, id))}</span>${action("Train", "recruit", id, construction ? "disabled" : `aria-label="Train ${u.name} here"`)}</div>`;
+        const u = UNITS[id], status = available.recruits[id]!;
+        return `<div class="inspect-action"><span><b>${u.name}</b><small>${u.population} population · ${Math.ceil(trainingSeconds(state, id, e))}s</small>${resourceCostHTML(getUnitCost(state, e.team, id))}${availabilityHTML(status)}</span>${action("Train", "recruit", id, availabilityAttributes(status, `Train ${u.name} here`))}</div>`;
       })
       .join("");
     const tech = Object.values(TECHNOLOGIES)
@@ -154,7 +162,8 @@ export function inspectionHTML(
               b.team === e.team &&
               b.queue.some((q) => q.type === "research" && q.id === t.id),
           );
-        return `<div class="inspect-action"><span><b>${t.name} · ${current}/${t.maxLevel}</b><small>${esc(t.description)}</small>${current < t.maxLevel ? money(technologyCost(state, e.team, t.id)) : ""}</span>${action(current >= t.maxLevel ? "Complete" : queued ? "Queued" : "Research", "research", t.id, construction || current >= t.maxLevel || queued ? "disabled" : "")}</div>`;
+        const status = available.research[t.id]!;
+        return `<div class="inspect-action"><span><b>${t.name} · ${current}/${t.maxLevel}</b><small>${esc(t.description)}</small>${current < t.maxLevel ? resourceCostHTML(technologyCost(state, e.team, t.id)) : ""}${availabilityHTML(status)}</span>${action(current >= t.maxLevel ? "Complete" : queued ? "Queued" : "Research", "research", t.id, availabilityAttributes(status, `Research ${t.name} here`))}</div>`;
       })
       .join("");
     const queuedUpgrade = e.queue.some((q) => q.type === "buildingUpgrade");
@@ -163,7 +172,7 @@ export function inspectionHTML(
       "upgradeBuilding",
       e.type,
     );
-    return `<div class="inspection"><div class="inspect-heading"><div><h3>${definition.name}</h3><p>${e.type === "house" ? `Provides up to ${buildingPopulation(e)} population capacity. Match ceiling: ${state.players[e.team].maxPopulation}.` : esc(definition.description)}</p></div><span class="level-badge">Level ${level}/${max}</span></div><div class="inspect-stats"><span><b data-inspect-health>${Math.ceil(e.hp)} / ${Math.ceil(e.maxHp)}</b> health</span>${definition.population ? `<span><b>${buildingPopulation(e)}</b> capacity before match ceiling</span>` : ""}${e.damage ? `<span><b>${Math.round(e.damage)}</b> damage · ${e.range.toFixed(1)} range</span>` : ""}</div>${construction ? `<p class="construction-progress" data-construction-progress>${constructionProgressText(e)}</p>` : ""}${e.type === "house" ? "<p>Houses give your army room to grow. Troops in training reserve population immediately. Houses do not produce workers.</p>" : e.type === "keep" ? "<p>Your keep provides a small steady supply of gold and wood. Capture deposits for most of your income. Losing this keep ends your battle.</p>" : e.type === "depot" ? `<p>Captured deposits within 7 tiles gain ${35 + (level - 1) * 15}% income. Depot bonuses do not stack; the best nearby depot applies.</p>` : ""}<nav class="inspect-tabs" aria-label="Building actions">${[...(recruits ? [["train", "Train"]] : []), ["upgrades", "Upgrades"], ["info", "Info"]].map(([id,name]) => `<button data-action="inspect-tab" data-id="${id}" aria-pressed="${selectedTab === id}" class="${selectedTab === id ? "active" : ""}">${name}</button>`).join("")}</nav>${recruits ? `<section class="inspect-section" ${selectedTab === "train" ? "" : "hidden"}><h4>Train here</h4><div class="inspect-actions">${recruits}</div><p class="inspect-rally">${esc(rallyDestination(e))} ${action("Set rally point", "set-rally", e.id, construction ? "disabled" : "")}</p></section>` : ""}<section class="inspect-section" ${selectedTab === "upgrades" ? "" : "hidden"}>${tech ? `<h4>Research for your army</h4><div class="inspect-actions">${tech}</div>` : ""}<h4>Building development</h4><div class="inspect-action"><span><b>${next ? `${next.name} · level ${level + 1}/${max}` : "Fully upgraded"}</b><small>${next ? (next.population ? `${capacityGainText(state, next.population, e.team)}. +${Math.round(next.health * 100)}% durability.` : esc(next.description)) : "This building has reached its maximum level."}</small>${next ? money(next.cost) : ""}</span>${next && upgradeUnlocked ? action(queuedUpgrade ? "Upgrade queued" : `Upgrade · ${next.time}s`, "upgrade-building", e.id, construction || queuedUpgrade ? "disabled" : "") : next ? "<small>Building upgrades open later in the guide.</small>" : ""}</div></section><section class="inspect-section" ${selectedTab === "info" ? "" : "hidden"}><p>${esc(definition.description)}</p><p>${definition.recruits.length ? "Select Train to recruit here and choose a fixed rally point. Upgrades shows building development and supported research." : "This building does not train troops. Upgrades shows its supported development."}</p></section></div>`;
+    return `<div class="inspection"><div class="inspect-heading"><div><h3>${definition.name}</h3><p>${e.type === "house" ? `Provides up to ${buildingPopulation(e)} population capacity. Match ceiling: ${state.players[e.team].maxPopulation}.` : esc(definition.description)}</p></div><span class="level-badge">Level ${level}/${max}</span></div><div class="inspect-stats"><span><b data-inspect-health>${Math.ceil(e.hp)} / ${Math.ceil(e.maxHp)}</b> health</span>${definition.population ? `<span><b>${buildingPopulation(e)}</b> capacity before match ceiling</span>` : ""}${e.damage ? `<span><b>${Math.round(e.damage)}</b> damage · ${e.range.toFixed(1)} range</span>` : ""}</div>${construction ? `<p class="construction-progress" data-construction-progress>${constructionProgressText(e)}</p>` : ""}${e.type === "house" ? "<p>Houses give your army room to grow. Troops in training reserve population immediately. Houses do not produce workers.</p>" : e.type === "keep" ? "<p>Your keep provides a small steady supply of gold and wood. Capture deposits for most of your income. Losing this keep ends your battle.</p>" : e.type === "depot" ? `<p>Captured deposits within 7 tiles gain ${35 + (level - 1) * 15}% income. Depot bonuses do not stack; the best nearby depot applies.</p>` : ""}<nav class="inspect-tabs" aria-label="Building actions">${[...(recruits ? [["train", "Train"]] : []), ["upgrades", "Upgrades"], ["info", "Info"]].map(([id,name]) => `<button data-action="inspect-tab" data-id="${id}" aria-pressed="${selectedTab === id}" class="${selectedTab === id ? "active" : ""}">${name}</button>`).join("")}</nav>${recruits ? `<section class="inspect-section" ${selectedTab === "train" ? "" : "hidden"}><h4>Train here</h4><div class="inspect-actions">${recruits}</div><p class="inspect-rally">${esc(rallyDestination(e))} ${action("Set rally point", "set-rally", e.id, construction ? "disabled" : "")}</p></section>` : ""}<section class="inspect-section" ${selectedTab === "upgrades" ? "" : "hidden"}>${tech ? `<h4>Research for your army</h4><div class="inspect-actions">${tech}</div>` : ""}<h4>Building development</h4><div class="inspect-action"><span><b>${next ? `${next.name} · level ${level + 1}/${max}` : "Fully upgraded"}</b><small>${next ? (next.population ? `${capacityGainText(state, next.population, e.team)}. +${Math.round(next.health * 100)}% durability.` : esc(next.description)) : "This building has reached its maximum level."}</small>${next ? resourceCostHTML(next.cost) : ""}${next && upgradeUnlocked ? availabilityHTML(available.upgrade) : ""}</span>${next && upgradeUnlocked ? action(queuedUpgrade ? "Upgrade queued" : `Upgrade · ${next.time}s`, "upgrade-building", e.id, availabilityAttributes(available.upgrade, `Upgrade ${definition.name} to ${next.name}`)) : next ? "<small>Building upgrades open later in the guide.</small>" : ""}</div></section><section class="inspect-section" ${selectedTab === "info" ? "" : "hidden"}><p>${esc(definition.description)}</p><p>${definition.recruits.length ? "Select Train to recruit here and choose a fixed rally point. Upgrades shows building development and supported research." : "This building does not train troops. Upgrades shows its supported development."}</p></section></div>`;
   }
   const definition =
     e.kind === "commander"

@@ -4301,3 +4301,62 @@ footer .build-identifier {
 .producer progress::-webkit-progress-bar { background: #163c4d; border-radius: 4px; }
 .producer progress::-webkit-progress-value { background: linear-gradient(90deg, #17b8b4, #55f1d1); border-radius: 4px; }
 .producer progress::-moz-progress-bar { background: linear-gradient(90deg, #17b8b4, #55f1d1); border-radius: 4px; }
+
+/* Battlefield decision clarity: readable prices and truthful live readouts. */
+.hud .resources [data-resource="gold"] > .icon { color:#f5d47b; }
+.hud .resources [data-resource="wood"] > .icon { color:#ffc082; }
+.hud .resources [data-resource="population"] > .icon { color:#bfe8ef; fill:currentColor; stroke-width:1; }
+.command-deck .cost,
+.placement-toolbar .cost,
+.inspection .cost,
+.research-price .cost {
+  display:flex;
+  flex-wrap:wrap;
+  gap:4px 10px;
+  font-size:calc(11px * var(--ui-scale,1));
+  line-height:1.35;
+  font-variant-numeric:tabular-nums;
+}
+.cost > .resource-price { display:inline-flex; gap:4px; align-items:center; white-space:nowrap; }
+.cost > [data-resource="gold"] { color:#f5d47b; }
+.cost > [data-resource="wood"] { color:#ffc082; }
+.cost .resource-name { font-size:.9em; }
+.cost .resource-amount { font-weight:700; }
+.cost .icon { width:14px; height:14px; flex:none; }
+.command-deck .action-card.funds-low .cost > [data-resource] { color:#efb0a0; }
+.cost.no-resource-cost { color:#b9d2d4; }
+.selection-vitals { display:block; }
+.selection-health-track {
+  display:block;
+  height:5px;
+  margin:3px 0;
+  border-radius:4px;
+  background:#173b48;
+  box-shadow:inset 0 0 0 1px #659faaa3;
+  overflow:hidden;
+}
+.selection-health-track > i {
+  display:block;
+  height:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#1bb9b5,#65f3d4);
+}
+.command-deck .selection-vitals > small { white-space:normal; }
+.placement-toolbar .placement-status {
+  display:flex;
+  align-items:flex-start;
+  gap:6px;
+  padding-top:5px;
+  line-height:1.4;
+  color:#d1e9eb;
+}
+.placement-status > .icon { width:17px; height:17px; flex:none; }
+.placement-status[data-placement-state="valid"] { color:#75f0d8; }
+.placement-status[data-placement-state="blocked"] { color:#ffb3a2; }
+.placement-status[data-placement-state="warning"] { color:#ffe39b; }
+.inspection .availability-reason { color:#ffd39b; font-size:calc(11px * var(--ui-scale,1)); line-height:1.4; white-space:normal; }
+.inspection .inspect-action > button:disabled { opacity:1; color:#a4b4c1; background:#203440; border-color:#526c7a; }
+@media (max-height:500px) and (min-width:601px) {
+  .selection-health-track { height:4px; margin:2px 0; }
+  .placement-toolbar .placement-status { padding-top:2px; font-size:10px; }
+}

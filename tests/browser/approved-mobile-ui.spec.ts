@@ -31,6 +31,57 @@ async function pickOwnBuilding(page:Page,type:string) {
  await tap(page,point);return entity;
 }
 
+test('battlefield readouts distinguish costs, live health and unavailable building actions',async({page})=>{
+ await launch(page,{difficulty:'easy'});await pause(page);await action(page,'select-commander').click();
+ const meter=page.locator('#selection-info [role=meter]');
+ const move=action(page,'order-move'),moveNode=await move.elementHandle();
+ // Explicit health-readout fixture; this does not claim naturally received damage.
+ const hp=await page.evaluate(()=>{const c=window.__FRONTIER__.state.entities.find(e=>e.team===0&&e.kind==='commander')!;c.hp=c.maxHp/2;return Math.ceil(c.hp);});
+ await expect(meter).toHaveAttribute('aria-valuenow',String(hp));
+ await expect(meter.locator('i')).toHaveAttribute('style','width:50.00%');
+ expect(await moveNode!.evaluate(el=>el.isConnected)).toBe(true);
+ const pop=await page.evaluate(()=>{const p=window.__FRONTIER__.state.players[0];return `${p.population}/${p.populationCap}`;});
+ await expect(page.locator('#population')).toContainText(pop);
+ const colors=await page.evaluate(()=>['gold','wood','population'].map(r=>getComputedStyle(document.querySelector(`.hud [data-resource="${r}"] > .icon`)!).color));
+ expect(new Set(colors).size).toBe(3);
+ await action(page,'panel-build').click();
+ const house=page.getByRole('button',{name:'Build House',exact:true});
+ await expect(house.locator('.cost [data-resource=gold]')).toHaveCount(0);
+ await expect(house.locator('.cost [data-resource=wood]')).toContainText('65');
+ await expect(house.locator('.resource-name')).toHaveText('wood');
+ await house.click();await expect(page.locator('.placement-toolbar .cost')).toContainText('wood');
+ await action(page,'cancel-build').click();
+ await pickOwnBuilding(page,'keep');
+ const train=page.locator('#deck-content [data-action=recruit][data-id=swordsman]');
+ await expect(train).toBeEnabled();
+ // Explicit balance fixtures verify presentation thresholds; purchases still use native controls below.
+ await page.evaluate(()=>{const p=window.__FRONTIER__.state.players[0];p.gold=0;p.wood=0;});
+ await expect(train).toBeDisabled();
+ await expect(page.locator('.inspect-action').filter({has:train})).toContainText('Requires 45 gold and 10 wood total.');
+ const blockedNode=await train.elementHandle();
+ await page.evaluate(()=>{const p=window.__FRONTIER__.state.players[0];p.gold=1;p.wood=1;});
+ await page.waitForTimeout(300);
+ expect(await blockedNode!.evaluate(el=>el.isConnected)).toBe(true);
+ await page.locator('[data-action=inspect-tab][data-id=upgrades]').click();
+ const research=page.locator('#deck-content [data-action=research][data-id=economy]');
+ await expect(research).toBeDisabled();await expect(action(page,'upgrade-building')).toBeDisabled();
+ await page.screenshot({path:test.info().outputPath('readable-blocked-building-decisions.png')});
+ await page.evaluate(()=>{const p=window.__FRONTIER__.state.players[0];p.gold=2000;p.wood=2000;});
+ await expect(research).toBeEnabled();await expect(action(page,'upgrade-building')).toBeEnabled();
+ // Explicit full tactical-queue fixture checks live metadata separate from its projected snapshot.
+ await page.evaluate(()=>{const s=window.__FRONTIER__.state,id=s.entities.find(e=>e.team===0&&e.kind==='commander')!.id;s.pendingCommands=Array.from({length:60},()=>({type:'hold',team:0,entityIds:[id]}));});
+ await expect(research).toBeDisabled();await expect(action(page,'upgrade-building')).toBeDisabled();
+ await expect(page.locator('.inspect-action').filter({has:research})).toContainText('Tactical queue full (60/60)');
+ await page.evaluate(()=>{window.__FRONTIER__.state.pendingCommands=[];});
+ await expect(research).toBeEnabled();
+ await page.locator('[data-action=inspect-tab][data-id=train]').click();
+ await train.click();
+ expect(await page.evaluate(()=>window.__FRONTIER__.state.pendingCommands.filter(c=>c.type==='recruit').length)).toBe(1);
+ await expect(page.locator('#compact-production')).toContainText('1 queued');
+ await expect(page.locator('#selection-info')).toContainText('1 queued');
+ await page.screenshot({path:test.info().outputPath('readable-paid-building-decisions.png')});
+});
+
 test('approved explicit commands keep neutral taps, panning, invalid Attack and Cancel from ordering troops',async({page,context,isMobile})=>{
  await launch(page,{difficulty:'easy'});await pause(page);
  await tap(page,await clearGround(page));
@@ -94,8 +145,11 @@ test('approved placement pans independently, explains blocked terrain, spends on
  await action(page,'placement-place').click();await expect(action(page,'placement-place')).toHaveAttribute('aria-pressed','true');
  const keep=await page.evaluate(()=>window.__FRONTIER__.state.entities.find(e=>e.team===0&&e.type==='keep')!);await tap(page,await focusWorld(page,keep));
  await expect(action(page,'confirm-placement')).toBeDisabled();await expect(page.locator('.placement-toolbar [role=status]')).toContainText('Nothing spent yet');
+ await expect(page.locator('.placement-status')).toHaveAttribute('data-placement-state','blocked');
+ expect(await page.locator('.placement-status').textContent()).not.toContain('..');
  await page.screenshot({path:test.info().outputPath('blocked-placement-reason.png')});
  await tap(page,await clearGround(page,'house'));await expect(action(page,'confirm-placement')).toBeEnabled();
+ await expect(page.locator('.placement-status')).toHaveAttribute('data-placement-state','valid');
  // Explicit balance-change fixture isolates revalidation while a preview is open.
  await page.evaluate(()=>{window.__FRONTIER__.state.players[0].wood=0;});
  await expect(action(page,'confirm-placement')).toBeDisabled();await expect(page.locator('.placement-toolbar [role=status]')).toContainText('wood');
@@ -108,13 +162,15 @@ test('approved placement pans independently, explains blocked terrain, spends on
 });
 
 test('approved phone sheets keep logical targets, resource values and map space at three widths and enlarged text',async({page,isMobile})=>{
- test.skip(!isMobile || page.viewportSize()!.width>600,'Portrait phone matrix only');test.setTimeout(70_000);
+ test.skip(!isMobile || page.viewportSize()!.width>600,'Portrait phone matrix only');test.setTimeout(90_000);
  await launch(page,{difficulty:'easy'});await pause(page);const proofs=[];
+ const originalFunds=await page.evaluate(()=>({gold:window.__FRONTIER__.state.players[0].gold,wood:window.__FRONTIER__.state.players[0].wood}));
  for(const [w,h] of [[360,800],[390,844],[430,932]]) {
   await page.setViewportSize({width:w,height:h});
   await action(page,'pause-menu').click();await action(page,'settings').click();await page.getByLabel('Interface text size',{exact:true}).selectOption('1.3');await page.getByRole('button',{name:'Done',exact:true}).click();
-  for(const panel of ['panel-army','panel-build','panel-research','placement']) {
+  for(const panel of ['panel-army','panel-build','panel-research','placement','inspect-train','inspect-upgrades']) {
    if(panel==='placement') {await action(page,'panel-build').click();await page.getByRole('button',{name:'Build House',exact:true}).click();}
+   else if(panel.startsWith('inspect-')) {await pickOwnBuilding(page,'keep');await page.locator(`[data-action=inspect-tab][data-id=${panel==='inspect-train'?'train':'upgrades'}]`).click();await page.evaluate(()=>{const p=window.__FRONTIER__.state.players[0];p.gold=0;p.wood=0;});await expect(page.locator('.inspect-section:not([hidden]) .availability-reason').first()).toBeVisible();}
    else await action(page,panel).click();
    const proof=await page.evaluate(()=>{
     const hud=document.querySelector('.hud')!.getBoundingClientRect(),deck=document.querySelector('.command-deck')!.getBoundingClientRect();
@@ -126,6 +182,7 @@ test('approved phone sheets keep logical targets, resource values and map space 
    await expect(page.locator('#gold .resource-income')).toBeVisible();await expect(page.locator('#wood .resource-income')).toBeVisible();
    await page.screenshot({path:test.info().outputPath(`${w}-large-text-${panel}.png`)});proofs.push({panel,...proof});
    if(panel==='placement')await page.locator('#placement-controls [data-action=cancel-build]').click();
+   if(panel.startsWith('inspect-'))await page.evaluate(funds=>{Object.assign(window.__FRONTIER__.state.players[0],funds);},originalFunds);
   }
  }
  await writeFile(test.info().outputPath('three-phone-logical-target-proof.json'),JSON.stringify(proofs,null,2));

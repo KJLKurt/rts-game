@@ -1,0 +1,23 @@
+# Battlefield decision clarity — local candidate
+
+Candidate runtime **fc-d2c8a92015e0**, based on deployed production fc-194c08936126 and its verified test-selector revision da887be1. This is a separate implementation batch. Main and Pages have not been updated for it.
+
+## Player-facing changes
+
+- Gold, wood and population now have distinct icon/color identities. Population shows used/current capacity together and keeps the match ceiling separate. Values still come from the existing planning snapshot; income still comes from the real economy.
+- Build, Recruit, inspection, placement and research prices share resource-typed, visibly labeled costs. A wood-only House no longer inherits gold styling or shows a misleading zero-gold component.
+- Single-selection identity now includes a live bounded health meter plus actual numeric health, planned queue count and construction progress. Runic Turret is named correctly instead of falling back to Commander. Health/countdown changes do not invalidate the control-deck signature.
+- Building Train, Research and Upgrade controls expose actual resource, population, construction, selected-producer queue, duplicate/completed upgrade and tactical-queue restrictions before a tap. Native disabled controls remain legible. Availability only invalidates the inspector at meaningful thresholds. The engine remains authoritative and unchanged.
+- Placement status distinguishes unplaced, valid, blocked and legal teaching caution with icon and text. Engine errors receive one terminal punctuation mark. Population-building previews respect the match ceiling rather than promise unconditional capacity.
+
+## Verification completed locally
+
+TypeScript, eight-mission content validation, production build and **613 unit tests in 66 files** pass. The25 new unit cases cover typed costs/zero omission, turret identity, bounded health, punctuation/placement states, selected building availability, reserved population/refunds, stable control signatures and the60-command tactical limit. All15 simulation files and all public assets remain byte-identical to the deployed baseline.
+
+Read-only review found no P0/P1 regression. Its tactical-limit gap and large-text inspector coverage request were addressed before runtime QA. Browser collection contains475 identities: the previous472 plus three viewport executions of the new decision-readout scenario. Existing placement assertions are strengthened, and the three-phone enlarged-text matrix now includes blocked Train/Upgrades.
+
+## Runtime gate
+
+Pending the existing isolated browser workflow. No passing runtime, visual-fit or deployment claim belongs to this candidate until its own terminal evidence is appended. Keep the prior clean448-pass baseline gate and the earlier selector failures in their original records.
+
+The approved concept boards remain visual direction; no illustrative resources, costs, health or worker mechanics were copied into simulation. Original-scope reconciliation and substantive remaining work are in REQUIREMENTS_RECONCILIATION_20261008.md.
