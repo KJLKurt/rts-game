@@ -80,7 +80,7 @@ describe('research progression presentation', () => {
 describe('credits and identity information', () => {
   it('states version, all six source cue names, controls and honest licensing limitations', () => {
     const html=aboutHTML();
-    for(const text of ['v0.1.0','Welcome to the Winter Workshop','Lanterns in the Pines','Lanterns on Watch','Clockwork Brigade','A Banner in the Snow','Gather the Fallen Banners','not been independently verified','does not include a project-wide license grant','commercial redistribution clearance','WASD','Shift+Tab','recovered and reconstructed']) expect(html).toContain(text);
+    for(const text of ['v0.1.0','Welcome to the Winter Workshop','Lanterns in the Pines','Lanterns on Watch','Clockwork Brigade','A Banner in the Snow','Gather the Fallen Banners','not been independently verified','does not include a project-wide license grant','commercial redistribution clearance','WASD','Shift+Tab','recovered and reconstructed','dashed gold Queued footprints until Resume','Cancel closes only the active preview']) expect(html).toContain(text);
   });
   it('separates faction crests/materials from six team allegiance signals', () => {
     const html=factionLegendHTML();

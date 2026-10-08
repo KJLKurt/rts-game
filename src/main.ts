@@ -164,6 +164,7 @@ import { icon, unitIcons } from "./ui/icons";
 import { resourceCostHTML, selectionName, selectionHealthHTML, placementFeedback, isPlacementInstruction } from "./ui/battle-readouts";
 import { selectableTroops, pruneTroopSelection, toggleTroop, setTroopTypeSelection, troopSelectionGroups } from "./ui/troop-selection";
 import { troopPickerHTML } from "./ui/troop-picker";
+import { queuedConstructionPlans, type PlannedConstruction } from "./ui/queued-construction";
 import { feedbackHasExpired, troopSelectionFeedback, armySelectionFeedback, type FeedbackLifetime } from "./ui/feedback";
 
 const app = document.querySelector<HTMLDivElement>("#app")!;
@@ -320,15 +321,31 @@ let frameRate = 60;
 let runtimeFailed = false;
 let lastDeckSignature = "";
 let planningSignature = "",
-  planningSnapshot: GameState | null = null;
+  planningSnapshot: GameState | null = null,
+  planningSource: GameState | null = null;
 function planningState() {
   if (!state.paused || !state.pendingCommands.length) return state;
-  const signature = `${state.tick}:${state.pendingCommands.length}:${state.nextId}`;
-  if (signature !== planningSignature || !planningSnapshot) {
+  // Queue content, not only length, keeps restored/replaced plans accurate.
+  const signature = JSON.stringify([state.tick, state.nextId, state.players.map(player => [player.gold, player.wood, player.defeated]), state.pendingCommands]);
+  if (state !== planningSource || signature !== planningSignature || !planningSnapshot) {
     planningSnapshot = projectPendingCommands(state);
+    planningSource = state;
     planningSignature = signature;
   }
   return planningSnapshot;
+}
+let queuedConstructionSource: GameState | null = null,
+  queuedConstructionProjection: GameState | null = null,
+  queuedConstructionSnapshot: readonly PlannedConstruction[] = [];
+function visibleConstructionPlans(): readonly PlannedConstruction[] {
+  if (!playing || editing || !state.paused || state.winner !== null) return [];
+  const projected = planningState();
+  if (queuedConstructionSource !== state || queuedConstructionProjection !== projected) {
+    queuedConstructionSnapshot = queuedConstructionPlans(state, 0, projected);
+    queuedConstructionSource = state;
+    queuedConstructionProjection = projected;
+  }
+  return queuedConstructionSnapshot;
 }
 const hudHTML = new Map<string, string>();
 let playfieldCenterY = innerHeight / 2;
@@ -1341,7 +1358,7 @@ function showBriefing(index: number) {
 function showHelp() {
   showDialog(
     "Command the frontier",
-    `<div class="help-grid"><article>${icon("crosshair")}<h3>Lead from the front</h3><p>Select your commander, choose Move, then tap a destination. Orders → Choose troops selects a subset by type or individual; desktop Shift-click toggles troops. Drag the lower-left thumbstick on phones. On desktop, use WASD or arrow keys.</p></article><article>${icon("gold")}<h3>Claim your economy</h3><p>Stand near gold and timber to capture them. Held deposits generate resources until depleted. Enemy troops can contest them.</p></article><article>${icon("flag")}<h3>Build a fighting force</h3><p>Recruit troops from your keep and military buildings. Houses raise your population cap. Spearmen beat cavalry; cavalry hunt archers; siege breaks walls.</p></article><article>${icon("spark")}<h3>Turn the tide</h3><p>Hold relics to gain victory points. In Conquest, relics instead fund your siege; destroy every enemy keep to win. Commander abilities Q and E can win a close fight. Engineer’s C Breach Charge damages a nearby visible enemy building; bring an escort.</p></article><article>${icon("pause")}<h3>Take a breath</h3><p>Tactical pause freezes the fight. Queue movement, recruitment, and construction, then resume. Space pauses; Escape opens the menu.</p></article><article>${icon("save")}<h3>Make it yours</h3><p>Battles autosave every 30 seconds and when leaving the app. Load once online to play offline after the cache installs.</p></article></div>${learningGuideSkipped ? button("Replay practice guide", "replay-guide", "", "book") : ""}${button("Ready to lead", "close-dialog", "primary", "check")}`,
+    `<div class="help-grid"><article>${icon("crosshair")}<h3>Lead from the front</h3><p>Select your commander, choose Move, then tap a destination. Orders → Choose troops selects a subset by type or individual; desktop Shift-click toggles troops. Drag the lower-left thumbstick on phones. On desktop, use WASD or arrow keys.</p></article><article>${icon("gold")}<h3>Claim your economy</h3><p>Stand near gold and timber to capture them. Held deposits generate resources until depleted. Enemy troops can contest them.</p></article><article>${icon("flag")}<h3>Build a fighting force</h3><p>Recruit troops from your keep and military buildings. Houses raise your population cap. Spearmen beat cavalry; cavalry hunt archers; siege breaks walls.</p></article><article>${icon("spark")}<h3>Turn the tide</h3><p>Hold relics to gain victory points. In Conquest, relics instead fund your siege; destroy every enemy keep to win. Commander abilities Q and E can win a close fight. Engineer’s C Breach Charge damages a nearby visible enemy building; bring an escort.</p></article><article>${icon("pause")}<h3>Take a breath</h3><p>Tactical pause freezes the fight. Queue movement, recruitment, and construction, then resume. Confirmed builds remain as dashed gold Queued footprints until Resume. Cancel closes only the active preview. Space pauses; Escape opens the menu.</p></article><article>${icon("save")}<h3>Make it yours</h3><p>Battles autosave every 30 seconds and when leaving the app. Load once online to play offline after the cache installs.</p></article></div>${learningGuideSkipped ? button("Replay practice guide", "replay-guide", "", "book") : ""}${button("Ready to lead", "close-dialog", "primary", "check")}`,
     "wide",
   );
 }
@@ -3800,39 +3817,32 @@ function frame(now: number) {
       }
       if (!canPlayerContinue(state)) showResult();
     }
-    if (state)
+    if (state) {
+      const activePlacementResult = placement && targetPoint
+        ? plannedBuildResult(state, 0, placement, targetPoint.x, targetPoint.y)
+        : undefined;
       renderer.render(state, playing ? selection : [], {
         time: playing ? state.time + state.accumulator : now / 1000,
         reveal: !playing || debugReveal,
         quality: frameRate < 35 ? "low" : "high",
         reducedMotion: preferences.reducedMotion,
         screenObstacles: playing ? troopSummaryObstacles : [],
+        plannedConstruction: visibleConstructionPlans(),
         placement:
           placement && targetPoint
             ? {
                 type: placement,
                 x: targetPoint.x,
                 y: targetPoint.y,
-                valid: plannedBuildResult(
-                  state,
-                  0,
-                  placement,
-                  targetPoint.x,
-                  targetPoint.y,
-                ).ok,
+                valid: activePlacementResult!.ok,
                 size: BUILDINGS[placement].size,
-                reason: plannedBuildResult(
-                  state,
-                  0,
-                  placement,
-                  targetPoint.x,
-                  targetPoint.y,
-                ).error,
+                reason: activePlacementResult!.error,
               }
             : undefined,
         target:
           targetPoint && playing ? { ...targetPoint, radius: 0.45 } : undefined,
       });
+    }
   } catch (error) {
     console.error(error);
     runtimeFailed = true;
