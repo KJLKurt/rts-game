@@ -103,7 +103,14 @@ test('native Attack targeting directs Breach to a farther structure instead of t
       return null;
     });return !!painted;
   }).toBe(true);
+  const tapPoint=painted as unknown as {x:number;y:number};
+  const beforeTap=await page.evaluate((point:{x:number;y:number})=>{const {state:s,renderer:r}=window.__FRONTIER__;const evidence:unknown[]=[];(window as any).__BREACH_POINTER__=evidence;
+    for(const type of ['pointerdown','pointerup','click'])document.addEventListener(type,event=>{const e=event as PointerEvent; evidence.push({type,x:e.clientX,y:e.clientY,target:(e.target as HTMLElement)?.id,action:(e.target as HTMLElement)?.closest<HTMLElement>('[data-action]')?.dataset.action,pick:(r.pick(s,e.clientX,e.clientY) as {id?:string}|null)?.id,camera:{...r.camera}});},{capture:true,once:true});
+    return {point,camera:{...r.camera},pick:(r.pick(s,point!.x,point!.y) as {id?:string}|null)?.id};
+  },tapPoint);
+  await page.screenshot({path:test.info().outputPath('breach-explicit-before-native.png')});
   await tap(page,painted!);
+  console.log('BREACH_NATIVE_DIAGNOSTIC',JSON.stringify({beforeTap,after:await page.evaluate(()=>({events:(window as any).__BREACH_POINTER__,camera:window.__FRONTIER__.renderer.camera,pending:window.__FRONTIER__.state.pendingCommands,toast:document.querySelector('#toast')?.textContent,selection:document.querySelector('#selection-info')?.textContent}))}));
   await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.state.pendingCommands.some(c=>c.type==='attack'&&c.targetId==='qa-explicit-breach'))).toBe(true);
   await nativeBreach(page);
   const queued=await page.evaluate(()=>window.__FRONTIER__.state.pendingCommands.find(c=>c.type==='ability'&&c.ability==='breach'));
