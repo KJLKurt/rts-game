@@ -2,6 +2,7 @@ import { test, expect, action, launch, pause, tap, clearGround } from './helpers
 
 test('an explicitly opened panel retains card identity through the next HUD tick and held pointer',async({page,context,isMobile})=>{
   await launch(page,{difficulty:'easy'});await pause(page);
+  await action(page,'select-commander').click();await action(page,'order-move').click();
   await tap(page,await clearGround(page));
   await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.state.pendingCommands.length)).toBe(1);
   await expect.poll(()=>page.evaluate(()=>(window.__FRONTIER__.renderer as unknown as {atlas:{ready:boolean}}).atlas.ready)).toBe(true);
@@ -25,7 +26,7 @@ test('an explicitly opened panel retains card identity through the next HUD tick
   }
   await expect(page.locator('body')).toHaveClass(/placing-building/);
   await expect(page.locator('#placement-controls')).toContainText('Place House');
-  await expect(page.getByRole('status')).toContainText('Drag the House preview');
+  await expect(page.locator('#toast')).toContainText('Drag the House preview');
   expect(await page.evaluate(()=>window.__FRONTIER__.state.pendingCommands.map(command=>command.type))).toEqual(['move']);
 });
 

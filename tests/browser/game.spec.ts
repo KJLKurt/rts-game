@@ -31,7 +31,7 @@ test('skirmish launches at the repository path with configured values',async({pa
 
 test('real battlefield tap selects and moves the commander',async({page})=>{
  await launch(page);await action(page,'select-commander').click();const before=await commander(page);
- await tap(page,await clearGround(page));
+ await action(page,'order-move').click();await tap(page,await clearGround(page));
  await expect.poll(async()=>{const c=await commander(page);return Math.hypot(c.x-before.x,c.y-before.y);}).toBeGreaterThan(.5);
  await action(page,'select-army').click();
  await expect(page.locator('#selection-info')).toContainText('5 units selected');
@@ -78,7 +78,7 @@ test('recruitment charges once and produces a soldier',async({page})=>{
 test('tactical pause freezes simulation and queues move, build, and research',async({page})=>{
  await launch(page);await pause(page);
  const time=await page.evaluate(()=>window.__FRONTIER__.state.time);const before=await commander(page);
- await tap(page,await clearGround(page));
+ await action(page,'order-move').click();await tap(page,await clearGround(page));
  await action(page,'panel-build').click();await page.getByRole('button',{name:'Build House',exact:true}).click();
  const stocks=await page.evaluate(()=>({gold:window.__FRONTIER__.state.players[0].gold,wood:window.__FRONTIER__.state.players[0].wood}));
  await tap(page,await clearGround(page,true));
@@ -101,7 +101,7 @@ test('tactical pause freezes simulation and queues move, build, and research',as
 test('cancel build, reopen build, and cancel again does not spend resources',async({page})=>{
  await launch(page);await pause(page);
  const before=await page.evaluate(()=>({gold:window.__FRONTIER__.state.players[0].gold,wood:window.__FRONTIER__.state.players[0].wood}));
- for(const container of ['#placement-controls','#selection-info']){
+ for(const container of ['#placement-controls','#placement-controls']){
   await action(page,'panel-build').click();
   await page.getByRole('button',{name:'Build House',exact:true}).click();await expect(page.locator('#selection-info')).toContainText('Place House');
   await page.locator(`${container} [data-action="cancel-build"]`).click();await expect(page.locator('#selection-info')).not.toContainText('Place House');
@@ -114,7 +114,7 @@ test('cancel build, reopen build, and cancel again does not spend resources',asy
 });
 
 test('manual save, leave, refresh, and repeated continue retain queued orders',async({page})=>{
- await launch(page);await pause(page);await tap(page,await clearGround(page));
+ await launch(page);await pause(page);await action(page,'order-move').click();await tap(page,await clearGround(page));
  const expected=await page.evaluate(()=>{const s=window.__FRONTIER__.state;return{seed:s.settings.seed,time:s.time,pending:s.pendingCommands};});
  await action(page,'pause-menu').click();await action(page,'save-leave').click();await expect(action(page,'continue')).toBeVisible();
  for(let i=0;i<2;i++){
@@ -436,7 +436,7 @@ test('paused construction rejects an invalid site immediately and rejects overla
  expect(invalid,'At least one canonically invalid snapped site must be reachable on the canvas').toBeDefined();
  const resources={gold:fixture.state.players[0].gold,wood:fixture.state.players[0].wood};
  await tap(page,invalid!.screen);
- await expect(page.locator('#placement-controls small')).toHaveText(invalid!.check.error!);
+ await expect(page.locator('#placement-controls small[role=status]')).toContainText(invalid!.check.error!);
  await expect(action(page,'confirm-placement')).toBeDisabled();
  expect(await page.evaluate(()=>window.__FRONTIER__.state.pendingCommands)).toEqual([]);
  expect(await page.evaluate(()=>({gold:window.__FRONTIER__.state.players[0].gold,wood:window.__FRONTIER__.state.players[0].wood}))).toEqual(resources);
@@ -455,7 +455,7 @@ test('paused construction rejects an invalid site immediately and rejects overla
  const overlap=await page.evaluate(point=>{const screen=window.__FRONTIER__.renderer.worldToScreen(point.x,point.y);return{screen,hit:document.elementFromPoint(screen.x,screen.y)?.id};},{x:placed.x,y:placed.y});
  expect(overlap.hit,'The confirmed house site must remain reachable for a repeated placement').toBe('world');
  await tap(page,overlap.screen);
- await expect(page.locator('#placement-controls small')).toHaveText('Too close to your queued House. Pick another spot.');
+ await expect(page.locator('#placement-controls small[role=status]')).toContainText('Too close to your queued House. Pick another spot.');
  await expect(action(page,'confirm-placement')).toBeDisabled();
  expect(await page.evaluate(()=>window.__FRONTIER__.state.pendingCommands)).toEqual(first);
  expect(await page.evaluate(()=>({gold:window.__FRONTIER__.state.players[0].gold,wood:window.__FRONTIER__.state.players[0].wood}))).toEqual(resources);

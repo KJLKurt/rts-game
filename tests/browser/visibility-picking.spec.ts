@@ -27,7 +27,7 @@ for(const theme of ['christmas','mythic']){
   await page.evaluate(async theme=>{await (window.__FRONTIER__.renderer as any).setVisualTheme(theme);},theme);
   await action(page,'select-commander').click();
   const initial=await page.evaluate(()=>{const s=window.__FRONTIER__.state,e=s.entities.find(e=>e.team===0&&e.kind==='commander')!;return{id:e.id,x:e.x,y:e.y,time:s.time,profile:window.__FRONTIER__.profile};});
-  const ground=await clearGround(page);await tap(page,ground);
+  await action(page,'order-move').click();const ground=await clearGround(page);await tap(page,ground);
   expect(await page.evaluate(()=>window.__FRONTIER__.state.paused)).toBe(true);
   await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.state.pendingCommands.at(-1))).toMatchObject({type:'move',entityIds:[initial.id]});
   await expect(page.locator('.hud #paused-ribbon')).toBeVisible();await expect(page.locator('.hud #paused-ribbon')).toContainText('1 queued');
@@ -46,6 +46,7 @@ for(const theme of ['christmas','mythic']){
   },fixture);
   await page.screenshot({path:test.info().outputPath(`${theme}-foreground-depot-before-input.png`)});
   await tap(page,point);await expect(page.locator('#selection-info')).toContainText('Swordsman');
+  await action(page,'order-attack').click();
   const targetPoint=await page.evaluate(({targetId}:any)=>{const f=window.__FRONTIER__,r=f.renderer as any,e=f.state.entities.find(e=>e.id===targetId)!,p=r.worldToScreen(e.x,e.y),z=r.camera.zoom;for(let dy=-65;dy<0;dy+=3)for(let dx=-35;dx<=35;dx+=3){const q={x:p.x+dx*z,y:p.y+dy*z};if(document.elementFromPoint(q.x,q.y)?.id==='world'&&r.pick(f.state,q.x,q.y)?.id===targetId)return q;}throw Error('No remaining depot art can receive an attack');},fixture);
   await tap(page,targetPoint);
   await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.state.pendingCommands.at(-1))).toMatchObject({type:'attack',targetId:fixture.targetId,entityIds:[fixture.ownId]});
@@ -58,6 +59,7 @@ for(const theme of ['christmas','mythic']){
  test(`${theme} a native tap on exposed enemy pixels beats a nearer friendly transparent rectangle`,async({page})=>{
   const fixture=scene(true);await prepare(page,theme,fixture);await action(page,'select-army').click();
   if(!((await page.locator('.command-deck').getAttribute('class'))??'').includes('collapsed'))await action(page,'toggle-deck').click();
+  await action(page,'order-attack').click();
   const point=await page.evaluate(({targetId,frontId}:any)=>{
    const f=window.__FRONTIER__,r=f.renderer as any,target=f.state.entities.find(e=>e.id===targetId)!,front=f.state.entities.find(e=>e.id===frontId)!,p=r.worldToScreen(target.x,target.y),fp=r.worldToScreen(front.x,front.y),z=r.camera.zoom;
    // Independently sample the exact source frame chosen by the real draw, using its recorded matrix.

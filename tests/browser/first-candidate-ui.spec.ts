@@ -79,7 +79,7 @@ test("planned economy includes reserved recruitment and Army cancels rally targe
   // Finish the camera's panel-collapse adjustment through its real focus control
   // before reading a ground coordinate. The move assertion still verifies cancel.
   await page.locator('.map-controls [data-action="focus"]').click();
-  await tap(page, await clearGround(page));
+  await action(page, "order-move").click();await tap(page, await clearGround(page));
   expect(
     await page.evaluate(
       () => window.__FRONTIER__.state.pendingCommands.at(-1)?.type,

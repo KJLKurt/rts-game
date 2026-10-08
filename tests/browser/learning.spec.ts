@@ -81,6 +81,7 @@ async function pointAtLessonTarget(
     await page.screenshot({path:test.info().outputPath("native-house-before-verified-tap.png")});
   }
   await tap(page, point);
+  if (["gold","wood","relic"].includes(kind)) await action(page,"capture-resource").click();
 }
 async function startLearning(page: Page) {
   await action(page, "learn").click();
@@ -105,7 +106,7 @@ async function moveCommander(page: Page) {
   await page
     .getByRole("button", { name: "Minimize guide", exact: true })
     .click();
-  await tap(page, await clearGround(page));
+  await action(page, "order-move").click();await tap(page, await clearGround(page));
   await lesson(page, 2);
 }
 
@@ -157,6 +158,11 @@ test("all eight peaceful lessons use real input, teach neighboring houses, and l
   await expect(
     page.locator('.action-cards [data-action="recruit"]'),
   ).toHaveCount(1);
+  const recruit = page.locator('.action-cards [data-action="recruit"]').first();
+  const producerLayout = await recruit.locator('.recruit-producer').evaluate(el => ({height:el.getBoundingClientRect().height,lineHeight:parseFloat(getComputedStyle(el).lineHeight),text:el.textContent}));
+  await page.screenshot({path:test.info().outputPath("practice-producer-card-layout.png")});
+  expect(producerLayout.text).toContain("commander’s position at completion");
+  expect(producerLayout.height, "The single practice recruit card must use its available width so its destination fits within two lines").toBeLessThanOrEqual(producerLayout.lineHeight * 2 + 1);
   await page
     .getByRole("button", { name: "Queue 3 at a time", exact: true })
     .click();
@@ -173,7 +179,7 @@ test("all eight peaceful lessons use real input, teach neighboring houses, and l
     1,
   );
   await page.getByRole("button", { name: "Build House", exact: true }).click();
-  await expect(page.locator(".placement-toolbar small")).toContainText("Ready");
+  await expect(page.locator(".placement-toolbar small[role=status]")).toContainText("Valid location");
   await action(page, "confirm-placement").click();
   await expect
     .poll(
@@ -208,6 +214,8 @@ test("all eight peaceful lessons use real input, teach neighboring houses, and l
   await expect(page.locator(".inspection")).toContainText(
     "Houses do not produce workers",
   );
+  await expect(page.locator("#selection-info")).toContainText("Inspect actions and upgrades in Details");
+  await expect(page.locator("#selection-info")).not.toContainText("production and rally");
   await action(page, "upgrade-building").click();
   await lesson(page, 8);
   expect(

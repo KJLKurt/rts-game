@@ -108,3 +108,31 @@ test('large-text framing survives native held Focus and real commander movement'
   }
   await test.info().attach('large-text-follow-proof',{body:JSON.stringify(proofs,null,2),contentType:'application/json'});
 });
+
+test('default-zoom Focus exposes commanders and health with native field guide content retained',async({page})=>{
+  test.setTimeout(180_000);const proofs=[];
+  for(const commander of ['ranger','warlord','engineer']){
+    await launch(page,{difficulty:'easy',commander,keepTips:true});await pause(page);
+    await expect(page.locator('#battle-hint')).toContainText('COMMANDER’S FIELD GUIDE');
+    expect(await page.evaluate(()=>window.__FRONTIER__.renderer.camera.zoom)).toBeLessThanOrEqual(1.35);
+    for(const theme of ['christmas','mythic']){
+      await settings(page,theme);
+      for(const requestedCollapsed of [false,true]){
+        if(await page.locator('.command-deck').evaluate(e=>e.classList.contains('collapsed'))!==requestedCollapsed)await action(page,'toggle-deck').click();
+        const before=await page.evaluate(()=>JSON.stringify(window.__FRONTIER__.state));
+        await action(page,'focus').first().click();
+        await expect.poll(async()=>{const p=await exposedCommander(page);return p.covered===0&&p.healthExposed;}).toBe(true);
+        await action(page,'select-army').click();
+        await expect.poll(async()=>!!(await exposedCommander(page)).native).toBe(true);
+        const point=(await exposedCommander(page)).native!;await tap(page,point);
+        await expect(page.locator('#selection-info')).toContainText(commander==='ranger'?'Ranger':commander==='warlord'?'Warlord':'Engineer');
+        expect(await page.evaluate(()=>JSON.stringify(window.__FRONTIER__.state))).toBe(before);
+        const proof=await exposedCommander(page);expect(proof.covered).toBe(0);expect(proof.healthExposed).toBe(true);
+        await page.screenshot({path:test.info().outputPath(`default-${commander}-${theme}-${requestedCollapsed?'collapsed':'expanded'}-guide-Focus.png`)});
+        proofs.push({commander,theme,requestedCollapsed,fieldGuideContentRetained:true,fieldGuideVisible:await page.locator('#battle-hint').isVisible(),...proof,nativeBodySelection:true,simulationUnchanged:true});
+      }
+    }
+  }
+  await test.info().attach('default-guide-framing-proof',{body:JSON.stringify(proofs,null,2),contentType:'application/json'});
+});
+

@@ -10,7 +10,7 @@ async function expectPausedGuideReadable(page:Page){
   await expect(guide).toBeHidden();await expect(ribbon).toBeVisible();
  }else{
   await expect(guide).toBeVisible();await expect(guide.locator('p')).toBeVisible();
-  await expect(ribbon,'The lower-priority pause ribbon must not cover populated guide instructions').toBeHidden();
+  await expect(ribbon,'Pause status remains available in the HUD beside Resume').toBeVisible();
   const instructions=await guide.locator('p').evaluate(el=>{
    const r=el.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);
    return{left:r.left,top:r.top,right:r.right,bottom:r.bottom,hitGuide:hit?.closest('#battle-hint')?.id};
@@ -18,6 +18,9 @@ async function expectPausedGuideReadable(page:Page){
   expect(instructions.left).toBeGreaterThanOrEqual(0);expect(instructions.top).toBeGreaterThanOrEqual(0);
   expect(instructions.right).toBeLessThanOrEqual(viewport.width);expect(instructions.bottom).toBeLessThanOrEqual(viewport.height);
   expect(instructions.hitGuide).toBe('battle-hint');
+  const bounds=await ribbon.evaluate(el=>{const a=el.getBoundingClientRect(),h=document.querySelector('.hud')!.getBoundingClientRect();return{left:a.left,top:a.top,right:a.right,bottom:a.bottom,insideHUD:a.top>=h.top&&a.bottom<=h.bottom};});
+  expect(bounds.insideHUD).toBe(true);
+  expect(bounds.bottom<=instructions.top||bounds.top>=instructions.bottom||bounds.right<=instructions.left||bounds.left>=instructions.right,'HUD pause status must not cover guide instructions').toBe(true);
  }
 }
 

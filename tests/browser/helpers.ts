@@ -70,6 +70,13 @@ export async function clearGround(page:Page,build:false|true|BuildingId=false):P
    const screen=r.worldToScreen(p.x,p.y);
    if(screen.x<20||screen.y<120||screen.x>innerWidth-20||screen.y>innerHeight-30)continue;
    if(document.elementFromPoint(screen.x,screen.y)?.id!=='world'||r.pick(s,screen.x,screen.y))continue;
+   // A center-point hit test alone is insufficient for native touch: Chromium
+   // can target a nearby button even when that exact pixel belongs to canvas.
+   // Keep the fixture's contact region clear of UI instead of weakening native
+   // input or changing the gameplay assertion. Desktop keeps pixel precision.
+   const clearance=navigator.maxTouchPoints>0?20:0;
+   if(clearance && [-clearance,0,clearance].some(dx=>
+     [-clearance,0,clearance].some(dy=>document.elementFromPoint(screen.x+dx,screen.y+dy)?.id!=='world')))continue;
    candidates.push({screen,world:p});
   }
   return{candidates,state:building?s:null};

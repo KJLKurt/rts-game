@@ -63,7 +63,7 @@ test('native commander movement uses several authored walk phases and reduced mo
   const r=window.__FRONTIER__.renderer as any,a=r.directionalAtlas,draw=a.draw.bind(a);r.qaWalkFrames=[];
   a.draw=(c:any,actor:string,id:string,height:number)=>{if(actor==='ranger')r.qaWalkFrames.push(id);return draw(c,actor,id,height);};
  });
- const ground=await clearGround(page);await tap(page,ground);await resume(page);
+ await action(page,'order-move').click();const ground=await clearGround(page);await tap(page,ground);await resume(page);
  await expect.poll(()=>page.evaluate(()=>new Set((window.__FRONTIER__.renderer as any).qaWalkFrames.filter((id:string)=>id.includes('-walk-'))).size),{timeout:10000}).toBeGreaterThanOrEqual(3);
  await pause(page);await action(page,'pause-menu').click();await action(page,'settings').click();
  await page.getByLabel('Reduced motion and effects').check();await page.getByRole('button',{name:'Done',exact:true}).click();

@@ -21,6 +21,7 @@ async function focusPoint(page: Page, point: { x: number; y: number }) {
   const screen = await page.evaluate(p => window.__FRONTIER__.renderer.worldToScreen(p.x, p.y), point);
   expect(await page.evaluate(p => document.elementFromPoint(p.x, p.y)?.id, screen)).toBe("world");
   await tap(page, screen);
+  const capture=action(page,"capture-resource");if(await capture.isVisible())await capture.click();
 }
 async function restoreOwnedSave(page: Page, storage: typeof isolatedPair) {
   // Replay a preserved, owned native-input save through the browser's storage
@@ -84,7 +85,7 @@ test("saved distant Houses explain one extra neighbor, preserve both Houses, com
   await expect(page.locator("#battle-hint p")).toContainText("one more");
   await page.screenshot({ path: test.info().outputPath("saved-house-recovery-guidance.png") });
   await action(page, "learning-help").click();
-  await expect(page.locator(".placement-toolbar small")).toContainText("Ready");
+  await expect(page.locator(".placement-toolbar small[role=status]")).toContainText("Valid location");
   const siteButton = action(page, "learning-house-site"), rect = (await siteButton.boundingBox())!;
   expect(rect.height).toBeGreaterThanOrEqual(44); expect(rect.width).toBeGreaterThanOrEqual(44);
   expect(await siteButton.evaluate(el => { const r=el.getBoundingClientRect(); return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest("button") === el; })).toBe(true);
@@ -113,13 +114,13 @@ test("native legal edge House warns before building and offers an explained new 
   const state = await page.evaluate(() => window.__FRONTIER__.state);
   expect(canBuild(state, 0, "house", 2.5, 16.5).ok).toBe(true);
   await focusPoint(page, {x:2.5,y:16.5});
-  await expect(page.locator(".placement-toolbar small")).toContainText("no room for a neighbor");
+  await expect(page.locator(".placement-toolbar small[role=status]")).toContainText("no room for a neighbor");
   await expect(action(page, "confirm-placement")).toBeEnabled(); // Valid manual sites remain valid.
   await page.screenshot({ path: test.info().outputPath("exact-edge-house-warning.png") });
   await confirmAndFinishHouse(page, 1); await lesson(page, 6);
   await expandGuide(page); await expect(page.locator("#battle-hint p")).toContainText("two more Houses");
   await action(page, "learning-help").click();
-  await expect(page.locator(".placement-toolbar small")).toContainText("Ready");
+  await expect(page.locator(".placement-toolbar small[role=status]")).toContainText("Valid location");
   await confirmAndFinishHouse(page, 2); await lesson(page, 6);
   await action(page, "panel-build").click(); await page.getByRole("button", { name: "Build House", exact: true }).click();
   await confirmAndFinishHouse(page, 7);

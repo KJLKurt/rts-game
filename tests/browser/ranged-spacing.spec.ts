@@ -20,7 +20,15 @@ test('native Keep distance gives a player ranged force the shared spacing behavi
  expect(await page.evaluate(()=>window.__FRONTIER__.state.pendingCommands)).toEqual([{type:'rangedSpacing',team:0,enabled:true}]);
  await action(page,'order-attackMove').click();
  if(!await page.locator('.command-deck').evaluate(el=>el.classList.contains('collapsed')))await action(page,'toggle-deck').click();
- if(!await page.locator('.minimap-wrap').evaluate(el=>el.classList.contains('collapsed')))await action(page,'toggle-minimap').click();
+ // Focus the same exact combat destination using native minimap input before tapping.
+ // The compact command toolbar legitimately covers the old fixed screen coordinate.
+ if(await page.locator('.minimap-wrap').evaluate(el=>el.classList.contains('collapsed')))await action(page,'toggle-minimap').click();
+ const mini=(await page.locator('#minimap').boundingBox())!,size=await page.evaluate(()=>({w:window.__FRONTIER__.state.map.width,h:window.__FRONTIER__.state.map.height}));
+ const focusPoint={x:mini.x+31/size.w*mini.width,y:mini.y+27.5/size.h*mini.height};
+ expect(await page.evaluate(p=>document.elementFromPoint(p.x,p.y)?.id,focusPoint)).toBe('minimap');
+ await tap(page,focusPoint);await action(page,'toggle-minimap').click();
+ await page.evaluate(()=>new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve()))));
+ expect(await page.evaluate(()=>window.__FRONTIER__.state.pendingCommands.map(c=>c.type))).toEqual(['rangedSpacing']);
  const point=await page.evaluate(()=>{const p=window.__FRONTIER__.renderer.worldToScreen(31,27.5);return{...p,hit:document.elementFromPoint(p.x,p.y)?.id};});
  expect(point.hit).toBe('world');await tap(page,point);
  expect(await page.evaluate(()=>window.__FRONTIER__.state.pendingCommands.map(c=>c.type))).toEqual(['rangedSpacing','attackMove']);
@@ -61,7 +69,7 @@ test('ranged stance is visible at large text while native Move and Hold retain p
  }
  await action(page,'ranged-spacing').scrollIntoViewIfNeeded();await page.screenshot({path:test.info().outputPath('stance-control-130-text.png')});
  await action(page,'order-move').click();if(!await page.locator('.command-deck').evaluate(el=>el.classList.contains('collapsed')))await action(page,'toggle-deck').click();
- const origin=await commander(page);await tap(page,await clearGround(page));await expect(page.locator('.current-order')).toContainText('Move to');await expect(page.locator('.ranged-spacing-status')).toHaveText('Move: spacing off');
+ const origin=await commander(page);await action(page,'order-move').click();await tap(page,await clearGround(page));await expect(page.locator('.current-order')).toContainText('Move to');await expect(page.locator('.ranged-spacing-status')).toHaveText('Move: spacing off');
  await resume(page);await expect.poll(async()=>{const hero=await commander(page);return Math.hypot(hero.x-origin.x,hero.y-origin.y);}).toBeGreaterThan(1.2);
  expect(await page.evaluate(()=>window.__FRONTIER__.state.entities.find(e=>e.team===0&&e.kind==='commander')!.skirmishAnchor)).toBeUndefined();
  if(isMobile){

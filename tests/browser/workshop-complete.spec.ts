@@ -160,6 +160,7 @@ test("complete skirmish preset, slots, preview and playback match the displayed 
   await expect(page.locator('[name="mapSize"]')).toHaveValue("giant");
   await expect(page.locator('[name="populationCap"]')).toHaveValue("150");
   await expect(page.locator(".setup-slot")).toHaveCount(4);
+  await page.locator('.setup-advanced > summary').click();
   await page.locator('[name="slot-1-controller"]').selectOption("closed");
   await page.locator('[name="slot-2-alliance"]').selectOption("0");
   await page.locator('[name="gameSpeed"]').fill("0.5");

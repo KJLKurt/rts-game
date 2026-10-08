@@ -8,27 +8,27 @@ export interface LearningProgress {
 export const LESSONS = [
   {
     title: "Move your commander",
-    text: "Start with one commander and a small keep. Tap clear ground to walk there, or hold the thumbstick. Release the stick to stop. Drag empty ground to look around.",
+    text: "Start with one commander and a small keep. Choose Move, then tap clear ground to walk there, or hold the thumbstick. Release the stick to stop. Drag empty ground to look around.",
     action: "Show commander",
   },
   {
     title: "Claim a gold mine",
-    text: "Tap the marked gold mine. Stay beside it while the capture ring fills. Once your banner rises, the mine gathers gold automatically. No workers are needed.",
+    text: "Tap the marked mine, then Capture. The mine gathers gold automatically after your banner rises. No workers are needed.",
     action: "Show gold mine",
   },
   {
     title: "Claim a timber camp",
-    text: "Wood pays for buildings and archers. Tap the marked timber camp to capture it. Your gold mine keeps paying even after you leave it.",
+    text: "Tap the timber camp, then Capture. Held camps gather wood automatically; your gold mine keeps paying.",
     action: "Show timber camp",
   },
   {
     title: "Discover your keep",
-    text: "Tap your Command Keep. Its Details panel shows what it does, what it trains, its research, and upgrades. Tap a resource number at the top to inspect all your income.",
+    text: "Tap the Keep. Train, Upgrades and Info explain its purpose. Resource numbers explain your income.",
     action: "Show keep",
   },
   {
     title: "Queue three soldiers",
-    text: "Open Recruit, choose 3, then Swordsman. The queue shows each soldier, time remaining, and Cancel. Wait for all three to finish. You can minimize the panel while they train.",
+    text: "Recruit → 3 → Swordsman. Finish three soldiers. Each paid queue item shows its time and Cancel.",
     action: "Open Recruit",
   },
   {
@@ -38,12 +38,12 @@ export const LESSONS = [
   },
   {
     title: "Improve a building",
-    text: "Tap either completed House and choose its Townhouse upgrade. It adds 4 more population capacity without another footprint. Details shows the cost, benefit, and current and maximum level. Wait for the upgrade to finish.",
+    text: "Tap a completed House → Upgrades → Townhouse (+4 capacity). Wait for the upgrade to finish.",
     action: "Show your house",
   },
   {
     title: "Claim the frontier",
-    text: "Select Army, then tap the marked relic. Relics earn victory points in real battles; gold and wood fund your army. Your force will hold the captured site. Finish this lesson to open every practice option.",
+    text: "Select Army, tap the marked relic, then Capture. Stay until your banner rises. Relics earn victory points.",
     action: "Show relic",
   },
 ];

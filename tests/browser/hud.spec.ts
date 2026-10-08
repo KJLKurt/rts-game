@@ -20,12 +20,16 @@ test('income stays per game-second and four-digit stock HUD fits desktop, landsc
  }
  for(const selector of ['.hud','.resources','#match-time','.pause-button'])await expectWithinViewport(page,selector);
  const geometry=await page.evaluate(()=>{
-  const slots=[...document.querySelectorAll('.resources>span')].map(el=>{const r=el.getBoundingClientRect();return{left:r.left,right:r.right};});
+  const slots=[...document.querySelectorAll('.resources>button')].map(el=>{const r=el.getBoundingClientRect();return{left:r.left,right:r.right};});
   const resources=document.querySelector('.resources')!.getBoundingClientRect(),clock=document.querySelector('#match-time')!.getBoundingClientRect();
-  return{slots,resourceRight:resources.right,clockLeft:clock.left,innerWidth,clientWidth:document.documentElement.clientWidth};
+  const hud=document.querySelector('.hud')!.getBoundingClientRect();
+  return{slots,resources:resources.toJSON(),clock:clock.toJSON(),hud:hud.toJSON(),innerWidth,clientWidth:document.documentElement.clientWidth};
  });
  for(let i=1;i<geometry.slots.length;i++)expect(geometry.slots[i-1].right).toBeLessThanOrEqual(geometry.slots[i].left);
- expect(geometry.resourceRight).toBeLessThanOrEqual(geometry.clockLeft);
+ expect(geometry.slots).toHaveLength(3);
+ expect(geometry.resources.right<=geometry.clock.left||geometry.resources.left>=geometry.clock.right||geometry.resources.bottom<=geometry.clock.top||geometry.resources.top>=geometry.clock.bottom,'Resource values and clock must not overlap in either HUD row').toBe(true);
+ expect(geometry.clock.left).toBeGreaterThanOrEqual(geometry.hud.left);expect(geometry.clock.right).toBeLessThanOrEqual(geometry.hud.right);
+ expect(geometry.clock.top).toBeGreaterThanOrEqual(geometry.hud.top);expect(geometry.clock.bottom).toBeLessThanOrEqual(geometry.hud.bottom);
  expect(geometry.innerWidth).toBe(page.viewportSize()!.width);expect(geometry.clientWidth).toBe(page.viewportSize()!.width);
  await action(page,'panel-orders').click();await action(page,'speed').click();await action(page,'speed').click();await expect(action(page,'speed')).toHaveAccessibleName('2× speed');
  for(const resource of expected)await expect(page.locator(`#${resource.id} .resource-income`)).toHaveText(`+${resource.rate.toFixed(1)}/s`);

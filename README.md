@@ -1,3 +1,5 @@
+> **Current testing candidate: fc-194c08936126 (8 October 2026).** The newer phone interface and material pass are deployed for hosted browser QA. Type/build and 588 unit tests pass; browser acceptance remains pending, including the documented native-touch fixture issue. See [current testing status](docs/TESTING_PREVIEW_20261008.md). The prior published checkpoint and its evidence remain below as history.
+
 # Frontier Command
 
 A mobile-first, offline-capable fantasy RTS. Lead a commander directly, capture finite resource deposits, recruit a combined-arms army, and contest a central relic.
@@ -149,3 +151,4 @@ Workflow design follows [GitHub’s custom Pages workflow documentation](https:/
 Master, Music, Effects and mute controls are saved per device. Replaceable soundtrack files and the audio manifest are documented in `docs/AUDIO_REPLACEMENT.md`. There is no in-app audio upload. The release includes attack-only frames for three actors; locomotion and the remaining actors retain cutout-based animation. Exact presentation and reduced-motion behavior are described in `docs/RENDERING_AND_COMBAT_FEEDBACK.md`.
 
 The lead confirms the latest docs-only baseline on main and feature is `471e5be05232a0b00e4785f7101206516e443bed`, with 234 verified remote source hashes and no additional Actions or deployment; the published runtime identity is unchanged.
+

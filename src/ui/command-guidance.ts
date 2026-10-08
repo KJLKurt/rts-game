@@ -22,7 +22,9 @@ export function recruitDestination(producer: Entity): string {
 
 export function orderDescription(state: GameState, entity: Entity): string {
   const order = entity.order;
-  if (entity.kind === "building") return "Inspect production and rally in Details";
+  if (entity.kind === "building") return BUILDINGS[entity.type as BuildingId]?.recruits.length
+    ? "Inspect production and rally in Details"
+    : "Inspect actions and upgrades in Details";
   switch (order.type) {
     case "hold": return "Hold: stay here; attack within range";
     case "idle": return "Guard: defend nearby, then return";

@@ -1,0 +1,66 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://127.0.0.1:50426",
+      "localStorage": [
+        {
+          "name": "frontier-command:rts-game:v1:profile",
+          "value": "{\"version\":2,\"games\":7,\"wins\":3,\"seconds\":2970.8,\"kills\":460,\"streak\":0,\"bestStreak\":3,\"campaign\":3,\"campaignProgress\":{\"rise-of-the-frontier\":3},\"completedMissions\":{\"rise-of-the-frontier\":[\"outpost\",\"hold-line\",\"broken-alliance\"]},\"expedition\":0,\"unlocked\":[\"first-victory\",\"capture\",\"recruiter\",\"tactician\",\"warlord\",\"quick\",\"builder\",\"streak\",\"century\",\"economist\",\"woodsman\",\"ranger\",\"survivor\",\"veteran\"],\"achievements\":{\"first-victory\":{\"progress\":1,\"unlocked\":true,\"unlockedAt\":\"2026-10-06T11:54:15.308Z\"},\"veteran\":{\"progress\":5,\"unlocked\":true,\"unlockedAt\":\"2026-10-06T19:05:19.845Z\"},\"conqueror\":{\"progress\":3,\"unlocked\":false,\"unlockedAt\":null},\"legend\":{\"progress\":3,\"unlocked\":false,\"unlockedAt\":null},\"streak\":{\"progress\":3,\"unlocked\":true,\"unlockedAt\":\"2026-10-06T17:17:30.390Z\"},\"century\":{\"progress\":100,\"unlocked\":true,\"unlockedAt\":\"2026-10-06T17:17:30.390Z\"},\"thousand\":{\"progress\":460,\"unlocked\":false,\"unlockedAt\":null},\"hour\":{\"progress\":2970.8,\"unlocked\":false,\"unlockedAt\":null},\"capture\":{\"progress\":1,\"unlocked\":true,\"unlockedAt\":\"2026-10-06T11:54:15.308Z\"},\"builder\":{\"progress\":5,\"unlocked\":true,\"unlockedAt\":\"2026-10-06T13:27:07.653Z\"},\"recruiter\":{\"progress\":20,\"unlocked\":true,\"unlockedAt\":\"2026-10-06T11:54:15.308Z\"},\"economist\":{\"progress\":2000,\"unlocked\":true,\"unlockedAt\":\"2026-10-06T17:17:30.390Z\"},\"woodsman\":{\"progress\":2000,\"unlocked\":true,\"unlockedAt\":\"2026-10-06T17:17:30.390Z\"},\"tactician\":{\"progress\":1,\"unlocked\":true,\"unlockedAt\":\"2026-10-06T11:54:15.308Z\"},\"siege\":{\"progress\":0,\"unlocked\":false,\"unlockedAt\":null},\"warlord\":{\"progress\":1,\"unlocked\":true,\"unlockedAt\":\"2026-10-06T11:54:15.308Z\"},\"ranger\":{\"progress\":1,\"unlocked\":true,\"unlockedAt\":\"2026-10-06T17:17:30.390Z\"},\"engineer\":{\"progress\":0,\"unlocked\":false,\"unlockedAt\":null},\"hard\":{\"progress\":0,\"unlocked\":false,\"unlockedAt\":null},\"expedition\":{\"progress\":0,\"unlocked\":false,\"unlockedAt\":null},\"quick\":{\"progress\":1,\"unlocked\":true,\"unlockedAt\":\"2026-10-06T11:54:15.308Z\"},\"survivor\":{\"progress\":1,\"unlocked\":true,\"unlockedAt\":\"2026-10-06T17:17:30.390Z\"},\"no-pause\":{\"progress\":0,\"unlocked\":false,\"unlockedAt\":null},\"huge\":{\"progress\":0,\"unlocked\":false,\"unlockedAt\":null},\"all-supplies\":{\"progress\":0,\"unlocked\":false,\"unlockedAt\":null},\"cavalry\":{\"progress\":0,\"unlocked\":false,\"unlockedAt\":null},\"all-factions\":{\"progress\":2,\"unlocked\":false,\"unlockedAt\":null},\"ember-road\":{\"progress\":0,\"unlocked\":false,\"unlockedAt\":null},\"last-banner\":{\"progress\":0,\"unlocked\":false,\"unlockedAt\":null},\"master-builder\":{\"progress\":62,\"unlocked\":false,\"unlockedAt\":null}},\"totals\":{\"unitsCreated\":176,\"unitsLost\":158,\"kills\":460,\"buildingsCreated\":62,\"buildingsDestroyed\":4,\"goldCollected\":10527.020312875211,\"woodCollected\":10094.8342128746,\"captures\":31,\"commanderDeaths\":29,\"damageDealt\":78409.91600000003,\"pauses\":127},\"best\":{\"unitsCreated\":40,\"unitsLost\":33,\"kills\":110,\"buildingsCreated\":13,\"buildingsDestroyed\":4,\"goldCollected\":3215.8411210001327,\"woodCollected\":2867.6069209999932,\"captures\":11,\"commanderDeaths\":9,\"damageDealt\":14779.000000000004,\"pauses\":55,\"quickWins\":2,\"survivorWins\":1},\"factionUsage\":{\"ironhold\":{\"games\":6,\"wins\":2,\"seconds\":2372.6000000000004},\"wildborn\":{\"games\":1,\"wins\":1,\"seconds\":598.2},\"arcanists\":{\"games\":0,\"wins\":0,\"seconds\":0}},\"commanderUsage\":{\"warlord\":{\"games\":5,\"wins\":2,\"seconds\":1946.2},\"ranger\":{\"games\":1,\"wins\":1,\"seconds\":598.2},\"engineer\":{\"games\":1,\"wins\":0,\"seconds\":426.40000000000003}},\"fastestVictory\":191.70000000000002,\"history\":[{\"id\":\"battle:66b1c863-dbcb-4ae5-a8a4-b50ff52eee8d\",\"endedAt\":\"2026-10-07T00:19:14.630Z\",\"victory\":false,\"seconds\":518,\"faction\":\"ironhold\",\"commander\":\"warlord\",\"mode\":\"domination\",\"difficulty\":\"easy\",\"biome\":\"desert\",\"seed\":\"FRONTIER-328581:foothold\",\"reason\":\"Relic domination\",\"stats\":{\"unitsCreated\":29,\"unitsLost\":29,\"kills\":110,\"buildingsCreated\":7,\"buildingsDestroyed\":0,\"goldCollected\":1474.5614687500408,\"woodCollected\":1250.8358687499372,\"captures\":5,\"commanderDeaths\":6,\"damageDealt\":14779.000000000004,\"pauses\":2},\"expeditionNode\":\"foothold\"},{\"id\":\"battle:10fb1e69-5bbb-491f-94eb-cca8ffbef8cb\",\"endedAt\":\"2026-10-06T23:59:25.755Z\",\"victory\":false,\"seconds\":426.40000000000003,\"faction\":\"ironhold\",\"commander\":\"engineer\",\"mode\":\"conquest\",\"difficulty\":\"hard\",\"biome\":\"snow\",\"seed\":\"IRONWATCH-04\",\"reason\":\"Your Command Keep has fallen.\",\"stats\":{\"unitsCreated\":18,\"unitsLost\":17,\"kills\":77,\"buildingsCreated\":10,\"buildingsDestroyed\":0,\"goldCollected\":1322.8350000001258,\"woodCollected\":1193.9199999999096,\"captures\":1,\"commanderDeaths\":9,\"damageDealt\":11947.899999999998,\"pauses\":3},\"campaignId\":\"rise-of-the-frontier\",\"missionId\":\"ironwatch\"},{\"id\":\"battle:9750b6f5-3a17-4c38-8b0f-d366b50c99c9\",\"endedAt\":\"2026-10-06T19:05:19.845Z\",\"victory\":false,\"seconds\":475,\"faction\":\"ironhold\",\"commander\":\"warlord\",\"mode\":\"domination\",\"difficulty\":\"easy\",\"biome\":\"grasslands\",\"seed\":\"FRONTIER-038099:foothold\",\"reason\":\"Relic domination\",\"stats\":{\"unitsCreated\":26,\"unitsLost\":26,\"kills\":104,\"buildingsCreated\":10,\"buildingsDestroyed\":0,\"goldCollected\":1470.592328124945,\"woodCollected\":1694.0568281249164,\"captures\":6,\"commanderDeaths\":6,\"damageDealt\":14465.370000000034,\"pauses\":55},\"expeditionNode\":\"foothold\"},{\"id\":\"battle:be40c677-8c72-4215-a5e9-0e98bd8d1071\",\"endedAt\":\"2026-10-06T18:26:38.260Z\",\"victory\":false,\"seconds\":401.5,\"faction\":\"ironhold\",\"commander\":\"warlord\",\"mode\":\"domination\",\"difficulty\":\"easy\",\"biome\":\"snow\",\"seed\":\"FRONTIER-901949:foothold\",\"reason\":\"Your Command Keep has fallen.\",\"stats\":{\"unitsCreated\":27,\"unitsLost\":29,\"kills\":40,\"buildingsCreated\":7,\"buildingsDestroyed\":0,\"goldCollected\":1431.3130749999505,\"woodCollected\":1267.757074999951,\"captures\":6,\"commanderDeaths\":3,\"damageDealt\":7728.489999999977,\"pauses\":18},\"expeditionNode\":\"foothold\"},{\"id\":\"battle:72bbd0fa-d429-4df3-8e6e-daf6b445b50e\",\"endedAt\":\"2026-10-06T17:17:30.390Z\",\"victory\":true,\"seconds\":598.2,\"faction\":\"wildborn\",\"commander\":\"ranger\",\"mode\":\"relic\",\"difficulty\":\"normal\",\"biome\":\"desert\",\"seed\":\"ALLIANCE-03\",\"reason\":\"Mission objectives complete\",\"stats\":{\"unitsCreated\":40,\"unitsLost\":33,\"kills\":56,\"buildingsCreated\":11,\"buildingsDestroyed\":4,\"goldCollected\":3215.8411210001327,\"woodCollected\":2867.6069209999932,\"captures\":11,\"commanderDeaths\":0,\"damageDealt\":14610.856000000018,\"pauses\":24},\"campaignId\":\"rise-of-the-frontier\",\"missionId\":\"broken-alliance\"},{\"id\":\"battle:2df119b8-246a-44a4-af19-210dba55b6c1\",\"endedAt\":\"2026-10-06T13:27:07.653Z\",\"victory\":true,\"seconds\":360,\"faction\":\"ironhold\",\"commander\":\"warlord\",\"mode\":\"domination\",\"difficulty\":\"normal\",\"biome\":\"forest\",\"seed\":\"HOLD-LINE-02\",\"reason\":\"Mission objectives complete\",\"stats\":{\"unitsCreated\":13,\"unitsLost\":7,\"kills\":44,\"buildingsCreated\":13,\"buildingsDestroyed\":0,\"goldCollected\":1123.0423200000234,\"woodCollected\":1283.8975199999193,\"captures\":0,\"commanderDeaths\":2,\"damageDealt\":10399.149999999996,\"pauses\":12},\"campaignId\":\"rise-of-the-frontier\",\"missionId\":\"hold-line\"},{\"id\":\"battle:1e4e5cb1-c009-4c35-b219-2a4d6d2687c6\",\"endedAt\":\"2026-10-06T11:54:15.308Z\",\"victory\":true,\"seconds\":191.70000000000002,\"faction\":\"ironhold\",\"commander\":\"warlord\",\"mode\":\"domination\",\"difficulty\":\"easy\",\"biome\":\"grasslands\",\"seed\":\"OUTPOST-01\",\"reason\":\"Mission objectives complete\",\"stats\":{\"unitsCreated\":23,\"unitsLost\":17,\"kills\":29,\"buildingsCreated\":4,\"buildingsDestroyed\":0,\"goldCollected\":488.8349999999927,\"woodCollected\":536.7599999999736,\"captures\":2,\"commanderDeaths\":3,\"damageDealt\":4479.150000000009,\"pauses\":13},\"campaignId\":\"rise-of-the-frontier\",\"missionId\":\"outpost\"}],\"recordedMatchIds\":[\"battle:66b1c863-dbcb-4ae5-a8a4-b50ff52eee8d\",\"battle:10fb1e69-5bbb-491f-94eb-cca8ffbef8cb\",\"battle:9750b6f5-3a17-4c38-8b0f-d366b50c99c9\",\"battle:be40c677-8c72-4215-a5e9-0e98bd8d1071\",\"battle:72bbd0fa-d429-4df3-8e6e-daf6b445b50e\",\"battle:2df119b8-246a-44a4-af19-210dba55b6c1\",\"battle:1e4e5cb1-c009-4c35-b219-2a4d6d2687c6\"],\"choices\":[\"banner-frontier\",\"banner-founder\",\"loadout-forager\",\"loadout-vanguard\"],\"selectedBanner\":\"banner-frontier\"}"
+        },
+        {
+          "name": "frontier-command:rts-game:v1:preferences",
+          "value": "{\"master\":0.85,\"muted\":false,\"music\":0.32,\"sfx\":0.65,\"reducedMotion\":false,\"showTips\":true,\"tutorialSeen\":false,\"learningComplete\":true,\"uiScale\":1,\"visualTheme\":\"christmas\"}"
+        }
+      ],
+      "indexedDB": [
+        {
+          "name": "frontier-command-rts-game",
+          "version": 1,
+          "stores": [
+            {
+              "name": "records",
+              "autoIncrement": false,
+              "records": [
+                {
+                  "key": "battle",
+                  "value": {
+                    "__frontierRecord": 1,
+                    "writtenAt": 1791332354868,
+                    "value": null
+                  }
+                },
+                {
+                  "key": "expedition",
+                  "value": {
+                    "__frontierRecord": 1,
+                    "writtenAt": 1791332408688,
+                    "value": {
+                      "version": 1,
+                      "run": {
+                        "version": 1,
+                        "seed": "FRONTIER-328581",
+                        "faction": "ironhold",
+                        "commander": "warlord",
+                        "loadout": "forager",
+                        "journal": [
+                          {
+                            "nodeId": "foothold",
+                            "victory": false
+                          }
+                        ],
+                        "activeNode": null
+                      },
+                      "battle": null
+                    }
+                  }
+                }
+              ],
+              "indexes": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
