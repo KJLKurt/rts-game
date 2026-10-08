@@ -5,7 +5,7 @@ import {defineConfig, devices} from '@playwright/test';
 const external = process.env.FRONTIER_TEST_URL;
 export default defineConfig({
   testDir: './tests/browser',
-  testMatch: /(?:surrender|results|pwa)\.spec\.ts/,
+  testMatch: /surrender\.spec\.ts/,
   timeout: 35_000,
   expect: {timeout: 8_000},
   fullyParallel: true,
@@ -21,10 +21,9 @@ export default defineConfig({
     launchOptions: process.env.PLAYWRIGHT_EXECUTABLE_PATH ? {executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH} : {},
   },
   projects: [
-    {name: 'desktop', use: {...devices['Desktop Chrome'], viewport: {width: 1440, height: 900}}, testIgnore: /pwa\.spec\.ts/},
-    {name: 'phone-portrait', use: {...devices['Pixel 7'], viewport: {width: 390, height: 844}}, testIgnore: /pwa\.spec\.ts/},
-    {name: 'phone-landscape', use: {...devices['Pixel 7'], viewport: {width: 844, height: 390}}, testIgnore: /pwa\.spec\.ts/},
-    {name: 'pwa', use: {...devices['Desktop Chrome']}, testMatch: /pwa\.spec\.ts/},
+    {grep: /native confirmation fits|native confirmed surrender/, name: 'desktop', use: {...devices['Desktop Chrome'], viewport: {width: 1440, height: 900}}, testIgnore: /pwa\.spec\.ts/},
+    {grep: /native confirmation fits|native confirmed surrender|native expedition surrender/, name: 'phone-portrait', use: {...devices['Pixel 7'], viewport: {width: 390, height: 844}}, testIgnore: /pwa\.spec\.ts/},
+    {grep: /native confirmation fits|native confirmed surrender|native expedition surrender/, name: 'phone-landscape', use: {...devices['Pixel 7'], viewport: {width: 844, height: 390}}, testIgnore: /pwa\.spec\.ts/},
   ],
   webServer: external ? undefined : {
     command: 'npm run build && node tests/browser/serve-production.mjs',

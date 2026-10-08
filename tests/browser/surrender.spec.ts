@@ -119,7 +119,6 @@ test("native confirmation fits, cancels repeatedly, survives interruption and pr
   await expect(confirmation(page)).toContainText("Use Save & leave if you want to continue this battle later.");
   for (const name of ["Cancel", "Confirm surrender"]) {
     const button = confirmation(page).getByRole("button", { name, exact: true });
-    await button.scrollIntoViewIfNeeded();
     const rect = (await button.boundingBox())!;
     const viewport = page.viewportSize()!;
     expect(rect.width).toBeGreaterThanOrEqual(44);
@@ -128,6 +127,8 @@ test("native confirmation fits, cancels repeatedly, survives interruption and pr
     expect(rect.y).toBeGreaterThanOrEqual(0);
     expect(rect.x + rect.width).toBeLessThanOrEqual(viewport.width);
     expect(rect.y + rect.height).toBeLessThanOrEqual(viewport.height);
+    const dialogRect = (await confirmation(page).boundingBox())!;
+    expect(rect.y + rect.height).toBeLessThanOrEqual(dialogRect.y + dialogRect.height - 4);
     expect(await button.evaluate(node => {
       const box = node.getBoundingClientRect();
       return document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)?.closest("button") === node;
@@ -233,6 +234,16 @@ test("native expedition surrender warns that the run ends, preserves Cancel and 
   await press(page, action(page, "begin-briefing"));
   await openSurrender(page);
   await expect(confirmation(page)).toContainText("This also ends your expedition run. Your journal and earlier rewards are kept, but you will need to start a new expedition.");
+  if (test.info().project.name.startsWith("phone-"))
+    await page.screenshot({path:test.info().outputPath(`surrender-expedition-${test.info().project.name}.png`), scale:"css", animations:"disabled"});
+  const dialogRect = (await confirmation(page).boundingBox())!;
+  for (const name of ["Cancel", "Confirm surrender"]) {
+    const button = confirmation(page).getByRole("button", {name, exact:true});
+    const rect = (await button.boundingBox())!;
+    expect(rect.y + rect.height).toBeLessThanOrEqual(dialogRect.y + dialogRect.height - 4);
+    expect(rect.height).toBeGreaterThanOrEqual(44);
+  }
+
   const before = await readBattle(page);
   expect(before.expedition?.phase).toBe("battle");
   await press(page, confirmation(page).getByRole("button", { name: "Cancel", exact: true }));

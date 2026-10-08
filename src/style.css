@@ -4413,3 +4413,13 @@ footer .build-identifier {
   color: #ffb5a8;
   border-color: #c97969;
 }
+
+@media (max-height: 500px) and (min-width: 600px) {
+  .surrender-dialog { padding: 16px 20px; }
+  .surrender-dialog header { margin-bottom: 10px; }
+  .surrender-dialog p { margin: 8px 0; line-height: 1.4; }
+  .surrender-dialog .result-actions {
+    grid-template-columns: 1fr 1fr;
+    margin-top: 14px;
+  }
+}

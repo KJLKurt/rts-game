@@ -1400,6 +1400,8 @@ function canOfferSurrender() {
 }
 function showSurrenderConfirmation() {
   if (!canOfferSurrender()) return;
+  // A planned-order notice is unrelated to the choice to end this battle.
+  clearToast();
   const consequence = expeditionBattleActive
     ? "This also ends your expedition run. Your journal and earlier rewards are kept, but you will need to start a new expedition."
     : activeMission()
