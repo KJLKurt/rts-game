@@ -4362,3 +4362,11 @@ footer .build-identifier {
 @media (max-height:500px) and (min-width:601px) {
   .placement-toolbar .placement-status { padding-top:2px; font-size:10px; }
 }
+
+/* Exact current HP stays readable in the narrow identity slot. The meter's
+   accessible value and expanded Details retain the full current/maximum pair. */
+.health-mobile { display:none; }
+@media (max-width:600px) {
+  .selection-health-value .health-exact { display:none; }
+  .selection-health-value .health-mobile { display:inline; }
+}

@@ -50,7 +50,7 @@ test('battlefield readouts distinguish costs, live health and unavailable buildi
  await expect(house.locator('.cost [data-resource=wood]')).toContainText('65');
  await expect(house.locator('.resource-name')).toHaveText('wood');
  await house.click();await expect(page.locator('.placement-toolbar .cost')).toContainText('wood');
- await action(page,'cancel-build').click();
+ await action(page,'cancel-build').click();await expect(page.locator('#toast')).not.toContainText('Drag the House preview');
  await pickOwnBuilding(page,'keep');
  const train=page.locator('#deck-content [data-action=recruit][data-id=swordsman]');
  await expect(train).toBeEnabled();
@@ -170,7 +170,7 @@ test('approved phone sheets keep logical targets, resource values and map space 
   await action(page,'pause-menu').click();await action(page,'settings').click();await page.getByLabel('Interface text size',{exact:true}).selectOption('1.3');await page.getByRole('button',{name:'Done',exact:true}).click();
   for(const panel of ['panel-army','panel-build','panel-research','placement','inspect-train','inspect-upgrades']) {
    if(panel==='placement') {await action(page,'panel-build').click();await page.getByRole('button',{name:'Build House',exact:true}).click();}
-   else if(panel.startsWith('inspect-')) {await pickOwnBuilding(page,'keep');await page.locator(`[data-action=inspect-tab][data-id=${panel==='inspect-train'?'train':'upgrades'}]`).click();await page.evaluate(()=>{const p=window.__FRONTIER__.state.players[0];p.gold=0;p.wood=0;});await expect(page.locator('.inspect-section:not([hidden]) .availability-reason').first()).toBeVisible();}
+   else if(panel.startsWith('inspect-')) {if(panel==='inspect-train') {if(!(await page.locator('#selection-info').textContent())?.includes('Command Keep'))await pickOwnBuilding(page,'keep');else await action(page,'panel-inspect').click();}await expect(page.locator('#selection-info')).toContainText('Command Keep');await page.locator(`[data-action=inspect-tab][data-id=${panel==='inspect-train'?'train':'upgrades'}]`).click();await page.evaluate(()=>{const p=window.__FRONTIER__.state.players[0];p.gold=0;p.wood=0;});await expect(page.locator('.inspect-section:not([hidden]) .availability-reason').first()).toBeVisible();}
    else await action(page,panel).click();
    const proof=await page.evaluate(()=>{
     const hud=document.querySelector('.hud')!.getBoundingClientRect(),deck=document.querySelector('.command-deck')!.getBoundingClientRect();

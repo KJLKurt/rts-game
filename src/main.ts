@@ -160,7 +160,7 @@ import {
 } from "./ui/progression/view";
 import { icon, unitIcons } from "./ui/icons";
 
-import { resourceCostHTML, selectionName, selectionHealthHTML, placementFeedback } from "./ui/battle-readouts";
+import { resourceCostHTML, selectionName, selectionHealthHTML, placementFeedback, isPlacementInstruction } from "./ui/battle-readouts";
 
 const app = document.querySelector<HTMLDivElement>("#app")!;
 app.innerHTML = `<canvas id="world" aria-label="Isometric battlefield"></canvas><div id="screen"></div><div id="modal-root"></div><div id="suspension-root"></div><div id="toast" role="status" aria-live="polite"></div><div id="update"></div>`;
@@ -2588,6 +2588,7 @@ async function performAction(action: string, id?: string) {
       break;
     }
     case "cancel-build":
+      if (placement && isPlacementInstruction(document.querySelector("#toast")?.textContent ?? "", BUILDINGS[placement].name)) clearToast();
       placement = null;
       targetPoint = null;
       renderDeck();

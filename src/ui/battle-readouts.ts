@@ -32,7 +32,7 @@ export function selectionHealthHTML(
   const maximum = Math.max(1, Math.ceil(entity.maxHp));
   const health = Math.max(0, Math.min(maximum, Math.ceil(entity.hp)));
   const ratio = Math.max(0, Math.min(1, entity.hp / Math.max(1, entity.maxHp)));
-  return `<small class="selection-vitals"><span class="selection-health-track" role="meter" aria-label="${esc(selectionName(entity))} health" aria-valuemin="0" aria-valuemax="${maximum}" aria-valuenow="${health}" aria-valuetext="${health} of ${maximum} health"><i style="width:${(ratio * 100).toFixed(2)}%"></i></span><span class="selection-health-value">${health} / ${maximum} health${queued ? ` · ${queued} queued` : ""}</span></small>`;
+  return `<small class="selection-vitals"><span class="selection-health-track" role="meter" aria-label="${esc(selectionName(entity))} health" aria-valuemin="0" aria-valuemax="${maximum}" aria-valuenow="${health}" aria-valuetext="${health} of ${maximum} health"><i style="width:${(ratio * 100).toFixed(2)}%"></i></span><span class="selection-health-value" aria-hidden="true"><span class="health-exact">${health} / ${maximum} health${queued ? ` · ${queued} queued` : ""}</span><span class="health-mobile">${health} HP</span></span></small>`;
 }
 
 export function placementFeedback(
@@ -65,4 +65,9 @@ export function placementFeedback(
     icon: "close",
     text: `${reason}. Nothing spent yet.`,
   };
+}
+
+/** Retire only this placement instruction, never a concurrent battle warning. */
+export function isPlacementInstruction(text: string, buildingName: string): boolean {
+  return text.startsWith(`Drag the ${buildingName} preview,`);
 }

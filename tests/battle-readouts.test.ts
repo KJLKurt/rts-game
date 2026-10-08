@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   placementFeedback,
+  isPlacementInstruction,
   resourceCostHTML,
   selectionHealthHTML,
   selectionName,
@@ -76,4 +77,10 @@ describe("truthful battlefield readouts", () => {
     );
     expect(placementFeedback({ ok: true }, true).state).toBe("warning");
   });
+});
+
+it('retires only the matching placement instruction and keeps battle warnings', () => {
+  expect(isPlacementInstruction('Drag the House preview, then choose Confirm build.', 'House')).toBe(true);
+  expect(isPlacementInstruction('Your Command Keep is under attack.', 'House')).toBe(false);
+  expect(isPlacementInstruction('Drag the Watchtower preview, then choose Confirm build.', 'House')).toBe(false);
 });
