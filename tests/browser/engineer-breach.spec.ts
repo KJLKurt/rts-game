@@ -74,6 +74,15 @@ test('native Attack targeting directs Breach to a farther structure instead of t
   await launch(page,{commander:'engineer',difficulty:'easy'});await pause(page);
   await action(page,'select-commander').click();
   await action(page,'order-attack').click();
+  await expect(page.locator('#toast')).not.toHaveClass(/show/);
+  // Focus uses a smooth camera follow after changing the landscape target HUD.
+  // Wait for observed stability rather than freezing gameplay or weakening taps.
+  let previousCamera: {x:number;y:number;zoom:number}|undefined, stableSamples=0;
+  await expect.poll(async()=>{
+    const camera=await page.evaluate(()=>({...window.__FRONTIER__.renderer.camera}));
+    stableSamples=previousCamera && Math.hypot(camera.x-previousCamera.x,camera.y-previousCamera.y)<.0001 && camera.zoom===previousCamera.zoom ? stableSamples+1 : 0;
+    previousCamera=camera;return stableSamples;
+  },{timeout:10000,intervals:[100]}).toBeGreaterThanOrEqual(3);
   const target=await page.evaluate(()=>{
     const {state:s,renderer:r}=window.__FRONTIER__,c=s.entities.find(e=>e.team===0&&e.kind==='commander')!;
     s.players.forEach(p=>p.ai=false);s.entities.forEach(e=>e.damage=0);
