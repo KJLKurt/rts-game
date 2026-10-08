@@ -105,6 +105,17 @@ test('troop sheet fits narrow and large-text viewports with native targets, scro
     const close=page.getByRole('button',{name:'Close dialog',exact:true}),apply=action(page,'troop-select-apply');
     await apply.focus();await page.keyboard.press('Tab');await expect(close).toBeFocused();await page.keyboard.press('Shift+Tab');await expect(apply).toBeFocused();
     await page.screenshot({path:test.info().outputPath(`troop-sheet-${width}px-large-text.png`)});
+    const focusOutline=await apply.evaluate(el=>{
+      const r=el.getBoundingClientRect(),style=getComputedStyle(el),extent=parseFloat(style.outlineWidth)+Math.max(0,parseFloat(style.outlineOffset));
+      const clippedBy=[];for(let parent=el.parentElement;parent;parent=parent.parentElement){
+        const p=parent.getBoundingClientRect(),css=getComputedStyle(parent),clips=(value:string)=>['hidden','auto','scroll','clip'].includes(value);
+        if(clips(css.overflowX)&&(r.left-extent<p.left-.5||r.right+extent>p.right+.5))clippedBy.push(parent.className+':x');
+        if(clips(css.overflowY)&&(r.top-extent<p.top-.5||r.bottom+extent>p.bottom+.5))clippedBy.push(parent.className+':y');
+      }
+      return{focusVisible:el.matches(':focus-visible'),extent,clippedBy};
+    });
+    await test.info().attach(`footer-focus-outline-${width}`,{body:JSON.stringify(focusOutline),contentType:'application/json'});
+    expect(focusOutline.focusVisible).toBe(true);expect(focusOutline.extent).toBeGreaterThan(0);expect(focusOutline.clippedBy).toEqual([]);
     await native(page,apply);await expect(root).toHaveCount(0);await expect(action(page,'choose-troops')).toBeFocused();
   }
   await page.setViewportSize(viewport);

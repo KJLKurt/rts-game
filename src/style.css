@@ -4395,7 +4395,7 @@ footer .build-identifier {
 .troop-individuals > summary:focus-visible { outline: 2px solid var(--gold); }
 .troop-unit-list { padding-left: 12px; border-left: 1px solid #527780; margin: 0 6px 6px; }
 .troop-unit-row + .troop-unit-row { border-top: 1px solid #315560; }
-.troop-picker-footer { display: flex; gap: 10px; flex-shrink: 0; padding: 12px 4px 4px; background: #112b36; }
+.troop-picker-footer { display: flex; gap: 10px; flex-shrink: 0; padding: 8px; background: #112b36; }
 .troop-picker-footer button { flex: 1; }
 /* Short landscapes reserve room for the roster, including a live notice.
    Only noninteractive spacing tightens; every control keeps its 44px target. */
@@ -4406,5 +4406,4 @@ footer .build-identifier {
   .troop-picker-dialog .dialog-feedback-slot > #toast { padding: 6px 10px; }
   .troop-picker-help { margin-bottom: 4px; }
   .troop-picker-toolbar { margin-bottom: 4px; }
-  .troop-picker-footer { padding: 4px 4px 0; }
 }
