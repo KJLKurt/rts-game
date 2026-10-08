@@ -406,7 +406,7 @@ export const FRONTIER_CAMPAIGN: AuthoredCampaign = {
             { type: "resources", team: 0, gold: 160, wood: 140 },
             {
               type: "dialogue",
-              text: "Engineer: Build a blacksmith after your barracks to unlock a workshop. Train siege there, then move with an infantry escort. Our repair ability can keep the attack alive.",
+              text: "Engineer: Build a blacksmith after your barracks to unlock a workshop. Train siege there, then move with an infantry escort. Field Repair can keep the attack alive. Breach Charge strikes a visible enemy building within 6 tiles; approach with an escort, then withdraw while it recharges.",
             },
           ],
         },

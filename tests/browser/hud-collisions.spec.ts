@@ -27,7 +27,7 @@ test('Rush Engineer abilities stay above expanded and collapsed command panels a
       const dock=el.getBoundingClientRect(),deck=document.querySelector('.command-deck')!.getBoundingClientRect();
       return dock.bottom <= deck.top-7;
     })).toBe(true);
-    for(const id of ['turret','repair'])expect(await page.locator(`[data-action="ability"][data-id="${id}"]`).evaluate(el=>{
+    for(const id of ['turret','repair','breach'])expect(await page.locator(`[data-action="ability"][data-id="${id}"]`).evaluate(el=>{
       const r=el.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest<HTMLButtonElement>('[data-action]');
       return {action:hit?.dataset.action,id:hit?.dataset.id};
     })).toEqual({action:'ability',id});

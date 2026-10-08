@@ -64,4 +64,24 @@ describe("touch ability targeting", () => {
     updateFog(s);
     expect(chooseAbilityTarget(s, c, "charge", null)).toEqual({ x: defender.x, y: defender.y });
   });
+  it("Breach auto-targets an eligible structure instead of stale movement points or nearby troops", () => {
+    const s=createGame({commander:"engineer"}),c=getCommander(s)!;
+    spawnEntity(s,1,"unit","swordsman",c.x+1,c.y);
+    const building=spawnEntity(s,1,"building","house",c.x+5,c.y,true);
+    updateFog(s);
+    expect(chooseAbilityTarget(s,c,"breach",{x:1,y:1})).toEqual({x:building.x,y:building.y});
+    s.fog.visible[0].fill(0);
+    expect(chooseAbilityTarget(s,c,"breach",{x:building.x,y:building.y})).toEqual({x:c.x,y:c.y});
+  });
+
+  it("Breach honors the commander’s explicit building Attack target instead of a closer structure", () => {
+    const s=createGame({commander:"engineer"}),c=getCommander(s)!;
+    spawnEntity(s,1,"building","house",c.x+3,c.y);
+    const intended=spawnEntity(s,1,"building","tower",c.x+5.5,c.y,true);
+    c.order={type:"attack",targetId:intended.id}; updateFog(s);
+    expect(chooseAbilityTarget(s,c,"breach",null)).toEqual({x:intended.x,y:intended.y});
+    intended.x=c.x+9;
+    expect(chooseAbilityTarget(s,c,"breach",null)).toEqual({x:intended.x,y:intended.y});
+  });
+
 });

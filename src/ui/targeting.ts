@@ -1,5 +1,6 @@
 import type { Entity, GameState, Point } from "../sim/types";
 import { areHostile } from "../sim/alliances";
+import { findBreachTarget } from "../sim/ability-targeting";
 /** Touch abilities use visible threats; defensive movement must never auto-dodge into one. */
 export function chooseAbilityTarget(
   state: GameState,
@@ -7,6 +8,15 @@ export function chooseAbilityTarget(
   ability: string,
   fallback: Point | null,
 ): Point {
+  if (ability === "breach") {
+    // Attack is the existing native way to express a deliberate building target.
+    // Preserve that intent even when invalid now; the engine rejects it for free.
+    const intendedId = commander.order.type === "attack" ? commander.order.targetId : undefined;
+    const intended = state.entities.find(entity => entity.id === intendedId && entity.kind === "building");
+    if (intended) return {x:intended.x,y:intended.y};
+    const structure = findBreachTarget(state, commander);
+    return structure ? {x: structure.x, y: structure.y} : {x: commander.x, y: commander.y};
+  }
   if (ability === "rally" || ability === "repair")
     return { x: commander.x, y: commander.y };
   const threat = state.entities

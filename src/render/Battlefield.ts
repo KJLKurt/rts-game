@@ -510,7 +510,7 @@ export class Battlefield {
    const duration=e.type==='ability'?1.2:1;if(age>duration){c.restore();return;}const f=age/duration,r=motion?24:12+f*(e.type==='ability'?80:33);c.globalAlpha=1-f;
    const color=e.type==='heal'?'#b4e4a5':e.type==='capture'?'#f2d68e':p.main;ellipse(c,0,0,r,r*.5,'#e6edc800',color,e.type==='ability'?2:1.3);
    if(!motion)for(let i=0;i<8;i++){const a=i*TAU/8;ellipse(c,Math.cos(a)*r,-f*35+Math.sin(a)*r*.45,1.5,2.5,color);}
-   if(e.type==='ability'){c.font='700 10px system-ui';c.textAlign='center';c.fillStyle='#fff0c1';c.fillText((e.subtype??'ABILITY').toUpperCase(),0,-52-f*15);}
+   if(e.type==='ability'){c.font='700 10px system-ui';c.textAlign='center';c.fillStyle='#fff0c1';c.fillText((e.subtype==='breach'?'Breach Charge':e.subtype??'ABILITY').toUpperCase(),0,-52-f*15);}
   }else if(e.type==='build'){if(age<1){c.globalAlpha=1-age;ellipse(c,0,0,22+age*30,11+age*15,'#f9eab500','#e7d594',2);}}
   c.restore();
  }

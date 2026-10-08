@@ -14,7 +14,7 @@ export function battleResultReason(state: GameState): string {
 export function battleDefeatAdvice(state: GameState): { title: string; text: string } | null {
   if (playerOutcomeStatus(state) !== "lost") return null;
   if (state.rush)
-    return { title: "Keep moving", text: "Dodge the marked strikes, use both abilities, and collect supplies while your squad handles nearby enemies." };
+    return { title: "Keep moving", text: "Dodge the marked strikes, use your abilities, and collect supplies while your squad handles nearby enemies." };
   if (state.players[0].defeated)
     return { title: "Protect your keep", text: "Gather a mixed army at a safe rally point before pushing forward. Defend nearby gold and timber so you can replace losses, and use a tower to cover the approach to your keep." };
   if (!state.settings.scriptedVictory && ["domination", "relic"].includes(state.settings.mode))

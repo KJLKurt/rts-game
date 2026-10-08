@@ -1,4 +1,5 @@
 import { areAllied, areHostile, allianceRepresentative, allianceMembers, isCompetitivePlayer } from './alliances';
+import { findBreachTarget, BREACH_DAMAGE } from './ability-targeting';
 import { evaluateScriptCondition } from './triggers';
 import { SpatialIndex } from './spatial';
 import { validateMapPlayerSlots, validateMapScenario, validateScenarioGeometry } from './scenarios';
@@ -509,6 +510,9 @@ function useAbility(s: GameState, team: number, id: string, x?: number, y?: numb
     const target = { x: x ?? e.x + Math.cos(e.facing) * 5, y: y ?? e.y + Math.sin(e.facing) * 5 };
     if (!Number.isFinite(target.x) || !Number.isFinite(target.y))
         return { ok: false, error: 'Invalid ability target.' };
+    const breachTarget = id === 'breach' ? findBreachTarget(s, e, x === undefined && y === undefined ? undefined : { x: x!, y: y! }) : undefined;
+    if (id === 'breach' && !breachTarget)
+        return { ok: false, error: 'Breach Charge needs a visible enemy building within 6 tiles.' };
     e.abilityCooldowns[id] = def.cooldown * (s.players[team].research.veterancy ? .8 : 1) * Math.pow(.75, s.rush?.upgrades.filter(u => u === 'focus').length ?? 0);
     if (id === 'charge' || id === 'dodge') {
         const d = distance(e, target), length = Math.min(id === 'charge' ? 7 : 5, d), dx = d ? (target.x - e.x) / d : Math.cos(e.facing), dy = d ? (target.y - e.y) / d : Math.sin(e.facing);
@@ -556,7 +560,10 @@ function useAbility(s: GameState, team: number, id: string, x?: number, y?: numb
         const pos = freePosition(s, e.x + Math.cos(e.facing) * 1.8, e.y + Math.sin(e.facing) * 1.8, .5);
         spawnEntity(s, team, 'building', 'turret', pos.x, pos.y, true);
     }
-    emit(s, { type: 'ability', x: id === 'trap' ? target.x : e.x, y: id === 'trap' ? target.y : e.y, team, entityId: e.id, subtype: id });
+    else if (breachTarget)
+        dealDamage(s, e, breachTarget, BREACH_DAMAGE);
+    const impact = breachTarget ?? (id === 'trap' ? target : e);
+    emit(s, { type: 'ability', x: impact.x, y: impact.y, team, entityId: e.id, subtype: id, ...(breachTarget ? { text: def.name } : {}) });
     return { ok: true };
 }
 export function combatDamage(s: GameState, attacker: Entity, target: Entity): number {
@@ -1382,8 +1389,13 @@ function thinkAI(s: GameState, p: Player) {
         if (difficulty !== 'easy')
             for (const ability of COMMANDERS[commander.type as CommanderId].abilities) {
                 const offensive = ['charge', 'trap', 'turret'].includes(ability.id), defensive = ['repair', 'rally'].includes(ability.id);
-                if ((offensive && enemies.length >= 2) || (defensive && hurt.length >= 2) || (ability.id === 'dodge' && commander.hp < commander.maxHp * .4 && enemies.length)) {
-                    const target = ability.id === 'dodge' ? spawn : enemies[0];
+                // Reserve the siege charge for armed fortifications. Spending it
+                // on nearby houses or workshops can prolong the AI's rebuild war.
+                const breachTarget = ability.id === 'breach' ? visibleEnemies.filter(enemy => enemy.kind === 'building' && enemy.damage > 0)
+                    .sort((a, b) => distance(commander, a) - distance(commander, b))
+                    .find(enemy => findBreachTarget(s, commander, enemy)?.id === enemy.id) : undefined;
+                if (breachTarget || (offensive && enemies.length >= 2) || (defensive && hurt.length >= 2) || (ability.id === 'dodge' && commander.hp < commander.maxHp * .4 && enemies.length)) {
+                    const target = breachTarget ?? (ability.id === 'dodge' ? spawn : enemies[0]);
                     issueCommand(s, { type: 'ability', team: p.team, ability: ability.id, x: target?.x, y: target?.y });
                 }
             }
