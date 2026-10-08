@@ -37,7 +37,7 @@ for (const input of ['native','keyboard'] as const) test(`${input} Breach queues
   if(input==='native') await nativeBreach(page); else await page.keyboard.press('c');
   await expect(breach(page)).toBeDisabled(); await expect(breach(page)).toContainText('Queued');
   expect(await page.evaluate(()=>({queued:window.__FRONTIER__.state.pendingCommands.filter(c=>c.type==='ability'&&c.ability==='breach').length,hp:window.__FRONTIER__.state.entities.find(e=>e.id==='qa-breach-structure')!.hp}))).toEqual({queued:1,hp:1000});
-  await action(page,'pause-menu').click();await action(page,'save-leave').click();await page.reload();await action(page,'continue').click();
+  await action(page,'pause-menu').click();await action(page,'save-leave').click();await expect(action(page,'continue')).toBeVisible();await page.reload();await action(page,'continue').click();
   await expect(breach(page)).toBeDisabled(); await expect(breach(page)).toContainText('Queued');
   await resume(page);
   await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.state.events.some(e=>e.type==='hit'&&e.entityId==='qa-breach-structure'&&e.value===180))).toBe(true);
@@ -50,7 +50,7 @@ for (const input of ['native','keyboard'] as const) test(`${input} Breach queues
 test('all three Engineer controls remain distinct native targets with large text and expanded panels',async({page})=>{
   await home(page); await action(page,'settings').click();
   await page.getByLabel("Interface text size",{exact:true}).selectOption("1.3");
-  await action(page,'close-dialog').click();
+  await page.getByRole('button',{name:'Done',exact:true}).click();
   await launch(page,{commander:'engineer',difficulty:'easy'});await pause(page);
   const viewport=page.viewportSize()!;
   const widths=viewport.width<600 ? [360,390,430] : [viewport.width];
