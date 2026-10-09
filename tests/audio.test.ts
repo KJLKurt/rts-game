@@ -39,6 +39,13 @@ const mythicManifest = Object.fromEntries(
     fallback: `assets/audio/mythic/${state}.mp3`,
   }]),
 );
+const halloweenManifest = Object.fromEntries(
+  states.map(state => [state, {
+    ...manifest[state],
+    src: `assets/audio/halloween/${state}.ogg`,
+    fallback: `assets/audio/halloween/${state}.mp3`,
+  }]),
+);
 type Decoded = {
   duration: number;
   state: AudioState;
@@ -172,7 +179,7 @@ function decode(bytes: ArrayBuffer): Decoded {
   const state = match[1] as AudioState;
   return {
     duration: durations[state], state, codec: match[2],
-    theme: path.includes("/mythic/") ? "mythic" : "christmas",
+    theme: path.includes("/halloween/") ? "halloween" : path.includes("/mythic/") ? "mythic" : "christmas",
   };
 }
 function requestedPaths() {
@@ -285,7 +292,7 @@ beforeEach(() => {
   FakeContext.decoder = async (bytes) => decode(bytes);
   fetchMock = vi.fn(async (url: string) => ({
     ok: true,
-    json: async () => String(url).includes("/mythic/") ? mythicManifest : manifest,
+    json: async () => String(url).includes("/halloween/") ? halloweenManifest : String(url).includes("/mythic/") ? mythicManifest : manifest,
     arrayBuffer: async () => new TextEncoder().encode(String(url)).buffer,
   }));
   vi.stubGlobal("fetch", fetchMock);
@@ -787,18 +794,18 @@ describe("theme-aware soundtrack routing", () => {
     ]);
     expect(sourcesFor("combat", "mythic")).toHaveLength(1);
   });
-  it.each(states)("selects the Mythic %s cue using the existing state contract", async state => {
+  it.each((["mythic", "halloween"] as const).flatMap(theme => states.map(state => ({theme, state}))))("selects the $theme $state cue using the existing state contract", async ({theme, state}) => {
     const audio = director();
-    audio.setTheme("mythic");
+    audio.setTheme(theme);
     audio.start(state);
     audio.unlock();
     await settle();
     expect(requestedPaths()).toEqual([
-      "/rts-game/assets/audio/mythic/manifest.json",
-      `/rts-game/assets/audio/mythic/${state}.ogg`,
+      `/rts-game/assets/audio/${theme}/manifest.json`,
+      `/rts-game/assets/audio/${theme}/${state}.ogg`,
     ]);
-    expect(sourcesFor(state, "mythic")).toHaveLength(1);
-    expect(sourcesFor(state, "mythic")[0].loop).toBe(state !== "victory" && state !== "defeat");
+    expect(sourcesFor(state, theme)).toHaveLength(1);
+    expect(sourcesFor(state, theme)[0].loop).toBe(state !== "victory" && state !== "defeat");
   });
   it("preserves combat and tension holds when changing banks", async () => {
     const audio = await started();
@@ -910,6 +917,20 @@ describe("theme-aware soundtrack routing", () => {
     expect(requestedPaths().filter(path => path === "/rts-game/assets/audio/menu.ogg")).toHaveLength(2);
     expect(requestedPaths().filter(path => path.endsWith("manifest.json"))).toHaveLength(2);
   });
+  it("shares the same three-entry decoded budget across all three theme banks", async () => {
+    const audio = await started("menu");
+    audio.setTheme("mythic"); await settle();
+    audio.setTheme("halloween"); await settle();
+    expect(context().decodeAudioData).toHaveBeenCalledTimes(3);
+    audio.setState("exploration"); await settle();
+    expect(context().decodeAudioData).toHaveBeenCalledTimes(4);
+    audio.setState("menu"); await settle();
+    expect(context().decodeAudioData).toHaveBeenCalledTimes(4);
+    audio.setTheme("christmas"); await settle();
+    expect(context().decodeAudioData).toHaveBeenCalledTimes(5);
+    expect(requestedPaths().filter(path => path === "/rts-game/assets/audio/menu.ogg")).toHaveLength(2);
+    expect(requestedPaths().filter(path => path.endsWith("manifest.json"))).toHaveLength(3);
+  });
   it("reserves all three pending slots and admits only the newest waiting request", async () => {
     const pending: { buffer: Decoded; resolve: (buffer: Decoded) => void }[] = [];
     let decoding = 0, maximum = 0;
@@ -967,12 +988,12 @@ describe("theme-aware soundtrack routing", () => {
     expect(context().sources).toHaveLength(0);
     expect(vi.getTimerCount()).toBe(0);
   });
-  it("caps both banks together at two sources during repeated crossfades", async () => {
+  it("caps all three banks together at two sources during repeated crossfades", async () => {
     const audio = await started("menu");
     for (const state of states) {
       audio.setState(state);
       await settle();
-      for (const theme of ["mythic", "christmas", "mythic"] as const) {
+      for (const theme of ["mythic", "halloween", "christmas", "halloween"] as const) {
         audio.setTheme(theme);
         await settle();
         expect(activeSources().length).toBeLessThanOrEqual(2);
@@ -1392,14 +1413,14 @@ describe("packaged offline soundtrack", () => {
       expect(hasMP3Header).toBe(true);
     },
   );
-  it.each(states)("ships a separate Mythic %s cue and codec fallback with valid loop metadata", state => {
+  it.each((["mythic", "halloween"] as const).flatMap(theme => states.map(state => ({theme, state}))))("ships a separate $theme $state cue and codec fallback with valid loop metadata", ({theme, state}) => {
     const packaged = JSON.parse(
-      readFileSync(resolve("public/assets/audio/mythic/manifest.json"), "utf8"),
+      readFileSync(resolve(`public/assets/audio/${theme}/manifest.json`), "utf8"),
     );
     expect(Object.keys(packaged).sort()).toEqual([...states].sort());
     const entry = packaged[state];
-    expect(entry.src).toBe(`assets/audio/mythic/${state}.ogg`);
-    expect(entry.fallback).toBe(`assets/audio/mythic/${state}.mp3`);
+    expect(entry.src).toBe(`assets/audio/${theme}/${state}.ogg`);
+    expect(entry.fallback).toBe(`assets/audio/${theme}/${state}.mp3`);
     expect(Number.isFinite(entry.duration)).toBe(true);
     expect(entry.duration).toBeGreaterThan(0);
     expect(Number.isFinite(entry.bpm)).toBe(true);
@@ -1423,5 +1444,9 @@ describe("packaged offline soundtrack", () => {
       (mp3[0] === 0xff && (mp3[1] & 0xe0) === 0xe0)).toBe(true);
     expect(ogg.equals(readFileSync(resolve(`public/assets/audio/${state}.ogg`)))).toBe(false);
     expect(mp3.equals(readFileSync(resolve(`public/assets/audio/${state}.mp3`)))).toBe(false);
+    if (theme === "halloween") {
+      expect(ogg.equals(readFileSync(resolve(`public/assets/audio/mythic/${state}.ogg`)))).toBe(false);
+      expect(mp3.equals(readFileSync(resolve(`public/assets/audio/mythic/${state}.mp3`)))).toBe(false);
+    }
   });
 });

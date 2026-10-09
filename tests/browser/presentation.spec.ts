@@ -6,7 +6,7 @@ test('Credits/About is reachable, honest about provenance, keyboard dismissible 
   const dialog=page.getByRole('dialog',{name:'Credits / About'});
   await expect(dialog).toContainText('v0.1.0');
   await expect(dialog).toContainText('license has not been independently verified');
-  await expect(dialog.locator('.soundtrack-credits li')).toHaveCount(6);
+  await expect(dialog.locator('.soundtrack-credits li')).toHaveCount(18);
   const before=await dialog.locator('.about-version').evaluate(el=>parseFloat(getComputedStyle(el).fontSize));
   await page.screenshot({path:test.info().outputPath('credits-about.png')});
   await page.keyboard.press('Escape');await expect(dialog).toHaveCount(0);

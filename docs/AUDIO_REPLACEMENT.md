@@ -92,3 +92,9 @@ Menu, tension, victory and defeat were missing from the recovered checkpoint. Th
 The recovery pass runs fresh mocked Web Audio state/gesture/routing/concurrency tests and technical checks of all shipped codecs. The restored `tests/browser/audio.spec.ts` checks actual decoding of all codecs when run against the integrated candidate; it is not counted as passed by a unit/codec-only recovery pass. Existing candidate results do not validate recovered code automatically.
 
 No subjective listening is verified. The earlier task's direct Chromium launch failed at runtime socket creation; no successful browser playback or listening result is inherited. Before claiming commercial sound polish, audition every full loop and both codas in the actual game on headphones and a small phone speaker, including one loop join, menu→match, quiet→tension→combat→quiet, results, repeated navigation, mute/unmute and simultaneous effects. Check continuity, fatigue and readable event feedback at low volume. Musical quality and physical-device listening remain open.
+# Hollow Lanterns bank — 9 October 2026
+
+The complete Halloween bank uses `public/assets/audio/halloween/manifest.json`, six Ogg files and six MP3 fallbacks. Runtime theme selection shares the same global three-entry decoded cache and two connected music-source limit across Christmas, Mythic and Halloween. Music/Effects/Master zero and mute retain explicit exact-zero scheduling. No additional independent cache or source pool is introduced.
+
+The six new original scores, codec/signal evidence and listening qualifications are recorded in `HALLOWEEN_THEME_20261009.md` and `HALLOWEEN_AUDIO_VALIDATION.json`. Reproduction uses the two adjacent `scripts/audio/compose_hollow_lanterns*.py` modules; pass `--output` and `--preserve-pilots` pointing to the retained pilot package. Accepted exploration/combat assets are hash-checked and copied unchanged. Existing Christmas/Mythic files are not replaced.
+

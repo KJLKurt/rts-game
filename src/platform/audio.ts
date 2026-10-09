@@ -71,6 +71,7 @@ const STATES: AudioState[] = [
 const MANIFESTS: Record<AudioTheme, string> = {
   christmas: "assets/audio/manifest.json",
   mythic: "assets/audio/mythic/manifest.json",
+  halloween: "assets/audio/halloween/manifest.json",
 };
 const limit = (value: number, fallback: number) =>
   Number.isFinite(value) ? Math.max(0, Math.min(1, value)) : fallback;
