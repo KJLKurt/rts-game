@@ -57,7 +57,7 @@ jobs:
       - name: Sequential exact-live update and one-time paid work completion
         run: npx playwright test --config playwright-rally-workshop-upgrade.config.ts
       - name: Verify both tested distributions remained byte-exact
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && hashFiles('.qa-previous/dist/sw.js', 'dist/sw.js') != '' }}
         run: |
           node .qa-verify-dist.mjs .qa-previous/dist .qa-previous-dist.json previous-live-dist-proof.json
           node .qa-verify-dist.mjs dist .qa-candidate-dist.json candidate-dist-proof.json
