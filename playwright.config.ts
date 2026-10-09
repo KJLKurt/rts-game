@@ -1,13 +1,34 @@
-import {defineConfig,devices} from '@playwright/test';
+import {defineConfig, devices} from '@playwright/test';
+
+/** Run against the production build: Vite dev deliberately does not register a worker. */
+const external = process.env.FRONTIER_TEST_URL;
 export default defineConfig({
-  testDir:'./tests/browser', testMatch:/editor-fling-fixture\.spec\.ts/,
-  fullyParallel:false, workers:1, retries:0, maxFailures:0,
-  timeout:90_000, globalTimeout:4*60_000, expect:{timeout:8_000},
-  forbidOnly:!!process.env.CI,
-  reporter:[['list'],['json',{outputFile:'fling-fixture-results.json'}]],
-  use:{trace:'off',screenshot:'off',video:'off'},
-  projects:[
-    {name:'phone-portrait',use:{...devices['Pixel 7'],viewport:{width:390,height:844}}},
-    {name:'phone-landscape',use:{...devices['Pixel 7'],viewport:{width:844,height:390}}},
+  testDir: './tests/browser',
+  testMatch: /(editor-name-retention|editor-exact-input-diagnostic|canvas-gesture-boundaries|touch-target-discrimination|approved-mobile-ui)\.spec\.ts/,
+  grep: /editor-name-retention.*(?:inline name|explicit settings|native Pan)|editor-exact-input-diagnostic|canvas-gesture-boundaries|touch-target-discrimination|approved explicit commands|approved editor touch cancellation/,
+  globalTimeout: 15 * 60_000,
+  timeout: 35_000,
+  expect: {timeout: 8_000},
+  fullyParallel: false,
+  forbidOnly: !!process.env.CI,
+  retries: 0,
+  maxFailures: 0,
+  // Canvas-heavy games should not spawn one browser per reported host CPU.
+  workers: 1,
+  reporter: [['list'], ['json', {outputFile: 'canvas-touch-results.json'}]],
+  use: {
+    baseURL: external || 'http://127.0.0.1:4181/rts-game/',
+    trace: 'on-first-retry', screenshot: 'only-on-failure', video: 'off',
+    launchOptions: process.env.PLAYWRIGHT_EXECUTABLE_PATH ? {executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH} : {},
+  },
+  projects: [
+    {name: 'desktop', use: {...devices['Desktop Chrome'], viewport: {width: 1440, height: 900}}, testIgnore: /(?:pwa|approved-mobile-ui|editor-exact-input-diagnostic)\.spec\.ts/},
+    {name: 'phone-portrait', use: {...devices['Pixel 7'], viewport: {width: 390, height: 844}}, testIgnore: /pwa\.spec\.ts/},
+    {name: 'phone-landscape', use: {...devices['Pixel 7'], viewport: {width: 844, height: 390}}, testIgnore: /pwa\.spec\.ts/},
   ],
+  webServer: external ? undefined : {
+    command: 'npm run build && node tests/browser/serve-production.mjs',
+    url: 'http://127.0.0.1:4181/rts-game/',
+    reuseExistingServer: false, timeout: 120_000,
+  },
 });
