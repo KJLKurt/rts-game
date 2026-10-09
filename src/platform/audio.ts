@@ -136,26 +136,22 @@ export class AudioDirector {
   setMaster(volume: number, muted = false) {
     this.masterVolume = limit(volume, 0.85);
     this.muted = muted;
-    this.master?.gain.setTargetAtTime(
-      muted ? 0 : this.masterVolume,
-      this.context!.currentTime,
-      0.05,
-    );
+    this.setBusVolume(this.master, muted ? 0 : this.masterVolume, 0.05);
   }
   setVolumes(music: number, sfx: number) {
     this.musicVolume = limit(music, 0.32);
     this.sfxVolume = limit(sfx, 0.65);
-    if (!this.context) return;
-    this.musicGain!.gain.setTargetAtTime(
-      this.musicVolume,
-      this.context.currentTime,
-      0.15,
-    );
-    this.effectsGain!.gain.setTargetAtTime(
-      this.sfxVolume,
-      this.context.currentTime,
-      0.05,
-    );
+    this.setBusVolume(this.musicGain, this.musicVolume, 0.15);
+    this.setBusVolume(this.effectsGain, this.sfxVolume, 0.05);
+  }
+  private setBusVolume(bus: GainNode | null, volume: number, smoothing: number) {
+    if (!bus || !this.context) return;
+    const at = this.context.currentTime;
+    if (volume === 0) {
+      // Silence must be exact, including when a dormant bus next receives a cue.
+      bus.gain.cancelScheduledValues(at);
+      bus.gain.setValueAtTime(0, at);
+    } else bus.gain.setTargetAtTime(volume, at, smoothing);
   }
   /** Arm music without creating/resuming an AudioContext; unlock only in a gesture. */
   start(state: AudioState | "peace" = "exploration") {

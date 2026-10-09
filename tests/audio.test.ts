@@ -203,6 +203,54 @@ function masterBus() {
     gain.connections.includes(context().destination),
   )!;
 }
+// FakeParam.value eagerly reflects a target. Sample its automation separately
+// so zero tests can detect exponential tails and uncancelled future targets.
+function scheduledGainAt(param: FakeParam, initial: number, at: number) {
+  type Event = { order: number; at: number; value: number; constant?: number; cancel?: boolean };
+  const operations: Event[] = [
+    ...param.setValueAtTime.mock.calls.map(([value, at], i) => ({
+      value, at, order: param.setValueAtTime.mock.invocationCallOrder[i],
+    })),
+    ...param.setTargetAtTime.mock.calls.map(([value, at, constant], i) => ({
+      value, at, constant, order: param.setTargetAtTime.mock.invocationCallOrder[i],
+    })),
+    ...param.cancelScheduledValues.mock.calls.map(([at], i) => ({
+      value: 0, at, cancel: true, order: param.cancelScheduledValues.mock.invocationCallOrder[i],
+    })),
+  ];
+  let events: Event[] = [];
+  for (const operation of operations.sort((a, b) => a.order - b.order)) {
+    if (operation.cancel) events = events.filter(event => event.at < operation.at);
+    else events.push(operation);
+  }
+  let value = initial, previous = 0, target: Event | undefined;
+  const advance = (time: number) => {
+    if (target) value = target.value + (value - target.value) * Math.exp(-(time - previous) / target.constant!);
+    previous = time;
+  };
+  for (const event of events.sort((a, b) => a.at - b.at || a.order - b.order)) {
+    if (event.at > at) break;
+    advance(event.at);
+    if (event.constant !== undefined) target = event;
+    else { value = event.value; target = undefined; }
+  }
+  advance(at);
+  return value;
+}
+type VolumeControl = "master" | "music" | "effects" | "mute";
+function volumeBus(control: VolumeControl) {
+  const master = masterBus();
+  const music = signalPath(context().sources[0])[1] as FakeGain;
+  if (control === "music") return music;
+  if (control === "effects") return context().gains.find(gain => gain !== music && gain.connections.includes(master))!;
+  return master;
+}
+function setVolumeControl(audio: AudioDirector, control: VolumeControl, volume: number) {
+  if (control === "master") audio.setMaster(volume);
+  else if (control === "mute") audio.setMaster(0.73, volume === 0);
+  else if (control === "music") audio.setVolumes(volume, 0.65);
+  else audio.setVolumes(0.32, volume);
+}
 function deferred<T>() {
   let resolve!: (value: T) => void;
   const promise = new Promise<T>((yes) => {
@@ -323,6 +371,101 @@ describe("gesture-gated audio lifecycle", () => {
 });
 
 describe("independent volume buses", () => {
+  it.each(["master", "music", "effects", "mute"] as const)(
+    "makes %s zero exact despite an ongoing fade and queued positive automation",
+    async control => {
+      const audio = await started("menu"), bus = volumeBus(control);
+      const initial = bus.gain.value;
+      context().currentTime = 2;
+      setVolumeControl(audio, control, 0.73);
+      bus.gain.setTargetAtTime(0.91, 5, 0.05);
+      context().currentTime = 2.1;
+      setVolumeControl(audio, control, 0);
+      for (const at of [2.1, 2.1001, 3.8, 6])
+        expect(scheduledGainAt(bus.gain, initial, at), `${control} at ${at}`).toBe(0);
+      expect(bus.gain.cancelScheduledValues).toHaveBeenLastCalledWith(2.1);
+      expect(bus.gain.setValueAtTime).toHaveBeenLastCalledWith(0, 2.1);
+      expect(bus.gain.cancelScheduledValues.mock.invocationCallOrder.at(-1))
+        .toBeLessThan(bus.gain.setValueAtTime.mock.invocationCallOrder.at(-1)!);
+      expect(bus.gain.setTargetAtTime.mock.calls.every(([target]) => target > 0)).toBe(true);
+    },
+  );
+  it.each(["master", "music", "effects", "mute"] as const)(
+    "retains exact %s silence for future cues, theme changes and stop/start recovery",
+    async control => {
+      const audio = await started("menu"), bus = volumeBus(control);
+      const initial = bus.gain.value;
+      expect(context().oscillators).toHaveLength(0);
+      context().currentTime = 1;
+      setVolumeControl(audio, control, 0);
+      await pulse(3.7);
+      audio.play("build");
+      expect(context().oscillators).toHaveLength(3);
+      for (const oscillator of context().oscillators) {
+        if (control !== "music") expect(signalPath(oscillator)).toContain(bus);
+      }
+      audio.setTheme("mythic");
+      audio.setState("exploration");
+      await settle();
+      if (control !== "effects") expect(signalPath(context().sources.at(-1)!)).toContain(bus);
+      expect(scheduledGainAt(bus.gain, initial, 3.7)).toBe(0);
+      expect(activeSources().length).toBeLessThanOrEqual(2);
+      audio.stop();
+      await pulse(5);
+      audio.start(audio.getState());
+      audio.unlock();
+      await settle();
+      audio.play("complete");
+      expect(scheduledGainAt(bus.gain, initial, 5)).toBe(0);
+      expect(activeSources().length).toBeLessThanOrEqual(2);
+      expect(FakeContext.instances).toHaveLength(1);
+    },
+  );
+  it.each(["master", "music", "effects", "mute"] as const)(
+    "restores %s from exact zero using its existing nonzero smoothing",
+    async control => {
+      const audio = await started("menu"), bus = volumeBus(control);
+      const initial = bus.gain.value, smoothing = control === "music" ? 0.15 : 0.05;
+      context().currentTime = 1;
+      setVolumeControl(audio, control, 0);
+      audio.stop();
+      await pulse(3);
+      setVolumeControl(audio, control, 0.73);
+      audio.start(audio.getState());
+      audio.unlock();
+      await settle();
+      expect(bus.gain.setTargetAtTime).toHaveBeenLastCalledWith(0.73, 3, smoothing);
+      expect(bus.gain.cancelScheduledValues).toHaveBeenCalledTimes(1);
+      expect(bus.gain.setValueAtTime).toHaveBeenCalledTimes(1);
+      expect(scheduledGainAt(bus.gain, initial, 3)).toBe(0);
+      expect(scheduledGainAt(bus.gain, initial, 3 + smoothing))
+        .toBeCloseTo(0.73 * (1 - Math.exp(-1)), 12);
+      expect(scheduledGainAt(bus.gain, initial, 4)).toBeGreaterThan(0.7);
+      audio.setTheme("mythic");
+      await settle();
+      expect(activeSources().length).toBeLessThanOrEqual(2);
+      const voiceGain = context().sources.at(-1)!.connections[0] as FakeGain;
+      expect(voiceGain.gain.setTargetAtTime).toHaveBeenLastCalledWith(0.7, 3.025, 0.45);
+      expect(voiceGain.gain.cancelScheduledValues).not.toHaveBeenCalled();
+    },
+  );
+  it("stores exact zero controls before unlock without creating a context or scheduling ramps", async () => {
+    const audio = director();
+    audio.setMaster(0.73, true);
+    audio.setVolumes(0, 0);
+    audio.start("menu");
+    expect(FakeContext.instances).toHaveLength(0);
+    expect(fetchMock).not.toHaveBeenCalled();
+    audio.unlock();
+    await settle();
+    for (const control of ["master", "music", "effects"] as const) {
+      const gain = volumeBus(control).gain;
+      expect(gain.value).toBe(0);
+      expect(gain.setTargetAtTime).not.toHaveBeenCalled();
+    }
+    audio.setMaster(0.73, false);
+    expect(masterBus().gain.setTargetAtTime).toHaveBeenLastCalledWith(0.73, 0, 0.05);
+  });
   it.each([false, true])(
     "applies saved volumes on first unlock with mute=%s",
     async (muted) => {
