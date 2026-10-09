@@ -50,7 +50,8 @@ test('rally wording identifies current producers and a later range retains its o
   await expect(action(page,'rally-all')).toHaveText('Rally current producers here');
   await expect(page.locator('.deck-tip')).toContainText('New buildings need their own rally point');
   await action(page,'rally-all').click();
-  await expect(page.locator('[role="status"]').filter({hasText:'Current buildings now send recruits'})).toBeVisible();
+  await expect(page.locator('[role="status"]').filter({hasText:'Rally queued for 2 current producers'})).toBeVisible();
+  await expect(page.locator('[role="status"]')).toContainText('Resume to apply this fixed point.');
   const result=await page.evaluate(()=>({ids:window.__FRONTIER__.state.entities.filter(e=>e.team===0&&e.kind==='building').map(e=>e.id),orders:window.__FRONTIER__.state.pendingCommands.filter(c=>c.type==='rally')}));
   expect(result.orders.map(c=>c.type==='rally'?c.buildingId:null).sort()).toEqual(result.ids.sort());
   await action(page,'panel-build').click();await action(page,'build').filter({hasText:'Archery Range'}).click();

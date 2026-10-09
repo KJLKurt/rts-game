@@ -28,7 +28,21 @@ The earlier C4 unit baseline had 24 passes. Expanded regressions produced 29 pas
 
 All 1,096 unit tests across 87 files pass, including 79 focused guidance/inspection/production/placement checks. C1/C4 received an independent source review; shared production timing covers levels 1/2/3, unit/research jobs, rate-1 building upgrades, producer ordering, waiting versus active heads, dead/other-team filtering, projection, serialization and nonmutation.
 
-Native acceptance is still pending for this candidate. The intended gate consists of the three corrected identities in affected desktop/phone orientations plus existing guide-save, paid-production/compact, placement-funds, reserved-footprint and construction-save regressions. The ordinary field guide is intentionally hidden on short landscape; that one copy identity is explicitly excluded there while the other controls still run. A sequential exact-current-live update must preserve the paused paid state and then complete production/construction once through normal Resume and reload.
+## Native acceptance and bounded oracle correction
+
+The reviewed production identity is `fc-e201ecf2a981`, JavaScript `index-BBC0CEZw.js`, CSS `index-txElQ2m-.css`, cache `000e649df14f`. All 83 previous-live and candidate build files were verified byte-exact. All 16 simulation files and 78 public source assets remain unchanged.
+
+[First corrected gate 37992489964](https://github.com/KJLKurt/rts-game/actions/runs/37992489964), QA `f54d1f9af1478c1f065da6349deafe9dfd8adb8a`, ran 24 native identities: **20 passed, three C2 failures, one predeclared skip**, zero retries/flakes/global errors. C1 passed desktop and portrait; C4 and the five affected regressions passed all three views. The short-landscape field guide is deliberately hidden, so its visible-copy identity remains excluded. Other landscape controls ran. The sequential update did not execute because this gate failed.
+
+The three C2 failures were in the newly added post-Continue timing oracle, after the corrected compact/expanded text and exact Save/Continue checks passed. It incorrectly treated the later native Pause snapshot as the production time. Preserved traces show actual spawn events at 8.7, 9.1 and 9.2 game seconds, only 0.0076923 seconds after each rate-adjusted prediction. Native Pause snapshots arrived at 9.7, 10.4 and 10.7. No gameplay correction was warranted.
+
+The bounded **test-only** correction retains an atomic first-removal snapshot and checks its already-recorded new Swordsman spawn event, queue identity/order and unit count. The time allowance was tightened from 0.8 to 0.11 seconds, one simulation tick. Passive input/camera traces and both actual-event and later-Pause times are preserved before assertions. The production build did not change.
+
+[Continuation 37994169130](https://github.com/KJLKurt/rts-game/actions/runs/37994169130), QA `e43ac725df274994fc7ba287290262b038618ac7`, passed **all three C2 views and the one sequential update**, with zero retries, failures, skips or global errors. C2 actual completions were 6.7, 6.4 and 6.6 game seconds, again predicted plus 0.0076923 seconds. Together the preserved runs cover **23 eligible native identities, one declared exclusion, and one sequential update identity**. This is not a single all-green first attempt or a full browser matrix. The unfiltered collection contains 773 identities; it was collected, not executed wholesale.
+
+The isolated update starts from exact live `5c16fba1`, preserves paused paid queues/resources/profile and planned construction through Update & restart, then completes the three paid Swordsmen and exactly one House. The completion snapshot at 31.1 game seconds increases units created from four to seven and Houses from zero to one; income-adjusted spending, repeat Resume, reload and Continue checks pass. The test server adds its disclosed QA cache suffix to exercise worker succession. This is synthetic migration and execution evidence, separate from the real hosted profile and natural gameplay.
+
+Actual desktop/portrait/landscape screenshots and passive trusted-input ledgers were inspected. No untrusted pointer/click events appear in the measured new-control ledgers. Full raw red/failed/continuation artifacts, source snapshots and receipts are retained; earlier failures and exclusion coverage remain part of the record.
 
 ## Remaining acceptance
 

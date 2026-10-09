@@ -52,8 +52,8 @@
   "assets/audio/tension.ogg": "005df17b7fe178e6008641c6daea0b727891eab14706cf5b465c62218c124e67",
   "assets/audio/victory.mp3": "5af3c0625e83d7148e884eed5a353b890e422ca1dcdcb71e3f813ebd0788249f",
   "assets/audio/victory.ogg": "ded78d1ec668e04eb0de047b56687f5bbbe8d890eab9fa36cad95ad6d6eb7fc0",
-  "assets/index-BBC0CEZw.js": "95f3d14ee375f818bc33b285b365a6f8b9a28b7ec951a18b110affb08a2a1381",
-  "assets/index-BBC0CEZw.js.map": "0673841072a67045fa2c9369cb869d666ee61839a0b0c185c41f6d05441ea04f",
+  "assets/index-B6auTkhX.js": "602fe6f0e59de4d446dd9298add87bf61cfc2962e6049bb4579c86b7895904fe",
+  "assets/index-B6auTkhX.js.map": "6116bc12ab1c5a0ffbfb65ff8d8bac336894c4feec12433c9f1930a02976d481",
   "assets/index-txElQ2m-.css": "100981f652e2d5aa7e666e30a224bd288d3c99a33fc30a25396d3e9a6171a60d",
   "assets/render/frontier-atlas.json": "01402bb7f3f82cb32d7d751e8e63ef778c89826121e120a3483418be12ee6f70",
   "assets/render/frontier-atlas.png": "7a6c1f79fece96ce65464831cb161b6a4fb60c098afaf3717b271812b20f87ed",
@@ -79,7 +79,7 @@
   "icon.svg": "e09aec1d0a0e769eb2507415753c3d7ef642fe4a96ad1aab96016c8bd69fb672",
   "icons/icon-192.png": "768362514e49ac22ea9ab4c10ade0915b7722b75d1fa479d25559430feb7030d",
   "icons/icon-512.png": "1c5619e9d86b5931b1db4b0596c222e01a78df26019e76e875c0919b141e5a33",
-  "index.html": "78e709b14cb98ba91c16f3d996e87f1959ccca413db5b89d2207dd6ac9e00535",
+  "index.html": "58b4dc0104268f8091ac886ac47e8be36ba3a4de50042c428bd8034445adeea3",
   "manifest.webmanifest": "433e8b075dbd00355c1af5c31321edb2f03f607d8850c294236e125441eececd",
-  "sw.js": "0fd32961942891b5e5cde2004f32c4268c57d9e599f1d89db11a8375fab7fe62"
+  "sw.js": "6f27ac7627a469a537ae444e971c4efb0ab2d9f06488eebe3fefd4fd9ebfcfb1"
 }

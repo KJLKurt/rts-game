@@ -57,6 +57,7 @@ import {
 } from "./ui/inspection";
 import { updateLiveHTML } from "./ui/live-html";
 import { tacticalPausePresentation } from "./ui/tactical-pause";
+import { rallyCurrentProducers } from "./ui/mass-rally";
 import { commanderRecoveryPresentation } from "./ui/commander-recovery";
 import { expeditionOpeningGuidance, rallyDestination, recruitDestination, resourceTargetName, selectedOrderDescription, rangedSpacingDescription } from "./ui/command-guidance";
 import {
@@ -2869,19 +2870,9 @@ async function performAction(action: string, id?: string) {
       updateHUD();
       break;
     case "rally-all": {
-      const c = commander();
-      if (c)
-        for (const b of state.entities.filter(
-          (e) => e.team === 0 && e.kind === "building",
-        ))
-          issueCommand(state, {
-            type: "rally",
-            team: 0,
-            buildingId: b.id,
-            x: c.x,
-            y: c.y,
-          });
-      toast(c ? "Current buildings now send recruits to this fixed position. New buildings need their own rally point; it will not follow your commander." : "Your commander is recovering. Set a building rally point in Details.");
+      const result = rallyCurrentProducers(state);
+      toast(result.message, result.warning ? "warning" : "", { untilResume: state.paused });
+      updateHUD();
       break;
     }
     case "copy-map-code": {
