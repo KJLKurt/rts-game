@@ -17,7 +17,7 @@ concurrency:
 jobs:
   browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 12
     env:
       FRONTIER_TEST_WORKERS: "1"
     steps:
@@ -42,7 +42,7 @@ jobs:
         with:
           name: frontier-browser-acceptance-${{ github.sha }}
           path: |
-            canvas-touch-continuation-results.json
+            research-guidance-results.json
             test-results/**/*.json
             test-results/**/*.gz
             test-results/**/*.png

@@ -2796,7 +2796,7 @@ async function performAction(action: string, id?: string) {
         toast(
           state.paused
             ? `${TECHNOLOGIES[id as TechId].name} order queued`
-            : `${TECHNOLOGIES[id as TechId].name} research started`,
+            : `${TECHNOLOGIES[id as TechId].name} queued for research`,
           "", { untilResume: state.paused },
         );
       renderDeck();
