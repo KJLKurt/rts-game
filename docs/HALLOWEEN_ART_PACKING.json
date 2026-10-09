@@ -1,0 +1,1233 @@
+{
+  "tool": "image_gen.imagegen",
+  "packing": "Whole original RGBA uniformly resized with premultiplied-alpha Lanczos; measured frame rectangles and ground anchors. No recoloring, mirroring, silhouette painting or alpha cleanup.",
+  "atlasSha256": "a57f2f03fd854b0e4b6fd16f00d7ea0a8933cd5e496d95ef95a55dd994794607",
+  "atlasBytes": 1629809,
+  "decodedBytes": 5760000,
+  "frames": [
+    {
+      "id": "gold-full",
+      "sourceFile": "gold-full-v1.png",
+      "sourceSha256": "ff23bf768f2394d2c3b519e70b019b6647e16a9df19fea2e9083e401d5983bd1",
+      "sourceSize": [
+        1295,
+        1215
+      ],
+      "sourceBounds": [
+        39,
+        66,
+        1273,
+        1170
+      ],
+      "sourceGround": [
+        656.0,
+        1026.48
+      ],
+      "resampledSize": [
+        192,
+        180
+      ],
+      "frame": {
+        "x": 8,
+        "y": 18,
+        "w": 186,
+        "h": 167,
+        "anchorX": 0.501399094947482,
+        "anchorY": 0.8627012641383898
+      },
+      "packedRgbaSha256": "cbb1a11e605067981089b10983e94f2ebbc77ad12c67ef474b8d1002042065c4",
+      "groundMethod": "Full-state .87 ground convention, then shared visible-ground offset in CSS pixels for both resource states. Fixed width; empty height is not normalized. Inferred ground registration, not a rig measurement.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "gold-half",
+      "sourceFile": "gold-half-v1.png",
+      "sourceSha256": "2c5574ee415c8cc0ab00499a421c38b706de44de72b9e0288f7617d823385bd2",
+      "sourceSize": [
+        1295,
+        1215
+      ],
+      "sourceBounds": [
+        36,
+        66,
+        1275,
+        1170
+      ],
+      "sourceGround": [
+        655.5,
+        1025.904
+      ],
+      "resampledSize": [
+        192,
+        180
+      ],
+      "frame": {
+        "x": 208,
+        "y": 18,
+        "w": 187,
+        "h": 167,
+        "anchorX": 0.49832139243903945,
+        "anchorY": 0.8621902860944777
+      },
+      "packedRgbaSha256": "e0be46b6b4901fe891e4a6c6b7b03eeef7d4fb54ade60dc3baf4b01f4d523cb7",
+      "groundMethod": "Common visible-bottom registration within state family; gold/wood preserve pilot full-state anchor=.87 equivalent. Confirm physical contact and packing padding in renderer before adoption.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "gold-sparse",
+      "sourceFile": "gold-sparse-v1.png",
+      "sourceSha256": "cec9ffa9da836579015de3a87124f8f412f63e972a0e9033fce3a0dd61b285f7",
+      "sourceSize": [
+        1295,
+        1215
+      ],
+      "sourceBounds": [
+        28,
+        66,
+        1269,
+        1171
+      ],
+      "sourceGround": [
+        648.5,
+        1026.672
+      ],
+      "resampledSize": [
+        192,
+        180
+      ],
+      "frame": {
+        "x": 407,
+        "y": 18,
+        "w": 187,
+        "h": 167,
+        "anchorX": 0.49811905106022747,
+        "anchorY": 0.8628715901530273
+      },
+      "packedRgbaSha256": "e4110dcefcbde2197b1de76633aad7e74ee3c48de708873e6a2a493341034bef",
+      "groundMethod": "Common visible-bottom registration within state family; gold/wood preserve pilot full-state anchor=.87 equivalent. Confirm physical contact and packing padding in renderer before adoption.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "gold-empty",
+      "sourceFile": "gold-empty-v1.png",
+      "sourceSha256": "3e0d365d5d7f98f97cf367cf9119c1bb745d6cb1052df94b5055a5bbb2dae1f3",
+      "sourceSize": [
+        1295,
+        1215
+      ],
+      "sourceBounds": [
+        40,
+        60,
+        1294,
+        1180
+      ],
+      "sourceGround": [
+        667.0,
+        1034.1539059967586
+      ],
+      "resampledSize": [
+        192,
+        180
+      ],
+      "frame": {
+        "x": 608,
+        "y": 17,
+        "w": 189,
+        "h": 169,
+        "anchorX": 0.5020694163551306,
+        "anchorY": 0.8651360122697861
+      },
+      "packedRgbaSha256": "0b04751c23ce78566d4a31d4d7bf089309ab98e234f4f711c22977e684d04f01",
+      "groundMethod": "Full-state .87 ground convention, then shared visible-ground offset in CSS pixels for both resource states. Fixed width; empty height is not normalized. Inferred ground registration, not a rig measurement.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "wood-full",
+      "sourceFile": "wood-full-v1.png",
+      "sourceSha256": "e5b06dde080a340e0f0560a777594cee70d7cf5b00d6c4b3b50b4168ecfe8060",
+      "sourceSize": [
+        1295,
+        1215
+      ],
+      "sourceBounds": [
+        136,
+        61,
+        1227,
+        1158
+      ],
+      "sourceGround": [
+        681.5,
+        1015.39
+      ],
+      "resampledSize": [
+        192,
+        180
+      ],
+      "frame": {
+        "x": 823,
+        "y": 18,
+        "w": 164,
+        "h": 165,
+        "anchorX": 0.5002495526885771,
+        "anchorY": 0.8632008978675644
+      },
+      "packedRgbaSha256": "df8e59d201568fbe1e1a38c76fc559524cddee5bcd735849e7ce10d862310bed",
+      "groundMethod": "Full-state .87 ground convention, then shared visible-ground offset in CSS pixels for both resource states. Fixed width; empty height is not normalized. Inferred ground registration, not a rig measurement.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "wood-half",
+      "sourceFile": "wood-half-v1.png",
+      "sourceSha256": "7dc4ec5c54e3127ae7f212b6771e338a4f0c58b9f2206f8e88c2e5336328a3ce",
+      "sourceSize": [
+        1295,
+        1215
+      ],
+      "sourceBounds": [
+        124,
+        243,
+        1253,
+        1113
+      ],
+      "sourceGround": [
+        688.5,
+        965.426
+      ],
+      "resampledSize": [
+        192,
+        180
+      ],
+      "frame": {
+        "x": 1021,
+        "y": 45,
+        "w": 170,
+        "h": 131,
+        "anchorX": 0.5004633204633204,
+        "anchorY": 0.8246265196494205
+      },
+      "packedRgbaSha256": "4fb3c9c144fd1ef257419700467b77890d53966653b37f5c88d24b44d152e158",
+      "groundMethod": "Common visible-bottom registration within state family; gold/wood preserve pilot full-state anchor=.87 equivalent. Confirm physical contact and packing padding in renderer before adoption.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "wood-sparse",
+      "sourceFile": "wood-sparse-v1.png",
+      "sourceSha256": "e2b5ce1c80479ebe5340b4e62bc35fd78dd16ccf49be8da059c643634954ccbb",
+      "sourceSize": [
+        1295,
+        1215
+      ],
+      "sourceBounds": [
+        131,
+        348,
+        1258,
+        1120
+      ],
+      "sourceGround": [
+        694.5,
+        972.688
+      ],
+      "resampledSize": [
+        192,
+        180
+      ],
+      "frame": {
+        "x": 22,
+        "y": 260,
+        "w": 170,
+        "h": 117,
+        "anchorX": 0.49981376334317507,
+        "anchorY": 0.804289965178854
+      },
+      "packedRgbaSha256": "5f879b0fcb0213619a5644beaab14f8741b11d66ee72842c43b85d57f1accede",
+      "groundMethod": "Common visible-bottom registration within state family; gold/wood preserve pilot full-state anchor=.87 equivalent. Confirm physical contact and packing padding in renderer before adoption.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "wood-empty",
+      "sourceFile": "wood-empty-v1.png",
+      "sourceSha256": "dad9762e851b49d980762ee817510fd7bee99fbb075a71766c68b96d501cd89e",
+      "sourceSize": [
+        1295,
+        1215
+      ],
+      "sourceBounds": [
+        138,
+        527,
+        1209,
+        1146
+      ],
+      "sourceGround": [
+        673.5,
+        1006.0042988084326
+      ],
+      "resampledSize": [
+        192,
+        180
+      ],
+      "frame": {
+        "x": 223,
+        "y": 287,
+        "w": 162,
+        "h": 94,
+        "anchorX": 0.4991038657705324,
+        "anchorY": 0.7663582329526125
+      },
+      "packedRgbaSha256": "83b0f4a42cd410f446374b071b5cfe53781f6ccd3f8d81eac830e2451f29920c",
+      "groundMethod": "Full-state .87 ground convention, then shared visible-ground offset in CSS pixels for both resource states. Fixed width; empty height is not normalized. Inferred ground registration, not a rig measurement.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "relic-neutral",
+      "sourceFile": "relic-neutral-v1.png",
+      "sourceSha256": "32067cb33ed3db4d04c3a4f26d506f7a50fa7c0899940e54c5729a5624d9f3a2",
+      "sourceSize": [
+        1144,
+        1375
+      ],
+      "sourceBounds": [
+        198,
+        119,
+        948,
+        1236
+      ],
+      "sourceGround": [
+        573.0,
+        1090.79
+      ],
+      "resampledSize": [
+        160,
+        192
+      ],
+      "frame": {
+        "x": 446,
+        "y": 219,
+        "w": 108,
+        "h": 159,
+        "anchorX": 0.5012950012950014,
+        "anchorY": 0.86360974271012
+      },
+      "packedRgbaSha256": "e411cd3f64752661a180a4d03693ee52df046b12420bb99ffd568310b6828473",
+      "groundMethod": "Common visible-bottom registration within state family; gold/wood preserve pilot full-state anchor=.87 equivalent. Confirm physical contact and packing padding in renderer before adoption.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "relic-contested",
+      "sourceFile": "relic-contested-v1.png",
+      "sourceSha256": "e205aa815009fec7b6ddf5a9f47afb0d568734048183c1d03ab8807dce6fdddc",
+      "sourceSize": [
+        1144,
+        1375
+      ],
+      "sourceBounds": [
+        192,
+        130,
+        957,
+        1240
+      ],
+      "sourceGround": [
+        574.5,
+        1095.7
+      ],
+      "resampledSize": [
+        160,
+        192
+      ],
+      "frame": {
+        "x": 645,
+        "y": 221,
+        "w": 110,
+        "h": 158,
+        "anchorX": 0.503178639542276,
+        "anchorY": 0.8607567318757193
+      },
+      "packedRgbaSha256": "c136b3bb97f3a9159660b602095ac11f7c3f7c5e6954fb9413b6a49fb5180a04",
+      "groundMethod": "Common visible-bottom registration within state family; gold/wood preserve pilot full-state anchor=.87 equivalent. Confirm physical contact and packing padding in renderer before adoption.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "relic-captured",
+      "sourceFile": "relic-captured-v1.png",
+      "sourceSha256": "170f1dd792ca14142fc5beeb300f5b207427bf130abce4e11b6595ab9601d9df",
+      "sourceSize": [
+        1144,
+        1375
+      ],
+      "sourceBounds": [
+        185,
+        133,
+        962,
+        1239
+      ],
+      "sourceGround": [
+        573.5,
+        1095.22
+      ],
+      "resampledSize": [
+        160,
+        192
+      ],
+      "frame": {
+        "x": 844,
+        "y": 221,
+        "w": 112,
+        "h": 158,
+        "anchorX": 0.5018731268731269,
+        "anchorY": 0.8603325201380898
+      },
+      "packedRgbaSha256": "42516222e1d1148044d6baf3db778f4493a2eba7c7af5d964d66834dcb0e0f6e",
+      "groundMethod": "Common visible-bottom registration within state family; gold/wood preserve pilot full-state anchor=.87 equivalent. Confirm physical contact and packing padding in renderer before adoption.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "relic-inactive",
+      "sourceFile": "relic-inactive-v1.png",
+      "sourceSha256": "7990f59ac4f26d7e35fb5073d8d67e10df8786b72437308eb3caef882a6ca9b2",
+      "sourceSize": [
+        1144,
+        1375
+      ],
+      "sourceBounds": [
+        196,
+        166,
+        950,
+        1234
+      ],
+      "sourceGround": [
+        573.0,
+        1095.16
+      ],
+      "resampledSize": [
+        160,
+        192
+      ],
+      "frame": {
+        "x": 1046,
+        "y": 226,
+        "w": 108,
+        "h": 152,
+        "anchorX": 0.5012950012950014,
+        "anchorY": 0.861343157894737
+      },
+      "packedRgbaSha256": "b8c5d39660c9968540cb90d9412c82ebc6517df4bb470b71f0144ea538498c91",
+      "groundMethod": "Common visible-bottom registration within state family; gold/wood preserve pilot full-state anchor=.87 equivalent. Confirm physical contact and packing padding in renderer before adoption.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "camp-guarded",
+      "sourceFile": "camp-guarded-v1.png",
+      "sourceSha256": "9b7edfd79d29fbd8fb1e5e62ba4f474f09b03bdd9daf3b09754f19f26378a041",
+      "sourceSize": [
+        1536,
+        1024
+      ],
+      "sourceBounds": [
+        259,
+        77,
+        1281,
+        957
+      ],
+      "sourceGround": [
+        770.0,
+        857.777
+      ],
+      "resampledSize": [
+        192,
+        128
+      ],
+      "frame": {
+        "x": 35,
+        "y": 444,
+        "w": 131,
+        "h": 113,
+        "anchorX": 0.49809160305343514,
+        "anchorY": 0.8780719026548673
+      },
+      "packedRgbaSha256": "8615a2005262d7b8fb42f6d8760a18166cecb782d1888ffdaede2ac02b600b90",
+      "groundMethod": "Common visible-bottom registration within state family; gold/wood preserve pilot full-state anchor=.87 equivalent. Confirm physical contact and packing padding in renderer before adoption.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "camp-cleared",
+      "sourceFile": "camp-cleared-v1.png",
+      "sourceSha256": "99f140c8bb34d4735b099e2d1bc64e98c7551dffd3041cae59309dfeddabeb02",
+      "sourceSize": [
+        1536,
+        1024
+      ],
+      "sourceBounds": [
+        174,
+        20,
+        1371,
+        1010
+      ],
+      "sourceGround": [
+        772.5,
+        893.786
+      ],
+      "resampledSize": [
+        192,
+        128
+      ],
+      "frame": {
+        "x": 224,
+        "y": 437,
+        "w": 153,
+        "h": 127,
+        "anchorX": 0.5004084967320261,
+        "anchorY": 0.8718366141732283
+      },
+      "packedRgbaSha256": "e74fc98544e2046f9f82a36c6babe2846c0731ae80b6636d6cb069460153fd12",
+      "groundMethod": "Common visible-bottom registration within state family; gold/wood preserve pilot full-state anchor=.87 equivalent. Confirm physical contact and packing padding in renderer before adoption.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "mining-cue",
+      "sourceFile": "mining-cue-v1.png",
+      "sourceSha256": "3e84be86f5d525b664e2861e7247be3c240d71658feca236caf602affc7a376a",
+      "sourceSize": [
+        1295,
+        1215
+      ],
+      "sourceBounds": [
+        161,
+        156,
+        1159,
+        1049
+      ],
+      "sourceGround": [
+        660.0,
+        924.25
+      ],
+      "resampledSize": [
+        192,
+        180
+      ],
+      "frame": {
+        "x": 426,
+        "y": 432,
+        "w": 151,
+        "h": 135,
+        "anchorX": 0.5023396149223963,
+        "anchorY": 0.8513031550068587
+      },
+      "packedRgbaSha256": "93d0529820de484716f70063b5ecc20df9d5279e9d6662456bf445c1446fda31",
+      "groundMethod": "Common visible-bottom registration within state family; gold/wood preserve pilot full-state anchor=.87 equivalent. Confirm physical contact and packing padding in renderer before adoption.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "chopping-cue",
+      "sourceFile": "chopping-cue-v1.png",
+      "sourceSha256": "deddc37180c1e3020e6a5c7da69568d99484b498f772e2d94d88b4b08d06d91d",
+      "sourceSize": [
+        1295,
+        1215
+      ],
+      "sourceBounds": [
+        155,
+        138,
+        1154,
+        1078
+      ],
+      "sourceGround": [
+        654.5,
+        953.125
+      ],
+      "resampledSize": [
+        192,
+        180
+      ],
+      "frame": {
+        "x": 625,
+        "y": 429,
+        "w": 152,
+        "h": 142,
+        "anchorX": 0.5002489331436699,
+        "anchorY": 0.8605894627021387
+      },
+      "packedRgbaSha256": "d3fc8cba223255ea2ef9cab4a54cd89d941d0443a948c6ecc406d051f045e793",
+      "groundMethod": "Common visible-bottom registration within state family; gold/wood preserve pilot full-state anchor=.87 equivalent. Confirm physical contact and packing padding in renderer before adoption.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "swordsman",
+      "sourceFile": "swordsman-v1.png",
+      "sourceSha256": "2fceef9dd9c91d3893db2d7708c0a6d1f4156f883c48b963916b3fc1b2dc0fe9",
+      "sourceSize": [
+        1295,
+        1214
+      ],
+      "sourceBounds": [
+        53,
+        134,
+        1265,
+        1103
+      ],
+      "sourceGround": [
+        750.8298722127913,
+        1044.4195419656526
+      ],
+      "resampledSize": [
+        192,
+        180
+      ],
+      "frame": {
+        "x": 810,
+        "y": 428,
+        "w": 183,
+        "h": 147,
+        "anchorX": 0.5755188533656388,
+        "anchorY": 0.9309950663675344
+      },
+      "packedRgbaSha256": "74dc5d692eeed49f181674764345384755238a0bb699ed7be494fd43945d4b8a",
+      "groundMethod": "Midpoint of the two alpha>=128 boot sole bottom-six-row centroids; isolated bow part excluded by component area <5000. Exact pixel-derived review placement, not a production rig pivot.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "spearman",
+      "sourceFile": "spearman-v2.png",
+      "sourceSha256": "9c588334a71df9bd9272283d519bad4c6da9a438bc7494bc96fe5f10c3b43ce7",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceBounds": [
+        258,
+        13,
+        1065,
+        1233
+      ],
+      "sourceGround": [
+        632,
+        1212
+      ],
+      "resampledSize": [
+        192,
+        192
+      ],
+      "frame": {
+        "x": 1042,
+        "y": 404,
+        "w": 127,
+        "h": 190,
+        "anchorX": 0.4627208680254681,
+        "anchorY": 0.9766809367917401
+      },
+      "packedRgbaSha256": "718c9ae52959e85fc5e9b080d20fbe7e28a662f7e046881fe580a383cf97e63d",
+      "groundMethod": "Visually reviewed boot/hoof/wheel contact center; asymmetric equipment preserved. See actor packing inputs.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "archer",
+      "sourceFile": "archer-v1.png",
+      "sourceSha256": "61cc118716fc890355bd8dcce3174ff6c313c7fd3427df9294309ac04775f513",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceBounds": [
+        264,
+        49,
+        1068,
+        1197
+      ],
+      "sourceGround": [
+        601,
+        1192
+      ],
+      "resampledSize": [
+        192,
+        192
+      ],
+      "frame": {
+        "x": 43,
+        "y": 610,
+        "w": 126,
+        "h": 179,
+        "anchorX": 0.42078681552365765,
+        "anchorY": 0.9860736147122503
+      },
+      "packedRgbaSha256": "0a40bff0a020153fc1d1df664c569056b1a0662157b1c8ba747468f9fc177814",
+      "groundMethod": "Visually reviewed boot/hoof/wheel contact center; asymmetric equipment preserved. See actor packing inputs.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "cavalry",
+      "sourceFile": "cavalry-v1.png",
+      "sourceSha256": "4d4763301a89a6f267a6eba59277a462135bea1aa13a1b3e1485e0bddc4352da",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceBounds": [
+        144,
+        31,
+        1137,
+        1209
+      ],
+      "sourceGround": [
+        644,
+        1170
+      ],
+      "resampledSize": [
+        192,
+        192
+      ],
+      "frame": {
+        "x": 225,
+        "y": 607,
+        "w": 155,
+        "h": 184,
+        "anchorX": 0.5006636826670783,
+        "anchorY": 0.957275847722072
+      },
+      "packedRgbaSha256": "a0a510a1ff1046b145b091f350e4cd5f79a15e6faf64532306c7655230660be9",
+      "groundMethod": "Visually reviewed boot/hoof/wheel contact center; asymmetric equipment preserved. See actor packing inputs.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "siege",
+      "sourceFile": "siege-v1.png",
+      "sourceSha256": "4ba0f8c4ed11430f5c98f983dcff169ef71f4f4182e9a80cf834a532562a96e3",
+      "sourceSize": [
+        1312,
+        1199
+      ],
+      "sourceBounds": [
+        63,
+        25,
+        1288,
+        1136
+      ],
+      "sourceGround": [
+        675,
+        958
+      ],
+      "resampledSize": [
+        192,
+        175
+      ],
+      "frame": {
+        "x": 412,
+        "y": 614,
+        "w": 182,
+        "h": 165,
+        "anchorX": 0.4987938890377915,
+        "anchorY": 0.8353021457275003
+      },
+      "packedRgbaSha256": "51e1bca3b5600f4d4e820147cd179fe9a6a5a2967f3a1bb18ea88e764760642e",
+      "groundMethod": "Visually reviewed boot/hoof/wheel contact center; asymmetric equipment preserved. See actor packing inputs.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "support",
+      "sourceFile": "support-v1.png",
+      "sourceSha256": "c33915a0422dd1a341ec4ded5c6fd69e7a2859cf145847704e10b251b1be4440",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceBounds": [
+        312,
+        77,
+        1136,
+        1193
+      ],
+      "sourceGround": [
+        592,
+        1174
+      ],
+      "resampledSize": [
+        192,
+        192
+      ],
+      "frame": {
+        "x": 650,
+        "y": 614,
+        "w": 129,
+        "h": 174,
+        "anchorX": 0.3460554133748747,
+        "anchorY": 0.9755815871968322
+      },
+      "packedRgbaSha256": "c584788807c052d29fe24ebf699e2e598ec5b608a1d77d35e0e3925f403d2457",
+      "groundMethod": "Visually reviewed boot/hoof/wheel contact center; asymmetric equipment preserved. See actor packing inputs.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "warlord",
+      "sourceFile": "warlord-v1.png",
+      "sourceSha256": "23a428a21b212c22844186d534fcb4292cd2993605dc5e7db16b1b4b4fba6238",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceBounds": [
+        56,
+        45,
+        1246,
+        1222
+      ],
+      "sourceGround": [
+        535,
+        1193
+      ],
+      "resampledSize": [
+        192,
+        192
+      ],
+      "frame": {
+        "x": 811,
+        "y": 609,
+        "w": 185,
+        "h": 184,
+        "anchorX": 0.40493986809776283,
+        "anchorY": 0.9655450384855419
+      },
+      "packedRgbaSha256": "2c0e9909db12f18b524ceb8d7f7c65c5670a510786eabfc560f0334e5cf20b8f",
+      "groundMethod": "Visually reviewed boot/hoof/wheel contact center; asymmetric equipment preserved. See actor packing inputs.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "ranger",
+      "sourceFile": "ranger-v1.png",
+      "sourceSha256": "7d8a67c7bf3c5e9288be24e4d0a69dcab02f51083c949fa673720bc105aab33d",
+      "sourceSize": [
+        1295,
+        1215
+      ],
+      "sourceBounds": [
+        192,
+        115,
+        1189,
+        1150
+      ],
+      "sourceGround": [
+        699.7267879661322,
+        1122.3937608839246
+      ],
+      "resampledSize": [
+        192,
+        180
+      ],
+      "frame": {
+        "x": 1031,
+        "y": 626,
+        "w": 151,
+        "h": 156,
+        "anchorX": 0.5082336203405732,
+        "anchorY": 0.9633369049230053
+      },
+      "packedRgbaSha256": "8cadc025bd3e7075d5d1509587cb679bdd9910537a8a1fedc98318d752e6e347",
+      "groundMethod": "Midpoint of the two alpha>=128 boot sole bottom-six-row centroids; isolated bow part excluded by component area <5000. Exact pixel-derived review placement, not a production rig pivot.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "engineer",
+      "sourceFile": "engineer-v1.png",
+      "sourceSha256": "0502e9baec8aa31a7f3092b19de335e21b68a359db8ecbac3264b41a5e0073c6",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceBounds": [
+        142,
+        51,
+        1177,
+        1210
+      ],
+      "sourceGround": [
+        664,
+        1177
+      ],
+      "resampledSize": [
+        192,
+        192
+      ],
+      "frame": {
+        "x": 24,
+        "y": 810,
+        "w": 162,
+        "h": 181,
+        "anchorX": 0.5041053812983637,
+        "anchorY": 0.9624890956673452
+      },
+      "packedRgbaSha256": "3850490b56cf8cedc57458734c0201c7589fcf7c83ca11fc85d9bc1abc4fea82",
+      "groundMethod": "Visually reviewed boot/hoof/wheel contact center; asymmetric equipment preserved. See actor packing inputs.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "keep",
+      "sourceFile": "keep-v1.png",
+      "sourceSha256": "b1ea159d871bb711e7cb961d51bfa90983a2e1d10074331b84fd7933d02ff4a4",
+      "sourceSize": [
+        1295,
+        1215
+      ],
+      "sourceBounds": [
+        128,
+        48,
+        1261,
+        1170
+      ],
+      "sourceGround": [
+        694.5,
+        1024.14
+      ],
+      "resampledSize": [
+        192,
+        180
+      ],
+      "frame": {
+        "x": 221,
+        "y": 816,
+        "w": 171,
+        "h": 169,
+        "anchorX": 0.5027388290546185,
+        "anchorY": 0.8622748191978962
+      },
+      "packedRgbaSha256": "03a24a4e747e47dad3ce9283d45d0cd5ff76daeca7fc888cc3e16952f043a8bf",
+      "groundMethod": "Inferred foundation-center proposal: x center of meaningful bounds, y .87 of tight frame, matching the existing static anchor convention. Physical world origin is not uniquely recoverable from a rendered PNG.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "house",
+      "sourceFile": "house-v1.png",
+      "sourceSha256": "257a989811e2ddc8fb7970e72684c32061afc4babf563cced905a4e5db106081",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceBounds": [
+        105,
+        93,
+        1180,
+        1177
+      ],
+      "sourceGround": [
+        643,
+        1065
+      ],
+      "resampledSize": [
+        192,
+        192
+      ],
+      "frame": {
+        "x": 419,
+        "y": 817,
+        "w": 167,
+        "h": 169,
+        "anchorX": 0.49969916626077987,
+        "anchorY": 0.8879420174966733
+      },
+      "packedRgbaSha256": "9b7a50922c55d75a871c5c38d2d84659d786a28b5ae69dd889bb0898353aa766",
+      "groundMethod": "Visually reviewed foundation center, not uniquely recoverable physical origin.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "barracks",
+      "sourceFile": "barracks-v1.png",
+      "sourceSha256": "7fc1abdae000f78d87568723e80a151ab2975422f64fec2d81976563d3303855",
+      "sourceSize": [
+        1312,
+        1199
+      ],
+      "sourceBounds": [
+        39,
+        83,
+        1277,
+        1146
+      ],
+      "sourceGround": [
+        674,
+        1030
+      ],
+      "resampledSize": [
+        192,
+        175
+      ],
+      "frame": {
+        "x": 608,
+        "y": 823,
+        "w": 184,
+        "h": 158,
+        "anchorX": 0.5143160127253446,
+        "anchorY": 0.881858299637884
+      },
+      "packedRgbaSha256": "2cf798678ac282f302717a1736b93854e2ae2f8214d47bd4c0154b65440b1a8e",
+      "groundMethod": "Visually reviewed foundation center, not uniquely recoverable physical origin.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "range",
+      "sourceFile": "range-v1.png",
+      "sourceSha256": "162866df92817d25f23e66948c4be24386dc5e919e84905142f483883efe3f4c",
+      "sourceSize": [
+        1396,
+        1127
+      ],
+      "sourceBounds": [
+        39,
+        38,
+        1366,
+        1106
+      ],
+      "sourceGround": [
+        700,
+        948
+      ],
+      "resampledSize": [
+        192,
+        155
+      ],
+      "frame": {
+        "x": 808,
+        "y": 826,
+        "w": 185,
+        "h": 150,
+        "anchorX": 0.49878417099047473,
+        "anchorY": 0.8425436261461107
+      },
+      "packedRgbaSha256": "5ea71bf9d114b8cfd6e9b16499dcc2542630860d0b521e77c0ef7b52596e6f7a",
+      "groundMethod": "Visually reviewed foundation center, not uniquely recoverable physical origin.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "stable",
+      "sourceFile": "stable-v1.png",
+      "sourceSha256": "1c3440be1f1584a78c329e8ae8ef0c15ff817e859ba28b1cfd02bbe019961a98",
+      "sourceSize": [
+        1332,
+        1181
+      ],
+      "sourceBounds": [
+        45,
+        62,
+        1309,
+        1129
+      ],
+      "sourceGround": [
+        700,
+        999
+      ],
+      "resampledSize": [
+        192,
+        170
+      ],
+      "frame": {
+        "x": 1009,
+        "y": 822,
+        "w": 185,
+        "h": 157,
+        "anchorX": 0.5183832481129778,
+        "anchorY": 0.8713494447650432
+      },
+      "packedRgbaSha256": "c6516fff920c80934c6ae74e6adacea020cd8a2df98250dd9d0cb9137679a760",
+      "groundMethod": "Visually reviewed foundation center, not uniquely recoverable physical origin.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "workshop",
+      "sourceFile": "workshop-v1.png",
+      "sourceSha256": "cd84583e84d57d44048a43be6736a26b90830279c532e5bcce0d3e44ff4d5a98",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceBounds": [
+        51,
+        61,
+        1227,
+        1145
+      ],
+      "sourceGround": [
+        660,
+        1020
+      ],
+      "resampledSize": [
+        192,
+        192
+      ],
+      "frame": {
+        "x": 10,
+        "y": 1012,
+        "w": 183,
+        "h": 169,
+        "anchorX": 0.5194132873166523,
+        "anchorY": 0.8767588686617027
+      },
+      "packedRgbaSha256": "dc9c065ba9aca6fb205335de816a6f373a16ae3169681fa9cca30bdf90364876",
+      "groundMethod": "Visually reviewed foundation center, not uniquely recoverable physical origin.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "tower",
+      "sourceFile": "tower-v1-halo-rejected.png",
+      "sourceSha256": "6f03d5bdc624e044800ed8c6ec46470c5690db46a952bf1726c3be3051e140e9",
+      "sourceSize": [
+        1024,
+        1536
+      ],
+      "sourceBounds": [
+        202,
+        86,
+        936,
+        1482
+      ],
+      "sourceGround": [
+        594.0,
+        1318.0
+      ],
+      "resampledSize": [
+        128,
+        192
+      ],
+      "frame": {
+        "x": 249,
+        "y": 1013,
+        "w": 116,
+        "h": 178,
+        "anchorX": 0.5280172413793104,
+        "anchorY": 0.875
+      },
+      "packedRgbaSha256": "5d8def15a5825af6009170a35c760d66d720e8344f131ad36d1f393c16e09cff",
+      "groundMethod": "Foundation footprint review proposal from visible base corner endpoints around (275,1325) and (913,1310), midpoint rounded to the source pixel. Rear footprint is occluded, so semantic placement remains inferred.",
+      "maxDisplayHeight": 102
+    },
+    {
+      "id": "depot",
+      "sourceFile": "depot-v1.png",
+      "sourceSha256": "3e3dfab731d4872542a492bb713647f2e04aed621daab1dfbaf97f44847954a9",
+      "sourceSize": [
+        1369,
+        1149
+      ],
+      "sourceBounds": [
+        108,
+        68,
+        1317,
+        1090
+      ],
+      "sourceGround": [
+        740,
+        994
+      ],
+      "resampledSize": [
+        192,
+        161
+      ],
+      "frame": {
+        "x": 418,
+        "y": 1027,
+        "w": 172,
+        "h": 146,
+        "anchorX": 0.5219987429289754,
+        "anchorY": 0.8991857124122227
+      },
+      "packedRgbaSha256": "3a18494668087b10055058a946df29af7fcc94101253f765e5988a283e1231b2",
+      "groundMethod": "Visually reviewed foundation center, not uniquely recoverable physical origin.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "blacksmith",
+      "sourceFile": "blacksmith-v1.png",
+      "sourceSha256": "2b4b146f3f1b4b0a994738f065e93ccc76a7e85c94f48c7ae0c7c42f892af87a",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceBounds": [
+        101,
+        61,
+        1179,
+        1189
+      ],
+      "sourceGround": [
+        660,
+        1090
+      ],
+      "resampledSize": [
+        192,
+        192
+      ],
+      "frame": {
+        "x": 610,
+        "y": 1012,
+        "w": 185,
+        "h": 176,
+        "anchorX": 0.5137980085348507,
+        "anchorY": 0.9027838190517616
+      },
+      "packedRgbaSha256": "04de42e92ee036c9b7fa939dcfcc16d9e62ec237443e6e8f951f78d22c7fc33d",
+      "groundMethod": "Visually reviewed foundation center, not uniquely recoverable physical origin.",
+      "maxDisplayHeight": 98
+    },
+    {
+      "id": "arcane",
+      "sourceFile": "arcane-v1.png",
+      "sourceSha256": "d142d92c4fa084048cc7347fc582d0563be425138472172f73b19894a729beb3",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceBounds": [
+        49,
+        74,
+        1224,
+        1185
+      ],
+      "sourceGround": [
+        654,
+        1060
+      ],
+      "resampledSize": [
+        192,
+        192
+      ],
+      "frame": {
+        "x": 810,
+        "y": 1014,
+        "w": 183,
+        "h": 173,
+        "anchorX": 0.5143932857479018,
+        "anchorY": 0.880327460795973
+      },
+      "packedRgbaSha256": "696d204c42a350273282aafd575903ce2fd8f33e079088e0712106f32ec256be",
+      "groundMethod": "Visually reviewed foundation center, not uniquely recoverable physical origin.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "wall",
+      "sourceFile": "wall-v1.png",
+      "sourceSha256": "ccc02a9037ba8a61328f26dfb6a928045a887011512692f6a335d4e01f07f192",
+      "sourceSize": [
+        1386,
+        1135
+      ],
+      "sourceBounds": [
+        59,
+        108,
+        1354,
+        1063
+      ],
+      "sourceGround": [
+        706,
+        900
+      ],
+      "resampledSize": [
+        192,
+        157
+      ],
+      "frame": {
+        "x": 1011,
+        "y": 1034,
+        "w": 182,
+        "h": 136,
+        "anchorX": 0.49890585604871324,
+        "anchorY": 0.8198043534594455
+      },
+      "packedRgbaSha256": "a3d71f487309f8300869ca594e7990cf355eba9d1952e52aace84d94a013fc0a",
+      "groundMethod": "Visually reviewed foundation center, not uniquely recoverable physical origin.",
+      "maxDisplayHeight": null
+    }
+  ]
+}

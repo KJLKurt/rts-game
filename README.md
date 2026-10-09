@@ -1,3 +1,7 @@
+> **Current authored-content candidate: fc-fc75c030c578 (9 October 2026).** Hollow Lanterns adds a complete Halloween static-art family and matching six-state soundtrack. Local981units and build pass; focused native/update acceptance is pending. The last verified live release remains32f1d4ea / fc-8228b96098aa. See [Halloween scope and evidence](docs/HALLOWEEN_THEME_20261009.md) and the [dated requirements overlay](docs/REQUIREMENTS_RECONCILIATION_20261009.md). Full directional/style/theme commitments and broader natural/device/subjective acceptance remain open.
+
+### Earlier checkpoints (historical)
+
 > **Current testing preview: fc-987c1e7d64e6 (9 October 2026).** Campaign cards and briefings now disclose difficulty and tactical pause rules. The HUD shows remaining Hard pauses and an honest disabled state when exhausted or on Brutal; the third paused turn still permits Resume. All 810 unit tests and type/content/build checks pass. A 42-case focused native browser gate passed once with no retries or skips, and 16 phone screenshots were reviewed. See [pause allowance evidence](docs/PAUSE_DISCLOSURE_20261009.md). The full default browser collection contains 593 identities and was not rerun as a full matrix. Wider campaign, art and physical-device acceptance remains open.
 
 ### Previous foliage preview (historical)

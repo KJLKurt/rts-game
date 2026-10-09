@@ -1,0 +1,100 @@
+{
+  "menu": {
+    "src": "assets/audio/halloween/menu.ogg",
+    "fallback": "assets/audio/halloween/menu.mp3",
+    "bpm": 96,
+    "duration": 40.0,
+    "loop": true,
+    "volume": 0.8,
+    "title": "The Lanternkeeper\u2019s Gate",
+    "key": "G minor, with harmonic-minor turns and E-flat Lydian color",
+    "bars": 16,
+    "timeSignature": [
+      4,
+      4
+    ],
+    "loopStart": 0,
+    "loopEnd": 40.0
+  },
+  "exploration": {
+    "src": "assets/audio/halloween/exploration.ogg",
+    "fallback": "assets/audio/halloween/exploration.mp3",
+    "bpm": 96,
+    "duration": 60.0,
+    "loop": true,
+    "volume": 0.72,
+    "title": "Lanterns Through the Pumpkin Rows",
+    "key": "G minor, with harmonic-minor turns and E-flat Lydian color",
+    "bars": 24,
+    "timeSignature": [
+      4,
+      4
+    ],
+    "loopStart": 0,
+    "loopEnd": 60.0
+  },
+  "tension": {
+    "src": "assets/audio/halloween/tension.ogg",
+    "fallback": "assets/audio/halloween/tension.mp3",
+    "bpm": 96,
+    "duration": 40.0,
+    "loop": true,
+    "volume": 0.71,
+    "title": "Footsteps Beyond the Haystacks",
+    "key": "G minor, with harmonic-minor turns and E-flat Lydian color",
+    "bars": 16,
+    "timeSignature": [
+      4,
+      4
+    ],
+    "loopStart": 0,
+    "loopEnd": 40.0
+  },
+  "combat": {
+    "src": "assets/audio/halloween/combat.ogg",
+    "fallback": "assets/audio/halloween/combat.mp3",
+    "bpm": 96,
+    "duration": 60.0,
+    "loop": true,
+    "volume": 0.68,
+    "title": "The Scarecrow Procession",
+    "key": "G minor, with harmonic-minor turns and E-flat Lydian color",
+    "bars": 24,
+    "timeSignature": [
+      4,
+      4
+    ],
+    "loopStart": 0,
+    "loopEnd": 60.0
+  },
+  "victory": {
+    "src": "assets/audio/halloween/victory.ogg",
+    "fallback": "assets/audio/halloween/victory.mp3",
+    "bpm": 96,
+    "duration": 7.5,
+    "loop": false,
+    "volume": 0.68,
+    "title": "First Light at the Harvest Fair",
+    "key": "G major, Picardy-color transformation of the Hollow Lanterns cell",
+    "bars": 3,
+    "timeSignature": [
+      4,
+      4
+    ]
+  },
+  "defeat": {
+    "src": "assets/audio/halloween/defeat.ogg",
+    "fallback": "assets/audio/halloween/defeat.mp3",
+    "bpm": 96,
+    "duration": 10.0,
+    "loop": false,
+    "volume": 0.73,
+    "title": "The Last Ember in the Field",
+    "key": "G minor",
+    "bars": 4,
+    "timeSignature": [
+      4,
+      4
+    ]
+  }
+}

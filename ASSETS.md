@@ -58,3 +58,9 @@ Hold first-stage `fc-9708c3913116`: native commander ground-marker taps queued a
 ## Combined actor and corrected visibility candidate — 2026-10-06
 
 Frozen pre-full buildfc-4a71fd4dca98 passes588units/64files,8missions,TS/build,40exactrepeat outputs and3first-attempt earned native targeting/offline continuations. Five unchanged actor packs cover720/1296frames; corrected visibility code is combined without sim/content/audio changes. Full412 gate remains separately required. See docs/COMBINED_ACTOR_VISIBILITY_QA_20261006.md (repository root) and COMBINED_REQUIREMENTS_AUDIT_20261006.md. No publication; four UI boards remain proposals.
+# Hollow Lanterns static art and soundtrack — 9 October 2026
+
+The Halloween candidate adds 36 newly generated semantic role images in one 1200×1200 RGBA atlas and six original sample-free musical arrangements in twelve codecs. Exact art prompts, generation IDs, source hashes, frame transforms and packed hashes are in `docs/HALLOWEEN_ART_PROVENANCE.json` and `docs/HALLOWEEN_ART_PACKING.json`. Whole-source uniform resampling is documented; originals and rejected/alternate samples remain preserved. This does not add authored directional frames or new gameplay systems for reserved atlas roles.
+
+Music composition/provenance and signal evidence are in `scripts/audio/compose_hollow_lanterns.py`, its retained core module and `docs/HALLOWEEN_AUDIO_PROVENANCE.md` / `HALLOWEEN_AUDIO_VALIDATION.json`. No commercial recording, external sample library or paid art was used. Existing Christmas/Mythic assets remain unchanged. See `docs/HALLOWEEN_THEME_20261009.md` for the exact candidate gate and remaining subjective/device/rights limitations; generation alone does not establish public-domain status or redistribution clearance.
+

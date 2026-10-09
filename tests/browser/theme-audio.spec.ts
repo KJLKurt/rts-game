@@ -2,7 +2,7 @@ import type { Locator, Page } from '@playwright/test';
 import type { AudioState } from '../../src/platform/audio';
 import { action, expect, home, setSlider, test } from './helpers';
 
-type Theme = 'christmas' | 'mythic';
+type Theme = 'christmas' | 'mythic' | 'halloween';
 type SourceReceipt = {
   id: number; asset: string; start: number; stop: number | null; ended: boolean; disconnected: boolean;
   loop: boolean; duration: number; route: string[]; gain: number;
@@ -192,7 +192,7 @@ async function observeAudio(page: Page, measureEffects = false) {
   }, { measureEffects });
 }
 const audio = (page: Page) => page.evaluate(() => window.__QA_THEME_AUDIO__.read());
-const asset = (theme: Theme, state: AudioState) => `/assets/audio/${theme === 'mythic' ? 'mythic/' : ''}${state}.`;
+const asset = (theme: Theme, state: AudioState) => `/assets/audio/${theme === 'christmas' ? '' : `${theme}/`}${state}.`;
 const hasAsset = (source: SourceReceipt, theme: Theme, state: AudioState) => source.asset.includes(asset(theme, state));
 async function press(page: Page, locator: Locator) {
   await locator.scrollIntoViewIfNeeded();
@@ -278,7 +278,9 @@ async function receipt(name: string, data: unknown) {
   await test.info().attach(name, { contentType: 'application/json', body: JSON.stringify(data, null, 2) });
 }
 
-test('theme music follows native settings, independent buses and a paused offline save without changing progression', async ({ page, context }) => {
+// Exercise the same native signal/lifecycle contract for each authored alternate bank.
+for (const focusTheme of ['mythic', 'halloween'] as const) {
+test(`${focusTheme}: theme music follows native settings, independent buses and a paused offline save without changing progression`, async ({ page, context }) => {
   // Includes three independent bus controls, recovery and a full offline reload.
   test.setTimeout(90_000);
   test.info().annotations.push({ type: 'controlled-interruption', description: 'Browser blur/focus notifications are injected; volume/theme controls, selection cues and recovery use real UI. Three passive native analysers keep the buses separate.' });
@@ -286,15 +288,15 @@ test('theme music follows native settings, independent buses and a paused offlin
   const profile = await page.evaluate(() => window.__FRONTIER__.profile);
   expect((await audio(page)).context).toBeNull();
   await openSettings(page); await currentSource(page, 'christmas', 'menu');
-  await choose(page, 'mythic'); await currentSource(page, 'mythic', 'menu');
-  await test.info().attach(`mythic-audio-settings-${test.info().project.name}`, {
+  await choose(page, focusTheme); await currentSource(page, focusTheme, 'menu');
+  await test.info().attach(`${focusTheme}-audio-settings-${test.info().project.name}`, {
     contentType: 'image/png', body: await page.screenshot({ scale: 'css' }),
   });
   await setSlider(page, '#master-slider', .4); await setSlider(page, '#music-slider', 0); await setSlider(page, '#sfx-slider', .2);
   await expect.poll(async () => Math.round((await audio(page)).master * 100)).toBe(40);
   await expect.poll(async () => (await audio(page)).music).toBeLessThan(.001);
   const musicZeroSchedule = exactZero(await audio(page), 'music');
-  await closeSettings(page); await launchHere(page); await currentSource(page, 'mythic', 'exploration');
+  await closeSettings(page); await launchHere(page); await currentSource(page, focusTheme, 'exploration');
   const before = await page.evaluate(() => JSON.stringify(window.__FRONTIER__.state));
   await settleBus(page, 'effects');
   const musicOff = await selectionCue(page);
@@ -345,7 +347,7 @@ test('theme music follows native settings, independent buses and a paused offlin
   await press(page, action(page, 'resume-app'));
   await expect(page.getByRole('dialog', { name: 'Battle suspended', exact: true })).toHaveCount(0);
   await expect.poll(async () => (await audio(page)).sources.length).toBeGreaterThan(sourcesBeforeInterruption);
-  await currentSource(page, 'mythic', 'exploration');
+  await currentSource(page, focusTheme, 'exploration');
   const resumedZeroSchedule = exactZero(await audio(page), 'master');
   const resumedAtZero = await selectionCue(page);
   await receipt('master-zero-interruption-native-cue', { resumedZeroSchedule, resumedAtZero });
@@ -362,7 +364,7 @@ test('theme music follows native settings, independent buses and a paused offlin
   await press(page, settings(page).getByLabel('Mute all audio', { exact: true }));
   const muteSchedule = exactZero(await audio(page), 'master');
   await expect.poll(async () => (await audio(page)).master).toBeLessThan(.001);
-  for (const theme of ['christmas', 'mythic'] as const) {
+  for (const theme of ['christmas', 'mythic', 'halloween', focusTheme] as const) {
     await choose(page, theme); await currentSource(page, theme, 'exploration');
     expect((await audio(page)).master).toBeLessThan(.001);
     expect(await page.evaluate(() => JSON.stringify(window.__FRONTIER__.state))).toBe(before);
@@ -382,21 +384,21 @@ test('theme music follows native settings, independent buses and a paused offlin
     const names = (await caches.keys()).filter(name => name.startsWith('frontier-command-rts-game-'));
     return (await Promise.all(names.map(async name => (await (await caches.open(name)).keys()).map(r => new URL(r.url).pathname)))).flat();
   });
-  for (const theme of ['christmas', 'mythic'] as const) {
-    expect(cached).toContain(`/rts-game/assets/audio/${theme === 'mythic' ? 'mythic/' : ''}manifest.json`);
+  for (const theme of ['christmas', 'mythic', 'halloween', focusTheme] as const) {
+    expect(cached).toContain(`/rts-game/assets/audio/${theme === 'christmas' ? '' : `${theme}/`}manifest.json`);
     for (const state of ['menu', 'exploration', 'tension', 'combat', 'victory', 'defeat']) {
-      for (const codec of ['ogg', 'mp3']) expect(cached).toContain(`/rts-game/assets/audio/${theme === 'mythic' ? 'mythic/' : ''}${state}.${codec}`);
+      for (const codec of ['ogg', 'mp3']) expect(cached).toContain(`/rts-game/assets/audio/${theme === 'christmas' ? '' : `${theme}/`}${state}.${codec}`);
     }
   }
   await context.setOffline(true); await page.reload(); await expect(action(page, 'continue')).toBeVisible();
-  await openSettings(page); await expect(settings(page).getByLabel('Visual theme', { exact: true })).toHaveValue('mythic');
+  await openSettings(page); await expect(settings(page).getByLabel('Visual theme', { exact: true })).toHaveValue(focusTheme);
   await expect(settings(page).getByLabel('Mute all audio', { exact: true })).toBeChecked();
   await expect(page.locator('#master-slider')).toHaveValue('0.4'); await expect(page.locator('#music-slider')).toHaveValue('0.3');
-  await expect(page.locator('#sfx-slider')).toHaveValue('0.2'); await currentSource(page, 'mythic', 'menu');
+  await expect(page.locator('#sfx-slider')).toHaveValue('0.2'); await currentSource(page, focusTheme, 'menu');
   await choose(page, 'christmas'); await currentSource(page, 'christmas', 'menu');
-  await choose(page, 'mythic'); await currentSource(page, 'mythic', 'menu'); await closeSettings(page);
+  await choose(page, focusTheme); await currentSource(page, focusTheme, 'menu'); await closeSettings(page);
   await press(page, action(page, 'continue')); await expect(page.locator('.hud')).toBeVisible();
-  await currentSource(page, 'mythic', 'exploration');
+  await currentSource(page, focusTheme, 'exploration');
   const offlineMuted = await selectionCue(page);
   await receipt('offline-mute-zero-native-cue', offlineMuted);
   expect(offlineMuted.rendered.master).toBe(0); expect(offlineMuted.masterSignal.peak).toBe(0);
@@ -416,28 +418,28 @@ test('theme music follows native settings, independent buses and a paused offlin
     muted, offlineMuted, offlineRestored, online, offline });
 });
 
-test('controlled local state and delayed-load fixtures reject stale theme music and retire native outcome sources', async ({ page, baseURL }) => {
+test(`${focusTheme}: controlled local state and delayed-load fixtures reject stale theme music and retire native outcome sources`, async ({ page, baseURL }) => {
   test.skip(!['localhost', '127.0.0.1', '[::1]'].includes(new URL(baseURL!).hostname), 'Result fixtures are confined to fresh local test profiles.');
   test.setTimeout(90_000);
   test.info().annotations.push({ type: 'controlled-fixture', description: 'Hold an actual asset read; inject recent hit events, terminal winner values and browser blur/focus events. Theme selection, navigation and the recovery gesture use real UI. This is routing/lifecycle acceptance, not natural victories or subjective listening.' });
   await observeAudio(page); await home(page); await openSettings(page); await currentSource(page, 'christmas', 'menu');
-  await page.evaluate(() => window.__QA_THEME_AUDIO__.hold('/assets/audio/mythic/menu.ogg'));
-  await choose(page, 'mythic');
+  await page.evaluate(theme => window.__QA_THEME_AUDIO__.hold(`/assets/audio/${theme}/menu.ogg`), focusTheme);
+  await choose(page, focusTheme);
   await expect.poll(async () => (await audio(page)).held.length).toBe(1);
   await choose(page, 'christmas'); await currentSource(page, 'christmas', 'menu');
-  await choose(page, 'mythic'); await closeSettings(page); await launchHere(page);
-  await currentSource(page, 'mythic', 'exploration');
+  await choose(page, focusTheme); await closeSettings(page); await launchHere(page);
+  await currentSource(page, focusTheme, 'exploration');
   await page.evaluate(() => window.__QA_THEME_AUDIO__.release());
-  await expect.poll(async () => (await audio(page)).decoded.some(path => path.endsWith('/assets/audio/mythic/menu.ogg'))).toBe(true);
+  await expect.poll(async () => (await audio(page)).decoded.some(path => path.endsWith(`/assets/audio/${focusTheme}/menu.ogg`))).toBe(true);
   // Decoding has completed; allow its Promise continuation and native scheduling to settle.
   await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
   const afterLateDecode = await audio(page);
-  expect(afterLateDecode.sources.filter(source => hasAsset(source, 'mythic', 'menu'))).toEqual([]);
-  await currentSource(page, 'mythic', 'exploration');
+  expect(afterLateDecode.sources.filter(source => hasAsset(source, focusTheme, 'menu'))).toEqual([]);
+  await currentSource(page, focusTheme, 'exploration');
   // Pausing does not pause the AudioContext's combat hold. Exercise rapid bank
   // swaps in stable exploration, before introducing any controlled pressure.
   await openSettings(page);
-  for (const theme of ['christmas', 'mythic', 'christmas', 'mythic'] as const) {
+  for (const theme of ['christmas', 'mythic', 'halloween', 'christmas', focusTheme] as const) {
     await choose(page, theme); await currentSource(page, theme, 'exploration');
   }
   await closeSettings(page);
@@ -447,7 +449,7 @@ test('controlled local state and delayed-load fixtures reject stale theme music 
       const s = window.__FRONTIER__.state;
       for (let i = 0; i < count; i++) s.events.push({ id: s.nextEventId++, type: 'hit', team: 0, targetTeam: 1, x: 1, y: 1, time: s.time });
     }, count);
-    await currentSource(page, 'mythic', state);
+    await currentSource(page, focusTheme, state);
   }
   await paused(page, true);
   const outcomes: { state: string; source: SourceReceipt; zeroSchedule: BusAutomation[]; restoreSchedule: BusAutomation;
@@ -460,7 +462,7 @@ test('controlled local state and delayed-load fixtures reject stale theme music 
     }, { state, winner });
     await expect(page.locator('.result-dialog')).toBeVisible();
     await expect(page.locator('#result-save-status')).toHaveText('Result saved on this device.');
-    const source = await currentSource(page, 'mythic', state), count = (await audio(page)).sources.length;
+    const source = await currentSource(page, focusTheme, state), count = (await audio(page)).sources.length;
     await expect.poll(async () => {
       const result = (await audio(page)).sources.find(row => row.id === source.id)!;
       return result.ended && result.disconnected;
@@ -484,16 +486,18 @@ test('controlled local state and delayed-load fixtures reject stale theme music 
     // This branch is deliberately dormant. Verify restored gain only once real
     // navigation starts a new menu source, never by activating a dummy source.
     await press(page, action(page, 'result-home'));
-    const menu = await currentSource(page, 'mythic', 'menu');
+    const menu = await currentSource(page, focusTheme, 'menu');
     await expect.poll(async () => (await audio(page)).master).toBeGreaterThan(.8);
     outcomes.push({ state, source: ended, zeroSchedule, restoreSchedule, menuSource: menu.id, restoredMaster: (await audio(page)).master });
   }
   const final = await audio(page);
   expect(final.maxConnectedSources).toBeLessThanOrEqual(2);
-  expect(new Set(final.sources.filter(source => source.asset.includes('/mythic/')).map(source => source.asset.split('/').pop()!.split('.')[0])))
+  expect(new Set(final.sources.filter(source => source.asset.includes(`/assets/audio/${focusTheme}/`)).map(source => source.asset.split('/').pop()!.split('.')[0])))
     .toEqual(new Set(['menu', 'exploration', 'tension', 'combat', 'victory', 'defeat']));
   expect(final.sources.every(source => source.asset !== 'unmapped')).toBe(true);
   for (const source of final.sources) expect(source.route).toEqual(['voice-gain', 'music', 'master', 'destination']);
   await receipt('controlled-theme-state-lifecycle', { provenance: 'Local isolated event/result fixtures, one held native asset read, injected browser blur/focus followed by a trusted recovery gesture, and native source/gain/stop observations. No natural-win or subjective listening claim.',
     afterLateDecode, outcomes, final });
 });
+
+}

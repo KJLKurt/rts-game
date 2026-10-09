@@ -19,6 +19,13 @@ export const VISUAL_THEMES = {
       'assets/render/themes/mythic-toon/cavalry-directional.json',
     ],
   },
+  halloween: {
+    name: 'Halloween · Toy 3D',
+    atlas: 'assets/render/themes/halloween-toon/atlas.json',
+    attackAtlas: null,
+    directionalAtlas: null,
+    additionalDirectionalAtlases: [],
+  },
 } as const;
 
 export type VisualThemeId = keyof typeof VISUAL_THEMES;

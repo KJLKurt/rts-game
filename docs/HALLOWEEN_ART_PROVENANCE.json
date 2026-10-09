@@ -1,0 +1,406 @@
+{
+  "theme": "halloween",
+  "family": "Hollow Lanterns",
+  "date": "2026-10-09",
+  "scope": "36 static semantic atlas roles. No authored directional or hit/death frames. Seven reserved art roles have no current Battlefield caller.",
+  "generation": "Built-in image generation; original project reference lineage, no downloaded commercial-game art or paid asset. Not labeled CC0/public domain.",
+  "packing": "Whole original RGBA uniformly resampled using scripts/pack_halloween_atlas.py; no manual recoloring, silhouette painting, mirroring or alpha cleanup. Source originals and alternate/rejected versions preserved separately. See HALLOWEEN_ART_PACKING.json for transforms, anchors, and packed/readback hashes.",
+  "records": [
+    {
+      "role": "gold-full",
+      "sourceFile": "gold-full-v1.png",
+      "sourceSha256": "ff23bf768f2394d2c3b519e70b019b6647e16a9df19fea2e9083e401d5983bd1",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-50251141-5b61-4e3f-8291-b4823da1d574",
+      "prompt": "Use case: stylized-concept. One isolated collectible-style isometric GOLD MINE resource sprite for Hollow Lanterns harvest-fantasy RTS. A low dark-slate rocky mound with a wide crooked timber mine entrance, a squat open minecart visibly HEAPED WITH BRIGHT GOLD NUGGETS, more bright yellow gold veins on the rock. Tiny carved pumpkin above timber lintel and a single small unlit iron lantern are restrained Halloween motifs. Gold remains unmistakably gold, not candy or pumpkins. Chunky polished toy3D, orthographic elevated30degree camera front/right visible, broad shapes readable at64px height, warm upper-left studio lighting. Use violet-gray slate, weathered ochre timber, vivid gold contrast matching attached art style but entirely new resource design. Compact square footprint and generous clean transparent margins. No fog, glow, haze, aura, cast shadow, terrain tile, trees, characters, text or other objects. Crisp opaque model against genuine fully transparent background outside its edge.\n",
+      "referenceLineage": "Existing project Mythic atlas as style reference, then new Hollow Lanterns pilot sources. Exact input filenames retained in original generation receipt."
+    },
+    {
+      "role": "gold-half",
+      "sourceFile": "gold-half-v1.png",
+      "sourceSha256": "2c5574ee415c8cc0ab00499a421c38b706de44de72b9e0288f7617d823385bd2",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-36da1cb4-26af-4280-996a-d8cc30a0e615",
+      "prompt": "Use case: precise-object-edit. Asset type: isolated transparent RTS resource sprite, Hollow Lanterns harvest fantasy toy-3D family. Image 1 is the exact gold-full edit target; image 2 is its depleted end-state reference. Create the HALF-REMAINING intermediate stage of this SAME gold mine. Keep the camera, three-quarter isometric view, violet rock silhouette, pumpkin lintel emblem, ochre timber entrance, cart, rails, hanging lantern, baseline, and ground footprint as closely identical to image 1 as possible. Change only the gold supply: REMOVE around half of the exposed bright yellow-gold ore chunks across the rocks and replace those occupied places with the underlying violet rock; the cart should contain about half the original gold heap, with its empty upper rim visible. Leave enough clearly yellow gold to read as about 50% remaining, distinctly less than full yet much more than sparse or empty. Do not add new objects or a new setting. Polished chunky beveled shapes, crisp readable silhouette at 78 CSS pixels wide, warm upper-left illumination. Genuinely transparent background, retain natural antialiased alpha, no aura, no ground tile, no text, no labels, no border, no watermark. One single sprite, not a sheet; keep complete silhouette inside canvas with generous transparent margins.",
+      "references": [
+        "gold-full-v1.png",
+        "gold-empty-v1.png"
+      ]
+    },
+    {
+      "role": "gold-sparse",
+      "sourceFile": "gold-sparse-v1.png",
+      "sourceSha256": "cec9ffa9da836579015de3a87124f8f412f63e972a0e9033fce3a0dd61b285f7",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-54b9cc92-528a-4c88-a90f-fe913a31b598",
+      "prompt": "Use case: precise-object-edit. Asset type: isolated transparent RTS resource sprite, Hollow Lanterns. Image 1 is the HALF gold mine edit target; image 2 is the exact depleted end-state; image 3 is the full state. Create the SPARSE stage of this SAME mine with about 15% ore remaining. Preserve camera, composition, violet rock silhouette, timber entrance, pumpkin emblem, lantern, cart, rails, ground footprint and baseline. Remove almost all remaining ore from image 1: keep only THREE small isolated yellow-gold nuggets embedded in rocks, one on each side and one near the upper center; replace the other ore with violet rock. The mine cart is nearly empty with only TWO small gold nuggets on its floor, no gold heap or overflowing ore. Make a clear monotonic progression full > half > sparse > empty through actually removing ore, not a dimmer palette. Keep the ochre wooden beams ochre, distinct from the few lemon-yellow gold pieces. Do not move or rescale the cart or entrance. Same polished beveled toy-3D rendering, upper-left light, readable at 78 CSS pixels wide. Real transparent alpha, single sprite with generous transparent margins, no aura, background, ground tile, labels, text, watermark or sheet.",
+      "references": [
+        "gold-half-v1.png",
+        "gold-empty-v1.png",
+        "gold-full-v1.png"
+      ]
+    },
+    {
+      "role": "gold-empty",
+      "sourceFile": "gold-empty-v1.png",
+      "sourceSha256": "3e0d365d5d7f98f97cf367cf9119c1bb745d6cb1052df94b5055a5bbb2dae1f3",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-6f5d2604-c77a-445b-93d5-ebc339da7522",
+      "prompt": "Use case: precise-object-edit. Create the EMPTY/DEPLETED state of this gold mine sprite. Preserve exact camera, overall rock mound shape, timber mine entrance, rail footprint, minecart size/location and small pumpkin carving. Remove EVERY bright gold nugget and vein, replacing mined spots with plain dull violet-gray rock recesses. Minecart is completely empty, clearly visible dark wooden interior. Lantern unlit. No gold anywhere, no yellow decoration other than ordinary brown timber highlights. This is the same site after extraction, not destroyed. Preserve polished chunky toy3D style. Entire isolated sprite against genuine transparent background, with no outer halo, ground shadow, haze, text or new objects. Full and empty must be immediately distinguishable at64px height without relying on labels.\n",
+      "referenceLineage": "Existing project Mythic atlas as style reference, then new Hollow Lanterns pilot sources. Exact input filenames retained in original generation receipt."
+    },
+    {
+      "role": "wood-full",
+      "sourceFile": "wood-full-v1.png",
+      "sourceSha256": "e5b06dde080a340e0f0560a777594cee70d7cf5b00d6c4b3b50b4168ecfe8060",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-1673f935-1204-42cc-a6c3-c635a8931f1d",
+      "prompt": "Use case: stylized-concept. One isolated WOOD RESOURCE full state game sprite for Hollow Lanterns harvest-fantasy Halloween. New miniature logging grove: three stout crooked deciduous trees with chunky amber/copper autumn canopies, broad gray-brown forked trunks, and a small orderly stack of cut brown logs with pale cut ends at their feet. One small unlit pumpkin lantern near a stump gives family identity. Timber remains unmistakably usable WOOD, no magical crystal or candy. Compact near-square ground footprint, all parts cohesive and grounded without a terrain island. Trees, trunks and log ends must read clearly at64px display height. Match attached reference's polished chunky toy3D, warm upper-left light, violet-gray stone/ochre materials, orthographic elevated30degree front/right camera. Broad readable planes, generous transparent margins. No house, people, tools stuck in tree, floating leaf particles, haze, glow, aura, shadow, text or additional objects. Genuine transparent background outside clean opaque model edges.\n",
+      "referenceLineage": "Existing project Mythic atlas as style reference, then new Hollow Lanterns pilot sources. Exact input filenames retained in original generation receipt."
+    },
+    {
+      "role": "wood-half",
+      "sourceFile": "wood-half-v1.png",
+      "sourceSha256": "7dc4ec5c54e3127ae7f212b6771e338a4f0c58b9f2206f8e88c2e5336328a3ce",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-98f447b8-1cd2-4626-9c3c-eff60168e14d",
+      "prompt": "Use case: precise-object-edit. Asset type: isolated transparent RTS resource sprite. Image 1 is the exact Hollow Lanterns wood-full edit target; image 2 is its empty end-state. Produce the HALF-REMAINING intermediate stage of this SAME autumn timber grove. Preserve exact three-quarter isometric camera, scale, baseline, footprint, each stump/root position, front-right pumpkin on its stump, stones, leaf colors and toy-3D material. Remove the tall REAR-CENTER tree and replace it with its sawn stump in that same ground position. Keep the original LEFT and RIGHT trees standing with their orange faceted foliage and original proportions. Reduce the front pile to FOUR logs, leaving visibly open ground where removed logs used to be. Exactly two standing trees, one rear sawn stump, the same front pumpkin stump, four loose logs. Do not enlarge the remaining trees or logs, do not move them to fill gaps. The asset is about 50% of the full supply: two trees and four logs, with clearly less material than image 1. One single sprite, generous transparent margins, no ground tile, no background, no text, no border, no watermark, no aura. Real transparent alpha, warm upper-left illumination, readable at 84 CSS pixels wide.",
+      "references": [
+        "wood-full-v1.png",
+        "wood-empty-v1.png"
+      ]
+    },
+    {
+      "role": "wood-sparse",
+      "sourceFile": "wood-sparse-v1.png",
+      "sourceSha256": "e2b5ce1c80479ebe5340b4e62bc35fd78dd16ccf49be8da059c643634954ccbb",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-a41a3207-d4bb-493d-a76a-4414df77ed4d",
+      "prompt": "Use case: precise-object-edit. Asset type: isolated transparent RTS resource sprite, Hollow Lanterns. Image 1 is the HALF timber grove edit target; image 2 is its empty end-state; image 3 is its full state. Create the SPARSE stage with about 15% remaining material. Keep exactly ONE standing tree: the RIGHT tree with its existing shape and orange canopy. Remove the LEFT standing tree from image 1 and show its sawn stump in precisely that ground position; keep the already sawn rear-center stump, and keep the separate front-right pumpkin stump. Reduce the front log pile to ONE small horizontal log in the same place, leaving visibly bare open space where other logs were removed. There must be only one tree canopy total, three sawn stumps including the pumpkin stump, and one loose log. Keep the same camera, root/stump positions, ground footprint, scale and baseline as the reference. Never enlarge the remaining tree or log to fill the missing material. Warm ochre-orange foliage, violet rocks, bright harvest pumpkin marker, chunky polished faceted toy-3D material. Transparent empty space above removed trees. One sprite only, actual transparent alpha and generous margins, no scenery, ground tile, text, aura, border or watermark. Readable at 84 CSS pixels wide.",
+      "references": [
+        "wood-half-v1.png",
+        "wood-empty-v1.png",
+        "wood-full-v1.png"
+      ]
+    },
+    {
+      "role": "wood-empty",
+      "sourceFile": "wood-empty-v1.png",
+      "sourceSha256": "dad9762e851b49d980762ee817510fd7bee99fbb075a71766c68b96d501cd89e",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-0991805c-8cc9-43a8-bdd8-68d79008310e",
+      "prompt": "Use case: precise-object-edit. Create EMPTY/DEPLETED wood resource state from this exact harvest logging grove. Preserve camera, ground footprint positions of the three tree trunks, small front stump and small pumpkin lantern. All three trees have been chopped to LOW FLAT STUMPS: remove every standing trunk, branch and leafy canopy. ALL usable stacked cut logs have been hauled away, remove the whole log pile. Only four low bare stumps, sparse harmless leaf litter and small perimeter rocks remain, plus the same small pumpkin on its front stump. No collectable wood pile left. Retain exact toy3D style, purple-gray bark, warm pale cut ends, lighting and perspective. Result is dramatically lower/sparser, but it is same cleared site, not a new composition. Whole sprite with clean generous transparent margin. No haze, glow, ground tile, shadow, text, tools or new objects. Genuine fully transparent background.\n",
+      "referenceLineage": "Existing project Mythic atlas as style reference, then new Hollow Lanterns pilot sources. Exact input filenames retained in original generation receipt."
+    },
+    {
+      "role": "relic-neutral",
+      "sourceFile": "relic-neutral-v1.png",
+      "sourceSha256": "32067cb33ed3db4d04c3a4f26d506f7a50fa7c0899940e54c5729a5624d9f3a2",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-c8476ad5-b581-4fef-9082-d3830ececdc9",
+      "prompt": "Use case: stylized-concept. Asset type: one isolated transparent RTS ancient relic shrine sprite for Hollow Lanterns. Image 1 is the harvest-fantasy toy-3D style/material reference; image 2 is the existing project's atlas for role meaning and camera, not to copy its design. Invent a NEW compact harvest relic: a tall pumpkin-ribbed amber crystal lantern with a clear faceted flame-shaped core, FLOATING just above a squat octagonal violet-stone pedestal, held by three crooked ochre-bronze branch-like uprights. The uprights end below the crystal's midpoint so the core has a strong exposed pointed silhouette. A carved pumpkin face medallion is inset on the front pedestal. Round stone footing with a few attached autumn leaves, modest upper-left highlights, chunky polished bevels, toy-3D painted game asset. This is the NEUTRAL unclaimed state: central lantern stands upright, open bronze collar with a visible gap, symmetrical relaxed support arms, no flags, no shields, no faction emblems. Its state must read through open/unbound structure, not allegiance color. Camera three-quarter isometric at the same angle as the references. Full asset fits roughly 75 by 91 CSS pixels in gameplay. Genuinely transparent background, one single centered sprite with generous transparent margins. No fog or aura outside the solid object, no magic circle, no scenery, no ground tile, no words, no labels, no watermark. Preserve violet, ochre, pumpkin-orange palette; never add team blue/red ownership coloring.",
+      "references": [
+        "keep-v1.png",
+        "atlas.png"
+      ]
+    },
+    {
+      "role": "relic-contested",
+      "sourceFile": "relic-contested-v1.png",
+      "sourceSha256": "e205aa815009fec7b6ddf5a9f47afb0d568734048183c1d03ab8807dce6fdddc",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-7802bd16-291b-4b9e-9e91-329d226f2924",
+      "prompt": "Use case: precise-object-edit. Asset type: isolated transparent RTS relic-CONTESTED state, Hollow Lanterns. This image is the exact neutral shrine edit target. Keep the same octagonal violet-stone base, pumpkin medallion, stone/leaf footprint, camera, size, bronze branch supports and material. Change the upper crystal assembly into a clear CONTESTED state without team colors: split its tall amber crystal vertically into TWO large separated angular halves with a clearly visible jagged dark gap from tip to bottom; tilt the left half about 15 degrees left and the right half about 15 degrees right so the silhouette visibly forks. The two floating halves pull apart inside a broken bronze collar whose two ends open outward. Use two short hard-edged amber zigzag energy segments strictly inside the central gap, no glow cloud or aura. The outer branch arms remain attached to the same base. The result should read as unstable contested power, structurally different in silhouette and grayscale from the neutral single upright crystal. Do not destroy the pedestal or add flags, warriors, teams, skulls or text. Keep all existing palette colors and warm upper-left illumination. One complete centered toy-3D sprite, actual transparent background, generous transparent margins, no ground tile, no watermark.",
+      "references": [
+        "relic-neutral-v1.png"
+      ]
+    },
+    {
+      "role": "relic-captured",
+      "sourceFile": "relic-captured-v1.png",
+      "sourceSha256": "170f1dd792ca14142fc5beeb300f5b207427bf130abce4e11b6595ab9601d9df",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-5030b5ff-f66f-497c-89af-833a6be50cbc",
+      "prompt": "Use case: precise-object-edit. Asset type: isolated transparent RTS relic-CAPTURED state, Hollow Lanterns. This image is the exact neutral shrine edit target. Keep the identical violet octagonal pedestal, pumpkin medallion, bronze branch uprights, leaf/stone footprint, camera and overall size. Change its state to CAPTURED/CLAIMED by making the single upright amber crystal stable and seated: lower its bottom tip into the top socket so there is NO floating gap. Wrap the bronze collar fully CLOSED around its middle with a prominent square locking clasp on the front. Add TWO SHORT IVORY CLOTH PENNANTS hanging outward from the outer branch arms, one to each side, each with a simple dark hollow diamond motif (no text). Their pointed cloth silhouettes create a clear claimed-state shape even in grayscale. Pennants are small but visibly project beyond the midsection; leave the crystal's pointed upper half fully visible. These are neutral state markers, not team colors. Keep the same amber/violet/ochre colors and upper-left light; do not turn the core blue or red. No new characters, no destruction, no scenery, no fog or aura. One complete centered transparent toy-3D sprite with generous transparent margins, no ground tile, text, labels or watermark.",
+      "references": [
+        "relic-neutral-v1.png"
+      ]
+    },
+    {
+      "role": "relic-inactive",
+      "sourceFile": "relic-inactive-v1.png",
+      "sourceSha256": "7990f59ac4f26d7e35fb5073d8d67e10df8786b72437308eb3caef882a6ca9b2",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-388bc9ff-ac66-4b3c-9555-4fe704a340e8",
+      "prompt": "Use case: precise-object-edit. Asset type: isolated transparent RTS relic-INACTIVE state, Hollow Lanterns. This image is the exact neutral shrine edit target. Keep the SAME violet octagonal pedestal, pumpkin medallion, outer stone/leaf footprint, camera, size and bronze material. Clearly turn the shrine OFF using structural changes and light removal: the crystal lantern is lowered into its socket, its core becomes solid dark smoky plum stone with NO emitted amber light, and three chunky bronze shutter blades fold INWARD over its lower and middle sections. Their upper ends meet into a closed pointed protective cage around the core, unlike neutral's open outward hooks. Only the dark pointed tip remains visible through the cage. Remove all ground/socket illumination; retain ordinary upper-left material highlights. Do not merely recolor an otherwise unchanged neutral asset: make the closed protective shutter silhouette strongly legible. No flags, pennants, team symbols, chains across the base, broken rubble or additional objects. Same polished faceted toy-3D family; one complete centered sprite on genuinely transparent alpha with generous margins. No background, no aura, no text, no label, no watermark, no ground tile.",
+      "references": [
+        "relic-neutral-v1.png"
+      ]
+    },
+    {
+      "role": "camp-guarded",
+      "sourceFile": "camp-guarded-v1.png",
+      "sourceSha256": "9b7edfd79d29fbd8fb1e5e62ba4f474f09b03bdd9daf3b09754f19f26378a041",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-1a446ce6-940d-4c2f-bf96-37e21eaed075",
+      "prompt": "Use case: stylized-concept. Asset type: one isolated transparent RTS GUARDED neutral camp sprite, Hollow Lanterns harvest fantasy family. Image 1 is the approved style/material/color reference; image 2's third-row left pair establishes semantic intent: the same intact tent with sentries present or absent, not a ruined building. Invent a new small harvest camp with a single squat crooked conical VIOLET CANVAS tent, ochre scalloped trim, orange pumpkin finial with curled green stem, a wide visible open front flap and wooden center pole. Place exactly TWO small stocky pumpkin-helmet sentries with short spears at opposite sides of the front entrance. The two sentries must be clearly separate silhouettes and visually guarding the tent. Place two low ochre wooden supply crates at the left front and a small unlit stone fire ring at the right front. Compact violet-gray stone/leaf ground footprint, no large terrain tile. Tent cloth must be recognizable and clearly different from a house's masonry or tiled roof. Three-quarter isometric view, warm upper-left illumination, polished chunky faceted toy-3D shapes matching the Keep. Clear big shapes at small game size. One single sprite, actual transparent background and generous margins, no text, no labels, no watermark, no aura. No blue/red team color, no faction insignia; this is a neutral guarded camp.",
+      "references": [
+        "keep-v1.png",
+        "atlas.png"
+      ]
+    },
+    {
+      "role": "camp-cleared",
+      "sourceFile": "camp-cleared-v1.png",
+      "sourceSha256": "99f140c8bb34d4735b099e2d1bc64e98c7551dffd3041cae59309dfeddabeb02",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-91b37921-8cc4-4e40-9c67-cc67b8b05255",
+      "prompt": "Use case: precise-object-edit. Asset type: isolated transparent RTS camp-CLEARED state, Hollow Lanterns. This image is the exact guarded-camp edit target. Remove BOTH pumpkin-helmet sentries and BOTH their spears entirely; show the existing paving, tent canvas and entrance behind them. The cleared state remains the SAME INTACT TENT: preserve its violet canvas, ochre trim, pumpkin finial, open front flaps, poles, crate pair at front-left, unlit stone fire ring at front-right, tiny attached leaves, camera, scale, lighting, footprint and baseline as closely identical as possible. The empty open entrance and absent guards signal that it has been cleared. Do not collapse, ruin, burn, replace or damage the tent; do not introduce another character, flag, weapon or loot pile. One complete sprite in the same polished faceted harvest toy-3D style, actual transparent background, generous transparent margins, no environmental scene, no aura or colored halo, no text, labels or watermark.",
+      "references": [
+        "camp-guarded-v1.png"
+      ]
+    },
+    {
+      "role": "mining-cue",
+      "sourceFile": "mining-cue-v1.png",
+      "sourceSha256": "3e84be86f5d525b664e2861e7247be3c240d71658feca236caf602affc7a376a",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-7ee8aa51-5193-458f-b884-adbde2bc398f",
+      "prompt": "Use case: stylized-concept. Asset type: one isolated transparent RTS MINING WORKSITE CUE icon in the Hollow Lanterns family. Image 1 supplies violet rock, ochre wood, yellow gold and cart language; image 2 supplies family polish; image 3's mining-cue demonstrates function only. Build a small compact worksite of an ochre WOODEN MINE CART half loaded with lemon-yellow gold nuggets and a single oversized iron PICKAXE leaning diagonally across its FRONT. Pickaxe has one pointed pick end and one short flat chisel end, a clearly visible long wooden handle. Put a small pumpkin-shaped metal rivet on the cart side, two visible dark wheels, two or three violet stones below, and a tiny warm enclosed lantern beside it. This is a worksite/object icon, NOT a worker, building, portrait, battle weapon badge or a full mine. The pickaxe and cart must dominate the silhouette and be readable at small size. Same three-quarter isometric angle, toy-3D chunky beveled forms, warm upper-left illumination, autumn violet/ochre/pumpkin palette. No character, no text, no crossed-tools insignia, no scene or ground tile. One centered complete sprite with generous margins, genuinely transparent background and natural alpha edges, no halo, no watermark.",
+      "references": [
+        "gold-full-v1.png",
+        "keep-v1.png",
+        "atlas.png"
+      ]
+    },
+    {
+      "role": "chopping-cue",
+      "sourceFile": "chopping-cue-v1.png",
+      "sourceSha256": "deddc37180c1e3020e6a5c7da69568d99484b498f772e2d94d88b4b08d06d91d",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-3da61c30-a345-44ce-8341-d712527b109f",
+      "prompt": "Use case: stylized-concept. Asset type: one isolated transparent RTS CHOPPING WORKSITE CUE icon in Hollow Lanterns. Image 1 supplies harvest timber materials; image 2 supplies family polish; image 3's chopping-cue demonstrates function only. Build a compact low worksite: one broad freshly cut tree STUMP with a single oversized iron WOODCUTTER'S AXE embedded firmly in its top at a diagonal, long ochre wooden handle rising to the upper-left, clearly broad wedge-shaped silver axe blade (not a pickaxe). Place exactly THREE short cut logs beside the stump, their pale rings facing the viewer, a few angular orange leaves and two violet rocks attached around the footing. A tiny carved pumpkin sits beside the stump but is secondary. This is an object/worksite icon, NOT a worker, character, house, portrait, sword badge or full grove. Axe, stump and logs must dominate and read at small size, with no tree canopy. Same three-quarter isometric angle, polished chunky faceted toy-3D shapes, warm upper-left light, autumn violet/ochre/orange family. One complete centered sprite with generous transparent margins and actual transparent alpha. No text, crossed-tools insignia, label, aura, scenery, ground tile or watermark.",
+      "references": [
+        "wood-full-v1.png",
+        "keep-v1.png",
+        "atlas.png"
+      ]
+    },
+    {
+      "role": "swordsman",
+      "sourceFile": "swordsman-v1.png",
+      "sourceSha256": "2fceef9dd9c91d3893db2d7708c0a6d1f4156f883c48b963916b3fc1b2dc0fe9",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-8ca7f74d-c619-4dd3-8a02-72d6fcf790a2",
+      "prompt": "Use case: stylized-concept. Create ONE new transparent game sprite, a Hollow Lanterns Halloween harvest-fantasy SWORDSMAN. The attached atlas is ONLY a visual style reference for chunky polished toy-3D proportions, isometric camera, clear big shapes and warm upper-left lighting; do not copy its sprite pixels, navy armor or composition. One friendly stout human guard wears carved pumpkin-shaped burnt-orange pauldrons and breastplate over charcoal padded cloth, a small violet hood behind a visible determined human face, chunky leather boots. Holds one unmistakable short steel sword diagonally out to viewer-left and a compact round dark wooden shield to viewer-right. New costume silhouette, not a recolor of the reference knight. Three-quarter view facing southeast/viewer-right, orthographic isometric elevation about30degrees. Neutral standing ready pose, whole body and sword fully visible with generous transparent margins. Intended final actor height44px, so simplify ornament, use broad value contrast, no thin dangling detail. The sword remains a sword, no scythe or magical weapon. No ground tile, no baked ground shadow, no aura, no words, no border, no additional characters. True transparent background. Match reference quality but genuinely new harvest identity.\n",
+      "referenceLineage": "Existing project Mythic atlas as style reference, then new Hollow Lanterns pilot sources. Exact input filenames retained in original generation receipt."
+    },
+    {
+      "role": "spearman",
+      "sourceFile": "spearman-v2.png",
+      "sourceSha256": "9c588334a71df9bd9272283d519bad4c6da9a438bc7494bc96fe5f10c3b43ce7",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-d74b7fd1-350e-4e26-bb03-4c295b1728c5",
+      "prompt": "Use case: style-transfer.\nAsset type: ONE static RGBA sprite for a tiny top-down RTS unit, Hollow Lanterns harvest fantasy.\nInput image 1 is the spearman edit target. Input image 2 is the accepted swordsman STYLE AND PROPORTION reference only, not an additional subject.\nChange only the spearman's body proportions, large shapes, and surface rendering to match the reference's compact, chunky, 3.5-heads-tall stylized human toy-3D readability. The target's adult-realistic elongated anatomy must become a large expressive human head, short thick limbs, big chunky boots and hands, broad simplified torso. Keep his visible human face, copper helmet with tiny straw crest, moss-green short cape, orange jerkin, violet trousers, small angular wood buckler, and the unmistakable long straight spear with its big bright steel triangular spearhead. Keep the same three-quarter front-right orientation and calm static planted stance. Do not change spear to any other weapon. Keep the spear tall but close to the body and the person about 75 percent of total height. No sword, no second character.\nRender the full character in a near-square composition, generous clear transparent margin on every side. Same polished high-contrast hand-painted beveled sculptural finish as the swordsman reference. Keep the source costume design and harvest motifs; do not copy the swordsman's pumpkin shoulders, shield or sword. All parts fully visible. Real transparent background, no cast shadow, no painted ground, no aura, no cloud, no words, no UI, no watermark. One frame only. Final figure must read strongly when the entire sprite is 45 pixels tall.",
+      "referenceLineage": "Spearman v1 edit target and accepted Swordsman proportion reference; v1 retained."
+    },
+    {
+      "role": "archer",
+      "sourceFile": "archer-v1.png",
+      "sourceSha256": "61cc118716fc890355bd8dcce3174ff6c313c7fd3427df9294309ac04775f513",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-6b9bf2f0-4b02-45b0-82de-ddd7080a3a56",
+      "prompt": "Use case: stylized-concept.\nAsset type: ONE static transparent cutout unit sprite for Hollow Lanterns, an original Halloween harvest-fantasy RTS. Match the viewed accepted pilot's polished toy-3D, hand-painted beveled forms, warm orange lanterns, deep violet cloth, burnished brass, dark timber/leather, slightly exaggerated friendly human proportions, high three-quarter view facing screen-right. Broad readable masses and clean soft contours, rich solid color and simple material highlights; no outline sticker rim. Full subject in frame with generous transparent gutter. Actual RGBA transparency, no painted ground, no cast shadow, no backdrop or gradient, no white matte, no glow cloud. Gentle upper-left light. Single static idle pose only, no animation sheet, no multiple views, no words, logo, UI or watermark. Clear separated limbs and role equipment. Original silhouette, not recoloring or copying a reference character. Design must stay legible when the entire visible subject is roughly 45\u201359 pixels tall. Human people with visible human faces, not undead or pumpkin-headed creatures.\nSubject: human ARCHER harvest scout, a slim standing foot soldier in a short russet leather tunic and pointed moss-green felt harvest cap with a small straw tie. Short violet scarf, dark leather boots, a compact quiver over one shoulder. One large clear wooden recurve BOW held upright beside the body with the complete C-curve and light string visible, one simple arrow held low. Bare forearms and warm visible human face. Modest patched capelet only; no flowing raven mantle, no heavy armor, no elaborate commander outfit. Distinct simple troop silhouette. The bow must be unmistakable when reduced to 45px tall. No sword or crossbow.\nCritical proportion constraint: compact stylized TOY figurines, human figure only 3.5 heads tall, very large friendly expressive head, chunky hands and feet, short thick limbs, broad simplified armor/clothing, clean sculpted planes matching the viewed pilot. Not natural adult anatomical proportions, not realistic concept-art illustration. Near-square composition with full figure taking about 80 percent of canvas height.",
+      "referenceLineage": "Viewed accepted pilot art and original role semantics."
+    },
+    {
+      "role": "cavalry",
+      "sourceFile": "cavalry-v1.png",
+      "sourceSha256": "4d4763301a89a6f267a6eba59277a462135bea1aa13a1b3e1485e0bddc4352da",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-8a7eff51-bbf9-4cee-9027-b4d61df5562a",
+      "prompt": "Use case: stylized-concept.\nAsset type: ONE static transparent cutout unit sprite for Hollow Lanterns, an original Halloween harvest-fantasy RTS. Match the viewed accepted pilot's polished toy-3D, hand-painted beveled forms, warm orange lanterns, deep violet cloth, burnished brass, dark timber/leather, slightly exaggerated friendly human proportions, high three-quarter view facing screen-right. Broad readable masses and clean soft contours, rich solid color and simple material highlights; no outline sticker rim. Full subject in frame with generous transparent gutter. Actual RGBA transparency, no painted ground, no cast shadow, no backdrop or gradient, no white matte, no glow cloud. Gentle upper-left light. Single static idle pose only, no animation sheet, no multiple views, no words, logo, UI or watermark. Clear separated limbs and role equipment. Original silhouette, not recoloring or copying a reference character. Design must stay legible when the entire visible subject is roughly 45\u201359 pixels tall. Human people with visible human faces, not undead or pumpkin-headed creatures.\nSubject: one human CAVALRY RIDER seated on one living stout chestnut HORSE with four anatomically plausible legs and clear hooves. Broad horse-and-rider silhouette in three-quarter view facing screen-right. Horse wears dark plum cloth barding with a simple orange pumpkin saddle badge and brass trim, dark mane; rider has copper cuirass, violet short cape, open-faced small helmet, one short straight sword held up at a compact diagonal. Horse in calm standing pose, head and muzzle distinct. Rider and horse both fully visible, no extreme rearing, no long upright lance that shrinks the horse at 48px rendering. No floating mount, no skeleton, no extra human or horse.\nCritical proportion constraint: compact stylized TOY figurines, human figure only 3.5 heads tall, very large friendly expressive head, chunky hands and feet, short thick limbs, broad simplified armor/clothing, clean sculpted planes matching the viewed pilot. Not natural adult anatomical proportions, not realistic concept-art illustration. Near-square composition with full figure taking about 80 percent of canvas height.",
+      "referenceLineage": "Viewed accepted pilot art and original role semantics."
+    },
+    {
+      "role": "siege",
+      "sourceFile": "siege-v1.png",
+      "sourceSha256": "4ba0f8c4ed11430f5c98f983dcff169ef71f4f4182e9a80cf834a532562a96e3",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-a3c8ea39-c68e-4e6a-a549-cd836a23b0c4",
+      "prompt": "Use case: stylized-concept.\nAsset type: ONE static transparent cutout unit sprite for Hollow Lanterns, an original Halloween harvest-fantasy RTS. Match the viewed accepted pilot's polished toy-3D, hand-painted beveled forms, warm orange lanterns, deep violet cloth, burnished brass, dark timber/leather, slightly exaggerated friendly human proportions, high three-quarter view facing screen-right. Broad readable masses and clean soft contours, rich solid color and simple material highlights; no outline sticker rim. Full subject in frame with generous transparent gutter. Actual RGBA transparency, no painted ground, no cast shadow, no backdrop or gradient, no white matte, no glow cloud. Gentle upper-left light. Single static idle pose only, no animation sheet, no multiple views, no words, logo, UI or watermark. Clear separated limbs and role equipment. Original silhouette, not recoloring or copying a reference character. Design must stay legible when the entire visible subject is roughly 45\u201359 pixels tall. Human people with visible human faces, not undead or pumpkin-headed creatures.\nSubject: one compact wheeled SIEGE CATAPULT, no crew. Broad low silhouette with four thick timber wheels, exposed dark oak triangular timber frame and windlass, chunky brass fasteners, central throwing arm carrying one orange pumpkin-shaped stone in a deep cup. An ordinary clearly functional medieval siege engine with Halloween harvest craft materials, violet ties and one small hanging amber lantern. Three-quarter isometric view facing screen-right. Visible wheels and throwing arm must read as a siege machine at 44px tall. Avoid a building, wagon house, cannon barrel, monster face, excessive foliage, or scattered loose pumpkins.\nCritical proportion constraint: compact near-square chunky toy miniature; thick simple sculpted timber, big clearly separated wheels, broad smooth hand-painted forms. No realistic grain noise.",
+      "referenceLineage": "Viewed accepted pilot art and original role semantics."
+    },
+    {
+      "role": "support",
+      "sourceFile": "support-v1.png",
+      "sourceSha256": "c33915a0422dd1a341ec4ded5c6fd69e7a2859cf145847704e10b251b1be4440",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-ad3dc821-0c9c-4e36-ad48-bb09d911bb0f",
+      "prompt": "Use case: stylized-concept.\nAsset type: ONE static transparent cutout unit sprite for Hollow Lanterns, an original Halloween harvest-fantasy RTS. Match the viewed accepted pilot's polished toy-3D, hand-painted beveled forms, warm orange lanterns, deep violet cloth, burnished brass, dark timber/leather, slightly exaggerated friendly human proportions, high three-quarter view facing screen-right. Broad readable masses and clean soft contours, rich solid color and simple material highlights; no outline sticker rim. Full subject in frame with generous transparent gutter. Actual RGBA transparency, no painted ground, no cast shadow, no backdrop or gradient, no white matte, no glow cloud. Gentle upper-left light. Single static idle pose only, no animation sheet, no multiple views, no words, logo, UI or watermark. Clear separated limbs and role equipment. Original silhouette, not recoloring or copying a reference character. Design must stay legible when the entire visible subject is roughly 45\u201359 pixels tall. Human people with visible human faces, not undead or pumpkin-headed creatures.\nSubject: human SUPPORT HEALER, a calm harvest apothecary with visible kindly adult human face. Broad ivory apron over deep plum robes with split hem showing both brown boots, moss-green shoulder shawl, a round orange potion bottle at the belt. One thick crooked wooden healer staff beside the body, topped by a compact brass lantern containing a simple pale mint medical plus symbol; other hand holds a chunky mint green healing flask at chest height. Visible role cues: staff, medicine flask and light healer clothing. Soft amber glow confined inside lantern glass, no aura, no spell effects, no particles or halo. Keep staff modest so the body fills the image. No weapons, no bow, no pointed witch hat.\nCritical proportion constraint: compact stylized TOY figurines, human figure only 3.5 heads tall, very large friendly expressive head, chunky hands and feet, short thick limbs, broad simplified armor/clothing, clean sculpted planes matching the viewed pilot. Not natural adult anatomical proportions, not realistic concept-art illustration. Near-square composition with full figure taking about 80 percent of canvas height.",
+      "referenceLineage": "Viewed accepted pilot art and original role semantics."
+    },
+    {
+      "role": "warlord",
+      "sourceFile": "warlord-v1.png",
+      "sourceSha256": "23a428a21b212c22844186d534fcb4292cd2993605dc5e7db16b1b4b4fba6238",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-d3d9be10-b025-491b-816a-31343f779163",
+      "prompt": "Use case: stylized-concept.\nAsset type: ONE static transparent cutout unit sprite for Hollow Lanterns, an original Halloween harvest-fantasy RTS. Match the viewed accepted pilot's polished toy-3D, hand-painted beveled forms, warm orange lanterns, deep violet cloth, burnished brass, dark timber/leather, slightly exaggerated friendly human proportions, high three-quarter view facing screen-right. Broad readable masses and clean soft contours, rich solid color and simple material highlights; no outline sticker rim. Full subject in frame with generous transparent gutter. Actual RGBA transparency, no painted ground, no cast shadow, no backdrop or gradient, no white matte, no glow cloud. Gentle upper-left light. Single static idle pose only, no animation sheet, no multiple views, no words, logo, UI or watermark. Clear separated limbs and role equipment. Original silhouette, not recoloring or copying a reference character. Design must stay legible when the entire visible subject is roughly 45\u201359 pixels tall. Human people with visible human faces, not undead or pumpkin-headed creatures.\nSubject: human WARLORD HAMMER COMMANDER, a confident broad heavy human harvest marshal with visible bearded adult face and small angular brass crown helmet. Wears pumpkin-orange breastplate, dark plum cloak forming a compact triangular silhouette, layered dark iron and brass shoulder armor, heavy leather boots. One enormous unmistakable TWO-HANDED WAR HAMMER with a rectangular iron-and-brass head and short pumpkin-relief inset, held across the front at a low diagonal. Two hands visibly grasp the shaft; both square striking faces read. Dominant wide hammer silhouette, thick commander mass, no shield. Original design distinct from the pilot swordsman. No sword, axe, polearm, scythe, bow, or animation frames. A hammer commander first, Halloween craft theme second.\nCritical proportion constraint: compact stylized TOY figurines, human figure only 3.5 heads tall, very large friendly expressive head, chunky hands and feet, short thick limbs, broad simplified armor/clothing, clean sculpted planes matching the viewed pilot. Not natural adult anatomical proportions, not realistic concept-art illustration. Near-square composition with full figure taking about 80 percent of canvas height.",
+      "referenceLineage": "Viewed accepted pilot art and original role semantics."
+    },
+    {
+      "role": "ranger",
+      "sourceFile": "ranger-v1.png",
+      "sourceSha256": "7d8a67c7bf3c5e9288be24e4d0a69dcab02f51083c949fa673720bc105aab33d",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-0ff78e4f-615b-4754-8b31-760ffbf23cc5",
+      "prompt": "Use case: stylized-concept. ONE transparent game sprite for Hollow Lanterns harvest-fantasy Halloween: a RANGER COMMANDER. Reference1 is style/scale only, reference2 is newly authored same-family sword guard; create a distinct new bow scout, not a recolor. Match chunky polished toy-3D isometric miniatures, warm upper-left light, strong readable big shapes. A confident adult woman with auburn hair and visible face wears a charcoal raven-feather-shaped cloak with a short pointed hood, muted violet tunic, ochre leather straps and stout leather boots. Small warm amber lantern at belt, no floating glow. Holds an unmistakable curved WOODEN BOW with visible taut string, quiver of arrows over shoulder. Alert neutral pose, bow held downward and clear from body. Compact full-body proportions about3heads tall, commander meant for59px body height. Whole figure, bow, both boots fully inside generous transparent margins. Orthographic camera looking down30degrees, facing southeast/viewer-right. New raven silhouette contrasts round pumpkin swordsman, playful harvest fantasy not horror. No gun, staff, sword, wings, pet, ground tile, shadow, text, border or extra characters. True transparent background.\n",
+      "referenceLineage": "Existing project Mythic atlas as style reference, then new Hollow Lanterns pilot sources. Exact input filenames retained in original generation receipt."
+    },
+    {
+      "role": "engineer",
+      "sourceFile": "engineer-v1.png",
+      "sourceSha256": "0502e9baec8aa31a7f3092b19de335e21b68a359db8ecbac3264b41a5e0073c6",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-b3881bbe-d0de-47b0-8c80-91bf1130a7d2",
+      "prompt": "Use case: stylized-concept.\nAsset type: ONE static transparent cutout unit sprite for Hollow Lanterns, an original Halloween harvest-fantasy RTS. Match the viewed accepted pilot's polished toy-3D, hand-painted beveled forms, warm orange lanterns, deep violet cloth, burnished brass, dark timber/leather, slightly exaggerated friendly human proportions, high three-quarter view facing screen-right. Broad readable masses and clean soft contours, rich solid color and simple material highlights; no outline sticker rim. Full subject in frame with generous transparent gutter. Actual RGBA transparency, no painted ground, no cast shadow, no backdrop or gradient, no white matte, no glow cloud. Gentle upper-left light. Single static idle pose only, no animation sheet, no multiple views, no words, logo, UI or watermark. Clear separated limbs and role equipment. Original silhouette, not recoloring or copying a reference character. Design must stay legible when the entire visible subject is roughly 45\u201359 pixels tall. Human people with visible human faces, not undead or pumpkin-headed creatures.\nSubject: human ENGINEER COMMANDER, a resourceful adult harvest mechanic with visible smiling human face, auburn sideburns and round goggles resting on a close leather cap. Compact sturdy body in a tan leather workshop apron over muted violet work clothes, rolled sleeves, brown boots; square copper-and-dark-wood tool backpack with visible crank. Holds one oversized open-jaw iron WRENCH clearly silhouetted at shoulder height in one hand, the other grips a compact wood-and-brass TOOLBOX near hip. A few big chunky brass gear shapes on belt, one small orange lantern lens in backpack. Readable practical tool mechanic, distinct from the warlord and support healer at 59px tall. No weapon, no war hammer, no sword, no long staff, no oversized witch hat.\nCritical proportion constraint: compact stylized TOY figurines, human figure only 3.5 heads tall, very large friendly expressive head, chunky hands and feet, short thick limbs, broad simplified armor/clothing, clean sculpted planes matching the viewed pilot. Not natural adult anatomical proportions, not realistic concept-art illustration. Near-square composition with full figure taking about 80 percent of canvas height.",
+      "referenceLineage": "Viewed accepted pilot art and original role semantics."
+    },
+    {
+      "role": "keep",
+      "sourceFile": "keep-v1.png",
+      "sourceSha256": "b1ea159d871bb711e7cb961d51bfa90983a2e1d10074331b84fd7933d02ff4a4",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-aac2f652-4e64-4229-8dfd-3318f85d473a",
+      "prompt": "Use case: stylized-concept. ONE transparent isometric RTS KEEP building sprite for Hollow Lanterns, a playful harvest-fantasy Halloween family. Reference1 shows existing game miniature scale/render quality only; reference2 is the new family character palette/material language. Newly design a compact defensible manor fortress: broad stone base, stout crooked timber gatehouse, three clustered steep violet-slate roofs with subtly hooked peaks, squat crenellated corner turret, large unmistakable central arched gate, two amber lanterns flanking entry, restrained pumpkin carving above gate. Strong architectural silhouette distinct from round blue-roof castle reference. Warm ochre timber, charcoal masonry, violet slate, pale stone contrast. Polished chunky toy3D with broad readable planes, orthographic isometric camera elevation30degrees, front and right side visible, upper-left warm studio light. Entire coherent building centered with generous transparent margins, compact near-square footprint, no distant objects. Final gameplay height approximately90px: use large simple roof/gate shapes, not dense microdetail. Friendly Halloween without gore or terror. No ground terrain island, scenery trees, exterior shadow, text, banner lettering or other buildings. Genuine transparent background.\n",
+      "referenceLineage": "Existing project Mythic atlas as style reference, then new Hollow Lanterns pilot sources. Exact input filenames retained in original generation receipt."
+    },
+    {
+      "role": "house",
+      "sourceFile": "house-v1.png",
+      "sourceSha256": "257a989811e2ddc8fb7970e72684c32061afc4babf563cced905a4e5db106081",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-a3fbb446-c149-4b72-8ef3-9b05d1289844",
+      "prompt": "Use case: stylized-concept.\nAsset type: one original static building sprite for a small isometric fantasy RTS, Hollow Lanterns Halloween toy-3D theme.\nInput images: Image 1 is the accepted Keep STYLE REFERENCE only, for materials, camera and rendering. Image 2 is the accepted Tower STYLE REFERENCE only. Invent new purpose-specific architecture; do not copy either building shape.\nStyle: polished chunky toy-3D game illustration, clear beveled volumes, saturated rich violet hooked shingle roofs, warm crooked orange-brown timber, cool gray-lilac foundation stone, restrained brass fittings, amber lanterns and windows. Cozy eerie harvest fantasy, friendly Halloween, clean readable silhouette. Same elevated three-quarter isometric camera showing front and right faces as the references. Soft light from upper left; robust dark creases and crisp edges. Large simplified architectural masses designed to read at native sprite size.\nScene/backdrop: genuinely transparent RGBA background, isolated single complete building. No scene, terrain patch, platform or ground shadow. Every visible pixel belongs to the building or its attached/closely clustered purpose-defining props. Keep all edges and protrusions entirely inside canvas with generous transparent padding. No text, letters, watermark, UI, outline halo, external glow fog, flags or team colors. Warm illuminated windows/lantern glass may glow internally but no aura extending into the background. No people or detached characters. Square 1024x1024 canvas.\nSubject: HOUSE. A small crooked two-storey harvest cottage with one broad asymmetrical violet gable roof whose tips hook gently upward, a short stout stone chimney with no smoke, a projecting timber bay window, single friendly round-topped door, little attached front step and two amber porch lanterns. One small carved pumpkin tucked beside door. Substantial warm timber and plaster facade. Compact civilian dwelling; clearly smaller and homelier than fortress or military structures. Whole silhouette approximately 1.07 times as wide as high; no narrow tall tower. Native display width 87px, expected height about81px. Prioritize roof, bright bay window, door and chimney over tiny ornament.\nConstraints: one building only, original architecture, no palette-only reskin, preserve truealpha and all intended source pixels.",
+      "referenceLineage": "Accepted Hollow Lanterns Keep/Tower style references."
+    },
+    {
+      "role": "barracks",
+      "sourceFile": "barracks-v1.png",
+      "sourceSha256": "7fc1abdae000f78d87568723e80a151ab2975422f64fec2d81976563d3303855",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-ea9e9698-e164-42e6-acdb-ac12a0e8f065",
+      "prompt": "Use case: stylized-concept.\nAsset type: one original static building sprite for a small isometric fantasy RTS, Hollow Lanterns Halloween toy-3D theme.\nInput images: Image 1 is the accepted Keep STYLE REFERENCE only, for materials, camera and rendering. Image 2 is the accepted Tower STYLE REFERENCE only. Invent new purpose-specific architecture; do not copy either building shape.\nStyle: polished chunky toy-3D game illustration, clear beveled volumes, saturated rich violet hooked shingle roofs, warm crooked orange-brown timber, cool gray-lilac foundation stone, restrained brass fittings, amber lanterns and windows. Cozy eerie harvest fantasy, friendly Halloween, clean readable silhouette. Same elevated three-quarter isometric camera showing front and right faces as the references. Soft light from upper left; robust dark creases and crisp edges. Large simplified architectural masses designed to read at native sprite size.\nScene/backdrop: genuinely transparent RGBA background, isolated single complete building. No scene, terrain patch, platform or ground shadow. Every visible pixel belongs to the building or its attached/closely clustered purpose-defining props. Keep all edges and protrusions entirely inside canvas with generous transparent padding. No text, letters, watermark, UI, outline halo, external glow fog, flags or team colors. Warm illuminated windows/lantern glass may glow internally but no aura extending into the background. No people or detached characters. Square 1024x1024 canvas.\nSubject: BARRACKS. A squat sturdy infantry muster hall with a wide crooked violet double-gable roof, heavy timber front entrance and two short stone corner buttresses. Large crossed sheathed sword-and-shield emblem over the door, a visible orderly rack of three blunt training spears under the side awning, two amber doorway lanterns. A pumpkin medallion small and subordinate to the infantry emblem. Broad defensive mass and clear troop-training identity, no tower spire or fortress copy. Whole silhouette approximately 1.12 times as wide as high. Native display width103px, expected height92px. Make the shield and training weapons large, simple and readable.\nConstraints: one building only, original architecture, no palette-only reskin, preserve truealpha and all intended source pixels.",
+      "referenceLineage": "Accepted Hollow Lanterns Keep/Tower style references."
+    },
+    {
+      "role": "range",
+      "sourceFile": "range-v1.png",
+      "sourceSha256": "162866df92817d25f23e66948c4be24386dc5e919e84905142f483883efe3f4c",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-daba3862-596f-4ad9-87d0-c37ab49115ec",
+      "prompt": "Use case: stylized-concept.\nAsset type: one original static building sprite for a small isometric fantasy RTS, Hollow Lanterns Halloween toy-3D theme.\nInput images: Image 1 is the accepted Keep STYLE REFERENCE only, for materials, camera and rendering. Image 2 is the accepted Tower STYLE REFERENCE only. Invent new purpose-specific architecture; do not copy either building shape.\nStyle: polished chunky toy-3D game illustration, clear beveled volumes, saturated rich violet hooked shingle roofs, warm crooked orange-brown timber, cool gray-lilac foundation stone, restrained brass fittings, amber lanterns and windows. Cozy eerie harvest fantasy, friendly Halloween, clean readable silhouette. Same elevated three-quarter isometric camera showing front and right faces as the references. Soft light from upper left; robust dark creases and crisp edges. Large simplified architectural masses designed to read at native sprite size.\nScene/backdrop: genuinely transparent RGBA background, isolated single complete building. No scene, terrain patch, platform or ground shadow. Every visible pixel belongs to the building or its attached/closely clustered purpose-defining props. Keep all edges and protrusions entirely inside canvas with generous transparent padding. No text, letters, watermark, UI, outline halo, external glow fog, flags or team colors. Warm illuminated windows/lantern glass may glow internally but no aura extending into the background. No people or detached characters. Square 1024x1024 canvas.\nSubject: ARCHERY RANGE. A distinctive low open-front timber archery training pavilion with a shallow crooked violet hooked roof across the back, a stout timber rear wall, TWO LARGE circular straw archery targets mounted upright and clearly facing the viewer, one oversized simple longbow on a rack at the side and three thick arrows in a barrel. Tiny amber lanterns fixed to the beams. Compact fence rails attached to the pavilion, no expansive terrain yard. The target circles must dominate the front silhouette at103px native width. Whole silhouette approximately1.24 times as wide as high. No closed house facade, towers, people or text.\nConstraints: one building only, original architecture, no palette-only reskin, preserve truealpha and all intended source pixels.",
+      "referenceLineage": "Accepted Hollow Lanterns Keep/Tower style references."
+    },
+    {
+      "role": "stable",
+      "sourceFile": "stable-v1.png",
+      "sourceSha256": "1c3440be1f1584a78c329e8ae8ef0c15ff817e859ba28b1cfd02bbe019961a98",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-c2ed9a80-c358-4dfc-83db-f0de11aa97f6",
+      "prompt": "Use case: stylized-concept.\nAsset type: one original static building sprite for a small isometric fantasy RTS, Hollow Lanterns Halloween toy-3D theme.\nInput images: Image 1 is the accepted Keep STYLE REFERENCE only, for materials, camera and rendering. Image 2 is the accepted Tower STYLE REFERENCE only. Invent new purpose-specific architecture; do not copy either building shape.\nStyle: polished chunky toy-3D game illustration, clear beveled volumes, saturated rich violet hooked shingle roofs, warm crooked orange-brown timber, cool gray-lilac foundation stone, restrained brass fittings, amber lanterns and windows. Cozy eerie harvest fantasy, friendly Halloween, clean readable silhouette. Same elevated three-quarter isometric camera showing front and right faces as the references. Soft light from upper left; robust dark creases and crisp edges. Large simplified architectural masses designed to read at native sprite size.\nScene/backdrop: genuinely transparent RGBA background, isolated single complete building. No scene, terrain patch, platform or ground shadow. Every visible pixel belongs to the building or its attached/closely clustered purpose-defining props. Keep all edges and protrusions entirely inside canvas with generous transparent padding. No text, letters, watermark, UI, outline halo, external glow fog, flags or team colors. Warm illuminated windows/lantern glass may glow internally but no aura extending into the background. No people or detached characters. Square 1024x1024 canvas.\nSubject: STABLE. A broad harvest horse barn with a tall open stall arch under one low crooked violet hooked roof, heavy timber posts, a visible horse head peeking above a half-height stall gate, a large simple brass horseshoe emblem on the gable and two round hay bales at the side. Amber lantern mounted to the front post; small pumpkin beside a bale. The animal is integrated into the stall, no detached rider or character. Distinct wide stable silhouette, approachable toy construction. Whole silhouette approximately1.13 times as wide as high. Native width103px. Large dark stall opening, horse head and horseshoe must read clearly.\nConstraints: one building only, original architecture, no palette-only reskin, preserve truealpha and all intended source pixels.",
+      "referenceLineage": "Accepted Hollow Lanterns Keep/Tower style references."
+    },
+    {
+      "role": "workshop",
+      "sourceFile": "workshop-v1.png",
+      "sourceSha256": "cd84583e84d57d44048a43be6736a26b90830279c532e5bcce0d3e44ff4d5a98",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-472d9205-4b45-455d-8eb1-27af6649b249",
+      "prompt": "Use case: stylized-concept.\nAsset type: one original static building sprite for a small isometric fantasy RTS, Hollow Lanterns Halloween toy-3D theme.\nInput images: Image 1 is the accepted Keep STYLE REFERENCE only, for materials, camera and rendering. Image 2 is the accepted Tower STYLE REFERENCE only. Invent new purpose-specific architecture; do not copy either building shape.\nStyle: polished chunky toy-3D game illustration, clear beveled volumes, saturated rich violet hooked shingle roofs, warm crooked orange-brown timber, cool gray-lilac foundation stone, restrained brass fittings, amber lanterns and windows. Cozy eerie harvest fantasy, friendly Halloween, clean readable silhouette. Same elevated three-quarter isometric camera showing front and right faces as the references. Soft light from upper left; robust dark creases and crisp edges. Large simplified architectural masses designed to read at native sprite size.\nScene/backdrop: genuinely transparent RGBA background, isolated single complete building. No scene, terrain patch, platform or ground shadow. Every visible pixel belongs to the building or its attached/closely clustered purpose-defining props. Keep all edges and protrusions entirely inside canvas with generous transparent padding. No text, letters, watermark, UI, outline halo, external glow fog, flags or team colors. Warm illuminated windows/lantern glass may glow internally but no aura extending into the background. No people or detached characters. Square 1024x1024 canvas.\nSubject: ENGINEERING WORKSHOP. A broad timber machine shed with a sloping crooked violet hooked roof and a wide OPEN work bay. Large wooden cart wheel and big exposed brass cog fixed prominently to the front corner, a compact workbench with one oversized mallet and saw under the awning, and a small partly assembled two-wheel timber cart beside the bay. Thick roof beams, stone plinth, one amber hanging lantern, restrained small pumpkin detail. Mechanical woodcraft identity. No furnace, no smoke, no military weapons. Whole silhouette approximately1.18 times as wide as high. Native width103px. Wheel, cog and open bay should dominate; keep secondary props simple.\nConstraints: one building only, original architecture, no palette-only reskin, preserve truealpha and all intended source pixels.",
+      "referenceLineage": "Accepted Hollow Lanterns Keep/Tower style references."
+    },
+    {
+      "role": "tower",
+      "sourceFile": "tower-v1-halo-rejected.png",
+      "sourceSha256": "6f03d5bdc624e044800ed8c6ec46470c5690db46a952bf1726c3be3051e140e9",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-b9a19293-39ee-4489-87d0-56d16c7af3eb",
+      "prompt": "Use case: stylized-concept. Create ONE new transparent RTS defensive TOWER sprite matching the attached Hollow Lanterns Keep reference in materials, chunky polished toy3D style, warm upper-left light and isometric30degree orthographic camera. A narrow tall watchtower, square pale-stone base and dark timber braces, a projecting open crenellated fighting platform near top, one steep violet-slate hooked roof over rear half so defensive platform remains apparent. One small warm amber lantern by sturdy ground-level door, a restrained carved pumpkin relief above door. Strong tall narrow silhouette versus Keep's broad cluster. Whole tower centered, no roof clipping, generous transparent margin. Gameplay height90px, use simple big structural shapes, clear platform and door, no dense microdetail. Front and right faces visible. Friendly harvest-fantasy Halloween, not horror. No characters, terrain tile, exterior shadow, text, extra buildings or floating glow. True transparent background.\n",
+      "referenceLineage": "Existing project Mythic atlas as style reference, then new Hollow Lanterns pilot sources. Exact input filenames retained in original generation receipt."
+    },
+    {
+      "role": "depot",
+      "sourceFile": "depot-v1.png",
+      "sourceSha256": "3e3dfab731d4872542a492bb713647f2e04aed621daab1dfbaf97f44847954a9",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-ee5a071e-bd18-4d61-a86b-e02c944fbf9c",
+      "prompt": "Use case: stylized-concept.\nAsset type: one original static building sprite for a small isometric fantasy RTS, Hollow Lanterns Halloween toy-3D theme.\nInput images: Image 1 is the accepted Keep STYLE REFERENCE only, for materials, camera and rendering. Image 2 is the accepted Tower STYLE REFERENCE only. Invent new purpose-specific architecture; do not copy either building shape.\nStyle: polished chunky toy-3D game illustration, clear beveled volumes, saturated rich violet hooked shingle roofs, warm crooked orange-brown timber, cool gray-lilac foundation stone, restrained brass fittings, amber lanterns and windows. Cozy eerie harvest fantasy, friendly Halloween, clean readable silhouette. Same elevated three-quarter isometric camera showing front and right faces as the references. Soft light from upper left; robust dark creases and crisp edges. Large simplified architectural masses designed to read at native sprite size.\nScene/backdrop: genuinely transparent RGBA background, isolated single complete building. No scene, terrain patch, platform or ground shadow. Every visible pixel belongs to the building or its attached/closely clustered purpose-defining props. Keep all edges and protrusions entirely inside canvas with generous transparent padding. No text, letters, watermark, UI, outline halo, external glow fog, flags or team colors. Warm illuminated windows/lantern glass may glow internally but no aura extending into the background. No people or detached characters. Square 1024x1024 canvas.\nSubject: SUPPLY DEPOT. A low broad warehouse with a deep crooked violet hooked lean-to roof, open loading doorway and big clean stacks of wooden crates, two barrels and rolled tied supply bundles grouped tightly against its front and side. Large simple loading pulley beam projecting from the facade with one short hook, amber lantern attached to beam, small carved pumpkin above loading entrance. Supply-storage identity with crates forming a stepped silhouette. No machine gear, forge, weapons, wagon or shop text. Whole silhouette approximately1.19 times as wide as high. Native width103px. Broad modest roof, large crate stack and loading entrance must read clearly.\nConstraints: one building only, original architecture, no palette-only reskin, preserve truealpha and all intended source pixels.",
+      "referenceLineage": "Accepted Hollow Lanterns Keep/Tower style references."
+    },
+    {
+      "role": "blacksmith",
+      "sourceFile": "blacksmith-v1.png",
+      "sourceSha256": "2b4b146f3f1b4b0a994738f065e93ccc76a7e85c94f48c7ae0c7c42f892af87a",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-284afb8e-f8e2-4a2a-94ad-d18e02385949",
+      "prompt": "Use case: stylized-concept.\nAsset type: one original static building sprite for a small isometric fantasy RTS, Hollow Lanterns Halloween toy-3D theme.\nInput images: Image 1 is the accepted Keep STYLE REFERENCE only, for materials, camera and rendering. Image 2 is the accepted Tower STYLE REFERENCE only. Invent new purpose-specific architecture; do not copy either building shape.\nStyle: polished chunky toy-3D game illustration, clear beveled volumes, saturated rich violet hooked shingle roofs, warm crooked orange-brown timber, cool gray-lilac foundation stone, restrained brass fittings, amber lanterns and windows. Cozy eerie harvest fantasy, friendly Halloween, clean readable silhouette. Same elevated three-quarter isometric camera showing front and right faces as the references. Soft light from upper left; robust dark creases and crisp edges. Large simplified architectural masses designed to read at native sprite size.\nScene/backdrop: genuinely transparent RGBA background, isolated single complete building. No scene, terrain patch, platform or ground shadow. Every visible pixel belongs to the building or its attached/closely clustered purpose-defining props. Keep all edges and protrusions entirely inside canvas with generous transparent padding. No text, letters, watermark, UI, outline halo, external glow fog, flags or team colors. Warm illuminated windows/lantern glass may glow internally but no aura extending into the background. No people or detached characters. Square 1024x1024 canvas.\nSubject: BLACKSMITH. A compact squat timber-and-stone smithy, with an OPEN FRONT FORGE glowing amber-orange under a low crooked violet hooked roof, a broad dark iron anvil prominently outside the forge mouth, oversized forging hammer leaning on its stand and one sturdy tall bent square stone chimney with NO smoke. Stonework protects the furnace, crooked timber supports the side awning; one amber hanging lantern. Small pumpkin detail beside stone base. Forge, anvil and chimney define distinct silhouette. No cogwheel or wood cart. Whole silhouette approximately0.98 times as wide as high. Native width103px, height105px. Large clean readable tool shapes.\nConstraints: one building only, original architecture, no palette-only reskin, preserve truealpha and all intended source pixels.",
+      "referenceLineage": "Accepted Hollow Lanterns Keep/Tower style references."
+    },
+    {
+      "role": "arcane",
+      "sourceFile": "arcane-v1.png",
+      "sourceSha256": "d142d92c4fa084048cc7347fc582d0563be425138472172f73b19894a729beb3",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-e3dbf131-2d7a-438c-8655-d9d593530f14",
+      "prompt": "Use case: stylized-concept.\nAsset type: one original static building sprite for a small isometric fantasy RTS, Hollow Lanterns Halloween toy-3D theme.\nInput images: Image 1 is the accepted Keep STYLE REFERENCE only, for materials, camera and rendering. Image 2 is the accepted Tower STYLE REFERENCE only. Invent new purpose-specific architecture; do not copy either building shape.\nStyle: polished chunky toy-3D game illustration, clear beveled volumes, saturated rich violet hooked shingle roofs, warm crooked orange-brown timber, cool gray-lilac foundation stone, restrained brass fittings, amber lanterns and windows. Cozy eerie harvest fantasy, friendly Halloween, clean readable silhouette. Same elevated three-quarter isometric camera showing front and right faces as the references. Soft light from upper left; robust dark creases and crisp edges. Large simplified architectural masses designed to read at native sprite size.\nScene/backdrop: genuinely transparent RGBA background, isolated single complete building. No scene, terrain patch, platform or ground shadow. Every visible pixel belongs to the building or its attached/closely clustered purpose-defining props. Keep all edges and protrusions entirely inside canvas with generous transparent padding. No text, letters, watermark, UI, outline halo, external glow fog, flags or team colors. Warm illuminated windows/lantern glass may glow internally but no aura extending into the background. No people or detached characters. Square 1024x1024 canvas.\nSubject: ARCANE HALL (static art role only). A squat eccentric lantern witch\u2019s study with a broad octagonal timber-and-stone base, three squat hooked violet roof gables surrounding a low central faceted AMBER crystal lantern held in a dark wrought-iron crescent cage. The central glowing lantern is a solid contained architectural object, no floating magic, fog or aura. Large round amber window, small attached book-shaped door plaque without lettering, chunky brass star on door, two pumpkin footlights. Broad scholarly/magical building silhouette distinct from Keep and Tower; not tall or slender. Whole silhouette approximately1.10 times as wide as high. Native width103px. Clear big crystal lantern, violet roofs and round window.\nConstraints: one building only, original architecture, no palette-only reskin, preserve truealpha and all intended source pixels.",
+      "referenceLineage": "Accepted Hollow Lanterns Keep/Tower style references."
+    },
+    {
+      "role": "wall",
+      "sourceFile": "wall-v1.png",
+      "sourceSha256": "ccc02a9037ba8a61328f26dfb6a928045a887011512692f6a335d4e01f07f192",
+      "tool": "image_gen.imagegen",
+      "transparentBackground": true,
+      "generationId": "exec-00486672-3442-4260-8e35-b9faeb1cee9d",
+      "prompt": "Use case: stylized-concept.\nAsset type: one original static building sprite for a small isometric fantasy RTS, Hollow Lanterns Halloween toy-3D theme.\nInput images: Image 1 is the accepted Keep STYLE REFERENCE only, for materials, camera and rendering. Image 2 is the accepted Tower STYLE REFERENCE only. Invent new purpose-specific architecture; do not copy either building shape.\nStyle: polished chunky toy-3D game illustration, clear beveled volumes, saturated rich violet hooked shingle roofs, warm crooked orange-brown timber, cool gray-lilac foundation stone, restrained brass fittings, amber lanterns and windows. Cozy eerie harvest fantasy, friendly Halloween, clean readable silhouette. Same elevated three-quarter isometric camera showing front and right faces as the references. Soft light from upper left; robust dark creases and crisp edges. Large simplified architectural masses designed to read at native sprite size.\nScene/backdrop: genuinely transparent RGBA background, isolated single complete building. No scene, terrain patch, platform or ground shadow. Every visible pixel belongs to the building or its attached/closely clustered purpose-defining props. Keep all edges and protrusions entirely inside canvas with generous transparent padding. No text, letters, watermark, UI, outline halo, external glow fog, flags or team colors. Warm illuminated windows/lantern glass may glow internally but no aura extending into the background. No people or detached characters. Square 1024x1024 canvas.\nSubject: FORTIFIED WALL GATE segment (static art role only). A single compact broad low stone-and-crooked-timber defensive wall section with a heavy CLOSED arched wooden gate at center, square chunky gray-lilac crenellations along the top and two short end piers capped by small hooked violet rooflets. Wrought iron gate bands, amber lantern fixed to each side, one carved pumpkin crest above gate. No tall towers, no house roof, no banners, no people. The wall is self-contained, no connecting pieces beyond frame. Whole silhouette approximately1.22 times as wide as high. Native width103px. Read as a wall gate at a glance with large central door and crenellation silhouette.\nConstraints: one building only, original architecture, no palette-only reskin, preserve truealpha and all intended source pixels.",
+      "referenceLineage": "Accepted Hollow Lanterns Keep/Tower style references."
+    }
+  ]
+}
