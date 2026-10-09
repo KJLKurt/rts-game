@@ -1,4 +1,7 @@
 /** Original, replaceable offline score. Audio never affects simulation timing. */
+import type { VisualThemeId } from "../render/visualThemes";
+
+export type AudioTheme = VisualThemeId;
 export type AudioState =
   | "menu"
   | "exploration"
@@ -40,6 +43,10 @@ interface Track {
   buffer: AudioBuffer;
   entry: TrackEntry;
 }
+interface CachedTrack {
+  promise: Promise<Track | null>;
+  pending: boolean;
+}
 interface MusicVoice {
   state: AudioState;
   source: AudioBufferSourceNode;
@@ -61,6 +68,10 @@ const STATES: AudioState[] = [
   "victory",
   "defeat",
 ];
+const MANIFESTS: Record<AudioTheme, string> = {
+  christmas: "assets/audio/manifest.json",
+  mythic: "assets/audio/mythic/manifest.json",
+};
 const limit = (value: number, fallback: number) =>
   Number.isFinite(value) ? Math.max(0, Math.min(1, value)) : fallback;
 const isResult = (state: AudioState) =>
@@ -79,6 +90,7 @@ export class AudioDirector {
   private effectsGain: GainNode | null = null;
   private fallbackGain: GainNode | null = null;
   private state: AudioState = "menu";
+  private theme: AudioTheme = "christmas";
   private active = false;
   private timer = 0;
   private next = 0;
@@ -86,14 +98,18 @@ export class AudioDirector {
   private combatUntil = 0;
   private tensionUntil = 0;
   private request = 0;
-  private manifest: Promise<Partial<Record<AudioState, TrackEntry>>> | null =
-    null;
-  private buffers = new Map<AudioState, Promise<Track | null>>();
+  private manifests = new Map<
+    AudioTheme,
+    Promise<Partial<Record<AudioState, TrackEntry>>>
+  >();
+  // Both banks share three slots, including in-flight fetches and decodes.
+  private buffers = new Map<string, CachedTrack>();
   private voices: MusicVoice[] = [];
   private notes: NoteVoice[] = [];
   private lastEffect = new Map<SoundEffect, number>();
   private lastCombatEffect = -Infinity;
   private hasTrack = false;
+  private resultFinished = false;
 
   /** Call only from a user gesture. A blocked resume can be retried next gesture. */
   unlock() {
@@ -120,34 +136,33 @@ export class AudioDirector {
   setMaster(volume: number, muted = false) {
     this.masterVolume = limit(volume, 0.85);
     this.muted = muted;
-    this.master?.gain.setTargetAtTime(
-      muted ? 0 : this.masterVolume,
-      this.context!.currentTime,
-      0.05,
-    );
+    this.setBusVolume(this.master, muted ? 0 : this.masterVolume, 0.05);
   }
   setVolumes(music: number, sfx: number) {
     this.musicVolume = limit(music, 0.32);
     this.sfxVolume = limit(sfx, 0.65);
-    if (!this.context) return;
-    this.musicGain!.gain.setTargetAtTime(
-      this.musicVolume,
-      this.context.currentTime,
-      0.15,
-    );
-    this.effectsGain!.gain.setTargetAtTime(
-      this.sfxVolume,
-      this.context.currentTime,
-      0.05,
-    );
+    this.setBusVolume(this.musicGain, this.musicVolume, 0.15);
+    this.setBusVolume(this.effectsGain, this.sfxVolume, 0.05);
+  }
+  private setBusVolume(bus: GainNode | null, volume: number, smoothing: number) {
+    if (!bus || !this.context) return;
+    const at = this.context.currentTime;
+    if (volume === 0) {
+      // Silence must be exact, including when a dormant bus next receives a cue.
+      bus.gain.cancelScheduledValues(at);
+      bus.gain.setValueAtTime(0, at);
+    } else bus.gain.setTargetAtTime(volume, at, smoothing);
   }
   /** Arm music without creating/resuming an AudioContext; unlock only in a gesture. */
   start(state: AudioState | "peace" = "exploration") {
+    const resolved = state === "peace" ? "exploration" : state;
     if (!this.active) {
       this.active = true;
       this.hasTrack = false;
+      // Returning from blur/pagehide is not a new result announcement.
+      if (resolved !== this.state) this.resultFinished = false;
       this.combatUntil = this.tensionUntil = 0;
-      this.state = state === "peace" ? "exploration" : state;
+      this.state = resolved;
     } else this.setState(state);
     this.beginPlayback();
   }
@@ -155,7 +170,7 @@ export class AudioDirector {
     if (!this.active || !this.context || this.timer) return;
     this.resetPhrase();
     this.updateFallback();
-    void this.loadState();
+    if (!this.resultFinished) void this.loadState();
     this.timer = window.setInterval(() => this.schedule(), 120);
   }
   stop() {
@@ -173,12 +188,25 @@ export class AudioDirector {
     const resolved = state === "peace" ? "exploration" : state;
     if (resolved === this.state) return;
     this.state = resolved;
+    this.resultFinished = false;
     this.resetPhrase();
     if (!isGameplay(resolved)) this.combatUntil = this.tensionUntil = 0;
     if (this.active && this.context) void this.loadState();
   }
   getState(): AudioState {
     return this.state;
+  }
+  /** Switch only the score bank; state, combat holds and volume buses persist. */
+  setTheme(theme: AudioTheme) {
+    if (theme === this.theme) return;
+    this.theme = theme;
+    // Selecting another look after a result must not celebrate/announce it again.
+    if (isResult(this.state) && this.resultFinished) return;
+    this.resetPhrase();
+    if (this.active && this.context) void this.loadState();
+  }
+  getTheme(): AudioTheme {
+    return this.theme;
   }
   /** Combat holds for 10 seconds, then tension for 4, avoiding attack-by-attack flaps. */
   setCombat(value: number) {
@@ -202,12 +230,13 @@ export class AudioDirector {
     this.beat = 0;
     this.next = (this.context?.currentTime ?? 0) + 0.04;
   }
-  private getManifest() {
-    if (!this.manifest)
-      this.manifest = (async () => {
+  private getManifest(theme: AudioTheme) {
+    let manifest = this.manifests.get(theme);
+    if (!manifest) {
+      manifest = (async () => {
         try {
           const response = await fetch(
-            `${import.meta.env.BASE_URL}assets/audio/manifest.json`,
+            `${import.meta.env.BASE_URL}${MANIFESTS[theme]}`,
           );
           if (!response.ok) throw Error("Music manifest unavailable");
           const json = await response.json();
@@ -230,42 +259,68 @@ export class AudioDirector {
           return {};
         }
       })();
-    return this.manifest;
-  }
-  private getTrack(state: AudioState) {
-    let pending = this.buffers.get(state);
-    if (!pending) {
-      pending = (async () => {
-        const entry = (await this.getManifest())[state];
-        if (!entry || !this.context) return null;
-        for (const src of [entry.src, entry.fallback].filter(Boolean)) {
-          try {
-            const response = await fetch(`${import.meta.env.BASE_URL}${src}`);
-            if (!response.ok) continue;
-            const buffer = await this.context.decodeAudioData(
-              await response.arrayBuffer(),
-            );
-            return { buffer, entry };
-          } catch {
-            /* Try the alternate codec before using the procedural score. */
-          }
-        }
-        return null;
-      })();
-      this.buffers.set(state, pending);
+      this.manifests.set(theme, manifest);
     }
-    return pending;
+    return manifest;
+  }
+  private async decodeTrack(theme: AudioTheme, state: AudioState) {
+    const entry = (await this.getManifest(theme))[state];
+    if (!entry || !this.context) return null;
+    for (const src of [entry.src, entry.fallback].filter(Boolean)) {
+      try {
+        const response = await fetch(`${import.meta.env.BASE_URL}${src}`);
+        if (!response.ok) continue;
+        const buffer = await this.context.decodeAudioData(
+          await response.arrayBuffer(),
+        );
+        return { buffer, entry };
+      } catch {
+        /* Try the alternate codec before using the procedural score. */
+      }
+    }
+    return null;
+  }
+  private async getTrack(theme: AudioTheme, state: AudioState, request: number) {
+    const key = `${theme}:${state}`;
+    while (request === this.request && this.active && this.context) {
+      const cached = this.buffers.get(key);
+      if (cached) {
+        // Refresh recency without duplicating a pending decode.
+        this.buffers.delete(key);
+        this.buffers.set(key, cached);
+        return cached.promise;
+      }
+      if (this.buffers.size >= 3) {
+        const settled = [...this.buffers].find(([, entry]) => !entry.pending);
+        if (settled) this.buffers.delete(settled[0]);
+        else {
+          // WebAudio decodes cannot be cancelled. Keep their slots reserved;
+          // only the latest request may claim a slot once one finishes.
+          // Wait only for capacity, not a Track value retained by another race.
+          await Promise.race(
+            [...this.buffers.values()].map(entry => entry.promise.then(() => {})),
+          );
+          continue;
+        }
+      }
+      const entry: CachedTrack = {
+        pending: true,
+        promise: this.decodeTrack(theme, state).then(track => {
+          entry.pending = false;
+          return track;
+        }),
+      };
+      this.buffers.set(key, entry);
+      return entry.promise;
+    }
+    return null;
   }
   private async loadState() {
     const request = ++this.request,
-      state = this.state;
-    const track = await this.getTrack(state);
+      state = this.state,
+      theme = this.theme;
+    const track = await this.getTrack(theme, state, request);
     if (request !== this.request || !this.active || !this.context) return;
-    // Keep no more than three cached cues. Loading is demand-driven on mobile.
-    for (const key of this.buffers.keys()) {
-      if (this.buffers.size <= 3) break;
-      if (key !== state) this.buffers.delete(key);
-    }
     if (!track) {
       this.hasTrack = false;
       this.retireVoices(0.35);
@@ -296,7 +351,11 @@ export class AudioDirector {
     gain.connect(this.musicGain!);
     const voice: MusicVoice = { state, source, gain, retiring: false };
     this.voices.push(voice);
-    source.onended = () => this.removeVoice(voice, false);
+    source.onended = () => {
+      if (!voice.retiring && state === this.state && isResult(state))
+        this.finishResult();
+      this.removeVoice(voice, false);
+    };
     source.start(at);
     gain.gain.setTargetAtTime(
       limit(track.entry.volume ?? 0.7, 0.7),
@@ -315,6 +374,11 @@ export class AudioDirector {
       voice.source.stop(this.context.currentTime + time * 5);
     }
   }
+  private finishResult() {
+    this.resultFinished = true;
+    // A slow theme/state load must not start a second coda after this one ends.
+    this.request++;
+  }
   private removeVoice(voice: MusicVoice, stop = true) {
     const index = this.voices.indexOf(voice);
     if (index < 0) return;
@@ -326,7 +390,7 @@ export class AudioDirector {
   }
   private updateFallback() {
     this.fallbackGain?.gain.setTargetAtTime(
-      this.active && !this.hasTrack ? 0.18 : 0,
+      this.active && !this.hasTrack && !this.resultFinished ? 0.18 : 0,
       this.context!.currentTime,
       0.25,
     );
@@ -400,14 +464,18 @@ export class AudioDirector {
       !this.context ||
       !this.active ||
       this.context.state !== "running" ||
-      this.hasTrack
+      this.hasTrack ||
+      this.resultFinished
     )
       return;
     const ctx = this.context,
       result = isResult(this.state);
     if (this.next < ctx.currentTime) this.next = ctx.currentTime + 0.04;
     while (this.next < ctx.currentTime + 0.35) {
-      if (result && this.beat >= (this.state === "victory" ? 24 : 32)) return;
+      if (result && this.beat >= (this.state === "victory" ? 24 : 32)) {
+        this.finishResult();
+        return;
+      }
       const minor =
         this.state === "tension" ||
         this.state === "combat" ||
