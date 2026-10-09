@@ -20,6 +20,8 @@ jobs:
     timeout-minutes: 25
     env:
       FRONTIER_TEST_WORKERS: "2"
+      FRONTIER_PREVIOUS_DIST: .qa-previous/dist
+      FRONTIER_EXPECT_BUILD_ID: fc-7592049128ac
     steps:
       - name: Check out the acceptance checkpoint
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -32,17 +34,38 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci --no-audit --no-fund
+      - name: Check out the exact current live rollback for upgrade acceptance
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: b8029a43e7a21e06b381bfd190689242798fd4a3
+          path: .qa-previous
+          persist-credentials: false
+      - name: Build and verify the exact previous live runtime
+        run: |
+          ln -s ../node_modules .qa-previous/node_modules
+          npm --prefix .qa-previous run build
+          node .qa-verify-previous.mjs
       - name: Install official Playwright Chromium
         run: npx playwright install --with-deps chromium
-      - name: Exercise the production PWA on desktop and touch viewports
-        run: npm run test:browser
+      - name: Exercise the complete Space theme and soundtrack
+        run: npx playwright test --config playwright-space-qa.config.ts
+      - name: Sequentially verify the exact previous-live cache upgrade
+        run: npx playwright test --config playwright-space-upgrade.config.ts
       - name: Preserve browser results and failure evidence
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: frontier-browser-acceptance-${{ github.sha }}
           path: |
-            playwright-report/
-            test-results/**/*.png
-            test-results/**/error-context.md
+            space-identity-ledger.json
+            space-upgrade-identity-ledger.json
+            previous-live-dist-proof.json
+            space-report/
+            space-upgrade-report/
+            test-results-space/**/*.png
+            test-results-space/**/error-context.md
+            test-results-space-upgrade/**/*.png
+            test-results-space-upgrade/**/*.json
+            test-results-space-upgrade/**/error-context.md
           retention-days: 2
+

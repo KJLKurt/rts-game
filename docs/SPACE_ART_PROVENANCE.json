@@ -1,0 +1,999 @@
+{
+  "theme": "space",
+  "style": "toy-3d",
+  "scope": "36 separately authored static roles. 19 recovered originals and17 new replacements; no directional animation claim.",
+  "frames": [
+    {
+      "id": "gold-full",
+      "source": "rebuilt-space/resources/originals/gold-full-new-v1.original.png",
+      "sha256": "e1ca21acd3585788bf0aea3161779107716eeb08537a20325d28a2b43cc4c4bc",
+      "bounds": [
+        30,
+        142,
+        1225,
+        1111
+      ],
+      "frame_bounds": [
+        30,
+        142,
+        1225,
+        1111
+      ],
+      "ground": [
+        627,
+        980.46
+      ],
+      "provenance": "FRESH REPLACEMENT"
+    },
+    {
+      "id": "gold-half",
+      "source": "recovered-space/resources/originals/gold-half.original.png",
+      "sha256": "3869d5afdded1f85defaae4adad02e5008d372c7c390dbbb689a4259de0ffb71",
+      "bounds": [
+        31,
+        145,
+        1223,
+        1109
+      ],
+      "frame_bounds": [
+        30,
+        142,
+        1225,
+        1111
+      ],
+      "ground": [
+        627,
+        980.46
+      ],
+      "provenance": "EXACT RECOVERED ORIGINAL"
+    },
+    {
+      "id": "gold-sparse",
+      "source": "recovered-space/resources/originals/gold-sparse.original.png",
+      "sha256": "518a1ffef9b0308f90dc448bc06ad62ae9cbf16ce7c1fb21c14cba738cabfd86",
+      "bounds": [
+        32,
+        143,
+        1222,
+        1108
+      ],
+      "frame_bounds": [
+        30,
+        142,
+        1225,
+        1111
+      ],
+      "ground": [
+        627,
+        980.46
+      ],
+      "provenance": "EXACT RECOVERED ORIGINAL"
+    },
+    {
+      "id": "gold-empty",
+      "source": "rebuilt-space/resources/originals/gold-empty-new-v1.original.png",
+      "sha256": "118f10bf1715b6954c5c47355dce036c8028964b888b3c5fcbadc50c39a1db2b",
+      "bounds": [
+        31,
+        143,
+        1224,
+        1110
+      ],
+      "frame_bounds": [
+        30,
+        142,
+        1225,
+        1111
+      ],
+      "ground": [
+        627,
+        980.46
+      ],
+      "provenance": "FRESH REPLACEMENT"
+    },
+    {
+      "id": "wood-full",
+      "source": "rebuilt-space/resources/originals/wood-full-new-v1.original.png",
+      "sha256": "1c7e7383dc04fc816b9e9b435ada38b49a4db2bb484d9a5f9df5fa11b5b036fe",
+      "bounds": [
+        79,
+        100,
+        1302,
+        1082
+      ],
+      "frame_bounds": [
+        78,
+        100,
+        1302,
+        1082
+      ],
+      "ground": [
+        738,
+        940.98
+      ],
+      "provenance": "FRESH REPLACEMENT",
+      "packing_canvas": [
+        1374,
+        1145
+      ]
+    },
+    {
+      "id": "wood-half",
+      "source": "recovered-space/resources/originals/wood-half.original.png",
+      "sha256": "4bf0e9fccba06174db5be2103b16b3df38a52e67e22c2121c6d60cfaad6eac63",
+      "bounds": [
+        78,
+        294,
+        1301,
+        1081
+      ],
+      "frame_bounds": [
+        78,
+        100,
+        1302,
+        1082
+      ],
+      "ground": [
+        738,
+        940.98
+      ],
+      "provenance": "EXACT PAYLOAD RECOVERY",
+      "packing_canvas": [
+        1374,
+        1145
+      ]
+    },
+    {
+      "id": "wood-sparse",
+      "source": "recovered-space/resources/originals/wood-sparse.original.png",
+      "sha256": "36b9b6ff04a9603067690156dc3ad3b2a1f2bef0109c85ca3d074cbb90ea2da5",
+      "bounds": [
+        220,
+        526,
+        1301,
+        1081
+      ],
+      "frame_bounds": [
+        78,
+        100,
+        1302,
+        1082
+      ],
+      "ground": [
+        738,
+        940.98
+      ],
+      "provenance": "EXACT PAYLOAD RECOVERY",
+      "packing_canvas": [
+        1374,
+        1145
+      ]
+    },
+    {
+      "id": "wood-empty",
+      "source": "rebuilt-space/resources/originals/wood-empty-new-v2.original.png",
+      "sha256": "269ea99d2f8037516d805b55ee1cf27f32c3f637f7af1a1d3adfe91813dc7e7e",
+      "bounds": [
+        220,
+        562,
+        1266,
+        1082
+      ],
+      "frame_bounds": [
+        78,
+        100,
+        1302,
+        1082
+      ],
+      "ground": [
+        738,
+        940.98
+      ],
+      "provenance": "FRESH REPLACEMENT",
+      "packing_canvas": [
+        1374,
+        1145
+      ]
+    },
+    {
+      "id": "relic-neutral",
+      "source": "recovered-space/resources/originals/relic-neutral.original.png",
+      "sha256": "4b81c6bcfa9e3824bc24214b7c2c3d3b00b8bbd2f2720f3bc4f10ae118908ec4",
+      "bounds": [
+        92,
+        21,
+        1148,
+        1230
+      ],
+      "ground": [
+        620,
+        1090
+      ],
+      "provenance": "EXACT PAYLOAD RECOVERY",
+      "frame_bounds": [
+        91,
+        9,
+        1150,
+        1233
+      ]
+    },
+    {
+      "id": "relic-contested",
+      "source": "recovered-space/resources/originals/relic-contested.original.png",
+      "sha256": "f5a34a440aedf9d2d393727c9170125be6138a38124248d7a06ad19f398519d1",
+      "bounds": [
+        91,
+        29,
+        1150,
+        1233
+      ],
+      "ground": [
+        620,
+        1090
+      ],
+      "provenance": "EXACT PAYLOAD RECOVERY",
+      "frame_bounds": [
+        91,
+        9,
+        1150,
+        1233
+      ]
+    },
+    {
+      "id": "relic-captured",
+      "source": "recovered-space/resources/originals/relic-captured.original.png",
+      "sha256": "4d8a6fb066b935a7cfa46ee5673ffb801a9553862f80c10ebeb72de9f060f6c6",
+      "bounds": [
+        92,
+        9,
+        1147,
+        1231
+      ],
+      "ground": [
+        620,
+        1090
+      ],
+      "provenance": "EXACT PAYLOAD RECOVERY",
+      "frame_bounds": [
+        91,
+        9,
+        1150,
+        1233
+      ]
+    },
+    {
+      "id": "relic-inactive",
+      "source": "recovered-space/resources/originals/relic-inactive.original.png",
+      "sha256": "512aed079c4a4549692beb20c7cdb43007749c38da6e3ef07febcb12407c79b8",
+      "bounds": [
+        91,
+        394,
+        1150,
+        1231
+      ],
+      "ground": [
+        620,
+        1090
+      ],
+      "provenance": "EXACT PAYLOAD RECOVERY",
+      "frame_bounds": [
+        91,
+        9,
+        1150,
+        1233
+      ]
+    },
+    {
+      "id": "camp-guarded",
+      "source": "recovered-space/resources/originals/camp-guarded.original.png",
+      "sha256": "e10dd9f9eb774fcd24fa7c930f674105ce6b38010dd1c4d3b14e7768704b95ba",
+      "bounds": [
+        179,
+        125,
+        1320,
+        847
+      ],
+      "ground": [
+        748,
+        759
+      ],
+      "provenance": "EXACT PAYLOAD RECOVERY"
+    },
+    {
+      "id": "camp-cleared",
+      "source": "recovered-space/resources/originals/camp-cleared.original.png",
+      "sha256": "8d7f7199bfe0022d780c8ec259dbb29d2399cb442c684b2344db75948c5fd1e5",
+      "bounds": [
+        74,
+        56,
+        1429,
+        914
+      ],
+      "ground": [
+        748.3493414877712,
+        809.8170720592842
+      ],
+      "provenance": "EXACT PAYLOAD RECOVERY"
+    },
+    {
+      "id": "mining-cue",
+      "source": "recovered-space/resources/originals/mining-cue.original.png",
+      "sha256": "5a6324ef39daee099872175f8e857b962be01db499d9f7a682f0093b3093563c",
+      "bounds": [
+        209,
+        145,
+        1151,
+        1091
+      ],
+      "ground": [
+        680.0,
+        968.02
+      ],
+      "provenance": "EXACT PAYLOAD RECOVERY"
+    },
+    {
+      "id": "chopping-cue",
+      "source": "recovered-space/resources/originals/chopping-cue.original.png",
+      "sha256": "905d8f6fd1344a90bc4e990a519861f60b75acedebffe17c9afe283f6ebfe5e5",
+      "bounds": [
+        286,
+        99,
+        1252,
+        1091
+      ],
+      "ground": [
+        769.0,
+        962.04
+      ],
+      "provenance": "EXACT PAYLOAD RECOVERY"
+    },
+    {
+      "id": "swordsman",
+      "source": "rebuilt-space/actors/swordsman-rebuilt-v1.png",
+      "sha256": "397e5a558323273d7a1173d1aeace999ed7a095244650d3fe17df186f169feb7",
+      "bounds": [
+        91,
+        162,
+        1114,
+        1126
+      ],
+      "ground": [
+        635.1523148148149,
+        1055.5
+      ],
+      "provenance": "FRESH REPLACEMENT"
+    },
+    {
+      "id": "spearman",
+      "source": "recovered-space/actors/spearman-v1.png",
+      "sha256": "f5bb2ebd0d86825dc7faabb95f7b941baf7c297fddcf1737313bb0cab9814554",
+      "bounds": [
+        357,
+        95,
+        1125,
+        1125
+      ],
+      "ground": [
+        649.2898561077661,
+        1074.5
+      ],
+      "provenance": "EXACT RECOVERED ORIGINAL"
+    },
+    {
+      "id": "archer",
+      "source": "recovered-space/actors/archer-v1.png",
+      "sha256": "e3e40a935a2f3cdef9d83b121d141d640006f1c5ddf40927ae4ed8fbe2d4b662",
+      "bounds": [
+        336,
+        217,
+        1065,
+        1052
+      ],
+      "ground": [
+        618.5712837837838,
+        1012.0
+      ],
+      "provenance": "EXACT RECOVERED ORIGINAL"
+    },
+    {
+      "id": "cavalry",
+      "source": "recovered-space/actors/cavalry-v1.png",
+      "sha256": "7aed2a8f13dff58c183bd718d1964810e477d81ad0c40bdd76f9acfe9d000851",
+      "bounds": [
+        264,
+        83,
+        1009,
+        1172
+      ],
+      "ground": [
+        663.4337627964987,
+        1047.5
+      ],
+      "provenance": "EXACT RECOVERED ORIGINAL"
+    },
+    {
+      "id": "siege",
+      "source": "recovered-space/actors/siege-v1.png",
+      "sha256": "a994edcc9decd69a45bbb8b9249c1bcf084ac2d4bdc066e0ec9a7b27197f3d58",
+      "bounds": [
+        164,
+        146,
+        1142,
+        1061
+      ],
+      "ground": [
+        646.3931034482758,
+        899.0
+      ],
+      "provenance": "EXACT RECOVERED ORIGINAL"
+    },
+    {
+      "id": "support",
+      "source": "recovered-space/actors/support-v1.png",
+      "sha256": "bff35883536881243af497840c63b4a47ce2b4859d1fdec51b4ea3fa43ebf64f",
+      "bounds": [
+        261,
+        131,
+        979,
+        1086
+      ],
+      "ground": [
+        658.7806656904709,
+        1043.0
+      ],
+      "provenance": "EXACT RECOVERED ORIGINAL"
+    },
+    {
+      "id": "warlord",
+      "source": "recovered-space/actors/warlord-v1.png",
+      "sha256": "3032b79927c061cdc8efb0aa40394fad5b564b797e98aee315ee0a3d15a54953",
+      "bounds": [
+        272,
+        174,
+        1055,
+        1099
+      ],
+      "ground": [
+        572.1774425287356,
+        1042.5
+      ],
+      "provenance": "EXACT RECOVERED ORIGINAL"
+    },
+    {
+      "id": "ranger",
+      "source": "rebuilt-space/actors/ranger-rebuilt-v1.png",
+      "sha256": "e7784205957506107820c61ac9947056c2b5aced83cc54757dacefb3285a7142",
+      "bounds": [
+        220,
+        72,
+        1088,
+        1182
+      ],
+      "ground": [
+        574.2743643249091,
+        1146.5
+      ],
+      "provenance": "FRESH REPLACEMENT"
+    },
+    {
+      "id": "engineer",
+      "source": "recovered-space/actors/engineer-v1.png",
+      "sha256": "4a1c8395a16993d7cd2943e3e476447f69447acb55d162d497427b9439435265",
+      "bounds": [
+        358,
+        134,
+        1008,
+        1132
+      ],
+      "ground": [
+        643.4723545873989,
+        1080.5
+      ],
+      "provenance": "EXACT RECOVERED ORIGINAL"
+    },
+    {
+      "id": "keep",
+      "source": "rebuilt-space/buildings/originals/keep-new-v3.original.png",
+      "sha256": "5861e0180267ce75f4aed4f0d865aa9071b270d74e05255ace45c9c4b9b556e5",
+      "bounds": [
+        36,
+        81,
+        1406,
+        1057
+      ],
+      "ground": [
+        720,
+        955
+      ],
+      "ground_method": "SEMANTIC INFERENCE, manually estimated projected foundation center; not measured engine ground contact.",
+      "provenance": "FRESH REPLACEMENT v3",
+      "frame_bounds": [
+        32,
+        77,
+        1410,
+        1061
+      ]
+    },
+    {
+      "id": "house",
+      "source": "rebuilt-space/buildings-civic/originals/house-new-v1.original.png",
+      "sha256": "d5cb475d82293cae062ea4b1f452b332701a92e3953ec73d1dbacbd94aad1b19",
+      "bounds": [
+        270,
+        134,
+        1114,
+        974
+      ],
+      "frame_bounds": [
+        266,
+        127,
+        1119,
+        978
+      ],
+      "ground": [
+        699,
+        880
+      ],
+      "ground_method": "SEMANTIC INFERENCE, manually estimated projected foundation center; not measured engine contact and not chosen to force bar clearance. Center inferred behind the lowest front rib foot and between the two outer side-foot contacts. The frontmost source contact is near y970 and side feet near y800.",
+      "provenance": "NEW ORIGINAL REPLACEMENT"
+    },
+    {
+      "id": "barracks",
+      "source": "rebuilt-space/buildings-civic/originals/barracks-new-v1.original.png",
+      "sha256": "f75bacebd9917799ee0477670154b28aa39f7638aa88fa5ccc397ba654728f4e",
+      "bounds": [
+        99,
+        133,
+        1333,
+        972
+      ],
+      "frame_bounds": [
+        96,
+        128,
+        1338,
+        978
+      ],
+      "ground": [
+        714,
+        830
+      ],
+      "ground_method": "SEMANTIC INFERENCE, manually estimated projected foundation center; not measured engine contact and not chosen to force bar clearance. Center inferred from the twin-hall foundation: rear-left side footing near y710, nearest left-front footing near y968, right-front feet near y835. Rack is equipment, not an anchor.",
+      "provenance": "NEW ORIGINAL REPLACEMENT"
+    },
+    {
+      "id": "range",
+      "source": "rebuilt-space/buildings-civic/originals/range-new-v2.original.png",
+      "sha256": "e2b35756a791da5e44601fedf308a20f3c45caae49fd2812e10e7aa09935a331",
+      "bounds": [
+        183,
+        142,
+        1215,
+        1094
+      ],
+      "frame_bounds": [
+        179,
+        138,
+        1220,
+        1099
+      ],
+      "ground": [
+        710,
+        920
+      ],
+      "ground_method": "SEMANTIC INFERENCE, manually estimated projected foundation center; not measured engine contact and not chosen to force bar clearance. Center inferred inside the foundation footprint bounded by left-rear foot near y835, near-front arch foot near y1088 and far-front arch foot near y907; target stand and bow rack do not determine anchor.",
+      "provenance": "NEW ORIGINAL REPLACEMENT"
+    },
+    {
+      "id": "stable",
+      "source": "rebuilt-space/buildings-production/originals/stable-new-v2.original.png",
+      "portable_source": "originals/stable-new-v2.original.png",
+      "classification": "NEW replacement; never exact restoration",
+      "sha256": "751322180b5673d960a6a30070e0b9bb70600e44cd94791d7da1f07e3e45fb3c",
+      "source_size": [
+        1470,
+        1070
+      ],
+      "mode": "RGBA",
+      "bounds": [
+        152,
+        92,
+        1353,
+        1020
+      ],
+      "alpha2_bounds": [
+        150,
+        90,
+        1355,
+        1023
+      ],
+      "alpha1_bounds": [
+        0,
+        19,
+        1422,
+        1023
+      ],
+      "alpha128_bounds": [
+        153,
+        93,
+        1353,
+        1020
+      ],
+      "frame_bounds": [
+        148,
+        88,
+        1357,
+        1025
+      ],
+      "ground": [
+        772,
+        915
+      ],
+      "ground_method": "SEMANTIC INFERENCE of projected structural foundation center, manually estimated behind front foundation feet/thresholds; not an engine-measured contact point. Requires packed/runtime review.",
+      "ground_role_note": "Two ordinary horse heads above wooden stall doors and a visible hay rack. Inferred foundation center behind the foreground navy foot, between the stall sill and the side foundation.",
+      "display_width": 103,
+      "scale": 0.08519437551695616,
+      "native_frame_height": 79.82712985938792,
+      "native_alpha16_body_height": 79.06038047973531,
+      "native_alpha16_body_width": 102.31844499586435,
+      "native_alpha16_top": -70.11497105045493,
+      "native_alpha16_bottom": 8.945409429280398,
+      "anchorX": 0.5161290322580645,
+      "anchorY": 0.8826040554962646,
+      "health_y": -98,
+      "health_width": 57,
+      "health_height": 3,
+      "health_outer_box": [
+        -29.5,
+        -99,
+        29.5,
+        -94
+      ],
+      "queue_y": -91,
+      "queue_width": 57,
+      "queue_height": 2.5,
+      "queue_outer_box": [
+        -29.5,
+        -92,
+        29.5,
+        -87.5
+      ],
+      "health_gap_to_alpha16_top": 23.885028949545074,
+      "queue_gap_to_alpha16_top": 17.385028949545074,
+      "body_height_75_to_90_pass": true,
+      "health_clear": true,
+      "queue_clear": true,
+      "meaningful_source_margins": [
+        152,
+        92,
+        117,
+        50
+      ],
+      "meaningful_content_hits_edge": false,
+      "edge_alpha_max": 1,
+      "alpha0_pixels": 820833,
+      "alpha255_pixels": 980,
+      "alpha1_pixels": 4805,
+      "alpha_outside_frame_max": 1,
+      "true_rgba": true,
+      "source_unmodified": true,
+      "selected_version": 2,
+      "correction_reason": "v1 architecture produced only 65\u201367px native height and excessively loose fixed HUD attachment; one built-in edit added real wall/roof height without source warping.",
+      "review": "Recommended as source candidate. Distinct readable role identity and intact silhouette; no visible external floor, cast shadow, haze or halo. Offline overlay proof only, not runtime acceptance.",
+      "native_raster_alpha16_top": -71,
+      "native_raster_alpha16_bottom": 9,
+      "native_raster_health_gap": 23,
+      "native_raster_queue_gap": 16.5,
+      "provenance": "NEW ORIGINAL REPLACEMENT v2; v1 retained"
+    },
+    {
+      "id": "workshop",
+      "source": "rebuilt-space/buildings-production/originals/workshop-new-v2.original.png",
+      "portable_source": "originals/workshop-new-v2.original.png",
+      "classification": "NEW replacement; never exact restoration",
+      "sha256": "d33a94ce838b03f4029a9e6bddfa443bbe3b48e2fd66a8d2429b78495d1c8f14",
+      "source_size": [
+        1470,
+        1070
+      ],
+      "mode": "RGBA",
+      "bounds": [
+        90,
+        21,
+        1423,
+        1040
+      ],
+      "alpha2_bounds": [
+        88,
+        19,
+        1425,
+        1042
+      ],
+      "alpha1_bounds": [
+        0,
+        18,
+        1450,
+        1052
+      ],
+      "alpha128_bounds": [
+        91,
+        21,
+        1422,
+        1039
+      ],
+      "frame_bounds": [
+        86,
+        17,
+        1427,
+        1044
+      ],
+      "ground": [
+        787,
+        928
+      ],
+      "ground_method": "SEMANTIC INFERENCE of projected structural foundation center, manually estimated behind front foundation feet/thresholds; not an engine-measured contact point. Requires packed/runtime review.",
+      "ground_role_note": "Open carpentry bay, wooden wheels, workbench, mallet, handsaw and physical catapult under construction. Inferred foundation center behind the foremost navy corner foot, through the front bench feet.",
+      "display_width": 103,
+      "scale": 0.07680835197613721,
+      "native_frame_height": 78.88217747949291,
+      "native_alpha16_body_height": 78.26771066368381,
+      "native_alpha16_body_width": 102.3855331841909,
+      "native_alpha16_top": -69.66517524235645,
+      "native_alpha16_bottom": 8.602535421327367,
+      "anchorX": 0.522744220730798,
+      "anchorY": 0.887049659201558,
+      "health_y": -98,
+      "health_width": 57,
+      "health_height": 3,
+      "health_outer_box": [
+        -29.5,
+        -99,
+        29.5,
+        -94
+      ],
+      "queue_y": -91,
+      "queue_width": 57,
+      "queue_height": 2.5,
+      "queue_outer_box": [
+        -29.5,
+        -92,
+        29.5,
+        -87.5
+      ],
+      "health_gap_to_alpha16_top": 24.334824757643545,
+      "queue_gap_to_alpha16_top": 17.834824757643545,
+      "body_height_75_to_90_pass": true,
+      "health_clear": true,
+      "queue_clear": true,
+      "meaningful_source_margins": [
+        90,
+        21,
+        47,
+        30
+      ],
+      "meaningful_content_hits_edge": false,
+      "edge_alpha_max": 1,
+      "alpha0_pixels": 722295,
+      "alpha255_pixels": 851,
+      "alpha1_pixels": 5402,
+      "alpha_outside_frame_max": 1,
+      "true_rgba": true,
+      "source_unmodified": true,
+      "selected_version": 2,
+      "correction_reason": "v1 architecture produced only 65\u201367px native height and excessively loose fixed HUD attachment; one built-in edit added real wall/roof height without source warping.",
+      "review": "Recommended as source candidate. Distinct readable role identity and intact silhouette; no visible external floor, cast shadow, haze or halo. Offline overlay proof only, not runtime acceptance.",
+      "native_raster_alpha16_top": -70,
+      "native_raster_alpha16_bottom": 9,
+      "native_raster_health_gap": 24,
+      "native_raster_queue_gap": 17.5,
+      "provenance": "NEW ORIGINAL REPLACEMENT v2; v1 retained"
+    },
+    {
+      "id": "tower",
+      "source": "rebuilt-space/buildings/originals/tower-new-v2.original.png",
+      "sha256": "f9f97bfac29a2290f6aaf25db433451193441dee6ef44758b7b466b781c50f77",
+      "bounds": [
+        162,
+        322,
+        904,
+        1285
+      ],
+      "ground": [
+        534,
+        1162
+      ],
+      "ground_method": "SEMANTIC INFERENCE, manually estimated projected foundation center; not measured engine ground contact.",
+      "provenance": "FRESH REPLACEMENT",
+      "frame_bounds": [
+        158,
+        318,
+        908,
+        1290
+      ]
+    },
+    {
+      "id": "depot",
+      "source": "rebuilt-space/buildings-production/originals/depot-new-v2.original.png",
+      "portable_source": "originals/depot-new-v2.original.png",
+      "classification": "NEW replacement; never exact restoration",
+      "sha256": "83bc52aa0c30c28af8516f32c1a1bcf204a12ae754bfef49f5da5833e22ef40c",
+      "source_size": [
+        1469,
+        1071
+      ],
+      "mode": "RGBA",
+      "bounds": [
+        78,
+        35,
+        1396,
+        1015
+      ],
+      "alpha2_bounds": [
+        76,
+        33,
+        1400,
+        1018
+      ],
+      "alpha1_bounds": [
+        0,
+        32,
+        1403,
+        1071
+      ],
+      "alpha128_bounds": [
+        79,
+        36,
+        1395,
+        1015
+      ],
+      "frame_bounds": [
+        74,
+        31,
+        1402,
+        1020
+      ],
+      "ground": [
+        774,
+        915
+      ],
+      "ground_method": "SEMANTIC INFERENCE of projected structural foundation center, manually estimated behind front foundation feet/thresholds; not an engine-measured contact point. Requires packed/runtime review.",
+      "ground_role_note": "Open crate/gold storehouse plus sheltered cut logs. Inferred foundation center behind the open doorway threshold and foreground supply crates, within the main structural footprint.",
+      "display_width": 103,
+      "scale": 0.07756024096385543,
+      "native_frame_height": 76.70707831325302,
+      "native_alpha16_body_height": 76.00903614457832,
+      "native_alpha16_body_width": 102.22439759036145,
+      "native_alpha16_top": -68.25301204819277,
+      "native_alpha16_bottom": 7.756024096385543,
+      "anchorX": 0.5271084337349398,
+      "anchorY": 0.8938321536905965,
+      "health_y": -98,
+      "health_width": 57,
+      "health_height": 3,
+      "health_outer_box": [
+        -29.5,
+        -99,
+        29.5,
+        -94
+      ],
+      "queue_y": -91,
+      "queue_width": 57,
+      "queue_height": 2.5,
+      "queue_outer_box": [
+        -29.5,
+        -92,
+        29.5,
+        -87.5
+      ],
+      "health_gap_to_alpha16_top": 25.746987951807228,
+      "queue_gap_to_alpha16_top": 19.246987951807228,
+      "body_height_75_to_90_pass": true,
+      "health_clear": true,
+      "queue_clear": true,
+      "meaningful_source_margins": [
+        78,
+        35,
+        73,
+        56
+      ],
+      "meaningful_content_hits_edge": false,
+      "edge_alpha_max": 1,
+      "alpha0_pixels": 749550,
+      "alpha255_pixels": 708,
+      "alpha1_pixels": 5349,
+      "alpha_outside_frame_max": 1,
+      "true_rgba": true,
+      "source_unmodified": true,
+      "selected_version": 2,
+      "correction_reason": "v1 architecture produced only 65\u201367px native height and excessively loose fixed HUD attachment; one built-in edit added real wall/roof height without source warping.",
+      "review": "Recommended as source candidate. Distinct readable role identity and intact silhouette; no visible external floor, cast shadow, haze or halo. Offline overlay proof only, not runtime acceptance.",
+      "native_raster_alpha16_top": -69,
+      "native_raster_alpha16_bottom": 8,
+      "native_raster_health_gap": 25,
+      "native_raster_queue_gap": 18.5,
+      "provenance": "NEW ORIGINAL REPLACEMENT v2; v1 retained"
+    },
+    {
+      "id": "blacksmith",
+      "source": "rebuilt-space/buildings-special/originals/blacksmith-new-v1.original.png",
+      "sha256": "6cc8224a704d1b27f76aa1f0f91f478735126d8fa20bf7088e0afb39cf501814",
+      "bounds": [
+        127,
+        27,
+        1340,
+        1028
+      ],
+      "frame_bounds": [
+        123,
+        23,
+        1343,
+        1032
+      ],
+      "ground": [
+        728,
+        865
+      ],
+      "ground_method": "Manually inferred projected center of the structural foundation footprint, from rear/side and front foundation feet. The prominent front anvil is architecture-attached; its lowest edge does not alone define ground center. Not adjusted to satisfy HUD.",
+      "provenance": "NEW ORIGINAL REPLACEMENT"
+    },
+    {
+      "id": "arcane",
+      "source": "rebuilt-space/buildings-special/originals/arcane-new-v1.original.png",
+      "sha256": "abe9ee99a0435d757dfba8e895bf537089b99c53e255641b74a6f8b427b9c5c2",
+      "bounds": [
+        155,
+        59,
+        1271,
+        1052
+      ],
+      "frame_bounds": [
+        151,
+        55,
+        1276,
+        1056
+      ],
+      "ground": [
+        715,
+        905
+      ],
+      "ground_method": "Manually inferred center of the oval architectural footprint from broad footing contacts. The forward doorstep is a projection, not the center. Not a engine-measured pivot.",
+      "provenance": "NEW ORIGINAL REPLACEMENT"
+    },
+    {
+      "id": "wall",
+      "source": "rebuilt-space/buildings-special/originals/wall-new-v1.original.png",
+      "sha256": "abfb01e408a1e318ee173e76bc5ab839b70c2ba0cd75f2dba07f09f9d0029ef6",
+      "bounds": [
+        135,
+        11,
+        1500,
+        998
+      ],
+      "frame_bounds": [
+        131,
+        7,
+        1504,
+        1002
+      ],
+      "ground": [
+        860,
+        714
+      ],
+      "ground_method": "Manually inferred midpoint of the diagonal structural contact axis between left pier foot center (364,901) and right pier foot center (1356,527). Both ends are on the same projected ground plane; anchorY is about 0.71, deliberately not generic 0.87.",
+      "provenance": "NEW ORIGINAL REPLACEMENT"
+    }
+  ],
+  "reproduction": "Resolve source paths beneath the preserved full authoring package root; originals are kept in Library checkpoints rather than production assets. Run scripts/pack_space_atlas.py with that resolved recipe.",
+  "library_checkpoints": {
+    "baseline": "libfile_4db7cb7ec2788191bd8e36e3e7a6aeb2",
+    "recovered7actors": "libfile_0ff61e0ef5ec819185dac3b329f16271",
+    "recovered13resourcesIncludingAlternate": "libfile_8fe15396dd98819186ff04ef1a50f7fc",
+    "new2actors": "libfile_0bce1b67caec81919f74dd446c3176d8",
+    "newKeepTower": "libfile_8740f67cea0c8191962cc92f88b6af1b",
+    "newGoldEndpoints": "libfile_d72dce3b9e488191b03b52925dfb5074",
+    "newWoodEndpoints": "libfile_4424ab8d653481919290e871ffb1f2cc",
+    "newCivicBuildings": "libfile_5756432831c48191bcc934d967c9df42",
+    "newProductionBuildings": "libfile_e67bd9e4ef5081918d7eda1c4b1bf044",
+    "newSpecialBuildings": "libfile_ae04c129ebc881918096ba0314e0edf7",
+    "completeAudio": "libfile_c1aae562999c819189b7deb7551efc90"
+  }
+}

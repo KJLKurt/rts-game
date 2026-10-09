@@ -1,0 +1,1593 @@
+{
+  "tool": "image_gen.imagegen",
+  "packing": "Whole original RGBA on its declared logical family canvas (transparent right/bottom padding only when specified), uniformly resized with premultiplied-alpha Lanczos; measured frame rectangles and ground anchors. No recoloring, mirroring, silhouette painting or alpha cleanup.",
+  "atlasSha256": "8359c2819d1ca46b93b2bb40254f5db30db69dee934681194e9cd37fee2f769a",
+  "atlasBytes": 1361093,
+  "decodedBytes": 5760000,
+  "frames": [
+    {
+      "id": "gold-full",
+      "sourceFile": "gold-full-new-v1.original.png",
+      "sourceSha256": "e1ca21acd3585788bf0aea3161779107716eeb08537a20325d28a2b43cc4c4bc",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "packingCanvasSize": [
+        1254,
+        1254
+      ],
+      "sourceBounds": [
+        30,
+        142,
+        1225,
+        1111
+      ],
+      "displayFrameBounds": [
+        30,
+        142,
+        1225,
+        1111
+      ],
+      "sourceGround": [
+        627,
+        980.46
+      ],
+      "resampledSize": [
+        192,
+        192
+      ],
+      "frame": {
+        "x": 7,
+        "y": 24,
+        "w": 186,
+        "h": 152,
+        "anchorX": 0.5,
+        "anchorY": 0.8560412994208009
+      },
+      "packedRgbaSha256": "3bdab41fdd14345443cfec43dad20cc2baa167d0a6e3f30574586b66db814494",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "gold-half",
+      "sourceFile": "gold-half.original.png",
+      "sourceSha256": "3869d5afdded1f85defaae4adad02e5008d372c7c390dbbb689a4259de0ffb71",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "packingCanvasSize": [
+        1254,
+        1254
+      ],
+      "sourceBounds": [
+        31,
+        145,
+        1223,
+        1109
+      ],
+      "displayFrameBounds": [
+        30,
+        142,
+        1225,
+        1111
+      ],
+      "sourceGround": [
+        627,
+        980.46
+      ],
+      "resampledSize": [
+        192,
+        192
+      ],
+      "frame": {
+        "x": 207,
+        "y": 24,
+        "w": 186,
+        "h": 152,
+        "anchorX": 0.5,
+        "anchorY": 0.8560412994208009
+      },
+      "packedRgbaSha256": "d92275972b6d3d5dcfe217b8da1af26f6d3d0e52680342de8c6d4f06eee8799b",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "gold-sparse",
+      "sourceFile": "gold-sparse.original.png",
+      "sourceSha256": "518a1ffef9b0308f90dc448bc06ad62ae9cbf16ce7c1fb21c14cba738cabfd86",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "packingCanvasSize": [
+        1254,
+        1254
+      ],
+      "sourceBounds": [
+        32,
+        143,
+        1222,
+        1108
+      ],
+      "displayFrameBounds": [
+        30,
+        142,
+        1225,
+        1111
+      ],
+      "sourceGround": [
+        627,
+        980.46
+      ],
+      "resampledSize": [
+        192,
+        192
+      ],
+      "frame": {
+        "x": 407,
+        "y": 24,
+        "w": 186,
+        "h": 152,
+        "anchorX": 0.5,
+        "anchorY": 0.8560412994208009
+      },
+      "packedRgbaSha256": "8aff8bf3b5f60c69c77952813d70982862e50ae616dae3f94694c466ade9c79b",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "gold-empty",
+      "sourceFile": "gold-empty-new-v1.original.png",
+      "sourceSha256": "118f10bf1715b6954c5c47355dce036c8028964b888b3c5fcbadc50c39a1db2b",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "packingCanvasSize": [
+        1254,
+        1254
+      ],
+      "sourceBounds": [
+        31,
+        143,
+        1224,
+        1110
+      ],
+      "displayFrameBounds": [
+        30,
+        142,
+        1225,
+        1111
+      ],
+      "sourceGround": [
+        627,
+        980.46
+      ],
+      "resampledSize": [
+        192,
+        192
+      ],
+      "frame": {
+        "x": 607,
+        "y": 24,
+        "w": 186,
+        "h": 152,
+        "anchorX": 0.5,
+        "anchorY": 0.8560412994208009
+      },
+      "packedRgbaSha256": "57ee47fb38531484cba1953be7581ecd64dcc91fd46d6ecbf6505f70fbba2c14",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "wood-full",
+      "sourceFile": "wood-full-new-v1.original.png",
+      "sourceSha256": "1c7e7383dc04fc816b9e9b435ada38b49a4db2bb484d9a5f9df5fa11b5b036fe",
+      "sourceSize": [
+        1374,
+        1145
+      ],
+      "packingCanvasSize": [
+        1374,
+        1145
+      ],
+      "sourceBounds": [
+        79,
+        100,
+        1302,
+        1082
+      ],
+      "displayFrameBounds": [
+        78,
+        100,
+        1302,
+        1082
+      ],
+      "sourceGround": [
+        738,
+        940.98
+      ],
+      "resampledSize": [
+        192,
+        160
+      ],
+      "frame": {
+        "x": 813,
+        "y": 32,
+        "w": 174,
+        "h": 141,
+        "anchorX": 0.5409576870953169,
+        "anchorY": 0.8474514540555605
+      },
+      "packedRgbaSha256": "fb1cd694bc4c34a4dadeced367b3f889abcc4368590e0f0a073d0a9318772c6c",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "wood-half",
+      "sourceFile": "wood-half.original.png",
+      "sourceSha256": "4bf0e9fccba06174db5be2103b16b3df38a52e67e22c2121c6d60cfaad6eac63",
+      "sourceSize": [
+        1374,
+        1145
+      ],
+      "packingCanvasSize": [
+        1374,
+        1145
+      ],
+      "sourceBounds": [
+        78,
+        294,
+        1301,
+        1081
+      ],
+      "displayFrameBounds": [
+        78,
+        100,
+        1302,
+        1082
+      ],
+      "sourceGround": [
+        738,
+        940.98
+      ],
+      "resampledSize": [
+        192,
+        160
+      ],
+      "frame": {
+        "x": 1013,
+        "y": 32,
+        "w": 174,
+        "h": 141,
+        "anchorX": 0.5409576870953169,
+        "anchorY": 0.8474514540555605
+      },
+      "packedRgbaSha256": "3f895f12631c3dc9733cf536227971400dc68920a34fd7e90eba2f24d4f97c28",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "wood-sparse",
+      "sourceFile": "wood-sparse.original.png",
+      "sourceSha256": "36b9b6ff04a9603067690156dc3ad3b2a1f2bef0109c85ca3d074cbb90ea2da5",
+      "sourceSize": [
+        1374,
+        1145
+      ],
+      "packingCanvasSize": [
+        1374,
+        1145
+      ],
+      "sourceBounds": [
+        220,
+        526,
+        1301,
+        1081
+      ],
+      "displayFrameBounds": [
+        78,
+        100,
+        1302,
+        1082
+      ],
+      "sourceGround": [
+        738,
+        940.98
+      ],
+      "resampledSize": [
+        192,
+        160
+      ],
+      "frame": {
+        "x": 13,
+        "y": 232,
+        "w": 174,
+        "h": 141,
+        "anchorX": 0.5409576870953169,
+        "anchorY": 0.8474514540555605
+      },
+      "packedRgbaSha256": "ed47414d599679c78032883cbce7caa4d2814c99d920f8e928414022be40d016",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "wood-empty",
+      "sourceFile": "wood-empty-new-v2.original.png",
+      "sourceSha256": "269ea99d2f8037516d805b55ee1cf27f32c3f637f7af1a1d3adfe91813dc7e7e",
+      "sourceSize": [
+        1373,
+        1145
+      ],
+      "packingCanvasSize": [
+        1374,
+        1145
+      ],
+      "sourceBounds": [
+        220,
+        562,
+        1266,
+        1082
+      ],
+      "displayFrameBounds": [
+        78,
+        100,
+        1302,
+        1082
+      ],
+      "sourceGround": [
+        738,
+        940.98
+      ],
+      "resampledSize": [
+        192,
+        160
+      ],
+      "frame": {
+        "x": 213,
+        "y": 232,
+        "w": 174,
+        "h": 141,
+        "anchorX": 0.5409576870953169,
+        "anchorY": 0.8474514540555605
+      },
+      "packedRgbaSha256": "303ac6b6fe55b8efa87dbba887db6b5888b720cf9a486f101efb5c86bdcc887d",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "relic-neutral",
+      "sourceFile": "relic-neutral.original.png",
+      "sourceSha256": "4b81c6bcfa9e3824bc24214b7c2c3d3b00b8bbd2f2720f3bc4f10ae118908ec4",
+      "sourceSize": [
+        1230,
+        1278
+      ],
+      "packingCanvasSize": [
+        1230,
+        1278
+      ],
+      "sourceBounds": [
+        92,
+        21,
+        1148,
+        1230
+      ],
+      "displayFrameBounds": [
+        91,
+        9,
+        1150,
+        1233
+      ],
+      "sourceGround": [
+        620,
+        1090
+      ],
+      "resampledSize": [
+        185,
+        192
+      ],
+      "frame": {
+        "x": 419,
+        "y": 204,
+        "w": 162,
+        "h": 187,
+        "anchorX": 0.5015557562983038,
+        "anchorY": 0.8756998317893098
+      },
+      "packedRgbaSha256": "d470a9b5176b9f9fc2014f859d042604088d3871f633cfd32d090f2aa7016a89",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "relic-contested",
+      "sourceFile": "relic-contested.original.png",
+      "sourceSha256": "f5a34a440aedf9d2d393727c9170125be6138a38124248d7a06ad19f398519d1",
+      "sourceSize": [
+        1230,
+        1278
+      ],
+      "packingCanvasSize": [
+        1230,
+        1278
+      ],
+      "sourceBounds": [
+        91,
+        29,
+        1150,
+        1233
+      ],
+      "displayFrameBounds": [
+        91,
+        9,
+        1150,
+        1233
+      ],
+      "sourceGround": [
+        620,
+        1090
+      ],
+      "resampledSize": [
+        185,
+        192
+      ],
+      "frame": {
+        "x": 619,
+        "y": 204,
+        "w": 162,
+        "h": 187,
+        "anchorX": 0.5015557562983038,
+        "anchorY": 0.8756998317893098
+      },
+      "packedRgbaSha256": "6cbd6d62be2f2b37981dd607431021e45dbd28da74f0967218e9e3efcfa82a2e",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "relic-captured",
+      "sourceFile": "relic-captured.original.png",
+      "sourceSha256": "4d8a6fb066b935a7cfa46ee5673ffb801a9553862f80c10ebeb72de9f060f6c6",
+      "sourceSize": [
+        1230,
+        1278
+      ],
+      "packingCanvasSize": [
+        1230,
+        1278
+      ],
+      "sourceBounds": [
+        92,
+        9,
+        1147,
+        1231
+      ],
+      "displayFrameBounds": [
+        91,
+        9,
+        1150,
+        1233
+      ],
+      "sourceGround": [
+        620,
+        1090
+      ],
+      "resampledSize": [
+        185,
+        192
+      ],
+      "frame": {
+        "x": 819,
+        "y": 204,
+        "w": 162,
+        "h": 187,
+        "anchorX": 0.5015557562983038,
+        "anchorY": 0.8756998317893098
+      },
+      "packedRgbaSha256": "808ed24e7817f785c0a2a145bacb8630ab7acca8f0e80fafcb9036e5c270153b",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "relic-inactive",
+      "sourceFile": "relic-inactive.original.png",
+      "sourceSha256": "512aed079c4a4549692beb20c7cdb43007749c38da6e3ef07febcb12407c79b8",
+      "sourceSize": [
+        1230,
+        1278
+      ],
+      "packingCanvasSize": [
+        1230,
+        1278
+      ],
+      "sourceBounds": [
+        91,
+        394,
+        1150,
+        1231
+      ],
+      "displayFrameBounds": [
+        91,
+        9,
+        1150,
+        1233
+      ],
+      "sourceGround": [
+        620,
+        1090
+      ],
+      "resampledSize": [
+        185,
+        192
+      ],
+      "frame": {
+        "x": 1019,
+        "y": 204,
+        "w": 162,
+        "h": 187,
+        "anchorX": 0.5015557562983038,
+        "anchorY": 0.8756998317893098
+      },
+      "packedRgbaSha256": "906d88b07e33d67ffcc9621f112c48ef881efb7b4f7a61e2b9d00d69a30d182f",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "camp-guarded",
+      "sourceFile": "camp-guarded.original.png",
+      "sourceSha256": "e10dd9f9eb774fcd24fa7c930f674105ce6b38010dd1c4d3b14e7768704b95ba",
+      "sourceSize": [
+        1536,
+        1024
+      ],
+      "packingCanvasSize": [
+        1536,
+        1024
+      ],
+      "sourceBounds": [
+        179,
+        125,
+        1320,
+        847
+      ],
+      "displayFrameBounds": [
+        179,
+        125,
+        1320,
+        847
+      ],
+      "sourceGround": [
+        748,
+        759
+      ],
+      "resampledSize": [
+        192,
+        128
+      ],
+      "frame": {
+        "x": 25,
+        "y": 450,
+        "w": 145,
+        "h": 93,
+        "anchorX": 0.5,
+        "anchorY": 0.8696236559139785
+      },
+      "packedRgbaSha256": "17623c2cbd9bc1b8ceced286c8ce26b7fe6a5b7c467c5374f7b49125f1a60023",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "camp-cleared",
+      "sourceFile": "camp-cleared.original.png",
+      "sourceSha256": "8d7f7199bfe0022d780c8ec259dbb29d2399cb442c684b2344db75948c5fd1e5",
+      "sourceSize": [
+        1536,
+        1024
+      ],
+      "packingCanvasSize": [
+        1536,
+        1024
+      ],
+      "sourceBounds": [
+        74,
+        56,
+        1429,
+        914
+      ],
+      "displayFrameBounds": [
+        74,
+        56,
+        1429,
+        914
+      ],
+      "sourceGround": [
+        748.3493414877712,
+        809.8170720592842
+      ],
+      "resampledSize": [
+        192,
+        128
+      ],
+      "frame": {
+        "x": 212,
+        "y": 442,
+        "w": 172,
+        "h": 110,
+        "anchorX": 0.4973469051509965,
+        "anchorY": 0.8657012182491866
+      },
+      "packedRgbaSha256": "f3ff50a1db558e87f06c2a9894a4f88285dd768ebbf9083c6e73356f25a78da7",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "mining-cue",
+      "sourceFile": "mining-cue.original.png",
+      "sourceSha256": "5a6324ef39daee099872175f8e857b962be01db499d9f7a682f0093b3093563c",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "packingCanvasSize": [
+        1254,
+        1254
+      ],
+      "sourceBounds": [
+        209,
+        145,
+        1151,
+        1091
+      ],
+      "displayFrameBounds": [
+        209,
+        145,
+        1151,
+        1091
+      ],
+      "sourceGround": [
+        680.0,
+        968.02
+      ],
+      "resampledSize": [
+        192,
+        192
+      ],
+      "frame": {
+        "x": 435,
+        "y": 425,
+        "w": 147,
+        "h": 148,
+        "anchorX": 0.49737981316928676,
+        "anchorY": 0.8595512737618
+      },
+      "packedRgbaSha256": "b6ac95958b8a3ce0b69440952cc85d629c9c0c95ef255299f8a9352b1dd56d86",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "chopping-cue",
+      "sourceFile": "chopping-cue.original.png",
+      "sourceSha256": "905d8f6fd1344a90bc4e990a519861f60b75acedebffe17c9afe283f6ebfe5e5",
+      "sourceSize": [
+        1374,
+        1145
+      ],
+      "packingCanvasSize": [
+        1374,
+        1145
+      ],
+      "sourceBounds": [
+        286,
+        99,
+        1252,
+        1091
+      ],
+      "displayFrameBounds": [
+        286,
+        99,
+        1252,
+        1091
+      ],
+      "sourceGround": [
+        769.0,
+        962.04
+      ],
+      "resampledSize": [
+        192,
+        160
+      ],
+      "frame": {
+        "x": 642,
+        "y": 432,
+        "w": 138,
+        "h": 142,
+        "anchorX": 0.5033225745205999,
+        "anchorY": 0.8622080078725628
+      },
+      "packedRgbaSha256": "0b12635c28923b0b4ace7ff9c45e1d519917d543c4f612870ddc40003a99b4a5",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "swordsman",
+      "sourceFile": "swordsman-rebuilt-v1.png",
+      "sourceSha256": "397e5a558323273d7a1173d1aeace999ed7a095244650d3fe17df186f169feb7",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "packingCanvasSize": [
+        1254,
+        1254
+      ],
+      "sourceBounds": [
+        91,
+        162,
+        1114,
+        1126
+      ],
+      "displayFrameBounds": [
+        91,
+        162,
+        1114,
+        1126
+      ],
+      "sourceGround": [
+        635.1523148148149,
+        1055.5
+      ],
+      "resampledSize": [
+        192,
+        192
+      ],
+      "frame": {
+        "x": 816,
+        "y": 427,
+        "w": 160,
+        "h": 151,
+        "anchorX": 0.5328012581959951,
+        "anchorY": 0.9179314933933267
+      },
+      "packedRgbaSha256": "09ca702776b3b1002ec52ec203e8a3b8aa1454968a26d74d3d04ab8dda88928a",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "spearman",
+      "sourceFile": "spearman-v1.png",
+      "sourceSha256": "f5bb2ebd0d86825dc7faabb95f7b941baf7c297fddcf1737313bb0cab9814554",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "packingCanvasSize": [
+        1254,
+        1254
+      ],
+      "sourceBounds": [
+        357,
+        95,
+        1125,
+        1125
+      ],
+      "displayFrameBounds": [
+        357,
+        95,
+        1125,
+        1125
+      ],
+      "sourceGround": [
+        649.2898561077661,
+        1074.5
+      ],
+      "resampledSize": [
+        192,
+        192
+      ],
+      "frame": {
+        "x": 1057,
+        "y": 417,
+        "w": 121,
+        "h": 161,
+        "anchorX": 0.38357686723273027,
+        "anchorY": 0.9410978037980325
+      },
+      "packedRgbaSha256": "43c2b5c2934740574f6df73617f35106374e840878db5da609ce46128818e03b",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "archer",
+      "sourceFile": "archer-v1.png",
+      "sourceSha256": "e3e40a935a2f3cdef9d83b121d141d640006f1c5ddf40927ae4ed8fbe2d4b662",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "packingCanvasSize": [
+        1254,
+        1254
+      ],
+      "sourceBounds": [
+        336,
+        217,
+        1065,
+        1052
+      ],
+      "displayFrameBounds": [
+        336,
+        217,
+        1065,
+        1052
+      ],
+      "sourceGround": [
+        618.5712837837838,
+        1012.0
+      ],
+      "resampledSize": [
+        192,
+        192
+      ],
+      "frame": {
+        "x": 54,
+        "y": 636,
+        "w": 115,
+        "h": 131,
+        "anchorX": 0.3887780770160632,
+        "anchorY": 0.9385295299316995
+      },
+      "packedRgbaSha256": "15c25906a3b797d7f024d7d4a7aae5d8fafe602de0e1e33b0057ca5b83211918",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "cavalry",
+      "sourceFile": "cavalry-v1.png",
+      "sourceSha256": "7aed2a8f13dff58c183bd718d1964810e477d81ad0c40bdd76f9acfe9d000851",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "packingCanvasSize": [
+        1254,
+        1254
+      ],
+      "sourceBounds": [
+        264,
+        83,
+        1009,
+        1172
+      ],
+      "displayFrameBounds": [
+        264,
+        83,
+        1009,
+        1172
+      ],
+      "sourceGround": [
+        663.4337627964987,
+        1047.5
+      ],
+      "resampledSize": [
+        192,
+        192
+      ],
+      "frame": {
+        "x": 243,
+        "y": 615,
+        "w": 117,
+        "h": 170,
+        "anchorX": 0.5348579073932833,
+        "anchorY": 0.8787222065859835
+      },
+      "packedRgbaSha256": "b8641ecf7e8261e0dc9ddedef73230446bf79d12203a9bc8a650400e52ebd5ac",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "siege",
+      "sourceFile": "siege-v1.png",
+      "sourceSha256": "a994edcc9decd69a45bbb8b9249c1bcf084ac2d4bdc066e0ec9a7b27197f3d58",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "packingCanvasSize": [
+        1254,
+        1254
+      ],
+      "sourceBounds": [
+        164,
+        146,
+        1142,
+        1061
+      ],
+      "displayFrameBounds": [
+        164,
+        146,
+        1142,
+        1061
+      ],
+      "sourceGround": [
+        646.3931034482758,
+        899.0
+      ],
+      "resampledSize": [
+        192,
+        192
+      ],
+      "frame": {
+        "x": 428,
+        "y": 625,
+        "w": 152,
+        "h": 143,
+        "anchorX": 0.49321894076885,
+        "anchorY": 0.8157058252752032
+      },
+      "packedRgbaSha256": "3701b52d544887b03b3b4a5977e914b90025ec30eb022448d373c53323064625",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "support",
+      "sourceFile": "support-v1.png",
+      "sourceSha256": "bff35883536881243af497840c63b4a47ce2b4859d1fdec51b4ea3fa43ebf64f",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "packingCanvasSize": [
+        1254,
+        1254
+      ],
+      "sourceBounds": [
+        261,
+        131,
+        979,
+        1086
+      ],
+      "displayFrameBounds": [
+        261,
+        131,
+        979,
+        1086
+      ],
+      "sourceGround": [
+        658.7806656904709,
+        1043.0
+      ],
+      "resampledSize": [
+        192,
+        192
+      ],
+      "frame": {
+        "x": 642,
+        "y": 623,
+        "w": 113,
+        "h": 149,
+        "anchorX": 0.5563357455263186,
+        "anchorY": 0.9442535564047396
+      },
+      "packedRgbaSha256": "db2fd93b5553e93ff6b4b377276e242f80985694a442a2fa20280d0dabfe46b9",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "warlord",
+      "sourceFile": "warlord-v1.png",
+      "sourceSha256": "3032b79927c061cdc8efb0aa40394fad5b564b797e98aee315ee0a3d15a54953",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "packingCanvasSize": [
+        1254,
+        1254
+      ],
+      "sourceBounds": [
+        272,
+        174,
+        1055,
+        1099
+      ],
+      "displayFrameBounds": [
+        272,
+        174,
+        1055,
+        1099
+      ],
+      "sourceGround": [
+        572.1774425287356,
+        1042.5
+      ],
+      "resampledSize": [
+        192,
+        192
+      ],
+      "frame": {
+        "x": 844,
+        "y": 629,
+        "w": 123,
+        "h": 145,
+        "anchorX": 0.38704159026411245,
+        "anchorY": 0.9283946543474674
+      },
+      "packedRgbaSha256": "e7467fede66315fba002fc18b9d2373d252471b6a1dab2322ff76d3ee822fdb0",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "ranger",
+      "sourceFile": "ranger-rebuilt-v1.png",
+      "sourceSha256": "e7784205957506107820c61ac9947056c2b5aced83cc54757dacefb3285a7142",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "packingCanvasSize": [
+        1254,
+        1254
+      ],
+      "sourceBounds": [
+        220,
+        72,
+        1088,
+        1182
+      ],
+      "displayFrameBounds": [
+        220,
+        72,
+        1088,
+        1182
+      ],
+      "sourceGround": [
+        574.2743643249091,
+        1146.5
+      ],
+      "resampledSize": [
+        192,
+        192
+      ],
+      "frame": {
+        "x": 1036,
+        "y": 614,
+        "w": 136,
+        "h": 172,
+        "anchorX": 0.41122923087521424,
+        "anchorY": 0.9624457549794146
+      },
+      "packedRgbaSha256": "137bf86b8e1ff8fd6803575427cf2d6f6ce1c37857739edad069759373035275",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "engineer",
+      "sourceFile": "engineer-v1.png",
+      "sourceSha256": "4a1c8395a16993d7cd2943e3e476447f69447acb55d162d497427b9439435265",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "packingCanvasSize": [
+        1254,
+        1254
+      ],
+      "sourceBounds": [
+        358,
+        134,
+        1008,
+        1132
+      ],
+      "displayFrameBounds": [
+        358,
+        134,
+        1008,
+        1132
+      ],
+      "sourceGround": [
+        643.4723545873989,
+        1080.5
+      ],
+      "resampledSize": [
+        192,
+        192
+      ],
+      "frame": {
+        "x": 57,
+        "y": 823,
+        "w": 103,
+        "h": 156,
+        "anchorX": 0.4419619708643454,
+        "anchorY": 0.938688504477978
+      },
+      "packedRgbaSha256": "30bc12c753b609f8b879a8d39a07880206cc39839a9acaa1a58ed77dab3b18a4",
+      "groundMethod": "reviewed source-space placement",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "keep",
+      "sourceFile": "keep-new-v3.original.png",
+      "sourceSha256": "5861e0180267ce75f4aed4f0d865aa9071b270d74e05255ace45c9c4b9b556e5",
+      "sourceSize": [
+        1426,
+        1103
+      ],
+      "packingCanvasSize": [
+        1426,
+        1103
+      ],
+      "sourceBounds": [
+        36,
+        81,
+        1406,
+        1057
+      ],
+      "displayFrameBounds": [
+        32,
+        77,
+        1410,
+        1061
+      ],
+      "sourceGround": [
+        720,
+        955
+      ],
+      "resampledSize": [
+        192,
+        149
+      ],
+      "frame": {
+        "x": 207,
+        "y": 834,
+        "w": 188,
+        "h": 136,
+        "anchorX": 0.49969413028557785,
+        "anchorY": 0.8824062716655113
+      },
+      "packedRgbaSha256": "5b06e0b430331ad98f6f94ee346c8053bddbb21907ec1d0e7af7a3dcdde5f34a",
+      "groundMethod": "SEMANTIC INFERENCE, manually estimated projected foundation center; not measured engine ground contact.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "house",
+      "sourceFile": "house-new-v1.original.png",
+      "sourceSha256": "d5cb475d82293cae062ea4b1f452b332701a92e3953ec73d1dbacbd94aad1b19",
+      "sourceSize": [
+        1374,
+        1145
+      ],
+      "packingCanvasSize": [
+        1374,
+        1145
+      ],
+      "sourceBounds": [
+        270,
+        134,
+        1114,
+        974
+      ],
+      "displayFrameBounds": [
+        266,
+        127,
+        1119,
+        978
+      ],
+      "sourceGround": [
+        699,
+        880
+      ],
+      "resampledSize": [
+        192,
+        160
+      ],
+      "frame": {
+        "x": 440,
+        "y": 836,
+        "w": 122,
+        "h": 122,
+        "anchorX": 0.5055479991409549,
+        "anchorY": 0.8767986255279546
+      },
+      "packedRgbaSha256": "3ab1c9e0f0124fc53b41105afbf9be9b2774addb5d7bb84c0af691e80e8853da",
+      "groundMethod": "SEMANTIC INFERENCE, manually estimated projected foundation center; not measured engine contact and not chosen to force bar clearance. Center inferred behind the lowest front rib foot and between the two outer side-foot contacts. The frontmost source contact is near y970 and side feet near y800.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "barracks",
+      "sourceFile": "barracks-new-v1.original.png",
+      "sourceSha256": "f75bacebd9917799ee0477670154b28aa39f7638aa88fa5ccc397ba654728f4e",
+      "sourceSize": [
+        1402,
+        1122
+      ],
+      "packingCanvasSize": [
+        1402,
+        1122
+      ],
+      "sourceBounds": [
+        99,
+        133,
+        1333,
+        972
+      ],
+      "displayFrameBounds": [
+        96,
+        128,
+        1338,
+        978
+      ],
+      "sourceGround": [
+        714,
+        830
+      ],
+      "resampledSize": [
+        192,
+        154
+      ],
+      "frame": {
+        "x": 616,
+        "y": 839,
+        "w": 173,
+        "h": 120,
+        "anchorX": 0.4958399643778912,
+        "anchorY": 0.8160130718954249
+      },
+      "packedRgbaSha256": "07ab36b1418a3a6d84a5f5d65a6891a9668516f9bc011e132e2820f2eed765d5",
+      "groundMethod": "SEMANTIC INFERENCE, manually estimated projected foundation center; not measured engine contact and not chosen to force bar clearance. Center inferred from the twin-hall foundation: rear-left side footing near y710, nearest left-front footing near y968, right-front feet near y835. Rack is equipment, not an anchor.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "range",
+      "sourceFile": "range-new-v2.original.png",
+      "sourceSha256": "e2b35756a791da5e44601fedf308a20f3c45caae49fd2812e10e7aa09935a331",
+      "sourceSize": [
+        1386,
+        1135
+      ],
+      "packingCanvasSize": [
+        1386,
+        1135
+      ],
+      "sourceBounds": [
+        183,
+        142,
+        1215,
+        1094
+      ],
+      "displayFrameBounds": [
+        179,
+        138,
+        1220,
+        1099
+      ],
+      "sourceGround": [
+        710,
+        920
+      ],
+      "resampledSize": [
+        192,
+        157
+      ],
+      "frame": {
+        "x": 827,
+        "y": 839,
+        "w": 148,
+        "h": 136,
+        "anchorX": 0.5091552591552592,
+        "anchorY": 0.8033817051049494
+      },
+      "packedRgbaSha256": "79b205a7193c320c0a157cbdc49746a50d01c5cf70f9cb5ea86e06f7bf72e8ef",
+      "groundMethod": "SEMANTIC INFERENCE, manually estimated projected foundation center; not measured engine contact and not chosen to force bar clearance. Center inferred inside the foundation footprint bounded by left-rear foot near y835, near-front arch foot near y1088 and far-front arch foot near y907; target stand and bow rack do not determine anchor.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "stable",
+      "sourceFile": "stable-new-v2.original.png",
+      "sourceSha256": "751322180b5673d960a6a30070e0b9bb70600e44cd94791d7da1f07e3e45fb3c",
+      "sourceSize": [
+        1470,
+        1070
+      ],
+      "packingCanvasSize": [
+        1470,
+        1070
+      ],
+      "sourceBounds": [
+        152,
+        92,
+        1353,
+        1020
+      ],
+      "displayFrameBounds": [
+        148,
+        88,
+        1357,
+        1025
+      ],
+      "sourceGround": [
+        772,
+        915
+      ],
+      "resampledSize": [
+        192,
+        140
+      ],
+      "frame": {
+        "x": 1022,
+        "y": 840,
+        "w": 161,
+        "h": 126,
+        "anchorX": 0.514488528330587,
+        "anchorY": 0.8707906838747959
+      },
+      "packedRgbaSha256": "4983219ab280501da8912cf05a403a3d713e35e802d12a84dc223536c04d09fb",
+      "groundMethod": "SEMANTIC INFERENCE of projected structural foundation center, manually estimated behind front foundation feet/thresholds; not an engine-measured contact point. Requires packed/runtime review.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "workshop",
+      "sourceFile": "workshop-new-v2.original.png",
+      "sourceSha256": "d33a94ce838b03f4029a9e6bddfa443bbe3b48e2fd66a8d2429b78495d1c8f14",
+      "sourceSize": [
+        1470,
+        1070
+      ],
+      "packingCanvasSize": [
+        1470,
+        1070
+      ],
+      "sourceBounds": [
+        90,
+        21,
+        1423,
+        1040
+      ],
+      "displayFrameBounds": [
+        86,
+        17,
+        1427,
+        1044
+      ],
+      "sourceGround": [
+        787,
+        928
+      ],
+      "resampledSize": [
+        192,
+        140
+      ],
+      "frame": {
+        "x": 14,
+        "y": 1031,
+        "w": 178,
+        "h": 137,
+        "anchorX": 0.521302453565696,
+        "anchorY": 0.87898219523842
+      },
+      "packedRgbaSha256": "dc09ae3a8aa4c30b357ca6a24f4c09abb8b3fd0dabab34d9bcf1cebd923fe78a",
+      "groundMethod": "SEMANTIC INFERENCE of projected structural foundation center, manually estimated behind front foundation feet/thresholds; not an engine-measured contact point. Requires packed/runtime review.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "tower",
+      "sourceFile": "tower-new-v2.original.png",
+      "sourceSha256": "f9f97bfac29a2290f6aaf25db433451193441dee6ef44758b7b466b781c50f77",
+      "sourceSize": [
+        1049,
+        1500
+      ],
+      "packingCanvasSize": [
+        1049,
+        1500
+      ],
+      "sourceBounds": [
+        162,
+        322,
+        904,
+        1285
+      ],
+      "displayFrameBounds": [
+        158,
+        318,
+        908,
+        1290
+      ],
+      "sourceGround": [
+        534,
+        1162
+      ],
+      "resampledSize": [
+        134,
+        192
+      ],
+      "frame": {
+        "x": 252,
+        "y": 1043,
+        "w": 98,
+        "h": 128,
+        "anchorX": 0.5021789459349041,
+        "anchorY": 0.8573124999999999
+      },
+      "packedRgbaSha256": "410520f90cdc26c42f6a7fd6c07a77bdf1f94e535a6a1414b561be60bd9523f2",
+      "groundMethod": "SEMANTIC INFERENCE, manually estimated projected foundation center; not measured engine ground contact.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "depot",
+      "sourceFile": "depot-new-v2.original.png",
+      "sourceSha256": "83bc52aa0c30c28af8516f32c1a1bcf204a12ae754bfef49f5da5833e22ef40c",
+      "sourceSize": [
+        1469,
+        1071
+      ],
+      "packingCanvasSize": [
+        1469,
+        1071
+      ],
+      "sourceBounds": [
+        78,
+        35,
+        1396,
+        1015
+      ],
+      "displayFrameBounds": [
+        74,
+        31,
+        1402,
+        1020
+      ],
+      "sourceGround": [
+        774,
+        915
+      ],
+      "resampledSize": [
+        192,
+        140
+      ],
+      "frame": {
+        "x": 412,
+        "y": 1033,
+        "w": 177,
+        "h": 132,
+        "anchorX": 0.5263429136235496,
+        "anchorY": 0.8833927510398099
+      },
+      "packedRgbaSha256": "e6c9053a4c113947e30af4033a897a6e1ffe696e003e9dd36ddd7d191795ab17",
+      "groundMethod": "SEMANTIC INFERENCE of projected structural foundation center, manually estimated behind front foundation feet/thresholds; not an engine-measured contact point. Requires packed/runtime review.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "blacksmith",
+      "sourceFile": "blacksmith-new-v1.original.png",
+      "sourceSha256": "6cc8224a704d1b27f76aa1f0f91f478735126d8fa20bf7088e0afb39cf501814",
+      "sourceSize": [
+        1437,
+        1095
+      ],
+      "packingCanvasSize": [
+        1437,
+        1095
+      ],
+      "sourceBounds": [
+        127,
+        27,
+        1340,
+        1028
+      ],
+      "displayFrameBounds": [
+        123,
+        23,
+        1343,
+        1032
+      ],
+      "sourceGround": [
+        728,
+        865
+      ],
+      "resampledSize": [
+        192,
+        146
+      ],
+      "frame": {
+        "x": 619,
+        "y": 1029,
+        "w": 166,
+        "h": 137,
+        "anchorX": 0.495598259426013,
+        "anchorY": 0.8272506082725061
+      },
+      "packedRgbaSha256": "05e47287b51c9105e7d32184404e7afd14851fa115d8807387f67351fced2364",
+      "groundMethod": "Manually inferred projected center of the structural foundation footprint, from rear/side and front foundation feet. The prominent front anvil is architecture-attached; its lowest edge does not alone define ground center. Not adjusted to satisfy HUD.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "arcane",
+      "sourceFile": "arcane-new-v1.original.png",
+      "sourceSha256": "abe9ee99a0435d757dfba8e895bf537089b99c53e255641b74a6f8b427b9c5c2",
+      "sourceSize": [
+        1424,
+        1105
+      ],
+      "packingCanvasSize": [
+        1424,
+        1105
+      ],
+      "sourceBounds": [
+        155,
+        59,
+        1271,
+        1052
+      ],
+      "displayFrameBounds": [
+        151,
+        55,
+        1276,
+        1056
+      ],
+      "sourceGround": [
+        715,
+        905
+      ],
+      "resampledSize": [
+        192,
+        149
+      ],
+      "frame": {
+        "x": 823,
+        "y": 1031,
+        "w": 155,
+        "h": 138,
+        "anchorX": 0.4993838347227256,
+        "anchorY": 0.8408092333923536
+      },
+      "packedRgbaSha256": "1848a6ca5d919259712e82ebb44ef000715b68c14d21d1653c1d230ee09b2837",
+      "groundMethod": "Manually inferred center of the oval architectural footprint from broad footing contacts. The forward doorstep is a projection, not the center. Not a engine-measured pivot.",
+      "maxDisplayHeight": null
+    },
+    {
+      "id": "wall",
+      "sourceFile": "wall-new-v1.original.png",
+      "sourceSha256": "abfb01e408a1e318ee173e76bc5ab839b70c2ba0cd75f2dba07f09f9d0029ef6",
+      "sourceSize": [
+        1536,
+        1024
+      ],
+      "packingCanvasSize": [
+        1536,
+        1024
+      ],
+      "sourceBounds": [
+        135,
+        11,
+        1500,
+        998
+      ],
+      "displayFrameBounds": [
+        131,
+        7,
+        1504,
+        1002
+      ],
+      "sourceGround": [
+        860,
+        714
+      ],
+      "resampledSize": [
+        192,
+        128
+      ],
+      "frame": {
+        "x": 1019,
+        "y": 1035,
+        "w": 174,
+        "h": 128,
+        "anchorX": 0.5316091954022989,
+        "anchorY": 0.705078125
+      },
+      "packedRgbaSha256": "494be6f086de0d503ec289ee940dfc09b061c6418b73723e3be270d8444c8101",
+      "groundMethod": "Manually inferred midpoint of the diagonal structural contact axis between left pier foot center (364,901) and right pier foot center (1356,527). Both ends are on the same projected ground plane; anchorY is about 0.71, deliberately not generic 0.87.",
+      "maxDisplayHeight": null
+    }
+  ]
+}
