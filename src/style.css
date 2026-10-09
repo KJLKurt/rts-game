@@ -3240,6 +3240,11 @@ footer .build-identifier {
 .commander-strip {
   bottom: calc(var(--deck-height, 200px) + 104px);
 }
+/* Keep geometry measurable so the duplicate returns as soon as space clears. */
+.commander-strip.learning-guide-overlap {
+  visibility: hidden;
+  pointer-events: none;
+}
 @media (max-width: 600px) {
   .hud {
     gap: 4px;
@@ -3422,7 +3427,7 @@ footer .build-identifier {
   position: static;
   width: auto;
   height: auto;
-  min-height: 40px;
+  min-height: 44px;
   padding: 6px 10px;
   margin-top: 8px;
   border-radius: 6px;

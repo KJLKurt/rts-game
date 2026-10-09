@@ -1,8 +1,23 @@
 import { describe, it, expect } from "vitest";
 import { createGame } from "../src/sim";
-import { relicSummary, nearestRelic, relicControlDescription } from "../src/ui/objectives";
+import { relicSummary, nearestRelic, relicControlDescription, firstBattleObjectiveCopy } from "../src/ui/objectives";
 import { getEconomyRates } from "../src/sim/economy";
 import { STORY_CAMPAIGNS } from "../src/ui/campaigns/authored";
+
+describe("first ordinary battle briefing", () => {
+  it("teaches Conquest's keep victory and relic income without promising victory points", () => {
+    const copy = firstBattleObjectiveCopy("conquest");
+    expect(copy.title).toBe("Destroy the enemy keeps");
+    expect(copy.text).toBe("Hold relics for gold and wood to fund your siege. Destroy the enemy keeps to win.");
+    expect(copy.text).not.toContain("victory points");
+  });
+  it.each(["domination", "relic"] as const)("preserves the existing %s point-mode copy exactly", mode => {
+    expect(firstBattleObjectiveCopy(mode)).toEqual({
+      title: "Take the center",
+      text: "Relics earn victory points; gold and wood fund your army.",
+    });
+  });
+});
 
 describe("selected relic guidance", () => {
   it("describes Conquest income, matching the economy's actual gold and wood stipend", () => {
@@ -38,6 +53,7 @@ describe("selected relic guidance", () => {
     };
     const state = createGame({ customMap: map, mode: "domination" });
     expect(state.settings.mode).toBe("conquest");
+    expect(firstBattleObjectiveCopy(state.settings.mode).title).toBe("Destroy the enemy keeps");
     expect(relicControlDescription(state)).toBe("Hold for gold and wood income");
   });
 });
