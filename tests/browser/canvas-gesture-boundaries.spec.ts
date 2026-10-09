@@ -267,7 +267,10 @@ for (const name of ['christmas', 'mythic'] as const) {
       await press(page, 'panel-build');
       await scrollPanel(page, '#deck-content', report);
       await mark(page, 'keyboard-economy');
-      await page.getByRole('button', { name: 'Gold and income sources', exact: true }).press('Enter');
+      const gold = page.locator('.hud button[data-action="economy"][data-resource="gold"]');
+      await expect(gold).toHaveCount(1);
+      await expect(gold).toHaveAccessibleName(/^Gold: \d+\. Income: \d+\.\d per game second$/);
+      await gold.press('Enter');
       await expect(page.getByRole('dialog', { name: 'Your economy and army', exact: true })).toBeVisible();
       const economy = await receipt(page); report.push(economy); oneClick(economy, 'economy');
       await page.keyboard.press('Escape');

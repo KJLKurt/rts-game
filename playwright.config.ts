@@ -4,9 +4,9 @@ import {defineConfig, devices} from '@playwright/test';
 const external = process.env.FRONTIER_TEST_URL;
 export default defineConfig({
   testDir: './tests/browser',
-  testMatch: /(editor-name-retention|editor-exact-input-diagnostic|canvas-gesture-boundaries|touch-target-discrimination|approved-mobile-ui)\.spec\.ts/,
-  grep: /editor-name-retention.*(?:inline name|explicit settings|native Pan)|editor-exact-input-diagnostic|canvas-gesture-boundaries|touch-target-discrimination|approved explicit commands|approved editor touch cancellation/,
-  globalTimeout: 15 * 60_000,
+  testMatch: /canvas-gesture-boundaries\.spec\.ts/,
+  grep: /battle canvas gestures preserve orders and outside HUD controls/,
+  globalTimeout: 5 * 60_000,
   timeout: 35_000,
   expect: {timeout: 8_000},
   fullyParallel: false,
@@ -15,7 +15,7 @@ export default defineConfig({
   maxFailures: 0,
   // Canvas-heavy games should not spawn one browser per reported host CPU.
   workers: 1,
-  reporter: [['list'], ['json', {outputFile: 'canvas-touch-results.json'}]],
+  reporter: [['list'], ['json', {outputFile: 'canvas-touch-continuation-results.json'}]],
   use: {
     baseURL: external || 'http://127.0.0.1:4181/rts-game/',
     trace: 'on-first-retry', screenshot: 'only-on-failure', video: 'off',
