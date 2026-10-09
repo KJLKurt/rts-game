@@ -3306,6 +3306,12 @@ function canvasPoint(e: PointerEvent): Point {
   const r = canvas.getBoundingClientRect();
   return { x: e.clientX - r.left, y: e.clientY - r.top };
 }
+// Workshop painting, panning and pinch use pointer events. Also consume native
+// touch scrolling there: Chromium can retain a hidden fling despite
+// touch-action:none and swallow the next tap on an ordinary workshop control.
+canvas.addEventListener("touchmove", (event) => {
+  if (editing && event.cancelable) event.preventDefault();
+}, { passive: false });
 canvas.addEventListener("pointerdown", (e) => {
   if ((!playing && !editing) || modalOpen || battleSuspension.suspended) return;
   // Audio is unlocked only by the trusted capture-phase gesture handler.
