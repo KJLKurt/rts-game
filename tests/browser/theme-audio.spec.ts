@@ -8,10 +8,17 @@ type SourceReceipt = {
   loop: boolean; duration: number; route: string[]; gain: number;
   targets: { value: number; at: number; constant: number }[];
 };
+type BusSample = { at: number; master: number; effects: number };
+type EffectReceipt = {
+  frequency: number; route: string[]; start: number; scheduled: BusSample; rendered: BusSample | null;
+  signal: { peak: number; rms: number; samples: number; reads: number; window: number; firstAt: number | null; lastAt: number | null };
+};
 type AudioReceipt = {
-  context: AudioContextState | null; master: number; music: number; effects: number;
+  context: AudioContextState | null; currentTime: number; master: number; music: number; effects: number;
+  busTargets: { master: SourceReceipt['targets']; music: SourceReceipt['targets']; effects: SourceReceipt['targets'] };
+  effectsMeter: { fftSize: number; sampleRate: number; route: string } | null;
   maxConnectedSources: number; sources: SourceReceipt[]; decoded: string[]; held: string[];
-  effectsVoices: { frequency: number; route: string[]; master: number; effects: number }[];
+  effectsVoices: EffectReceipt[];
 };
 declare global {
   interface Window {
@@ -22,15 +29,15 @@ declare global {
 }
 
 /** Native WebAudio only: observe calls and actual graph connections; never replace contexts or clocks. */
-async function observeAudio(page: Page) {
-  await page.addInitScript(() => {
+async function observeAudio(page: Page, measureEffects = false) {
+  await page.addInitScript(({ measureEffects }) => {
     const gains: GainNode[] = [], decoded: string[] = [], effectsVoices: AudioReceipt['effectsVoices'] = [];
     const links = new WeakMap<AudioNode, AudioNode | AudioParam>();
     const bytes = new WeakMap<ArrayBuffer, string>(), buffers = new WeakMap<AudioBuffer, string>();
     const targets = new WeakMap<AudioParam, SourceReceipt['targets']>();
     const voices: { source: AudioBufferSourceNode; gain?: GainNode; receipt: SourceReceipt }[] = [];
     const held: string[] = [], releases: (() => void)[] = [];
-    let context: AudioContext | undefined, holdAsset = '', maxConnectedSources = 0;
+    let context: AudioContext | undefined, effectsMeter: AnalyserNode | undefined, holdAsset = '', maxConnectedSources = 0;
     const arrayBuffer = Response.prototype.arrayBuffer;
     Response.prototype.arrayBuffer = async function () {
       const data = await arrayBuffer.call(this), asset = new URL(this.url, location.href).pathname;
@@ -47,12 +54,21 @@ async function observeAudio(page: Page) {
         buffers.set(buffer, asset); decoded.push(asset); success?.(buffer);
       }, failure);
     };
+    const connect = AudioNode.prototype.connect, disconnect = AudioNode.prototype.disconnect;
     const createGain = AudioContext.prototype.createGain;
     AudioContext.prototype.createGain = function () {
       context = this;
-      const gain = createGain.call(this); gains.push(gain); targets.set(gain.gain, []); return gain;
+      const gain = createGain.call(this); gains.push(gain); targets.set(gain.gain, []);
+      if (gains.length === 3 && measureEffects) {
+        // A passive native meter forks from Effects. The application's original
+        // Effects -> Master -> Destination connection remains unchanged, and the
+        // meter has no output connection. The route observer below follows the
+        // audible path; this additional observation branch is disclosed in read().
+        effectsMeter = this.createAnalyser(); effectsMeter.fftSize = 2048;
+        Reflect.apply(connect, gain, [effectsMeter]);
+      }
+      return gain;
     };
-    const connect = AudioNode.prototype.connect, disconnect = AudioNode.prototype.disconnect;
     AudioNode.prototype.connect = function (this: AudioNode, ...args: Parameters<typeof connect>) {
       const result = Reflect.apply(connect, this, args);
       links.set(this, args[0]);
@@ -100,24 +116,59 @@ async function observeAudio(page: Page) {
     const createOscillator = AudioContext.prototype.createOscillator;
     AudioContext.prototype.createOscillator = function () {
       const oscillator = createOscillator.call(this), start = oscillator.start;
+      let effect: EffectReceipt | undefined, monitor = 0, sumSquares = 0;
+      const sampleBus = (): BusSample => ({ at: oscillator.context.currentTime,
+        master: gains[0].gain.value, effects: gains[2].gain.value });
+      const capture = () => {
+        // Replace the whole analyser window with this cue's rendered frames;
+        // allow a few extra native quanta for the queued start to take effect.
+        if (!effect || !effectsMeter || oscillator.context.currentTime < effect.start + effect.signal.window + .01) return;
+        const samples = new Float32Array(effectsMeter.fftSize);
+        effectsMeter.getFloatTimeDomainData(samples);
+        for (const value of samples) {
+          effect.signal.peak = Math.max(effect.signal.peak, Math.abs(value)); sumSquares += value * value;
+        }
+        effect.signal.samples += samples.length; effect.signal.reads++;
+        effect.signal.rms = Math.sqrt(sumSquares / effect.signal.samples);
+        effect.signal.firstAt ??= oscillator.context.currentTime;
+        effect.signal.lastAt = oscillator.context.currentTime;
+      };
       oscillator.start = function (at = 0) {
         const path = route(oscillator);
-        if (path.includes('effects')) effectsVoices.push({ frequency: oscillator.frequency.value, route: path,
-          master: gains[0].gain.value, effects: gains[2].gain.value });
-        return start.call(this, at);
+        if (path.includes('effects')) {
+          effect = { frequency: oscillator.frequency.value, route: path, start: at, scheduled: sampleBus(), rendered: null,
+            signal: { peak: 0, rms: 0, samples: 0, reads: 0, window: effectsMeter ? effectsMeter.fftSize / effectsMeter.context.sampleRate : 0,
+              firstAt: null, lastAt: null } };
+          effectsVoices.push(effect);
+        }
+        const result = start.call(this, at);
+        if (effect && effectsMeter) monitor = window.setInterval(capture, 10);
+        return result;
       };
+      oscillator.addEventListener('ended', () => {
+        if (!effect) return;
+        capture(); window.clearInterval(monitor);
+        // AudioParam.value reflects rendering, not a newly queued automation
+        // request. Read it after this real application cue has actually ended.
+        // https://webaudio.github.io/web-audio-api/#computation-of-value
+        effect.rendered = sampleBus();
+      });
       return oscillator;
     };
+    const busTargets = (index: number) => gains[index] ? [...targets.get(gains[index].gain) ?? []] : [];
     window.__QA_THEME_AUDIO__ = {
-      read: () => ({ context: context?.state ?? null, master: gains[0]?.gain.value ?? 0,
+      read: () => ({ context: context?.state ?? null, currentTime: context?.currentTime ?? 0, master: gains[0]?.gain.value ?? 0,
         music: gains[1]?.gain.value ?? 0, effects: gains[2]?.gain.value ?? 0, maxConnectedSources,
+        busTargets: { master: busTargets(0), music: busTargets(1), effects: busTargets(2) },
+        effectsMeter: effectsMeter ? { fftSize: effectsMeter.fftSize, sampleRate: effectsMeter.context.sampleRate,
+          route: 'Effects -> passive AnalyserNode (no output); audible Effects -> Master -> Destination preserved' } : null,
         sources: voices.filter(v => v.receipt.start >= 0).map(v => ({ ...v.receipt, gain: v.gain?.gain.value ?? 0,
           targets: [...v.receipt.targets] })), decoded: [...decoded], held: [...held], effectsVoices: structuredClone(effectsVoices) }),
       hold: asset => { holdAsset = asset; },
       release: () => { holdAsset = ''; for (const release of releases.splice(0)) release(); },
       clearEffects: () => { effectsVoices.length = 0; },
     };
-  });
+  }, { measureEffects });
 }
 const audio = (page: Page) => page.evaluate(() => window.__QA_THEME_AUDIO__.read());
 const asset = (theme: Theme, state: AudioState) => `/assets/audio/${theme === 'mythic' ? 'mythic/' : ''}${state}.`;
@@ -172,10 +223,26 @@ async function launchHere(page: Page) {
 async function selectionCue(page: Page) {
   await page.evaluate(() => window.__QA_THEME_AUDIO__.clearEffects());
   await press(page, action(page, 'select-commander'));
+  await expect.poll(async () => {
+    const effects = (await audio(page)).effectsVoices;
+    return effects.length === 1 && effects[0].rendered !== null;
+  }).toBe(true);
   const effects = (await audio(page)).effectsVoices;
   expect(effects).toHaveLength(1); expect(effects[0].frequency).toBe(420);
   expect(effects[0].route).toEqual(['voice-gain', 'effects', 'master', 'destination']);
-  return effects[0];
+  expect(effects[0].rendered!.at).toBeGreaterThan(effects[0].start);
+  expect(effects[0].signal.reads).toBeGreaterThan(0);
+  expect(effects[0].signal.firstAt!).toBeGreaterThanOrEqual(effects[0].start + effects[0].signal.window);
+  return { ...effects[0], rendered: effects[0].rendered! };
+}
+async function settleEffects(page: Page) {
+  const snapshot = await audio(page), target = snapshot.busTargets.effects.at(-1)!;
+  expect(target).toBeDefined(); expect(snapshot.effectsMeter).not.toBeNull();
+  // Let the requested gain settle in real AudioContext time. A dormant meter
+  // may retain its old ring; capture() separately waits a full active cue window.
+  const settledAt = target.at + 12 * target.constant + snapshot.effectsMeter!.fftSize / snapshot.effectsMeter!.sampleRate;
+  await expect.poll(async () => (await audio(page)).currentTime).toBeGreaterThan(settledAt);
+  return target;
 }
 async function receipt(name: string, data: unknown) {
   await test.info().attach(name, { contentType: 'application/json', body: JSON.stringify(data, null, 2) });
@@ -183,7 +250,7 @@ async function receipt(name: string, data: unknown) {
 
 test('theme music follows native settings, independent buses and a paused offline save without changing progression', async ({ page, context }) => {
   test.setTimeout(60_000);
-  await observeAudio(page); await home(page);
+  await observeAudio(page, true); await home(page);
   const profile = await page.evaluate(() => window.__FRONTIER__.profile);
   expect((await audio(page)).context).toBeNull();
   await openSettings(page); await currentSource(page, 'christmas', 'menu');
@@ -196,14 +263,33 @@ test('theme music follows native settings, independent buses and a paused offlin
   await expect.poll(async () => (await audio(page)).music).toBeLessThan(.001);
   await closeSettings(page); await launchHere(page); await currentSource(page, 'mythic', 'exploration');
   const before = await page.evaluate(() => JSON.stringify(window.__FRONTIER__.state));
-  const musicOff = await selectionCue(page); expect(musicOff.master).toBeCloseTo(.4, 2); expect(musicOff.effects).toBeCloseTo(.2, 2);
+  await settleEffects(page);
+  const musicOff = await selectionCue(page);
+  expect(musicOff.rendered.master).toBeCloseTo(.4, 2); expect(musicOff.rendered.effects).toBeCloseTo(.2, 2);
+  expect(musicOff.signal.peak).toBeGreaterThan(.001);
   await openSettings(page); await setSlider(page, '#music-slider', .3); await setSlider(page, '#sfx-slider', 0);
   await expect.poll(async () => Math.round((await audio(page)).music * 100)).toBe(30);
-  await expect.poll(async () => (await audio(page)).effects).toBeLessThan(.001);
-  await closeSettings(page); const effectsOff = await selectionCue(page); expect(effectsOff.effects).toBeLessThan(.001);
+  const zeroRequest = await audio(page);
+  const effectsZeroRequest = { currentTime: zeroRequest.currentTime, reportedGainBeforeCue: zeroRequest.effects,
+    target: zeroRequest.busTargets.effects.at(-1), slider: await page.locator('#sfx-slider').inputValue(),
+    persisted: await page.evaluate(() => JSON.parse(localStorage.getItem('frontier-command:rts-game:v1:preferences')!).sfx) };
+  await receipt('effects-zero-request-before-native-cue', effectsZeroRequest);
+  expect(effectsZeroRequest.target).toMatchObject({ value: 0, constant: .05 });
+  expect(effectsZeroRequest.slider).toBe('0'); expect(effectsZeroRequest.persisted).toBe(0);
+  await settleEffects(page); await closeSettings(page);
+  const effectsOff = await selectionCue(page);
+  await receipt('effects-zero-rendered-native-cue', effectsOff);
+  expect(effectsOff.rendered.effects).toBeLessThan(.001);
+  expect(effectsOff.signal.peak, 'The real selection cue is silent after the Effects bus').toBeLessThan(.000001);
   const musicOn = await audio(page);
   expect(musicOn.sources.at(-1)!.gain * musicOn.music * musicOn.master).toBeGreaterThan(.001);
   await openSettings(page); await setSlider(page, '#sfx-slider', .2);
+  expect((await settleEffects(page)).value).toBe(.2);
+  await closeSettings(page); const effectsRestored = await selectionCue(page);
+  await receipt('effects-restored-rendered-native-cue', effectsRestored);
+  expect(effectsRestored.rendered.effects).toBeCloseTo(.2, 2);
+  expect(effectsRestored.signal.peak, 'Restoring Effects restores the real selection cue').toBeGreaterThan(.001);
+  await openSettings(page);
   await press(page, settings(page).getByLabel('Mute all audio', { exact: true }));
   await expect.poll(async () => (await audio(page)).master).toBeLessThan(.001);
   for (const theme of ['christmas', 'mythic'] as const) {
@@ -211,7 +297,7 @@ test('theme music follows native settings, independent buses and a paused offlin
     expect((await audio(page)).master).toBeLessThan(.001);
     expect(await page.evaluate(() => JSON.stringify(window.__FRONTIER__.state))).toBe(before);
   }
-  await closeSettings(page); const muted = await selectionCue(page); expect(muted.master).toBeLessThan(.001);
+  await closeSettings(page); const muted = await selectionCue(page); expect(muted.rendered.master).toBeLessThan(.001);
   expect(await page.evaluate(() => window.__FRONTIER__.profile)).toEqual(profile);
   const online = await audio(page); expect(online.maxConnectedSources).toBeLessThanOrEqual(2);
   await press(page, action(page, 'pause-menu')); await press(page, action(page, 'save-leave'));
@@ -244,7 +330,7 @@ test('theme music follows native settings, independent buses and a paused offlin
   const offline = await audio(page); expect(offline.maxConnectedSources).toBeLessThanOrEqual(2);
   await receipt('theme-controls-paused-save-offline', { provenance: 'Real UI input, native WebAudio graph and offline reload. No subjective listening claim.',
     profileUnchanged: true, pausedStateUnchanged: true, cachedAudioFiles: cached.filter(path => path.includes('/assets/audio/')).length,
-    musicOff, effectsOff, muted, online, offline });
+    musicOff, effectsZeroRequest, effectsOff, effectsRestored, muted, online, offline });
 });
 
 test('controlled local state and delayed-load fixtures reject stale theme music and retire native outcome sources', async ({ page, baseURL }) => {
