@@ -1,74 +1,48 @@
 name: Isolated browser acceptance
-
-# One reviewed checkpoint on a dedicated branch. No deployment permissions.
 on:
   push:
     branches: [qa-browser-check]
   workflow_dispatch:
-
 permissions:
   contents: read
-
 concurrency:
   group: frontier-command-browser-qa
   cancel-in-progress: false
-
 jobs:
   browser:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    env:
-      FRONTIER_TEST_WORKERS: "2"
-      FRONTIER_PREVIOUS_DIST: .qa-previous/dist
-      FRONTIER_EXPECT_BUILD_ID: fc-088b668ca425
     steps:
-      - name: Check out the acceptance checkpoint
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Check out the exact current-production reproduction checkpoint
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
       - name: Use Node.js 24
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version: "24"
           cache: npm
       - name: Install locked dependencies
         run: npm ci --no-audit --no-fund
-      - name: Check out the exact previous live Space release
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          ref: f9378101770085bae49d8b2ebdc21eb0edf86770
-          path: .qa-previous
-          persist-credentials: false
-      - name: Build and verify all 82 previous-live runtime files
-        run: |
-          ln -s ../node_modules .qa-previous/node_modules
-          npm --prefix .qa-previous run build
-          node .qa-verify-previous.mjs
-      - name: Build and verify all 83 frozen candidate files
+      - name: Build and verify all 83 unchanged current-production files
         run: |
           npm run build
-          node .qa-verify-candidate.mjs
+          node .qa-verify-current.mjs
       - name: Install official Playwright Chromium
         run: npx playwright install --with-deps chromium
-      - name: Continue the single affected desktop learning identity after the scoped layout fix
-        run: npx playwright test --config playwright-learning-qa.config.ts --project=desktop tests/browser/learning.spec.ts --grep='all eight peaceful lessons use real input, teach neighboring houses, and launch the named Outpost'
-      - name: Sequentially verify the exact previous-live cache upgrade
-        run: npx playwright test --config playwright-space-upgrade.config.ts
-      - name: Verify tested distribution still matches the frozen candidate
+      - name: Record three focused baseline UI reproductions without retries
+        run: npx playwright test --config playwright-planning-repro.config.ts
+      - name: Verify tested production remained byte-exact
         if: ${{ !cancelled() }}
-        run: node .qa-verify-candidate.mjs
-      - name: Preserve all ledgers, boundary geometry, screenshots, and failure traces
+        run: node .qa-verify-current.mjs
+      - name: Preserve all first-attempt failures, screenshots, ledgers and traces
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: frontier-learning-acceptance-${{ github.sha }}
+          name: frontier-planning-reproduction-${{ github.sha }}
           path: |
-            learning-identity-ledger.json
-            space-upgrade-identity-ledger.json
-            previous-live-dist-proof.json
-            candidate-dist-proof.json
-            learning-report/
-            space-upgrade-report/
-            test-results-learning/
-            test-results-space-upgrade/
+            planning-repro-identity-ledger.json
+            current-live-dist-proof.json
+            planning-repro-report/
+            test-results-planning-repro/
           retention-days: 7
