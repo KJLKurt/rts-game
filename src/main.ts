@@ -51,6 +51,7 @@ import {
   inspectionAvailabilitySignature,
 } from "./ui/inspection";
 import { updateLiveHTML } from "./ui/live-html";
+import { tacticalPausePresentation } from "./ui/tactical-pause";
 import { expeditionOpeningGuidance, rallyDestination, recruitDestination, resourceTargetName, selectedOrderDescription, rangedSpacingDescription } from "./ui/command-guidance";
 import {
   populationBreakdown,
@@ -1092,17 +1093,20 @@ function updateHUD() {
       : `<span class="respawning">${playerOutcomeStatus(state) === "spectating" ? "Your keep fell. Watching your surviving allies." : "Commander recovering at the keep…"}</span>`,
   );
   updateAbilities(c);
-  const pause = document.querySelector(".pause-button");
+  const pause = document.querySelector<HTMLButtonElement>(".pause-button");
   if (pause) {
-    if (
-      pause.getAttribute("aria-label") !==
-      (state.paused ? "Resume battle" : "Tactical pause")
-    )
-      pause.innerHTML = icon(state.paused ? "play" : "pause") + `<span>${state.paused ? "Resume" : "Pause"}</span>`;
-    pause.setAttribute(
-      "aria-label",
-      state.paused ? "Resume battle" : "Tactical pause",
+    const presentation = tacticalPausePresentation(
+      state.settings.difficulty,
+      state.paused,
+      state.players[0].stats.pauses,
     );
+    if (pause.getAttribute("aria-label") !== presentation.accessibleLabel) {
+      pause.innerHTML = icon(state.paused ? "play" : "pause") + `<span class="pause-copy"><span class="pause-label">${presentation.label}</span><small class="pause-budget">${presentation.budget}</small></span>`;
+      pause.setAttribute("aria-label", presentation.accessibleLabel);
+      pause.title = presentation.accessibleLabel;
+    }
+    pause.disabled = presentation.disabled;
+    pause.dataset.pauseState = presentation.state;
     pause.classList.toggle("active", state.paused);
   }
   set(

@@ -4414,6 +4414,18 @@ footer .build-identifier {
   border-color: #c97969;
 }
 
+/* Keep the pause allowance readable in the existing HUD action slot. */
+.hud .pause-button { min-width: 88px; flex-shrink: 0; }
+.pause-button .pause-copy { display: flex; flex-direction: column; gap: 2px; white-space: nowrap; }
+.pause-button .pause-label { font-size: calc(12px * var(--ui-scale, 1)); line-height: 1.1; }
+.pause-button .pause-budget { font-size: calc(10px * var(--ui-scale, 1)); line-height: 1.1; font-weight: 500; }
+.hud .pause-button:disabled { opacity: 1; color: #bdcfce; border-color: #647e83; background: #102631; cursor: default; }
+@media (max-width: 600px) {
+  .hud .pause-button { min-width: 64px; padding: 4px; }
+  .pause-button > .icon { display: none; }
+  .pause-button .pause-label { font-size: calc(11px * var(--ui-scale, 1)); }
+}
+
 @media (max-height: 500px) and (min-width: 600px) {
   .surrender-dialog { padding: 16px 20px; }
   .surrender-dialog header { margin-bottom: 10px; }
