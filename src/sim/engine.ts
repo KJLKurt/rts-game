@@ -835,7 +835,8 @@ function updateEntities(s: GameState, dt: number) {
         }
         // Fortifications retain siege damage; the Engineer's repair is intentionally valuable.
         if (e.type === 'support' && e.attackCooldown <= 0) {
-            const ally = spatial.query(e, 5, movementPadding).filter(a => areAllied(s, a.team, e.team) && a.kind !== 'building' && a.hp < a.maxHp * .96 && distance(a, e) < 5).sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0];
+            // An ally in this tick's spatial index may already have been killed.
+            const ally = spatial.query(e, 5, movementPadding).filter(a => living(a) && areAllied(s, a.team, e.team) && a.kind !== 'building' && a.hp < a.maxHp * .96 && distance(a, e) < 5).sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0];
             if (ally) {
                 const heal = s.players[e.team].faction === 'arcanists' ? 20 : 16;
                 ally.hp = Math.min(ally.maxHp, ally.hp + heal);

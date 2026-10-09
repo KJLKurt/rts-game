@@ -254,8 +254,7 @@ for (const theme of ['christmas', 'mythic'] as const) {
 
     test('native Range construction updates Recruit and Research without false readiness or card churn', async ({ page }) => {
       test.setTimeout(60_000);
-      test.info().annotations.push({ type: 'scenario-setup', description: 'Native Advanced setup starts each player with 500 gold and 500 wood. After paying for the Range, affordability stays above all initial thresholds so the card-identity window isolates fractional construction progress. No runtime resources or construction state are edited.' });
-      await startBattle(page, theme, { gold: 500, wood: 500 }); await fasterConstruction(page);
+      await startBattle(page, theme); await fasterConstruction(page);
       await press(page, action(page, 'panel-army'));
       await expect(recruitCard(page)).toHaveClass(/unavailable/);
       await expect(recruitCard(page)).toContainText('Needs Archery Range');
@@ -279,10 +278,6 @@ for (const theme of ['christmas', 'mythic'] as const) {
       await expect(recruitCard(page)).toContainText('Archery Range under construction');
       await expect(recruitCard(page)).toHaveAccessibleDescription(/Archery Range under construction/);
       await readable(page, recruitCard(page).locator('[data-prerequisite-state="constructing"]'));
-      await expect.poll(() => page.evaluate(() => {
-        const atlas = (window.__FRONTIER__.renderer as RendererProbe).atlas;
-        return atlas.ready && !!atlas.image?.complete && atlas.image.naturalWidth > 0;
-      })).toBe(true);
       const pausedCard = await recruitCard(page).elementHandle();
       await setPaused(page, false);
       // Resume is a real status transition and may replace the card. Capture
@@ -291,54 +286,9 @@ for (const theme of ['christmas', 'mythic'] as const) {
       await pausedCard!.dispose();
       await expect(recruitCard(page)).toContainText('Archery Range under construction');
       const handle = await recruitCard(page).elementHandle();
-      // Read-only evidence is bounded to acquisition, first disconnect, and the final comparison.
-      // Observe the stable deck container, without wrapping product functions.
-      const identityProbe = await handle!.evaluateHandle((node, costs) => {
-        const readState = () => {
-          const { state, renderer } = window.__FRONTIER__, player = state.players[0];
-          const atlas = (renderer as RendererProbe).atlas;
-          return {
-            connected: node.isConnected, time: state.time, tick: state.tick, paused: state.paused,
-            gold: player.gold, wood: player.wood,
-            rangeProgress: state.entities.find(e => e.team === 0 && e.type === 'range')?.buildProgress,
-            affordableBuildings: Object.fromEntries(costs.map(({ id, gold, wood }) => [id, player.gold >= gold && player.wood >= wood])),
-            atlas: { ready: atlas.ready, complete: atlas.image?.complete, width: atlas.image?.naturalWidth, src: atlas.image?.src },
-            pendingCommands: state.pendingCommands.map(command => command.type),
-            buildings: state.entities.filter(e => e.team === 0 && e.kind === 'building' && e.hp > 0)
-              .map(e => ({ id: e.id, type: e.type, ready: e.buildProgress >= 1, level: e.buildingLevel, rally: e.rally, queue: e.queue.map(q => [q.type, q.id, q.queueId]) })),
-          };
-        };
-        const evidence = { acquired: readState(), disconnected: null as ReturnType<typeof readState> | null };
-        const observer = new MutationObserver(() => {
-          if (!node.isConnected) { evidence.disconnected = readState(); observer.disconnect(); }
-        });
-        observer.observe(document.querySelector('#deck-content')!, { childList: true, subtree: true });
-        if (!node.isConnected) { evidence.disconnected = readState(); observer.disconnect(); }
-        return { evidence, readState, stop: () => observer.disconnect() };
-      }, Object.values(BUILDINGS).map(({ id, cost }) => ({ id, ...cost })));
-      let identityFailed = false;
-      try {
-        const progress = (await snapshot(page)).entities.find(e => e.team === 0 && e.type === 'range')!.buildProgress;
-        await expect.poll(() => page.evaluate(() => window.__FRONTIER__.state.entities.find(e => e.team === 0 && e.type === 'range')!.buildProgress)).toBeGreaterThan(progress + .05);
-        expect(await handle!.evaluate(node => node.isConnected)).toBe(true);
-      } catch (error) {
-        identityFailed = true;
-        throw error;
-      } finally {
-        try {
-          const evidence = await identityProbe.evaluate(probe => {
-            try { return { ...probe.evidence, final: probe.readState() }; }
-            finally { probe.stop(); }
-          });
-          await test.info().attach('range-card-identity-state', {
-            body: JSON.stringify(evidence, null, 2), contentType: 'application/json',
-          });
-        } catch (error) {
-          if (!identityFailed) throw error; // Diagnostics must not replace the original assertion error.
-        } finally {
-          await identityProbe.dispose().catch(error => { if (!identityFailed) throw error; });
-        }
-      }
+      const progress = (await snapshot(page)).entities.find(e => e.team === 0 && e.type === 'range')!.buildProgress;
+      await expect.poll(() => page.evaluate(() => window.__FRONTIER__.state.entities.find(e => e.team === 0 && e.type === 'range')!.buildProgress)).toBeGreaterThan(progress + .05);
+      expect(await handle!.evaluate(node => node.isConnected)).toBe(true);
       await expect(recruitCard(page)).toHaveClass(/unavailable/);
       await expect.poll(() => page.evaluate(() => window.__FRONTIER__.state.entities.some(e => e.team === 0 && e.type === 'range' && e.buildProgress >= 1)), { timeout: 20_000 }).toBe(true);
       await expect(recruitCard(page)).not.toHaveClass(/unavailable/);

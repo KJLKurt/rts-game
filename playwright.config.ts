@@ -4,8 +4,8 @@ import {defineConfig, devices} from '@playwright/test';
 const external = process.env.FRONTIER_TEST_URL;
 export default defineConfig({
   testDir: './tests/browser',
-  globalTimeout: 15 * 60_000,
-  grep: /native Range construction updates|an explicitly opened panel retains card identity|a real affordability change still invalidates|inline name survives one-stroke|explicit settings rename stays undoable|native Pan never paints|post-drag Tools diagnostic/,
+  testMatch: /support-healing\.spec\.ts/,
+  globalTimeout: 10 * 60_000,
   timeout: 35_000,
   expect: {timeout: 8_000},
   fullyParallel: true,
@@ -14,14 +14,14 @@ export default defineConfig({
   maxFailures: 0,
   // Canvas-heavy games should not spawn one browser per reported host CPU.
   workers: process.env.FRONTIER_TEST_WORKERS ? Math.max(1, Number(process.env.FRONTIER_TEST_WORKERS)) : 2,
-  reporter: [['list'], ['json', {outputFile: 'focused-diagnostic-results.json'}]],
+  reporter: [['list'], ['json', {outputFile: 'support-healing-results.json'}]],
   use: {
     baseURL: external || 'http://127.0.0.1:4181/rts-game/',
     trace: 'on-first-retry', screenshot: 'only-on-failure', video: 'off',
     launchOptions: process.env.PLAYWRIGHT_EXECUTABLE_PATH ? {executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH} : {},
   },
   projects: [
-    {name: 'desktop', use: {...devices['Desktop Chrome'], viewport: {width: 1440, height: 900}}, testIgnore: /pwa\.spec\.ts|editor-tools-input-diagnostic\.spec\.ts/},
+    {name: 'desktop', use: {...devices['Desktop Chrome'], viewport: {width: 1440, height: 900}}, testIgnore: /pwa\.spec\.ts/},
     {name: 'phone-portrait', use: {...devices['Pixel 7'], viewport: {width: 390, height: 844}}, testIgnore: /pwa\.spec\.ts/},
     {name: 'phone-landscape', use: {...devices['Pixel 7'], viewport: {width: 844, height: 390}}, testIgnore: /pwa\.spec\.ts/},
   ],
