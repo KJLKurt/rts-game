@@ -13,6 +13,7 @@ import type { UnitId } from '../sim/types';
 import type { PlannedConstruction } from '../ui/queued-construction';
 import { drawPlannedConstructionMarkers, plannedConstructionMarkers, QUEUED_CONSTRUCTION_STYLE } from './queued-construction';
 import { foliageMask, foliageOpacities, foliageSilhouette, type FoliageMask, type FoliageRect } from './foliage-visibility';
+import { actorIndicators, actorIndicatorIdentity, actorIndicatorBounds, type ActorIndicator } from './actor-indicators';
 
 export interface RenderOptions {
  time?:number; reveal?:boolean; quality?:'low'|'high'; reducedMotion?:boolean; team?:number;
@@ -196,6 +197,7 @@ export class Battlefield {
   // Every currently visible troop must remain readable and targetable behind structures.
   const protectedActors=items.filter(item=>item.kind==='entity'&&(item.value as Entity).kind!=='building');
   this.readableActors=protectedActors;
+  const indicators=this.planActorIndicators(protectedActors,selected,options),promoted=new Map(indicators.map(indicator=>[indicator.id,indicator]));
   this.updateTreeOpacities(items,protectedActors,state,t,options);
   // Ground orders and command markers stay below the silhouettes.
   this.drawPlannedConstruction(c,state,options);
@@ -205,12 +207,13 @@ export class Battlefield {
    else if(item.kind==='node'){const opacity=this.nodeOpacity(item,protectedActors);if(opacity<1)this.fadedNodes.add((item.value as ResourceNode).id);this.drawNode(c,item.value as ResourceNode,state,selected.has((item.value as ResourceNode).id),t,options,opacity);}
    else if(item.kind==='casualty')this.drawCasualty(c,item.value as Casualty,options);
    else if(item.kind==='supply')this.drawSupply(c,item.value as RushSupply,state,t,options);
-   else this.drawEntity(c,item.value as Entity,selected.has((item.value as Entity).id),t,state,options,(item.value as Entity).kind==='building'?this.nodeOpacity(item,protectedActors):1);
+   else this.drawEntity(c,item.value as Entity,selected.has((item.value as Entity).id),t,state,options,(item.value as Entity).kind==='building'?this.nodeOpacity(item,protectedActors):1,promoted.get((item.value as Entity).id));
    c.restore();
   }
   for(const event of state.events)if(this.visible(state,event.x,event.y,false,options))this.drawEvent(c,event,state,t,options);
+  this.drawActorIndicators(c,indicators,options);
   this.drawFog(c,state,options);
-  if(!options.placement)this.drawTroopSummaries(c,items,state,options);
+  if(!options.placement)this.drawTroopSummaries(c,items,state,options,indicators);
   if(state.rush)this.drawRushOverlay(c,state,t,options);
   if(options.placement)this.drawPlacement(c,options.placement,t);
   if(options.target){const p=this.worldToScreen(options.target.x,options.target.y);c.save();c.translate(p.x,p.y);c.scale(z,z);const r=options.target.radius??2;ellipse(c,0,0,r*CIRCLE_X,r*CIRCLE_Y,'#8be7ff15','#a4efff',1.5);diamond(c,0,0,10,5,'#a5f0ff55','#daffff',1);line(c,[-18,0,18,0],'#d4ffff80',1);line(c,[0,-10,0,10],'#d4ffff80',1);c.restore();}
@@ -219,6 +222,31 @@ export class Battlefield {
   const dusk=(1-Math.cos(state.time/600))*.025;c.fillStyle=`rgba(35,52,92,${dusk})`;c.fillRect(0,0,this.width,this.height);
   // Gentle edge falloff keeps the centre readable on small screens.
   const vignette=c.createRadialGradient(this.width*.5,this.height*.5,this.height*.15,this.width*.5,this.height*.5,Math.max(this.width,this.height)*.7);vignette.addColorStop(0,'#06121d00');vignette.addColorStop(1,'#06121d44');c.fillStyle=vignette;c.fillRect(0,0,this.width,this.height);
+ }
+ private planActorIndicators(actors:readonly RenderItem[],selected:ReadonlySet<string>,options:RenderOptions):ActorIndicator[]{
+  return actorIndicators(actors.map(item=>({entity:item.value as Entity,...this.worldToScreen(item.x,item.y)})),selected,options.team??0,this.camera.zoom);
+ }
+ /** Only markers move above the scene. Bodies, opacity, and hit records retain their depth order. */
+ private drawActorIndicators(c:Ctx,indicators:readonly ActorIndicator[],options:RenderOptions){
+  const z=this.camera.zoom;
+  for(const marker of indicators){
+   const p=palette(marker.team),color=marker.selected?p.light:p.main;
+   c.save();c.translate(marker.x,marker.y);
+   ellipse(c,0,marker.ringY,marker.radius,marker.radiusY,'#00000000','#10242de6',marker.stroke+2);
+   ellipse(c,0,marker.ringY,marker.radius,marker.radiusY,'#00000000',color,marker.stroke);
+   const health=marker.health;
+   if(health){
+    const y=health.y-marker.y;
+    this.bar(c,0,y,health.width,health.height,health.ratio,marker.team===(options.team??0)?'#85dba8':p.main);
+    const identity=actorIndicatorIdentity(marker,z);
+    if(identity?.kind==='star'){
+     c.font=`bold ${identity.size}px system-ui`;c.textAlign='center';c.lineWidth=2.5;c.strokeStyle='#10242d';c.strokeText('★',0,identity.y-marker.y);c.fillStyle='#efd990';c.fillText('★',0,identity.y-marker.y);
+    }else if(identity){
+     diamond(c,0,identity.y-marker.y,identity.size,identity.size,p.light,'#10242d',1.3);
+    }
+   }
+   c.restore();
+  }
  }
  private drawPlannedConstruction(c:Ctx,state:GameState,options:RenderOptions){
   if(!options.plannedConstruction?.length)return;
@@ -232,7 +260,7 @@ export class Battlefield {
   });
   drawPlannedConstructionMarkers(c,markers);c.restore();
  }
- private drawTroopSummaries(c:Ctx,items:RenderItem[],state:GameState,options:RenderOptions){
+ private drawTroopSummaries(c:Ctx,items:RenderItem[],state:GameState,options:RenderOptions,indicators:readonly ActorIndicator[]=[]){
   const troops:VisibleTroop[]=[];
   const landmarks:{x:number;y:number;w:number;h:number}[]=[];
   for(const item of items){
@@ -247,7 +275,7 @@ export class Battlefield {
    if(p.x<0||p.x>this.width||p.y<0||p.y>this.height)continue;
    troops.push({team:e.team,type:e.type as UnitId,...p});
   }
-  const rectangles:{x:number;y:number;w:number;h:number}[]=[];
+  const rectangles:ScreenRect[]=actorIndicatorBounds(indicators,this.camera.zoom);
   for(const summary of visibleTroopSummaries(troops)){
    const header=`${(state.players[summary.team]?.name??'Troops').slice(0,14)} · ${summary.count} visible troops`;
    c.save();c.font='600 12px system-ui, sans-serif';
@@ -472,7 +500,7 @@ export class Battlefield {
   }
   c.drawImage(sprite,bounds.x,bounds.y,sprite.width/resolution,sprite.height/resolution);
  }
- private drawEntity(c:Ctx,e:Entity,selected:boolean,t:number,state:GameState,options:RenderOptions,artOpacity=1){
+ private drawEntity(c:Ctx,e:Entity,selected:boolean,t:number,state:GameState,options:RenderOptions,artOpacity=1,indicator?:ActorIndicator){
   const team=options.team??0,p=palette(e.team),buildingEntity=e.kind==='building',commander=e.kind==='commander';
   const damaged=e.hp<e.maxHp;
   const pose=this.combat.pose(e,state.entities,state.time),hit=this.combat.hitStrength(e.id);
@@ -482,7 +510,7 @@ export class Battlefield {
   const phase=hash(e.id.length,e.id.charCodeAt(e.id.length-1))*TAU;
   const rw=buildingEntity?e.radius*TILE_W/2+12:mobileGroundRadius(e);
   // Team identity combines six independent glyphs with colored, two-tone ground markers.
-  if(selected||commander){ellipse(c,0,2,rw+4,(rw+4)*.48,`${p.main}12`,selected?p.light:`${p.main}b0`,selected?1.8:1.1);}
+  if((selected||commander)&&!indicator){ellipse(c,0,2,rw+4,(rw+4)*.48,`${p.main}12`,selected?p.light:`${p.main}b0`,selected?1.8:1.1);}
   if(!buildingEntity){
    if(!commander&&options.quality==='low')this.drawCachedOverlay(c,`ground/${e.team}/${rw}`,{x:-rw-2,y:2-rw*.43-3,width:rw*2+4,height:rw*.86+6},target=>{ellipse(target,0,2,rw,rw*.43,`${p.dark}b0`,p.main,1.3);drawTeamGlyph(target,e.team,0,4,4,p.light);});
    else{ellipse(c,0,2,rw,rw*.43,`${p.dark}b0`,p.main,1.3);drawTeamGlyph(c,e.team,0,4,4,p.light);}
@@ -519,7 +547,7 @@ export class Battlefield {
    if(!drewAuthored&&!this.atlas.draw(c,e.type,width,height))unit(c,e.type,e.team,attacking?pose.age*3:t+phase,move,attacking&&!options.reducedMotion,e.facing,pose.age/.3);
    c.restore();
    // Narrow pennants render beyond dense ranks and remain distinct from the supplied costume palette.
-   if(commander){flag(c,-19,-14,e.team,t,true);c.font='bold 10px system-ui';c.textAlign='center';c.fillStyle='#efd990';c.fillText('★',0,-73);}
+   if(commander){flag(c,-19,-14,e.team,t,true);if(!indicator?.commander){c.font='bold 10px system-ui';c.textAlign='center';c.fillStyle='#efd990';c.fillText('★',0,-73);}}
   }
   const faction=state.players[e.team]?.faction;
   if(faction&&!state.players[e.team]?.neutral){
@@ -529,7 +557,7 @@ export class Battlefield {
    c.restore();
   }
   if(hit>0){c.save();c.globalAlpha=hit*(options.reducedMotion?.38:.62);c.globalCompositeOperation='screen';ellipse(c,0,buildingEntity?-28:-24,buildingEntity?26:14,buildingEntity?20:18,'#ffe4b577');c.restore();}
-  if(selected||commander||damaged||options.showHealth||options.hoverId===e.id){
+  if(!indicator?.health&&(selected||commander||damaged||options.showHealth||options.hoverId===e.id)){
    const y=buildingEntity?e.type==='keep'?-133:e.type==='tower'?-107:-98:commander?-82:-58;
    this.bar(c,0,y,buildingEntity?57:commander?46:30,commander?4.3:3,e.hp/e.maxHp,e.team===team?'#85dba8':p.main);
    if(buildingEntity&&e.queue.length>0)this.bar(c,0,y+7,57,2.5,1-e.queue[0].remaining/e.queue[0].total,'#e7cf8a');
