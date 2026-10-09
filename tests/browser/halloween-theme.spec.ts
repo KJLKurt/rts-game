@@ -21,7 +21,15 @@ type Probe = Omit<Battlefield, 'constructor'> & {
   __qaSelection: string[]; __qaMarkers: ActorIndicator[];
   __qaPortraits: PortraitDraw[]; __qaRestorePortraitDraw(): void;
   __qaKeepBars: BuildingBar[]; __qaRestoreKeepObservation(): void;
+  __qaKeepPointers: KeepPointerReceipt[]; __qaInputPhase: KeepPointerReceipt['phase'];
+  __qaKeepTargets: KeepTargetReceipt[];
 };
+type KeepPointerReceipt = {
+  phase: 'setup' | 'clear-ground' | 'keep'; event: string; pointerId: number; pointerType: string; trusted: boolean;
+  targetId: string; targetTag: string; targetAction: string | null; client: Point; canvasPoint: Point;
+  camera: Point & {zoom: number}; pickedId: string | null; keepGround: Point; at: number;
+};
+type KeepTargetReceipt = {phase: 'clear-ground' | 'keep'; point: Point; camera: Point & {zoom: number}; pickedId: string | null; keepGround: Point};
 type BuildingBar = {x: number; y: number; width: number; height: number; value: number; matrix: number[]};
 type PortraitDraw = {
   role: string; frame: string; image: string; drawn: boolean; width: number; height?: number;
@@ -273,6 +281,19 @@ async function inspectSpaceKeepQueue(page: Page) {
     const drawEntity = r.drawEntity, bar = r.bar, render = r.render;
     let observingKeep = false;
     r.__qaKeepBars = []; r.__qaSelection = [];
+    r.__qaKeepPointers = []; r.__qaKeepTargets = []; r.__qaInputPhase = 'setup';
+    const pointerEvents = ['pointerdown', 'pointerup', 'pointercancel'] as const;
+    const observePointer = (event: PointerEvent) => {
+      const rect = r.canvas.getBoundingClientRect(), point = {x: event.clientX - rect.left, y: event.clientY - rect.top};
+      const target = event.target instanceof Element ? event.target : null;
+      r.__qaKeepPointers.push({phase: r.__qaInputPhase, event: event.type,
+        pointerId: event.pointerId, pointerType: event.pointerType, trusted: event.isTrusted,
+        targetId: target?.id ?? '', targetTag: target?.tagName ?? '', targetAction: target?.getAttribute('data-action') ?? null,
+        client: {x: event.clientX, y: event.clientY}, canvasPoint: point, camera: {...r.camera},
+        pickedId: (r.pick(state, point.x, point.y) as Entity | ResourceNode | null)?.id ?? null,
+        keepGround: r.worldToScreen(keep.x, keep.y), at: performance.now()});
+    };
+    for (const name of pointerEvents) window.addEventListener(name, observePointer, {capture: true, passive: true});
     r.drawEntity = function(...args) {
       const previous = observingKeep; observingKeep = args[1].id === keep.id;
       if (observingKeep) this.__qaKeepBars = [];
@@ -290,15 +311,59 @@ async function inspectSpaceKeepQueue(page: Page) {
       this.__qaSelection = Array.from(selection, String);
       return render.call(this, state, selection, {...options, reducedMotion: true});
     };
-    r.__qaRestoreKeepObservation = () => { r.drawEntity = drawEntity; r.bar = bar; r.render = render; };
+    r.__qaRestoreKeepObservation = () => {
+      r.drawEntity = drawEntity; r.bar = bar; r.render = render;
+      for (const name of pointerEvents) window.removeEventListener(name, observePointer, true);
+    };
     return keep.id;
   });
   try {
     if (!await page.locator('.command-deck').evaluate(node => node.classList.contains('collapsed')))
       await press(page, action(page, 'toggle-deck'));
+    // Continue restores commander-follow mode. Release it through the ordinary
+    // empty-ground input before this controlled camera framing; never edit the
+    // private follow flag or retry a missed Keep tap.
+    const clearPoint = await clearGround(page);
+    const planInput = async (phase: 'clear-ground' | 'keep', point: Point) => page.evaluate(({phase, point, id}) => {
+      const {state, renderer} = window.__FRONTIER__, r = renderer as unknown as Probe;
+      const keep = state.entities.find(entity => entity.id === id)!;
+      const plan = {phase, point, camera: {...r.camera}, pickedId: (r.pick(state, point.x, point.y) as Entity | ResourceNode | null)?.id ?? null,
+        keepGround: r.worldToScreen(keep.x, keep.y)};
+      r.__qaInputPhase = phase; r.__qaKeepTargets.push(plan); return plan;
+    }, {phase, point, id: keepId});
+    const clearPlan = await planInput('clear-ground', clearPoint);
+    expect(clearPlan.pickedId).toBeNull();
+    await tap(page, clearPoint); await painted(page);
+    await expect.poll(() => page.evaluate(() => (window.__FRONTIER__.renderer as unknown as Probe).__qaSelection)).toEqual([]);
+    const clearInput = await page.evaluate(() => (window.__FRONTIER__.renderer as unknown as Probe).__qaKeepPointers.filter(row => row.phase === 'clear-ground'));
+    expect(clearInput.map(row => row.event)).toEqual(['pointerdown', 'pointerup']);
+    for (const event of clearInput) expect(event).toMatchObject({targetId: 'world', trusted: true, pickedId: null});
+    expect(clearInput[1].pointerId).toBe(clearInput[0].pointerId);
+    await page.evaluate(() => { (window.__FRONTIER__.renderer as unknown as Probe).__qaInputPhase = 'setup'; });
     await center(page, keepId);
-    const contact = await bodyContact(page, keepId); await tap(page, contact); await painted(page);
+    const cameraProof = async () => page.evaluate(id => {
+      const {state, renderer} = window.__FRONTIER__, r = renderer as unknown as Probe;
+      const keep = state.entities.find(entity => entity.id === id)!, hit = r.entityHits.get(id)!;
+      return {camera: {...r.camera}, keepGround: r.worldToScreen(keep.x, keep.y), paintedGround: {x: hit.matrix.e, y: hit.matrix.f}};
+    }, keepId);
+    const firstFrame = await cameraProof(); await painted(page); const secondFrame = await cameraProof();
+    expect(secondFrame).toEqual(firstFrame);
+    expect(secondFrame.keepGround.x).toBeCloseTo(page.viewportSize()!.width / 2, 8);
+    expect(secondFrame.keepGround.y).toBeCloseTo(page.viewportSize()!.height / 2 + (page.viewportSize()!.height < 500 ? 42 : 0), 8);
+    expect(secondFrame.paintedGround.x).toBeCloseTo(secondFrame.keepGround.x, 4);
+    expect(secondFrame.paintedGround.y).toBeCloseTo(secondFrame.keepGround.y, 4);
+    const contact = await bodyContact(page, keepId), keepPlan = await planInput('keep', contact);
+    expect(keepPlan.pickedId).toBe(keepId); expect(keepPlan.camera).toEqual(secondFrame.camera);
+    await tap(page, contact); await painted(page);
     await expect.poll(() => page.evaluate(() => (window.__FRONTIER__.renderer as unknown as Probe).__qaSelection)).toEqual([keepId]);
+    const keepInput = await page.evaluate(() => (window.__FRONTIER__.renderer as unknown as Probe).__qaKeepPointers.filter(row => row.phase === 'keep'));
+    expect(keepInput.map(row => row.event)).toEqual(['pointerdown', 'pointerup']);
+    for (const event of keepInput) {
+      expect(event).toMatchObject({targetId: 'world', trusted: true, pickedId: keepId});
+      expect(event.camera).toEqual(keepPlan.camera); expect(event.keepGround).toEqual(keepPlan.keepGround);
+    }
+    expect(keepInput[1].pointerId).toBe(keepInput[0].pointerId);
+    await page.evaluate(() => { (window.__FRONTIER__.renderer as unknown as Probe).__qaInputPhase = 'setup'; });
     // Native building selection opens Inspect. Collapse it normally before
     // grading the battlefield so phone UI cannot cover the bar/queue evidence.
     if (!await page.locator('.command-deck').evaluate(node => node.classList.contains('collapsed')))
@@ -351,10 +416,22 @@ async function inspectSpaceKeepQueue(page: Page) {
     });
     await receipt('Controlled Space Keep health and unpaid queue at native renderer scale', {
       provenance: 'Additional post-save visual staging in an isolated local profile. One existing Keep receives controlled health/queue values; mouse/touch selection, production bar rendering, atlas pixels and screenshot are real. No paid recruitment or natural-gameplay claim.',
-      project: test.info().project.name, contact, profileUnchanged: true, resourcesBefore, ...proof,
+      project: test.info().project.name, clearPlan, clearInput, firstFrame, secondFrame, keepPlan, keepInput,
+      contact, profileUnchanged: true, resourcesBefore, ...proof,
     });
   } finally {
-    await page.evaluate(() => (window.__FRONTIER__.renderer as unknown as Probe).__qaRestoreKeepObservation());
+    try {
+      const input = await page.evaluate(() => {
+        const r = window.__FRONTIER__.renderer as unknown as Probe;
+        return {targets: r.__qaKeepTargets, pointers: r.__qaKeepPointers, finalCamera: {...r.camera}, finalSelection: r.__qaSelection};
+      });
+      await receipt('Controlled Keep input targets, passive native pointer capture and camera evidence', {
+        project: test.info().project.name,
+        provenance: 'Capture-phase passive observations only, before production pointer handlers. Includes ordinary empty-ground release of commander following and exactly one Keep body tap; no synthetic events or follow-state mutation.', ...input,
+      });
+    } finally {
+      await page.evaluate(() => (window.__FRONTIER__.renderer as unknown as Probe).__qaRestoreKeepObservation());
+    }
   }
 }
 

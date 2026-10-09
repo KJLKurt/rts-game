@@ -17,7 +17,7 @@ concurrency:
 jobs:
   browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 15
     env:
       FRONTIER_TEST_WORKERS: "2"
       FRONTIER_PREVIOUS_DIST: .qa-previous/dist
@@ -47,7 +47,7 @@ jobs:
           node .qa-verify-previous.mjs
       - name: Install official Playwright Chromium
         run: npx playwright install --with-deps chromium
-      - name: Exercise the complete Space theme and soundtrack
+      - name: Continue only three Space crowd identities after camera-follow setup correction
         run: npx playwright test --config playwright-space-qa.config.ts
       - name: Sequentially verify the exact previous-live cache upgrade
         run: npx playwright test --config playwright-space-upgrade.config.ts
