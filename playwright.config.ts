@@ -4,8 +4,7 @@ import {defineConfig, devices} from '@playwright/test';
 const external = process.env.FRONTIER_TEST_URL;
 export default defineConfig({
   testDir: './tests/browser',
-  testMatch: /(?:selected-actor-readability|visibility-picking|troop-selection)\.spec\.ts/,
-  grep: /selected readability|native ground marker preserves selection|a native tap on exposed enemy pixels|native troop sheet selects an arbitrary subset/,
+  testMatch: /(?:editor-name-retention|workshop-complete)\.spec\.ts/,
   timeout: 35_000,
   expect: {timeout: 8_000},
   fullyParallel: true,
@@ -17,13 +16,14 @@ export default defineConfig({
   reporter: [['list'], ['html', {open: 'never', outputFolder: 'playwright-report'}]],
   use: {
     baseURL: external || 'http://127.0.0.1:4181/rts-game/',
-    trace: 'off', screenshot: 'only-on-failure', video: 'off',
+    trace: 'on-first-retry', screenshot: 'only-on-failure', video: 'off',
     launchOptions: process.env.PLAYWRIGHT_EXECUTABLE_PATH ? {executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH} : {},
   },
   projects: [
     {name: 'desktop', use: {...devices['Desktop Chrome'], viewport: {width: 1440, height: 900}}, testIgnore: /pwa\.spec\.ts/},
     {name: 'phone-portrait', use: {...devices['Pixel 7'], viewport: {width: 390, height: 844}}, testIgnore: /pwa\.spec\.ts/},
     {name: 'phone-landscape', use: {...devices['Pixel 7'], viewport: {width: 844, height: 390}}, testIgnore: /pwa\.spec\.ts/},
+    {name: 'pwa', use: {...devices['Desktop Chrome']}, testMatch: /pwa\.spec\.ts/},
   ],
   webServer: external ? undefined : {
     command: 'npm run build && node tests/browser/serve-production.mjs',

@@ -2131,7 +2131,9 @@ async function performAction(action: string, id?: string) {
       break;
     case "editor-undo":
     case "editor-redo": {
-      finishEditorStroke();
+      // Capture and validate the inline name before history rebuilds the shell.
+      // Terrain-only history preserves it; settings transactions may rename.
+      rememberEditorDraft();
       const map =
         action === "editor-undo"
           ? editorHistory.undo(state.map)
@@ -3559,7 +3561,9 @@ window.addEventListener("keydown", (e) => {
   if (editing) {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") {
       e.preventDefault();
-      void handleAction(e.shiftKey ? "editor-redo" : "editor-undo");
+      void handleAction(e.shiftKey ? "editor-redo" : "editor-undo").catch((error) =>
+        toast(error instanceof Error ? error.message : "That edit could not be restored.", "warning"),
+      );
     } else if (e.key.toLowerCase() === "p") void handleAction("editor-pan");
     else if (e.key.toLowerCase() === "b") void handleAction("editor-paint");
     return;

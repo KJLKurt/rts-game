@@ -34,8 +34,10 @@ export function achievementGridHTML(
           progress: 0,
           unlockedAt: null,
         },
-        hidden = achievement.hidden && !record.unlocked;
-      return `<article class="achievement ${record.unlocked ? "unlocked" : ""}"><div><span class="eyebrow">${esc(achievement.category)}${record.unlocked ? " · earned" : ""}</span><h3>${hidden ? "Secret achievement" : esc(achievement.name)}</h3><p>${hidden ? "Keep exploring the frontier to discover this challenge." : esc(achievement.description)}</p>${hidden ? "" : `<progress max="${achievement.target}" value="${record.progress}" aria-label="${esc(achievement.name)} progress"></progress><small>${number(record.progress)} / ${number(achievement.target)}</small>`}${record.unlocked ? `<small class="achievement-date">${record.unlockedAt ? `Earned ${esc(new Date(record.unlockedAt).toLocaleDateString("en", { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" }))} (UTC)` : "Earned before detailed records began"}</small>` : ""}</div></article>`;
+        hidden = achievement.hidden && !record.unlocked,
+        pending =
+          !hidden && !record.unlocked && record.progress >= achievement.target;
+      return `<article class="achievement ${record.unlocked ? "unlocked" : ""}"><div><span class="eyebrow">${esc(achievement.category)}${record.unlocked ? " · earned" : ""}</span><h3>${hidden ? "Secret achievement" : esc(achievement.name)}</h3><p>${hidden ? "Keep exploring the frontier to discover this challenge." : esc(achievement.description)}</p>${hidden ? "" : `<progress max="${achievement.target}" value="${record.progress}" aria-label="${esc(achievement.name)} progress"></progress><small>${number(record.progress)} / ${number(achievement.target)}</small>`}${pending ? `<small class="achievement-pending">Progress recorded. Awarded after you finish another battle without surrender.</small>` : ""}${record.unlocked ? `<small class="achievement-date">${record.unlockedAt ? `Earned ${esc(new Date(record.unlockedAt).toLocaleDateString("en", { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" }))} (UTC)` : "Earned before detailed records began"}</small>` : ""}</div></article>`;
     })
     .join("")}</div>`;
 }
