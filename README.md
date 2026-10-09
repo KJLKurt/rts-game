@@ -132,6 +132,7 @@ Local sandbox-enabled Linux Chromium and emulated phone touch were tested. Hoste
 - Q / E: commander abilities. Space: tactical pause. 1: commander. 2: army.
 - Charge ends the previous march at its landing point; issue a new movement or attack order afterward.
 - Recruit, build, and research from the bottom command deck.
+- Build prerequisites distinguish ready, missing, under construction, and queued buildings. Queued construction starts on Resume and unlocks dependent actions only after completion; Recruit and Research show the same construction progress.
 - The gold Relic button sends your army to a victory landmark; resources fund troops, while held relics earn points.
 - First skirmishes open with a frozen briefing. Easy gives you a home-side opening phase. Troops guard locally, respond to actual nearby attacks, and return. Explicit Hold keeps them stationary.
 - Rally current producers here fixes the destination for existing production buildings. Set a rally point for newly built producers in Details.

@@ -1,0 +1,13 @@
+# Building prerequisite clarity
+
+Natural Ironwatch play exposed a misleading Build-card label: “Needs Barracks” remained visible with a completed Barracks. The simulation already enforced prerequisites correctly. This batch changes presentation only.
+
+Build cards now distinguish ready, missing, under construction, and valid queued prerequisites. A destroyed prerequisite is missing; no historical destruction claim is inferred. Queued plans are identified from successful simulation projection and remain unmet until construction completes. Recruit and Research use the same progress vocabulary while retaining their existing producer-routing and availability rules. Full production queues are distinguished from missing producers.
+
+Control names stay stable; prerequisite descriptions are available through accessible descriptions. Card refreshes follow state transitions, including changed pending plans, rather than fractional construction ticks. Costs, build times, simulation, save format and assets remain unchanged.
+
+Validation: 827 unit tests across 76 files, TypeScript, content validation and production build passed. The focused native gate reconciles 28 passing identities and two intentional non-landscape placement skips across two runs, with retries disabled. Initial run 37875967018 passed 22, skipped two and failed six Blacksmith setups. The native setup lacked reserved resources on phones; the desktop geometry probe assumed reach granted by hypothetical completion. Test-only corrections used native Advanced resource settings and required a genuinely reachable rejection site. Run 37876657752 then passed all six affected identities. Production bytes were identical across both runs (fc-0a14c0c260a5).
+
+Coverage includes controlled missing/destroyed fixtures, native paused construction, exact save/reload restoration, dependency rejection, completion, Recruit/Research status, stable controls and queue capacity. The original failed evidence remains in the ledger; this is a reconciled multipart gate, not one clean full-suite run. The default 611-case browser matrix was collected, not rerun. Controlled fixtures and Chromium phone emulation do not establish natural gameplay or physical-phone acceptance. Final phone pixel review is recorded in the release receipt.
+
+Visual review: all 16 planned final phone frames (ready, missing, queued Build, queued Research across two themes/orientations) were inspected from hash-verified artifacts. Status text is legible; short-landscape cards remain vertically scrollable and a title can scroll above view while its status remains visible. No claim that every card fits entirely at once.
