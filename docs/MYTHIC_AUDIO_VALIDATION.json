@@ -1,0 +1,228 @@
+{
+  "method": "FFmpeg decoded PCM and EBU R128; no subjective listening",
+  "cues": {
+    "menu": {
+      "title": "The Citadel Gates",
+      "loop": true,
+      "durationSeconds": 40.0,
+      "codecs": {
+        "ogg": {
+          "bytes": 473041,
+          "sha256": "a879e5e7d0625e6836c285424d4adadc4de019e5664918375cc17da44bccf1f8",
+          "sampleRate": 44100,
+          "frames": 1764000,
+          "durationExact": true,
+          "integratedLUFS": -20.18,
+          "truePeakDbTP": -7.8,
+          "clippedSamples": 0,
+          "dcOffsetMax": 3.301171664527716e-06,
+          "stereoCorrelation": 0.9935,
+          "boundaryDelta": 0.0009755352512001991,
+          "maxSampleStep": 0.029758185148239136,
+          "seamStepBelowTrackMax": true
+        },
+        "mp3": {
+          "bytes": 641192,
+          "sha256": "1bc5f091b44aecc631feb8bf267415786225b66a61c981c35c14e4a5c37858db",
+          "sampleRate": 44100,
+          "frames": 1764000,
+          "durationExact": true,
+          "integratedLUFS": -20.65,
+          "truePeakDbTP": -8.44,
+          "clippedSamples": 0,
+          "dcOffsetMax": 2.95612259641635e-07,
+          "stereoCorrelation": 0.994,
+          "boundaryDelta": 0.00041107810102403164,
+          "maxSampleStep": 0.02835986018180847,
+          "seamStepBelowTrackMax": true
+        }
+      }
+    },
+    "exploration": {
+      "title": "Banners Above the Vale",
+      "loop": true,
+      "durationSeconds": 60.0,
+      "codecs": {
+        "ogg": {
+          "bytes": 727328,
+          "sha256": "755cec0d509c3b70f8ba9d01e73c5b942e6c93a6de5d164ca9c98a5e4ce6d2c9",
+          "sampleRate": 44100,
+          "frames": 2646000,
+          "durationExact": true,
+          "integratedLUFS": -19.68,
+          "truePeakDbTP": -6.32,
+          "clippedSamples": 0,
+          "dcOffsetMax": 7.881054675430104e-06,
+          "stereoCorrelation": 0.9925,
+          "boundaryDelta": 0.0012187513057142496,
+          "maxSampleStep": 0.04470933973789215,
+          "seamStepBelowTrackMax": true
+        },
+        "mp3": {
+          "bytes": 960931,
+          "sha256": "658bcf91e90d1f72a9abf958381210fb1794c29ec38991e322d5102dae8dd51e",
+          "sampleRate": 44100,
+          "frames": 2646000,
+          "durationExact": true,
+          "integratedLUFS": -20.15,
+          "truePeakDbTP": -6.73,
+          "clippedSamples": 0,
+          "dcOffsetMax": 3.694936190008679e-07,
+          "stereoCorrelation": 0.993,
+          "boundaryDelta": 0.000802770780865103,
+          "maxSampleStep": 0.042368367314338684,
+          "seamStepBelowTrackMax": true
+        }
+      }
+    },
+    "tension": {
+      "title": "Watchfires on the Rampart",
+      "loop": true,
+      "durationSeconds": 40.0,
+      "codecs": {
+        "ogg": {
+          "bytes": 490539,
+          "sha256": "10793edfaac2241158dbecb9cbaa4143f20484574be9b68943901a4fcdbdbdc2",
+          "sampleRate": 44100,
+          "frames": 1764000,
+          "durationExact": true,
+          "integratedLUFS": -19.68,
+          "truePeakDbTP": -7.78,
+          "clippedSamples": 0,
+          "dcOffsetMax": 1.26424823229154e-05,
+          "stereoCorrelation": 0.9926,
+          "boundaryDelta": 0.0018070214428007603,
+          "maxSampleStep": 0.03716891258955002,
+          "seamStepBelowTrackMax": true
+        },
+        "mp3": {
+          "bytes": 641192,
+          "sha256": "16bd43205aa6f860f0ab035a38e460f15d95cf4f60b00756360a893cf1ca9a2a",
+          "sampleRate": 44100,
+          "frames": 1764000,
+          "durationExact": true,
+          "integratedLUFS": -20.14,
+          "truePeakDbTP": -8.28,
+          "clippedSamples": 0,
+          "dcOffsetMax": 1.613121054631284e-07,
+          "stereoCorrelation": 0.9932,
+          "boundaryDelta": 0.0005668243393301964,
+          "maxSampleStep": 0.035498328506946564,
+          "seamStepBelowTrackMax": true
+        }
+      }
+    },
+    "combat": {
+      "title": "The Ironwatch Muster",
+      "loop": true,
+      "durationSeconds": 60.0,
+      "codecs": {
+        "ogg": {
+          "bytes": 777974,
+          "sha256": "d4ebb73cef984042c027f353e13ebffb07e595587df1d166d0b845276d56bd32",
+          "sampleRate": 44100,
+          "frames": 2646000,
+          "durationExact": true,
+          "integratedLUFS": -19.07,
+          "truePeakDbTP": -5.7,
+          "clippedSamples": 0,
+          "dcOffsetMax": 7.491370512263873e-06,
+          "stereoCorrelation": 0.9955,
+          "boundaryDelta": 0.0018907338380813599,
+          "maxSampleStep": 0.045606471598148346,
+          "seamStepBelowTrackMax": true
+        },
+        "mp3": {
+          "bytes": 960931,
+          "sha256": "59a91b6de98939b0aa38f5a648b93f69b2e0e5514e496404d35c384155853279",
+          "sampleRate": 44100,
+          "frames": 2646000,
+          "durationExact": true,
+          "integratedLUFS": -19.54,
+          "truePeakDbTP": -6.23,
+          "clippedSamples": 0,
+          "dcOffsetMax": 1.8174749178615311e-06,
+          "stereoCorrelation": 0.9958,
+          "boundaryDelta": 0.0016017435118556023,
+          "maxSampleStep": 0.04303411394357681,
+          "seamStepBelowTrackMax": true
+        }
+      }
+    },
+    "victory": {
+      "title": "Standards at Dawn",
+      "loop": false,
+      "durationSeconds": 7.5,
+      "codecs": {
+        "ogg": {
+          "bytes": 99055,
+          "sha256": "8ce6027d05e3edc3e8163b8dfce871a52f4b8ebe6e014826557eda005b65c4ab",
+          "sampleRate": 44100,
+          "frames": 330750,
+          "durationExact": true,
+          "integratedLUFS": -18.98,
+          "truePeakDbTP": -6.23,
+          "clippedSamples": 0,
+          "dcOffsetMax": 8.555156794128874e-06,
+          "stereoCorrelation": 0.9948,
+          "boundaryDelta": 0.0006185337551869452,
+          "maxSampleStep": 0.0434979572892189,
+          "seamStepBelowTrackMax": true
+        },
+        "mp3": {
+          "bytes": 121251,
+          "sha256": "68298f71886109ec5114991d1492e4f91f32e0303ca8955b8e90b113c4bcc85e",
+          "sampleRate": 44100,
+          "frames": 330750,
+          "durationExact": true,
+          "integratedLUFS": -19.44,
+          "truePeakDbTP": -6.84,
+          "clippedSamples": 0,
+          "dcOffsetMax": 5.924731767865393e-08,
+          "stereoCorrelation": 0.9953,
+          "boundaryDelta": 0.0001000570337055251,
+          "maxSampleStep": 0.04086808115243912,
+          "seamStepBelowTrackMax": true
+        }
+      }
+    },
+    "defeat": {
+      "title": "The Silent Courtyard",
+      "loop": false,
+      "durationSeconds": 10.0,
+      "codecs": {
+        "ogg": {
+          "bytes": 130096,
+          "sha256": "f8294845c8463a1013ca1dcb7cdf06ca75b8cd46c436f12ef95c6fb49451aea9",
+          "sampleRate": 44100,
+          "frames": 441000,
+          "durationExact": true,
+          "integratedLUFS": -20.19,
+          "truePeakDbTP": -7.21,
+          "clippedSamples": 0,
+          "dcOffsetMax": 1.8880518701221137e-05,
+          "stereoCorrelation": 0.9953,
+          "boundaryDelta": 2.5897457817336544e-05,
+          "maxSampleStep": 0.017564423382282257,
+          "seamStepBelowTrackMax": true
+        },
+        "mp3": {
+          "bytes": 160957,
+          "sha256": "4188bd4d7d3921fd58dafb2ca79ee79cc2146331cd079a64415cacb711f603c2",
+          "sampleRate": 44100,
+          "frames": 441000,
+          "durationExact": true,
+          "integratedLUFS": -20.65,
+          "truePeakDbTP": -7.89,
+          "clippedSamples": 0,
+          "dcOffsetMax": 8.385648129113206e-07,
+          "stereoCorrelation": 0.9959,
+          "boundaryDelta": 3.4949400287587196e-05,
+          "maxSampleStep": 0.016864776611328125,
+          "seamStepBelowTrackMax": true
+        }
+      }
+    }
+  },
+  "totalEncodedBytes": 6184487
+}

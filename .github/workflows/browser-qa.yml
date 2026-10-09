@@ -35,7 +35,7 @@ jobs:
       - name: Install official Playwright Chromium
         run: npx playwright install --with-deps chromium
       - name: Exercise the production PWA on desktop and touch viewports
-        run: npx playwright test --config=playwright-audio-qa.config.ts
+        run: npm run test:browser -- --config playwright-mythic-qa.config.ts
       - name: Preserve browser results and failure evidence
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -45,6 +45,5 @@ jobs:
             playwright-report/
             test-results/**/*.png
             test-results/**/*.json
-            test-results/**/*.wav
             test-results/**/error-context.md
           retention-days: 2

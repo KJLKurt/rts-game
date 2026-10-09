@@ -1,0 +1,100 @@
+{
+  "menu": {
+    "src": "assets/audio/mythic/menu.ogg",
+    "fallback": "assets/audio/mythic/menu.mp3",
+    "bpm": 96,
+    "duration": 40.0,
+    "loop": true,
+    "volume": 0.8,
+    "title": "The Citadel Gates",
+    "key": "E minor / Dorian modal mixture",
+    "bars": 16,
+    "timeSignature": [
+      4,
+      4
+    ],
+    "loopStart": 0,
+    "loopEnd": 40.0
+  },
+  "exploration": {
+    "src": "assets/audio/mythic/exploration.ogg",
+    "fallback": "assets/audio/mythic/exploration.mp3",
+    "bpm": 96,
+    "duration": 60.0,
+    "loop": true,
+    "volume": 0.72,
+    "title": "Banners Above the Vale",
+    "key": "E minor / Dorian modal mixture",
+    "bars": 24,
+    "timeSignature": [
+      4,
+      4
+    ],
+    "loopStart": 0,
+    "loopEnd": 60.0
+  },
+  "tension": {
+    "src": "assets/audio/mythic/tension.ogg",
+    "fallback": "assets/audio/mythic/tension.mp3",
+    "bpm": 96,
+    "duration": 40.0,
+    "loop": true,
+    "volume": 0.71,
+    "title": "Watchfires on the Rampart",
+    "key": "E minor",
+    "bars": 16,
+    "timeSignature": [
+      4,
+      4
+    ],
+    "loopStart": 0,
+    "loopEnd": 40.0
+  },
+  "combat": {
+    "src": "assets/audio/mythic/combat.ogg",
+    "fallback": "assets/audio/mythic/combat.mp3",
+    "bpm": 96,
+    "duration": 60.0,
+    "loop": true,
+    "volume": 0.68,
+    "title": "The Ironwatch Muster",
+    "key": "E minor",
+    "bars": 24,
+    "timeSignature": [
+      4,
+      4
+    ],
+    "loopStart": 0,
+    "loopEnd": 60.0
+  },
+  "victory": {
+    "src": "assets/audio/mythic/victory.ogg",
+    "fallback": "assets/audio/mythic/victory.mp3",
+    "bpm": 96,
+    "duration": 7.5,
+    "loop": false,
+    "volume": 0.68,
+    "title": "Standards at Dawn",
+    "key": "E major",
+    "bars": 3,
+    "timeSignature": [
+      4,
+      4
+    ]
+  },
+  "defeat": {
+    "src": "assets/audio/mythic/defeat.ogg",
+    "fallback": "assets/audio/mythic/defeat.mp3",
+    "bpm": 96,
+    "duration": 10.0,
+    "loop": false,
+    "volume": 0.73,
+    "title": "The Silent Courtyard",
+    "key": "E minor",
+    "bars": 4,
+    "timeSignature": [
+      4,
+      4
+    ]
+  }
+}

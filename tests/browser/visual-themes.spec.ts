@@ -52,6 +52,7 @@ test('a missing required directional image retains the working theme and reports
   await expect(page.getByLabel('Visual theme',{exact:true})).toBeEnabled();
   await expect(page.getByLabel('Visual theme',{exact:true})).toHaveValue('christmas');
   expect(await page.evaluate(()=>(window.__FRONTIER__.renderer as any).visualTheme)).toBe('christmas');
+  expect(await page.evaluate(()=>(window.__FRONTIER__ as typeof window.__FRONTIER__ & {audioTheme:string}).audioTheme)).toBe('christmas');
   await expect(page.locator('#theme-status')).toContainText('current set');
   expect(errors).toEqual([]);
  }finally{await context.close();}

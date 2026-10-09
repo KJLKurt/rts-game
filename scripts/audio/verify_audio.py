@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 """Verify shipped codecs technically. This script does not listen or judge musical quality."""
 from pathlib import Path
-import hashlib,json,re,subprocess
+import argparse,hashlib,json,re,subprocess
 import numpy as np
 ROOT=Path(__file__).resolve().parents[2]
-entries=json.loads((ROOT/'public/assets/audio/manifest.json').read_text())
+parser=argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--manifest',type=Path,default=ROOT/'public/assets/audio/manifest.json')
+parser.add_argument('--output',type=Path,default=ROOT/'docs/AUDIO_VALIDATION.json')
+args=parser.parse_args()
+entries=json.loads(args.manifest.read_text())
 report={'method':'FFmpeg decoded PCM and EBU R128; no subjective listening','cues':{}}
 for name,entry in entries.items():
     row={'title':entry['title'],'loop':entry['loop'],'durationSeconds':entry['duration'],'codecs':{}}
@@ -24,5 +28,5 @@ for name,entry in entries.items():
         row['codecs'][codec]=result
     report['cues'][name]=row
 report['totalEncodedBytes']=sum(codec['bytes'] for row in report['cues'].values() for codec in row['codecs'].values())
-(ROOT/'docs/AUDIO_VALIDATION.json').write_text(json.dumps(report,indent=2)+'\n')
+args.output.write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps({name:{ext:{key:value for key,value in codec.items() if key in ('integratedLUFS','truePeakDbTP','durationExact')} for ext,codec in row['codecs'].items()} for name,row in report['cues'].items()},indent=2))
