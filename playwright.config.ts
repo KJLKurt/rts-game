@@ -1,12 +1,11 @@
-// Focused foliage and existing occlusion/picking gate. Release retains the full config.
 import {defineConfig, devices} from '@playwright/test';
 
 /** Run against the production build: Vite dev deliberately does not register a worker. */
 const external = process.env.FRONTIER_TEST_URL;
 export default defineConfig({
   testDir: './tests/browser',
-  testMatch: /(?:foliage-visibility|visibility-picking)\.spec\.ts/,
-  grep: /controlled desert foliage|foliage stays local|native body selection and attack work through a faded foreground depot/,
+  testMatch: /(?:pause-budget|interruption|battle-feedback-lifecycle)\.spec\.ts/,
+  grep: /pause budget|focus loss freezes until explicit recovery without spending tactical pauses|mobile visibility recovery preserves the existing dialog and tactical queue|Ironwatch retry retires prior defeat feedback and preserves fresh paused orders/,
   timeout: 35_000,
   expect: {timeout: 8_000},
   fullyParallel: true,
