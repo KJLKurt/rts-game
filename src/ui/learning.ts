@@ -5,10 +5,12 @@ export interface LearningProgress {
   origin: Point;
   inspectedKeep: boolean;
 }
+/** A deliberate first walk must clear this displacement from the saved origin. */
+export const LEARNING_MOVE_DISTANCE = 2;
 export const LESSONS = [
   {
     title: "Move your commander",
-    text: "Start with one commander and a small keep. Choose Move, then tap clear ground to walk there, or hold the thumbstick. Release the stick to stop. Drag empty ground to look around.",
+    text: "Choose Move, then tap clear ground at least 3 tiles from your starting spot. Or hold the thumbstick to walk that far. Release the stick to stop. Drag empty ground to look around.",
     action: "Show commander",
   },
   {
@@ -47,6 +49,34 @@ export const LESSONS = [
     action: "Show relic",
   },
 ];
+
+function hasLearningMovement(state: GameState): boolean {
+  return state.commandLog.some(({ command }) =>
+    command.team === 0 && ["steer", "move", "capture"].includes(command.type),
+  );
+}
+
+/** A stopped, intentional walk is too short; a walk still in progress is not. */
+export function learningMoveWasShort(state: GameState, progress: LearningProgress): boolean {
+  const hero = state.entities.find(e => e.team === 0 && e.kind === "commander");
+  const distance = hero ? Math.hypot(hero.x - progress.origin.x, hero.y - progress.origin.y) : 0;
+  return !!hero && distance > .1 && distance <= LEARNING_MOVE_DISTANCE &&
+    !hero.directControl && ["idle", "hold"].includes(hero.order.type) && hasLearningMovement(state);
+}
+
+export function learningMoveGuidance(
+  state: GameState,
+  progress: LearningProgress,
+  armed: boolean,
+  selected: boolean,
+): string {
+  const feedback = learningMoveWasShort(state, progress) ? "That move was too short. " : "";
+  if (armed)
+    return feedback + "Tap clear ground at least 3 tiles from your starting spot. Drag to pan; Cancel keeps your commander still.";
+  if (selected)
+    return feedback + "Choose Move, then tap clear ground at least 3 tiles from your starting spot. Or hold the thumbstick to walk that far.";
+  return feedback + "Choose Commander, then Move. Walk at least 3 ground tiles from your starting spot.";
+}
 
 /** Small gaps between non-overlapping footprints count as a compact settlement. */
 export function hasNeighboringHouses(state: GameState): boolean {
@@ -106,12 +136,8 @@ export function advanceLearning(
   );
   const predicates = [
     !!hero &&
-      Math.hypot(hero.x - progress.origin.x, hero.y - progress.origin.y) > 2 &&
-      state.commandLog.some(
-        ({ command }) =>
-          command.team === 0 &&
-          ["steer", "move", "capture"].includes(command.type),
-      ),
+      Math.hypot(hero.x - progress.origin.x, hero.y - progress.origin.y) > LEARNING_MOVE_DISTANCE &&
+      hasLearningMovement(state),
     state.map.nodes.some((n) => n.kind === "gold" && n.owner === 0),
     state.map.nodes.some((n) => n.kind === "wood" && n.owner === 0),
     progress.inspectedKeep,

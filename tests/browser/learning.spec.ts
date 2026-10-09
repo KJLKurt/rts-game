@@ -1,4 +1,5 @@
-import { test, expect, action, home, tap, clearGround, pause } from "./helpers";
+import { test, expect, action, home, tap, clearGround, pause, resume } from "./helpers";
+import { verifyLearningQueueClearance } from "./learning-guidance-support";
 import type { Page } from "@playwright/test";
 
 async function lesson(page: Page, number: number) {
@@ -113,7 +114,7 @@ async function moveCommander(page: Page) {
 test("all eight peaceful lessons use real input, teach neighboring houses, and launch the named Outpost", async ({
   page,
 }) => {
-  test.setTimeout(180_000);
+  test.setTimeout(240_000);
   await home(page);
   // A previous campaign selection must not redirect the completion button.
   await action(page, "campaign").click();
@@ -170,6 +171,9 @@ test("all eight peaceful lessons use real input, teach neighboring houses, and l
     .getByRole("button", { name: "Recruit Swordsman", exact: true })
     .click();
   await expect(action(page, "cancel-production")).toHaveCount(3);
+  await pause(page);
+  await verifyLearningQueueClearance(page, "paid-training", true);
+  await resume(page);
   await lesson(page, 6);
   const capacity = await page.evaluate(
     () => window.__FRONTIER__.state.players[0].populationCap,
@@ -217,6 +221,9 @@ test("all eight peaceful lessons use real input, teach neighboring houses, and l
   await expect(page.locator("#selection-info")).toContainText("Inspect actions and upgrades in Details");
   await expect(page.locator("#selection-info")).not.toContainText("production and rally");
   await action(page, "upgrade-building").click();
+  await pause(page);
+  await verifyLearningQueueClearance(page, "paid-house-upgrade");
+  await resume(page);
   await lesson(page, 8);
   expect(
     await page.evaluate(
@@ -267,6 +274,7 @@ test("all eight peaceful lessons use real input, teach neighboring houses, and l
   expect(
     await page.evaluate(() => window.__FRONTIER__.state.settings.learning),
   ).not.toBe(true);
+  await expect(page.locator(".commander-strip")).not.toHaveClass(/learning-guide-overlap/);
   const outpostBriefing = page.getByRole("dialog", { name: "The Outpost", exact: true });
   await outpostBriefing.locator('[data-action="begin-mission"]').click();
   await expect(outpostBriefing).toHaveCount(0);

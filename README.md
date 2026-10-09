@@ -1,3 +1,7 @@
+> **Current accepted content checkpoint: fc-7592049128ac (9 October 2026).** Starfall Outpost adds a 36-role static Space family and six-state original soundtrack. All 1,030 local unit tests and the build pass. Multipart native evidence covers 18 distinct eligible identities and one exact previous-live cache upgrade, with six predeclared duplicate exclusions. The first gate's two phone Keep-stage failures remain documented; a bounded test-only camera-follow setup correction passed all three crowd views on unchanged production bytes. See [Space scope and evidence](docs/SPACE_THEME_20261009.md). Rollback is b8029a43 / fc-fc75c030c578. Full-matrix, directional/style/theme, natural-gameplay, subjective and physical-device acceptance remain open.
+
+### Previous Halloween checkpoint (historical)
+
 > **Current accepted content checkpoint: fc-fc75c030c578 (9 October 2026).** Hollow Lanterns adds a complete Halloween static-art family and matching six-state soundtrack. All 981 local unit tests and the build pass. The focused native gate passed 18 planned identities with six explicit duplicate exclusions; the sequential previous-live cache upgrade also passed. Actual renderer and phone screenshots were inspected. Rollback is32f1d4ea / fc-8228b96098aa. See [Halloween scope and evidence](docs/HALLOWEEN_THEME_20261009.md) and the [dated requirements overlay](docs/REQUIREMENTS_RECONCILIATION_20261009.md). Full directional/style/theme commitments and broader natural/device/subjective acceptance remain open.
 
 ### Earlier checkpoints (historical)

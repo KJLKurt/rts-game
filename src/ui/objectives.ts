@@ -1,5 +1,13 @@
 import { areAllied } from "../sim/alliances";
-import type { GameState, Point, ResourceNode } from "../sim/types";
+import type { GameMode, GameState, Point, ResourceNode } from "../sim/types";
+
+/** The first ordinary briefing must teach the active match's win condition. */
+export function firstBattleObjectiveCopy(mode: GameMode): { title: string; text: string } {
+  return mode === "conquest"
+    ? { title: "Destroy the enemy keeps", text: "Hold relics for gold and wood to fund your siege. Destroy the enemy keeps to win." }
+    : { title: "Take the center", text: "Relics earn victory points; gold and wood fund your army." };
+}
+
 /** Describe the current rules without implying that score wins a scripted mission. */
 export function relicControlDescription(state: GameState): string {
   if (state.rush || state.settings.mode === "rush") return "Relics do not score in Rush";

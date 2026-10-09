@@ -1,7 +1,6 @@
 name: Isolated browser acceptance
 
-# Deliberately separate from routine source pushes and Pages deployments.
-# Move this dedicated branch only for a reviewed acceptance checkpoint.
+# One reviewed checkpoint on a dedicated branch. No deployment permissions.
 on:
   push:
     branches: [qa-browser-check]
@@ -17,11 +16,11 @@ concurrency:
 jobs:
   browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     env:
       FRONTIER_TEST_WORKERS: "2"
       FRONTIER_PREVIOUS_DIST: .qa-previous/dist
-      FRONTIER_EXPECT_BUILD_ID: fc-7592049128ac
+      FRONTIER_EXPECT_BUILD_ID: fc-3dce7db7d71b
     steps:
       - name: Check out the acceptance checkpoint
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -34,38 +33,42 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci --no-audit --no-fund
-      - name: Check out the exact current live rollback for upgrade acceptance
+      - name: Check out the exact previous live Space release
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
-          ref: b8029a43e7a21e06b381bfd190689242798fd4a3
+          ref: f9378101770085bae49d8b2ebdc21eb0edf86770
           path: .qa-previous
           persist-credentials: false
-      - name: Build and verify the exact previous live runtime
+      - name: Build and verify all 82 previous-live runtime files
         run: |
           ln -s ../node_modules .qa-previous/node_modules
           npm --prefix .qa-previous run build
           node .qa-verify-previous.mjs
+      - name: Build and verify all 83 frozen candidate files
+        run: |
+          npm run build
+          node .qa-verify-candidate.mjs
       - name: Install official Playwright Chromium
         run: npx playwright install --with-deps chromium
-      - name: Continue only three Space crowd identities after camera-follow setup correction
-        run: npx playwright test --config playwright-space-qa.config.ts
+      - name: Run all 27 focused learning identities once
+        run: npx playwright test --config playwright-learning-qa.config.ts
       - name: Sequentially verify the exact previous-live cache upgrade
         run: npx playwright test --config playwright-space-upgrade.config.ts
-      - name: Preserve browser results and failure evidence
+      - name: Verify tested distribution still matches the frozen candidate
+        if: ${{ !cancelled() }}
+        run: node .qa-verify-candidate.mjs
+      - name: Preserve all ledgers, boundary geometry, screenshots, and failure traces
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: frontier-browser-acceptance-${{ github.sha }}
+          name: frontier-learning-acceptance-${{ github.sha }}
           path: |
-            space-identity-ledger.json
+            learning-identity-ledger.json
             space-upgrade-identity-ledger.json
             previous-live-dist-proof.json
-            space-report/
+            candidate-dist-proof.json
+            learning-report/
             space-upgrade-report/
-            test-results-space/**/*.png
-            test-results-space/**/error-context.md
-            test-results-space-upgrade/**/*.png
-            test-results-space-upgrade/**/*.json
-            test-results-space-upgrade/**/error-context.md
-          retention-days: 2
-
+            test-results-learning/
+            test-results-space-upgrade/
+          retention-days: 7

@@ -16,8 +16,53 @@ import {
   hasNeighboringHouses,
   learningActionAvailable,
   learningPanelHint,
+  learningMoveGuidance,
+  learningMoveWasShort,
+  LEARNING_MOVE_DISTANCE,
 } from "../src/ui/learning";
 describe("a peaceful learn-by-doing settlement", () => {
+  it("keeps the strict deliberate-walk boundary and explains a completed short move", () => {
+    const s = createGame({ learning: true, mapSize: "tiny", seed: "FIRST-SETTLEMENT" }), hero = getCommander(s)!, p = restoreLearning(s, null);
+    expect(LEARNING_MOVE_DISTANCE).toBe(2);
+    expect(learningMoveGuidance(s, p, false, true)).toContain("at least 3 tiles from your starting spot");
+    expect(learningMoveGuidance(s, p, true, true)).toContain("Tap clear ground at least 3 tiles");
+    expect(learningMoveGuidance(s, p, false, false)).toContain("Choose Commander, then Move");
+    expect(LESSONS[0].text).toContain("at least 3 tiles from your starting spot");
+    // Preserve the observed ordinary-input target, not a fabricated completion.
+    expect(p.origin).toEqual({ x: 9.5, y: 16.5 });
+    expect(issueCommand(s, { type: "move", team: 0, entityIds: [hero.id], x: 10.5, y: 14.8 }).ok).toBe(true);
+    expect(learningMoveGuidance(s, p, false, true)).not.toContain("too short");
+    stepGame(s, 5);
+    expect(hero.order.type).toBe("idle");
+    expect(learningMoveWasShort(s, p)).toBe(true);
+    expect(Math.hypot(hero.x - p.origin.x, hero.y - p.origin.y)).toBeLessThan(2);
+    expect(advanceLearning(s, p).step).toBe(0);
+    expect(learningMoveGuidance(s, p, false, true)).toContain("That move was too short.");
+    const restored = restoreGame(serializeGame(s)), restoredProgress = restoreLearning(restored, p);
+    expect(restoredProgress.step).toBe(0);
+    expect(learningMoveGuidance(restored, restoredProgress, true, true)).toContain("That move was too short.");
+    hero.x = p.origin.x + 2; hero.y = p.origin.y;
+    expect(advanceLearning(s, p).step).toBe(0);
+    expect(learningMoveGuidance(s, p, false, true)).toContain("too short");
+    hero.x += .001;
+    expect(learningMoveWasShort(s, p)).toBe(false);
+    expect(advanceLearning(s, p).step).toBe(1);
+    expect(learningMoveGuidance(s, p, false, true)).not.toContain("too short");
+    s.commandLog = [];
+    expect(advanceLearning(s, p).step).toBe(0); // Displacement alone still cannot earn the lesson.
+  });
+  it("does not label active walking, held steering or uncommanded displacement as a short move", () => {
+    const s = createGame({ learning: true }), hero = getCommander(s)!, p = restoreLearning(s, null);
+    hero.x += 1;
+    expect(learningMoveGuidance(s, p, false, true)).not.toContain("too short");
+    issueCommand(s, { type: "move", team: 0, entityIds: [hero.id], x: hero.x + 4, y: hero.y });
+    expect(learningMoveGuidance(s, p, false, true)).not.toContain("too short");
+    hero.order = { type: "idle" };
+    hero.directControl = { x: 1, y: 0, until: s.time + 1 };
+    expect(learningMoveGuidance(s, p, false, true)).not.toContain("too short");
+    delete hero.directControl;
+    expect(learningMoveGuidance(s, p, false, true)).toContain("too short");
+  });
   it("starts with only a commander and keep and never raids or scores a forced loss", () => {
     const s = createGame({ learning: true });
     expect(

@@ -1,4 +1,5 @@
 import { observeControlDeck, battlefieldCenterY } from "./ui/deck-layout";
+import { clearLearningCommanderOverlap } from "./ui/guide-clearance";
 import { troopSummaryPosition, type ScreenRect } from "./render/troop-summary";
 import { aboutHTML } from "./ui/about";
 import { BUILD_ID } from "./platform/build-info";
@@ -34,6 +35,8 @@ import {
   learningTarget,
   learningActionAvailable,
   learningPanelHint,
+  learningMoveGuidance,
+  learningMoveWasShort,
   restoreLearning,
   type LearningProgress,
 } from "./ui/learning";
@@ -61,7 +64,7 @@ import {
   nextBuildingUpgrade,
   PRODUCTION_QUEUE_LIMIT,
 } from "./sim/progression";
-import { relicSummary, nearestRelic, relicControlDescription } from "./ui/objectives";
+import { relicSummary, nearestRelic, relicControlDescription, firstBattleObjectiveCopy } from "./ui/objectives";
 import { battleDefeatAdvice, battleResultReason } from "./ui/results";
 import { buildingUnderAttack } from "./ui/battle-guidance";
 import { advanceTutorial, restoreTutorial } from "./ui/tutorial";
@@ -388,6 +391,13 @@ function button(
 function positionBattleGuide() {
   const guide = document.querySelector<HTMLElement>("#battle-hint");
   const objective = document.querySelector<HTMLElement>("#objective");
+  positionGuideBelowObjective(guide, objective);
+  // Run after objective clearance, including cached layouts: paid queues and
+  // deck expansion can move the floating strip without changing guide content.
+  clearLearningCommanderOverlap(guide, document.querySelector<HTMLElement>(".commander-strip"),
+    playing && !editing && !!state.settings.learning);
+}
+function positionGuideBelowObjective(guide: HTMLElement | null, objective: HTMLElement | null) {
   if (!guide || !objective) return;
   const reset = () => ["top", "max-height", "overflow-y"].forEach(name => guide.style.removeProperty(name));
   if (!playing || editing || guide.classList.contains("critical")) { reset(); delete guide.dataset.clearanceKey; return; }
@@ -1205,11 +1215,12 @@ function updateAbilities(c: Entity | undefined) {
   }
 }
 function showFirstBriefing() {
+  const objective = firstBattleObjectiveCopy(state.settings.mode);
   preferences.tutorialSeen = true;
   writeLocal("preferences", preferences);
   showDialog(
     "Your first frontier",
-    `<span class="eyebrow">THE BATTLE WAITS WHILE YOU GET YOUR BEARINGS</span><div class="help-grid"><article>${icon("flag")}<h3>Lead together</h3><p>Select Army, choose Move, then tap a destination for your commander and soldiers. Idle troops guard their position.</p></article><article>${icon("gold")}<h3>Claim and grow</h3><p>Capture gold and timber for steady income. Recruit soldiers, then claim a relic. Build Houses for more troops and Watchtowers to defend your base.</p></article><article>${icon("spark")}<h3>Take the center</h3><p>Relics earn victory points; gold and wood fund your army. The gold Relic button sends your army toward an objective. Use your commander’s abilities in close fights. The Engineer’s Breach Charge strikes nearby enemy buildings.</p></article><article>${icon("pause")}<h3>Take your time</h3><p>${state.settings.difficulty === "easy" ? "Easy opponents spend the first minute consolidating their own side. " : ""}Use the pause button to plan orders${state.settings.difficulty === "hard" ? " (three tactical pauses on Hard)" : state.settings.difficulty === "brutal" ? " (tactical pause is disabled on Brutal)" : ""}.</p></article></div>${button("Start battle", "begin-briefing", "primary large", "play")}`,
+    `<span class="eyebrow">THE BATTLE WAITS WHILE YOU GET YOUR BEARINGS</span><div class="help-grid"><article>${icon("flag")}<h3>Lead together</h3><p>Select Army, choose Move, then tap a destination for your commander and soldiers. Idle troops guard their position.</p></article><article>${icon("gold")}<h3>Claim and grow</h3><p>Capture gold and timber for steady income. Recruit soldiers, then claim a relic. Build Houses for more troops and Watchtowers to defend your base.</p></article><article>${icon("spark")}<h3>${esc(objective.title)}</h3><p>${esc(objective.text)} The gold Relic button sends your army toward an objective. Use your commander’s abilities in close fights. The Engineer’s Breach Charge strikes nearby enemy buildings.</p></article><article>${icon("pause")}<h3>Take your time</h3><p>${state.settings.difficulty === "easy" ? "Easy opponents spend the first minute consolidating their own side. " : ""}Use the pause button to plan orders${state.settings.difficulty === "hard" ? " (three tactical pauses on Hard)" : state.settings.difficulty === "brutal" ? " (tactical pause is disabled on Brutal)" : ""}.</p></article></div>${button("Start battle", "begin-briefing", "primary large", "play")}`,
     "wide",
   );
 }
@@ -1242,12 +1253,12 @@ function updateTutorial() {
       return;
     }
     const lesson = LESSONS[learningProgress.step];
+    const title = learningProgress.step === 0 && learningMoveWasShort(state, learningProgress)
+      ? "Move farther to continue" : lesson.title;
     const text = learningProgress.step === 5 ? learningHouseGuidance(state) : learningProgress.step === 0
-      ? armedOrder === "move" ? "Tap clear ground for the destination. Drag to pan; Cancel keeps your commander still."
-        : selection.has(commander()?.id ?? "") ? "Choose Move, then tap clear ground. You can also hold the thumbstick."
-          : "Tap your commander or choose Commander to select it. Then choose Move."
+      ? learningMoveGuidance(state, learningProgress, armedOrder === "move", selection.has(commander()?.id ?? ""))
       : lesson.text;
-    const html = `<button data-action="toggle-guide" aria-label="${guideCollapsed ? "Expand guide" : "Minimize guide"}">${icon(guideCollapsed ? "plus" : "minus")}</button><span>LEARN TO COMMAND · ${learningProgress.step + 1}/${LESSONS.length}</span><b>${lesson.title}</b>${button("Skip guide", "skip-guide", "guide-skip")}${guideCollapsed ? "" : `<p>${text}</p>${button(learningProgress.step === 5 ? "Find House site" : lesson.action, "learning-help", "lesson-action", "crosshair")}`}`;
+    const html = `<button data-action="toggle-guide" aria-label="${guideCollapsed ? "Expand guide" : "Minimize guide"}">${icon(guideCollapsed ? "plus" : "minus")}</button><span>LEARN TO COMMAND · ${learningProgress.step + 1}/${LESSONS.length}</span><b>${title}</b>${button("Skip guide", "skip-guide", "guide-skip")}${guideCollapsed ? "" : `<p>${text}</p>${button(learningProgress.step === 5 ? "Find House site" : lesson.action, "learning-help", "lesson-action", "crosshair")}`}`;
     el.classList.add("learning-guide");
     if (hudHTML.get("battle-hint") !== html) {
       updateLiveHTML(el as HTMLElement, html);
