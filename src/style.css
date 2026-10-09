@@ -4420,6 +4420,31 @@ footer .build-identifier {
   border-color: #c97969;
 }
 
+/* A fallen commander remains explained in the compact landscape HUD. */
+.commander-strip > .respawning {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 8px;
+  max-width: 260px;
+  color: #e7f1ef;
+  border: 1px solid #64838b;
+  pointer-events: none;
+}
+.commander-strip .respawning strong { font-size: 11px; }
+.commander-strip .respawning .recovery-time { color: #f3d184; font-variant-numeric: tabular-nums; }
+.commander-strip .respawning small { grid-column: 1 / -1; color: #c2d9da; font-size: 10px; }
+.route-choice .expedition-rules { color: #e7ca8b; font-weight: 600; }
+@media (max-height: 500px) and (min-width: 601px) {
+  .commander-strip.recovering, .commander-strip.unavailable {
+    display: block;
+    left: 8px;
+    bottom: 102px;
+    width: 200px;
+    pointer-events: none;
+  }
+  .commander-strip > .respawning { padding: 7px 8px; }
+}
+
 /* Keep the pause allowance readable in the existing HUD action slot. */
 .hud .pause-button { min-width: 88px; flex-shrink: 0; }
 .pause-button .pause-copy { display: flex; flex-direction: column; gap: 2px; white-space: nowrap; }

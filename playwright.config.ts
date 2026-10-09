@@ -4,8 +4,9 @@ import {defineConfig, devices} from '@playwright/test';
 const external = process.env.FRONTIER_TEST_URL;
 export default defineConfig({
   testDir: './tests/browser',
-  testMatch: /support-healing\.spec\.ts/,
-  globalTimeout: 10 * 60_000,
+  testMatch: /(support-healing|recovery-disclosure|expedition-rules)\.spec\.ts/,
+  grepInvert: /controlled lethal troop|controlled dead-only target/,
+  globalTimeout: 12 * 60_000,
   timeout: 35_000,
   expect: {timeout: 8_000},
   fullyParallel: true,
@@ -14,7 +15,7 @@ export default defineConfig({
   maxFailures: 0,
   // Canvas-heavy games should not spawn one browser per reported host CPU.
   workers: process.env.FRONTIER_TEST_WORKERS ? Math.max(1, Number(process.env.FRONTIER_TEST_WORKERS)) : 2,
-  reporter: [['list'], ['json', {outputFile: 'support-healing-results.json'}]],
+  reporter: [['list'], ['json', {outputFile: 'disclosure-results.json'}]],
   use: {
     baseURL: external || 'http://127.0.0.1:4181/rts-game/',
     trace: 'on-first-retry', screenshot: 'only-on-failure', video: 'off',

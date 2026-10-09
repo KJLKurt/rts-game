@@ -240,7 +240,7 @@ for (const theme of ['mythic', 'christmas'] as const) {
     expectAccounting(first, fixture, initialProfile);
     const deadline = first.victim!.respawnAt!;
     expect(deadline - first.events.find(event => event.type === 'death')!.time).toBeCloseTo(24, 6);
-    await expect(page.locator('#commander-strip .respawning')).toHaveText('Commander recovering at the keep…');
+    await expect(page.locator('#commander-strip .respawning')).toContainText('Commander recovering');
     await expect(page.locator('#commander-strip [data-action="focus"]')).toHaveCount(0);
     await extraTicks(page);
     const beforeSave = await readProbe(page);
@@ -253,7 +253,7 @@ for (const theme of ['mythic', 'christmas'] as const) {
     await page.reload();
     await expect(action(page, 'continue')).toBeVisible();
     await press(page, action(page, 'continue'));
-    await expect(page.locator('#commander-strip .respawning')).toHaveText('Commander recovering at the keep…');
+    await expect(page.locator('#commander-strip .respawning')).toContainText('Commander recovering');
     await expect.poll(() => page.evaluate(() => window.__FRONTIER__.state.paused)).toBe(true);
     expect(await page.evaluate(() => window.__FRONTIER__.state.settings.gameSpeed)).toBe(1);
     expect(await page.evaluate(id => {

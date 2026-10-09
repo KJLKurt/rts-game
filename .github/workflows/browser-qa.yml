@@ -42,7 +42,7 @@ jobs:
         with:
           name: frontier-browser-acceptance-${{ github.sha }}
           path: |
-            support-healing-results.json
+            disclosure-results.json
             test-results/**/*.png
             test-results/**/*.json
             test-results/**/error-context.md
