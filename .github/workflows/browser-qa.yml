@@ -5,77 +5,111 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+  actions: read
 concurrency:
   group: frontier-command-browser-qa
   cancel-in-progress: false
 jobs:
-  browser:
+  preserve:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    env:
-      FRONTIER_PREVIOUS_DIST: .qa-previous/dist
-      FRONTIER_EXPECT_BUILD_ID: fc-41ff83f832fe
+    timeout-minutes: 15
     steps:
-      - name: Check out reviewed workshop preview layout candidate
+      - name: Check out evidence recovery only
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
-      - name: Use Node.js 24
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+      - name: Recover complete failed preview gate without running browsers
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
-          node-version: "24"
-          cache: npm
-      - name: Install locked dependencies
-        run: npm ci --no-audit --no-fund
-      - name: Check out exact current live rally and workshop release
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          ref: 43d4dad361c2e32f14ecd092c3a1c74ed8553fbc
-          path: .qa-previous
-          persist-credentials: false
-      - name: Build and verify all previous-live production bytes
-        run: |
-          ln -s ../node_modules .qa-previous/node_modules
-          npm --prefix .qa-previous run build
-          node .qa-verify-dist.mjs .qa-previous/dist .qa-previous-dist.json previous-live-dist-proof.json
-      - name: Build and verify all frozen candidate production bytes
-        run: |
-          npm run build
-          node .qa-verify-dist.mjs dist .qa-candidate-dist.json candidate-dist-proof.json
-      - name: Install official Playwright Chromium
-        run: npx playwright install --with-deps chromium
-      - name: Preserve and verify one intended baseline portrait overlap failure
-        run: |
-          set +e
-          npx playwright test --config playwright-preview-layout-red.config.ts
-          status=$?
-          set -e
-          node .qa-assert-red.mjs "$status"
-      - name: Verify preview round trips and ordinary HUD regressions across four views
-        run: npx playwright test --config playwright-preview-layout-qa.config.ts
-      - name: Sequential exact-live update and one-time paid work completion
-        run: npx playwright test --config playwright-preview-layout-upgrade.config.ts
-      - name: Verify both tested distributions remained byte-exact
-        if: ${{ !cancelled() }}
-        run: |
-          node .qa-verify-dist.mjs .qa-previous/dist .qa-previous-dist.json previous-live-dist-proof.json
-          node .qa-verify-dist.mjs dist .qa-candidate-dist.json candidate-dist-proof.json
-      - name: Preserve all native failures, passes, traces and exclusions
-        if: ${{ !cancelled() }}
+          name: frontier-preview-layout-1bdc346c7744924d959326508629e2906325b9f5
+          run-id: 38002426925
+          github-token: ${{ github.token }}
+          path: .qa-original
+      - name: Verify all original files and split bounded complete evidence
+        run: python3 .qa-preserve-original.py
+      - name: Preserve readable failure review without repeating test execution
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: frontier-preview-layout-${{ github.sha }}
+          name: frontier-preview-layout-original-review
+          path: original-review/
+          retention-days: 7
+      - name: Preserve complete original evidence part 1 of 8
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frontier-preview-layout-original-part-0
           path: |
-            preview-layout-red-ledger.json
-            preview-layout-red-proof.json
-            preview-layout-identity-ledger.json
-            preview-layout-upgrade-ledger.json
-            previous-live-dist-proof.json
-            candidate-dist-proof.json
-            preview-layout-red-report/
-            preview-layout-report/
-            preview-layout-upgrade-report/
-            test-results-preview-layout-red/
-            test-results-preview-layout/
-            test-results-preview-layout-upgrade/
+            original-evidence-parts/original-part-0.zip
+            original-evidence-parts/original-content-manifest.json
+            original-evidence-parts/restore-original.py
+          compression-level: 0
+          retention-days: 7
+      - name: Preserve complete original evidence part 2 of 8
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frontier-preview-layout-original-part-1
+          path: |
+            original-evidence-parts/original-part-1.zip
+            original-evidence-parts/original-content-manifest.json
+            original-evidence-parts/restore-original.py
+          compression-level: 0
+          retention-days: 7
+      - name: Preserve complete original evidence part 3 of 8
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frontier-preview-layout-original-part-2
+          path: |
+            original-evidence-parts/original-part-2.zip
+            original-evidence-parts/original-content-manifest.json
+            original-evidence-parts/restore-original.py
+          compression-level: 0
+          retention-days: 7
+      - name: Preserve complete original evidence part 4 of 8
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frontier-preview-layout-original-part-3
+          path: |
+            original-evidence-parts/original-part-3.zip
+            original-evidence-parts/original-content-manifest.json
+            original-evidence-parts/restore-original.py
+          compression-level: 0
+          retention-days: 7
+      - name: Preserve complete original evidence part 5 of 8
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frontier-preview-layout-original-part-4
+          path: |
+            original-evidence-parts/original-part-4.zip
+            original-evidence-parts/original-content-manifest.json
+            original-evidence-parts/restore-original.py
+          compression-level: 0
+          retention-days: 7
+      - name: Preserve complete original evidence part 6 of 8
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frontier-preview-layout-original-part-5
+          path: |
+            original-evidence-parts/original-part-5.zip
+            original-evidence-parts/original-content-manifest.json
+            original-evidence-parts/restore-original.py
+          compression-level: 0
+          retention-days: 7
+      - name: Preserve complete original evidence part 7 of 8
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frontier-preview-layout-original-part-6
+          path: |
+            original-evidence-parts/original-part-6.zip
+            original-evidence-parts/original-content-manifest.json
+            original-evidence-parts/restore-original.py
+          compression-level: 0
+          retention-days: 7
+      - name: Preserve complete original evidence part 8 of 8
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frontier-preview-layout-original-part-7
+          path: |
+            original-evidence-parts/original-part-7.zip
+            original-evidence-parts/original-content-manifest.json
+            original-evidence-parts/restore-original.py
+          compression-level: 0
           retention-days: 7
