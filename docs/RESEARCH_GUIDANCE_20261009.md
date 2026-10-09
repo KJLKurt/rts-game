@@ -1,0 +1,27 @@
+# Contextual research guidance — 9 October 2026
+
+The existing eight lessons already introduce movement, automatic gathering, Keep purpose, recruitment, population Houses, Townhouse upgrades and relic capture. Research becomes available after practice. Its existing contextual tree already explains prerequisite building paths, readiness, typed prices, independent technologies, sequential levels, shared production, refunds and completion. Adding another lesson or resetting completion flags would duplicate teaching and disturb prior saves.
+
+This small batch closes three specific gaps. Research now explains selecting a matching building to choose its production queue and the first-completed-source default when no matching building is selected. It explicitly says effects begin when the job finishes. The immediate success toast says “queued for research,” which remains true when paid work is waiting behind another job. The production heading identifies troops as the jobs that reserve population. Simulation, selection/routing, costs, artwork, CSS, learning order and save formats are unchanged.
+
+## Exact validation
+
+Production base and rollback: `927fa4bae7b6f04ca021044208c3ff2ac6739fd4`. Candidate runtime `fc-a8c270ad4de9`, offline cache `4488cecbde94`, 38 files. Only `src/main.ts`, `src/ui/research.ts` and `src/ui/inspection.ts` differ among tracked application sources/assets. Local validation passed **884 unit tests in 81 files**, TypeScript, content validation and production build. Independent source and complete test-path reviews found no remaining blocker.
+
+[Initial run 37912211057](https://github.com/KJLKurt/rts-game/actions/runs/37912211057), QA `7123948cced2a301b84dc31650c71562cb25b75a`, executed six identities with **0 passed, 6 failed, 0 skipped, 0 retries**, 264.564 seconds. Four desktop/portrait paths completed research and their first save/reload, then failed an incorrect test assumption that every troop survived normal combat. Two landscape paths waited for an intentionally CSS-hidden optional tip-dismiss control and did not reach research. Those failures and original test remain preserved.
+
+The test-only correction pauses before optional tip handling, dismisses only visible tips (as the existing launcher does), and accounts for actual troop creation and losses after verifying all involved units cost one population. Payment, paid waiting research, completion effects and exact save/reload assertions remain strict. Action waits are finite; partial receipts survive later failures. It retains the same game, map, seed, difficulty, resource settings and production bytes.
+
+[Continuation 37913369934](https://github.com/KJLKurt/rts-game/actions/runs/37913369934), QA `693aa6e12050b6043837ff47d8365c73875b16ce`, passed **6 of 6**, with **0 failures, skips, retries or flaky results**, in 309.717 seconds. It covers Christmas/Mythic on desktop, 390×844 portrait and 844×390 landscape. All six identities match the original scope. This is a clean corrected focused run following six preserved initial failures, not a clean cumulative full suite.
+
+Each isolated fresh context uses ordinary controls to configure Small Easy skirmish, seed QA-FRONTIER-2026 and 300 starting gold (default 260 wood). It uses the built-in 0.5× pace while enqueuing and 2× for completion. Desktop uses native clicks; phone projects use native taps. Read-only state/layout observations do not inject resources, commands, saves, camera or time.
+
+Verified behaviors: missing Blacksmith prerequisite, exact displayed prices, selected Keep routing, paid Swordsman before Commander Mastery, 200 gold/80 wood research spending after accounting for genuine income, no research population reservation, waiting status/refund, actual completion, max HP **713→891.25**, completed level/effect, exact paused save/reload both while queued and after completion, unchanged profile and false learning-completion flag. Actual combat losses are recorded (two to five troops); survival or battle victory is not a condition of this teaching check.
+
+All twelve planned CSS-scale phone frames were reviewed: intro, changed production heading/toast and completion in both themes/orientations. Short landscape cannot show the entire header/producer/job stack at once; the waiting text and refund are separately asserted and checked for clipping/coverage, rather than claimed visible in the queue-header frame. Automatic routing across multiple sources and selected-full/idle-alternative behavior are not independently exercised by this native scenario; relevant implementation and existing unit evidence remain separate.
+
+## Preserved evidence and limits
+
+Initial artifact `11607267370`: 8,239,740 bytes, SHA-256 `d3f6c31e4c160687111ae5c8aa26bc8cc3eb638e7cccbbad52c8a06b7d462460`. Continuation artifact `11607752403`: 3,346,485 bytes, SHA-256 `d323091dbf7d224e01d320520ef204afb1e99180bf18281e798ecb40b6013e0e`. Both were materialized, hashes verified, ledgers reconciled and actual pixels inspected.
+
+The real hosted profile and ended Forager route were not touched. These are scripted, configured Chromium acceptance scenarios; they are not an uncoached first-time walkthrough, physical phone/Safari validation or successful campaign/expedition evidence. The historical 644-case result remains 608 passed, 10 failed, 26 skipped. Default full browser configuration and the normal Pages workflow are retained in the release.

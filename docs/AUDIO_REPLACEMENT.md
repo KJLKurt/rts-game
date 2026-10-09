@@ -36,9 +36,11 @@ Paths remain under `assets/audio/`, resolved against Vite's base URL, including 
 
 ## Interaction feedback and accessibility
 
-Effects include select, click, order, error, build, recruit, capture, ability, hit, upgrade, research, repair, resource, destroy and alert. Rising approval/completion cues differ from lower falling denial/destruction contours; alert has a separate repeating contour. They use the independent Effects bus and contain no samples.
+Effects include select, click, order, error, build, complete, recruit, capture, ability, hit, melee, arrow, upgrade, research, repair, resource, destroy and alert. Rising approval/completion cues differ from lower falling denial/destruction contours; alert has a separate repeating contour. They use the independent Effects bus and contain no samples.
 
-The director caps effects at 12 oscillator notes and procedural music at 32. Hit repeats are throttled to 90 ms, click/select to 60 ms and other effects to 180 ms. Error/alert can displace older incidental effects at the cap. Finished nodes disconnect.
+The director caps effects at 12 oscillator notes and procedural music at 32. Hit, melee and arrow share a 90 ms combat slot so a release and its same-tick damage do not stack. Click/select have a 60 ms per-kind cooldown, hit 90 ms, and other effects 180 ms. Error/alert/construction completion can displace older incidental effects at the cap. Finished nodes disconnect.
+
+Owned construction completion (`build` event, `complete` subtype) plays a distinct 523/659/784 Hz cadence. Placement acknowledgement retains its original lower cue. Actual melee attack events use a short additive metal impact with inharmonic partials; archer/Ranger projectile events use a bow-string pluck and falling air tone. Other projectile types are not mislabeled as arrows. Owned releases and currently visible foreign sources are audible; hidden foreign releases are silent. The existing event cursor consumes each event once, including silent events, and save restoration starts at the last consumed ID rather than the next unused ID. Audio remains presentation only and does not alter damage or projectile timing.
 
 Pair each cue with visible selection, status, warning text, construction progress or a result screen. Audio is never the only way to discover a denied order, threat or outcome. Do not imply that an accepted/queued action has completed: trigger completion cues at the relevant completion event. The application owns visual/live-region feedback and event wiring; the director owns sound.
 

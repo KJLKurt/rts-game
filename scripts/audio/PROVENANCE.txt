@@ -25,3 +25,10 @@ WAV masters; the game includes only encoded audio and the state manifest.
 
 Technical measurements: docs/AUDIO_VALIDATION.json. No subjective listening,
 physical-device audio audition or commercial sound-quality review is claimed.
+
+2026-10-09 interaction-feedback addition: src/platform/audio.ts defines original
+sample-free additive melee partials (145/1260/1817/2943 Hz), two falling bow tones
+(960 to 220 Hz and 2400 to 650 Hz), and the construction completion cadence
+(523/659/784 Hz). These use the existing WebAudio oscillator/effects-bus path.
+No recording, external sample, paid asset or new audio service was used. The
+six music compositions and all shipped codec bytes are unchanged by this batch.

@@ -17,9 +17,9 @@ concurrency:
 jobs:
   browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 25
     env:
-      FRONTIER_TEST_WORKERS: "1"
+      FRONTIER_TEST_WORKERS: "2"
     steps:
       - name: Check out the acceptance checkpoint
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -35,16 +35,16 @@ jobs:
       - name: Install official Playwright Chromium
         run: npx playwright install --with-deps chromium
       - name: Exercise the production PWA on desktop and touch viewports
-        run: npm run test:browser
+        run: npx playwright test --config=playwright-audio-qa.config.ts
       - name: Preserve browser results and failure evidence
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: frontier-browser-acceptance-${{ github.sha }}
           path: |
-            research-guidance-results.json
-            test-results/**/*.json
-            test-results/**/*.gz
+            playwright-report/
             test-results/**/*.png
+            test-results/**/*.json
+            test-results/**/*.wav
             test-results/**/error-context.md
           retention-days: 2
