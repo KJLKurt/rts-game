@@ -11,9 +11,12 @@ concurrency:
 jobs:
   browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
+    env:
+      FRONTIER_PREVIOUS_DIST: .qa-previous/dist
+      FRONTIER_EXPECT_BUILD_ID: fc-e201ecf2a981
     steps:
-      - name: Check out the exact current-production reproduction checkpoint
+      - name: Check out the reviewed planning candidate
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
@@ -24,25 +27,42 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci --no-audit --no-fund
-      - name: Build and verify all 83 unchanged current-production files
+      - name: Check out the exact current live teaching release
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: 5c16fba12c4cfc97e026f1ddbf073e637daf2fc2
+          path: .qa-previous
+          persist-credentials: false
+      - name: Build and verify all 83 previous-live production files
+        run: |
+          ln -s ../node_modules .qa-previous/node_modules
+          npm --prefix .qa-previous run build
+          node .qa-verify-dist.mjs .qa-previous/dist .qa-previous-dist.json previous-live-dist-proof.json
+      - name: Build and verify all 83 frozen candidate production files
         run: |
           npm run build
-          node .qa-verify-current.mjs
+          node .qa-verify-dist.mjs dist .qa-candidate-dist.json candidate-dist-proof.json
       - name: Install official Playwright Chromium
         run: npx playwright install --with-deps chromium
-      - name: Record three focused baseline UI reproductions without retries
-        run: npx playwright test --config playwright-planning-repro.config.ts
-      - name: Verify tested production remained byte-exact
+      - name: Exercise three corrected controls and five affected regressions on desktop and phone layouts
+        run: npx playwright test --config playwright-planning-qa.config.ts
+      - name: Sequential exact-live update, restored queue completion and one-time construction
+        run: npx playwright test --config playwright-planning-upgrade.config.ts
+      - name: Verify tested candidate remained byte-exact
         if: ${{ !cancelled() }}
-        run: node .qa-verify-current.mjs
-      - name: Preserve all first-attempt failures, screenshots, ledgers and traces
+        run: node .qa-verify-dist.mjs dist .qa-candidate-dist.json candidate-dist-proof.json
+      - name: Preserve complete first-attempt native and update evidence
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: frontier-planning-reproduction-${{ github.sha }}
+          name: frontier-planning-acceptance-${{ github.sha }}
           path: |
-            planning-repro-identity-ledger.json
-            current-live-dist-proof.json
-            planning-repro-report/
-            test-results-planning-repro/
+            planning-identity-ledger.json
+            planning-upgrade-identity-ledger.json
+            previous-live-dist-proof.json
+            candidate-dist-proof.json
+            planning-report/
+            planning-upgrade-report/
+            test-results-planning/
+            test-results-planning-upgrade/
           retention-days: 7

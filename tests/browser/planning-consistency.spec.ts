@@ -4,13 +4,30 @@ import type { GameState, Point } from '../../src/sim/types';
 import type { RenderOptions } from '../../src/render/Battlefield';
 import { action, expect, home, tap, test } from './helpers';
 
-// Three desktop red-first identities. No test calls the command/start/save bridge,
+// Three red-first identities, expanded to affected touch orientations after the
+// exact-live desktop failures were preserved. No test calls the command/start/save bridge,
 // changes DOM controls, or clicks through an obstruction. The named setup writes
 // below are controlled fixtures, not an earned upgrade or a natural-play claim.
 // All measured actions after each setup boundary use native user controls.
 test.describe.configure({ retries: 0 });
-test.beforeEach(async ({ isMobile }) => {
-  test.skip(isMobile, 'Desktop red-first reproduction; phone expansion follows confirmed failure and fix.');
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    const target = window as Window & { __planningInputTrace?: unknown[] };
+    const trace: unknown[] = [];
+    target.__planningInputTrace = trace;
+    for (const type of ['pointerdown', 'pointerup', 'pointercancel', 'click']) {
+      document.addEventListener(type, event => {
+        const pointer = event as PointerEvent, node = event.target instanceof Element ? event.target : null;
+        const app = window.__FRONTIER__;
+        trace.push({ type, trusted: event.isTrusted, pointerType: pointer.pointerType,
+          x: pointer.clientX, y: pointer.clientY, target: node?.tagName, id: node?.id,
+          action: node?.closest('[data-action]')?.getAttribute('data-action'),
+          at: performance.now(), gameTime: app?.state?.time,
+          camera: app?.renderer ? { ...app.renderer.camera } : null });
+        if (trace.length > 256) trace.shift();
+      }, { capture: true, passive: true });
+    }
+  });
 });
 type RendererProbe = Window['__FRONTIER__']['renderer'] & { lastOptions: RenderOptions };
 const snapshot = (page: Page): Promise<GameState> => page.evaluate(() => structuredClone(window.__FRONTIER__.state));
@@ -75,7 +92,7 @@ async function evidence(page: Page, name: string, details: unknown) {
       return { selector, text: node.textContent, rect: r.toJSON(), display: style.display, visibility: style.visibility, centerHit: hit?.id || hit?.className || hit?.tagName, containsCenterHit: !!hit && (node.contains(hit) || hit.contains(node)), clips };
     }));
     const r = window.__FRONTIER__.renderer as RendererProbe;
-    return { state: structuredClone(window.__FRONTIER__.state), viewport: { width: innerWidth, height: innerHeight, touch: navigator.maxTouchPoints }, camera: { ...r.camera }, geometry, placement: r.lastOptions.placement ?? null, plans: r.lastOptions.plannedConstruction ?? [], compact: document.querySelector('#compact-production')?.textContent, expanded: [...document.querySelectorAll('.producer')].map(node => ({ id: (node as HTMLElement).dataset.liveKey, text: node.textContent })) };
+    return { state: structuredClone(window.__FRONTIER__.state), viewport: { width: innerWidth, height: innerHeight, touch: navigator.maxTouchPoints }, camera: { ...r.camera }, inputTrace: (window as Window & { __planningInputTrace?: unknown[] }).__planningInputTrace ?? [], geometry, placement: r.lastOptions.placement ?? null, plans: r.lastOptions.plannedConstruction ?? [], compact: document.querySelector('#compact-production')?.textContent, expanded: [...document.querySelectorAll('.producer')].map(node => ({ id: (node as HTMLElement).dataset.liveKey, text: node.textContent })) };
   });
   await test.info().attach(`${name}-ledger`, { body: JSON.stringify({ details, ...observed }, null, 2), contentType: 'application/json' });
   await test.info().attach(`${name}-screen`, { body: await page.screenshot({ scale: 'css' }), contentType: 'image/png' });
@@ -135,6 +152,9 @@ async function reachFourthGuideStep(page: Page, mode: 'domination' | 'conquest')
 }
 
 test('C1 fourth field-guide step teaches the active victory mode after real capture and recruitment', async ({ page }) => {
+  const viewport = page.viewportSize()!;
+  test.skip(viewport.width >= 600 && viewport.height <= 550,
+    'Ordinary field-guide tips are intentionally hidden in short landscape. This identity requires visible teaching copy; C2/C4 still exercise this orientation.');
   test.setTimeout(160_000);
   const control = await reachFourthGuideStep(page, 'domination');
   await evidence(page, 'C1-domination-control-fourth-step', control);
@@ -193,6 +213,21 @@ test('C2 compact next countdown agrees with the earliest rate-adjusted paid para
   // Intended current-production red: first Keep raw time, instead of the
   // later Barracks head's earlier completion after its production-rate bonus.
   await expect(page.locator('#compact-production')).toHaveText(`2 queued · ${expectedSeconds}s next`);
+  // Preserve the actual parallel queues and rate metadata through normal save,
+  // reload and Continue before observing which paid head completes first.
+  await press(page, action(page, 'pause-menu')); await press(page, action(page, 'save-leave'));
+  await expect(action(page, 'continue')).toBeVisible();
+  await page.reload(); await press(page, action(page, 'continue'));
+  await expect.poll(() => page.evaluate(() => window.__FRONTIER__.playing)).toBe(true);
+  const restored = await snapshot(page);
+  expect(restored.paused).toBe(true);
+  expect(restored.time).toBe(paid.time);
+  expect(purse(restored)).toEqual(purse(paid));
+  expect(jobs(restored).map(b => ({ id: b.id, level: b.buildingLevel, queue: b.queue })))
+    .toEqual(jobs(paid).map(b => ({ id: b.id, level: b.buildingLevel, queue: b.queue })));
+  await collapse(page);
+  await expect(page.locator('#compact-production')).toHaveText(`2 queued · ${expectedSeconds}s next`);
+  await evidence(page, 'C2-restored-paid-parallel-countdown', { paid, restored, expectedSeconds });
   // Post-fix continuation: the displayed next job must actually complete first.
   await setPaused(page, false);
   await expect.poll(() => page.evaluate(({ buildingId, queueId }) => !window.__FRONTIER__.state.entities.find(e => e.id === buildingId)!.queue.some(q => q.queueId === queueId), earliest), { timeout: 15_000, intervals: [50] }).toBe(true);
@@ -311,6 +346,8 @@ test('C4 a real queued full refund enables House confirmation and survives Save 
   expect(executed.pendingCommands).toEqual([]);
   expect(houses(executed).filter(h => h.x === site.world.x && h.y === site.world.y)).toHaveLength(1);
   expect(executed.entities.find(e => e.id === producer.id)!.queue.some(q => q.queueId === tail.queueId)).toBe(false);
+  expect(executed.players[0].population).toBe(before.players[0].population - 1);
+  expect(executed.players[0].populationCap).toBe(before.players[0].populationCap);
   expect(executed.commandLog.filter(e => e.command.type === 'cancelProduction')).toHaveLength(1);
   expect(executed.commandLog.filter(e => e.command.type === 'build')).toHaveLength(1);
   for (const resource of ['gold', 'wood'] as const) {

@@ -2,6 +2,7 @@ import {test,expect,home,launch,action,pause,resume,clearGround,tap} from './hel
 import {writeFile} from 'node:fs/promises';
 
 test('a previous production cache upgrades to the identified build without losing paid queued orders',async({page,request})=>{
+  test.setTimeout(100_000);
   test.skip(!process.env.FRONTIER_PREVIOUS_DIST || !!process.env.FRONTIER_TEST_URL,'Needs an isolated local host serving a saved previous dist via the test-only previous/release endpoints.');
   try {
     expect((await request.post('/__qa/previous')).ok()).toBe(true);
@@ -41,5 +42,32 @@ test('a previous production cache upgrades to the identified build without losin
     expect(cachesNow).toHaveLength(1);expect(cachesNow.some(n=>oldCaches.includes(n))).toBe(false);
     await writeFile(test.info().outputPath('previous-cache-upgrade.json'),JSON.stringify({oldRuntime,newRuntime,buildId:id,oldCaches,cachesNow,before,after:await snapshot()},null,2));
     await page.screenshot({path:test.info().outputPath('previous-cache-queued-battle-resumed.png')});
+    // Continue beyond restored equality: the same paid jobs and planned House
+    // must execute exactly once through native Resume, not merely deserialize.
+    const housePlan=before.orders.find(c=>c.type==='build');
+    if(!housePlan||housePlan.type!=='build')throw new Error('Expected one paid-state House plan.');
+    const workBefore=await page.evaluate(()=>{const s=window.__FRONTIER__.state;return{created:s.players[0].stats.unitsCreated,stats:{...s.players[0].stats},houses:s.entities.filter(e=>e.team===0&&e.type==='house').map(e=>e.id)};});
+    const queueIds=before.production.flatMap(b=>b.queue).map(q=>q.queueId);
+    expect(queueIds).toHaveLength(3);expect(new Set(queueIds).size).toBe(3);expect(queueIds.every(Boolean)).toBe(true);
+    await resume(page);
+    await expect.poll(()=>page.evaluate(({queueIds,plan})=>{const s=window.__FRONTIER__.state;return{paidJobsRemaining:s.entities.filter(e=>e.team===0).flatMap(e=>e.queue).filter(q=>queueIds.includes(q.queueId)).length,completedHouses:s.entities.filter(e=>e.team===0&&e.type==='house'&&e.x===plan.x&&e.y===plan.y&&e.buildProgress>=1).length};},{queueIds,plan:housePlan}),{timeout:50_000,intervals:[100]}).toEqual({paidJobsRemaining:0,completedHouses:1});
+    await pause(page);
+    const completed=await snapshot();
+    const workAfter=await page.evaluate(()=>{const s=window.__FRONTIER__.state;return{created:s.players[0].stats.unitsCreated,stats:{...s.players[0].stats},houses:s.entities.filter(e=>e.team===0&&e.type==='house').map(e=>e.id)};});
+    expect(workAfter.created-workBefore.created).toBe(3);
+    expect(workAfter.houses).toHaveLength(workBefore.houses.length+1);
+    expect(completed.orders).toEqual([]);
+    expect(completed.gold-before.gold-(workAfter.stats.goldCollected-workBefore.stats.goldCollected)).toBeCloseTo(0,6);
+    expect(completed.wood-before.wood-(workAfter.stats.woodCollected-workBefore.stats.woodCollected)).toBeCloseTo(-65,6);
+    await action(page,'pause-menu').click();await action(page,'save-leave').click();
+    await expect(action(page,'continue')).toBeVisible();await page.reload();await action(page,'continue').click();
+    await expect.poll(()=>page.evaluate(()=>window.__FRONTIER__.playing)).toBe(true);
+    await expect.poll(snapshot).toEqual(completed);
+    const reloaded=await snapshot();
+    await resume(page);await pause(page);
+    expect(await page.evaluate(()=>window.__FRONTIER__.state.players[0].stats.unitsCreated)).toBe(workAfter.created);
+    expect(await page.evaluate(()=>window.__FRONTIER__.state.entities.filter(e=>e.team===0&&e.type==='house').map(e=>e.id))).toEqual(workAfter.houses);
+    await writeFile(test.info().outputPath('previous-cache-production-completed-once.json'),JSON.stringify({oldRuntime,newRuntime,buildId:id,housePlan,queueIds,before,workBefore,completed,workAfter,reloaded,afterRepeatedResume:await snapshot()},null,2));
+    await page.screenshot({path:test.info().outputPath('previous-cache-production-completed-once.png')});
   } finally {await request.post('/__qa/release');}
 });

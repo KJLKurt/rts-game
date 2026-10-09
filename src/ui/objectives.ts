@@ -1,11 +1,27 @@
 import { areAllied } from "../sim/alliances";
-import type { GameMode, GameState, Point, ResourceNode } from "../sim/types";
+import type { GameMode, GameSettings, GameState, Point, ResourceNode } from "../sim/types";
 
 /** The first ordinary briefing must teach the active match's win condition. */
 export function firstBattleObjectiveCopy(mode: GameMode): { title: string; text: string } {
   return mode === "conquest"
     ? { title: "Destroy the enemy keeps", text: "Hold relics for gold and wood to fund your siege. Destroy the enemy keeps to win." }
     : { title: "Take the center", text: "Relics earn victory points; gold and wood fund your army." };
+}
+
+/** The last ordinary field-guide step must agree with the active victory rules. */
+export function fieldGuideObjectiveCopy(settings: Pick<GameSettings, "mode" | "scriptedVictory">): { title: string; text: string } {
+  if (settings.scriptedVictory) return {
+    title: "Follow your mission",
+    text: "Complete the mission objectives. Keep recruiting, capture fresh gold, and protect your keep.",
+  };
+  if (settings.mode === "conquest") return {
+    title: "Destroy the enemy keeps",
+    text: "Relics pay gold and wood. Destroy the enemy keeps to win, and protect your own keep.",
+  };
+  return {
+    title: "Take the center",
+    text: "Hold relics to score. Keep recruiting, capture fresh gold, and protect your keep.",
+  };
 }
 
 /** Describe the current rules without implying that score wins a scripted mission. */
