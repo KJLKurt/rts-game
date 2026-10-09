@@ -27,3 +27,9 @@ These are short Chromium mouse/touch-emulation previews, not physical-device or 
 The C3/C5 release passed 33 native feature/regression identities and one returning-cache update; its old worker-bootstrap failure and packaging-only failure remain recorded. Its hosted single-click update eventually completed after roughly a minute, with the cause unresolved. Direct public verification matched 61 of 83 responses before request-path errors and proxy restrictions; that route is not being retried. The real fresh record remains 0 wins, 1 defeat and 1 battle at 7:33, with 4/30 achievements. No continuity with the lost earlier profile is claimed.
 
 The original and expanded requirements audit remains open for wider natural pacing, uncoached usability, dense physical-device performance, Safari/PWA lifecycle, subjective listening, later campaign/Expedition outcomes and unfinished directional/theme/style commitments.
+
+## First native gate and bounded driver correction
+
+Run 38002015229 stopped during old-build setup, before the positive overlap oracle. The test filled the name and then asserted the map model before using a normal commit action. The editor intentionally commits that field on Save, Test or exit; the trusted input trace showed typing, zoom and pan worked. One unexpected setup failure is retained, with zero candidate or update executions. The strict classifier correctly rejected it as product-red evidence. Both 83-file production proofs passed.
+
+The test-only correction verifies the visible name field and presses ordinary Save before taking the full draft snapshot. It requires the save status and trusted Save input. No production source or bytes change, and the same positive old/candidate overlap oracle remains. The continuation covers only the previously unexecuted intended old red, seven candidate/regression identities and one sequential update.

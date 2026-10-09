@@ -214,15 +214,21 @@ test('native workshop preview keeps Return clear through text, pause, guide and 
   const original = await record(page, '01-original-editor', false, true);
   if (!(await page.locator('.editor-tools').isVisible())) await press(page, 'toggle-editor-tools');
   await page.locator('#editor-map-name').fill('Native preview layout round trip');
+  await expect(page.locator('#editor-map-name')).toHaveValue('Native preview layout round trip');
   await press(page, 'editor-pan');
   await press(page, 'toggle-editor-tools');
   await press(page, 'zoom-in');
   await panEditor(page);
+  // Map names commit on Save/Test/exit, not each keystroke. Snapshot the
+  // ordinary saved draft, rather than asserting uncommitted internal state.
+  await press(page, 'save-map');
+  await page.getByRole('status').filter({ hasText: 'Workshop saved' }).waitFor({ state: 'visible' });
   const draft = await record(page, '02-authored-translated-draft', true, true);
   expect(draft.draft!.map.name).toBe('Native preview layout round trip');
   expect(draft.camera!.zoom).toBeGreaterThan(original.camera!.zoom);
   expect({ x: draft.camera!.x, y: draft.camera!.y }).not.toEqual({ x: original.camera!.x, y: original.camera!.y });
   expect(draft.profile).toEqual(original.profile);
+  nativeAction(draft, 'save-map');
 
   await launchPreview(page);
   const standard = await record(page, '03-standard-running-positive-overlap-oracle', true);
