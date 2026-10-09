@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { createGame } from "../src/sim";
+import { createGame, restoreGame, serializeGame } from "../src/sim";
+import { validateScaleSettings } from "../src/sim/scales";
 import {
   defaultMapRules,
   validateMapPlayerSlots,
@@ -110,6 +111,14 @@ const view: WorkshopView = {
 };
 
 describe("workshop schema and safety", () => {
+  it.each([90, 91, 120, 180])(
+    "accepts a %i-minute workshop target for validation and launch",
+    (duration) => {
+      const map = updateWorkshopRules(fixture(), { duration });
+      expect(validateWorkshopMap(map).errors).toEqual([]);
+      expect(createWorkshopTest(map).duration).toBe(duration);
+    },
+  );
   it("upgrades legacy maps with independent scenario defaults without changing the source", () => {
     const legacy = createGame({ mapSize: "tiny" }).map,
       original = structuredClone(legacy);
@@ -209,6 +218,118 @@ describe("workshop schema and safety", () => {
         false,
       ).join(),
     ).toMatch(/declarative/);
+  });
+});
+
+describe("workshop duration context", () => {
+  describe.each([3, 4, 5] as const)("map version %i", (version) => {
+    it.each([4, 90, 91, 120, 180])(
+      "preserves a %i-minute target through JSON, launch, save and test return",
+      (duration) => {
+        const source = fixture();
+        source.version = version;
+        const map = updateWorkshopRules(source, { duration }),
+          original = structuredClone(map),
+          imported = importWorkshopMap(exportWorkshopMap(map)),
+          session = new WorkshopTestSession(),
+          settings = session.begin(imported, view);
+        expect(imported).toEqual(map);
+        expect(settings).toMatchObject({
+          duration,
+          mapGenerationVersion: version,
+          matchScale: "custom",
+          customMap: { version, scenario: { rules: { duration } } },
+        });
+        expect(validateScaleSettings(settings)).toEqual([]);
+        const state = createGame(settings),
+          restored = restoreGame(serializeGame(state));
+        expect(restored.settings.duration).toBe(duration);
+        expect(restored.settings.mapGenerationVersion).toBe(version);
+        expect(restored.map.scenario!.rules.duration).toBe(duration);
+        expect(serializeGame(restored)).toBe(serializeGame(state));
+        // Rebuild launch settings from persisted authored data, not a prior setup.
+        const reconstructed = createWorkshopTest(
+          importWorkshopMap(exportWorkshopMap(restored.map)),
+        );
+        expect(reconstructed.duration).toBe(duration);
+        expect(createGame(reconstructed).settings.duration).toBe(duration);
+        state.map.scenario!.rules.duration = 18;
+        (settings.customMap as WorkshopMap).scenario!.rules.duration = 18;
+        const resumed = new WorkshopTestSession();
+        resumed.resume(JSON.parse(JSON.stringify(session.export())));
+        expect(resumed.restore()).toEqual({ version: 1, map, view });
+        expect(map).toEqual(original);
+      },
+    );
+  });
+  it.each([3, 181])(
+    "rejects an out-of-range %i-minute authored target",
+    (duration) => {
+      const map = fixture();
+      expect(() => updateWorkshopRules(map, { duration })).toThrow(
+        "Match duration must be between 4 and 180 minutes.",
+      );
+      map.scenario!.rules.duration = duration;
+      expect(validateWorkshopMap(map).errors).toContain(
+        "Match duration must be between 4 and 180 minutes.",
+      );
+      expect(() => createWorkshopTest(map)).toThrow(/4 and 180/);
+      expect(() => importWorkshopMap(JSON.stringify(map))).toThrow(/4 and 180/);
+    },
+  );
+  it.each([NaN, Infinity, -Infinity])(
+    "rejects a nonfinite authored target (%s)",
+    (duration) => {
+      const map = fixture();
+      map.scenario!.rules.duration = duration;
+      expect(validateWorkshopStructure(map)).not.toEqual([]);
+      expect(() => createWorkshopTest(map)).toThrow();
+    },
+  );
+  it.each([undefined, 3, 4] as const)(
+    "retains the 90-minute generated-map limit for version %s",
+    (mapGenerationVersion) => {
+      expect(
+        validateScaleSettings({ mapGenerationVersion, duration: 90 }),
+      ).toEqual([]);
+      expect(
+        createGame({ mapGenerationVersion, duration: 90 }).settings.duration,
+      ).toBe(90);
+      for (const duration of [91, 120, 180]) {
+        expect(
+          validateScaleSettings({ mapGenerationVersion, duration }),
+        ).toEqual(["Targets longer than 90 minutes require generator v5."]);
+        expect(() => createGame({ mapGenerationVersion, duration })).toThrow(
+          "Targets longer than 90 minutes require generator v5.",
+        );
+      }
+    },
+  );
+  it("retains v5 generated targets and shared bounds without a custom map", () => {
+    expect(
+      createGame({ mapGenerationVersion: 5, duration: 180 }).settings.duration,
+    ).toBe(180);
+    for (const duration of [3, 181])
+      expect(
+        validateScaleSettings({ mapGenerationVersion: 5, duration }),
+      ).toContain("duration must be between 4 and 180.");
+  });
+  it("still rejects an over-budget long map and missing authored keeps", () => {
+    const overBudget = updateWorkshopRules(setWorkshopSlotCount(fixture(), 4), {
+      duration: 180,
+      populationCap: 200,
+    });
+    expect(validateWorkshopMap(overBudget).errors.join()).toMatch(/600 total/);
+    expect(() => createWorkshopTest(overBudget)).toThrow(/600 total/);
+    const missingKeeps = updateWorkshopRules(fixture(), {
+      duration: 180,
+      startingForces: "authored",
+    });
+    expect(validateWorkshopMap(missingKeeps).errors).toEqual([
+      "Player 1 needs exactly one Command Keep with authored starting forces.",
+      "Player 2 needs exactly one Command Keep with authored starting forces.",
+    ]);
+    expect(() => createWorkshopTest(missingKeeps)).toThrow(/Command Keep/);
   });
 });
 
@@ -519,6 +640,22 @@ describe("named library and test-return lifecycle", () => {
       },
     };
   }
+  it.each([4, 90, 91, 120, 180])(
+    "reopens and launches a saved %i-minute map from a fresh library",
+    async (duration) => {
+      const backing = store(),
+        library = new WorkshopLibrary(backing),
+        map = updateWorkshopRules(fixture(), { duration }),
+        saved = await library.save(map, `Duration ${duration}`),
+        reloaded = await new WorkshopLibrary(backing).load(saved.id);
+      expect(reloaded).toEqual(saved);
+      expect(reloaded.map.scenario!.rules.duration).toBe(duration);
+      expect(validateWorkshopMap(reloaded.map).errors).toEqual([]);
+      expect(
+        createGame(createWorkshopTest(reloaded.map)).settings.duration,
+      ).toBe(duration);
+    },
+  );
   it("saves independent maps, overwrites by ID, and clones without changing the original", async () => {
     const backing = store(),
       library = new WorkshopLibrary(
@@ -725,6 +862,30 @@ describe("workshop settings and palette integration", () => {
     );
     return data;
   }
+  it.each([4, 90, 91, 120, 180])(
+    "applies and validates the form's %i-minute target without changing the draft",
+    (duration) => {
+      const map = fixture(),
+        original = structuredClone(map),
+        data = form(map);
+      data.set("duration", String(duration));
+      const updated = readWorkshopSettings(data, map);
+      expect(updated.scenario!.rules.duration).toBe(duration);
+      expect(validateWorkshopMap(updated).errors).toEqual([]);
+      expect(map).toEqual(original);
+    },
+  );
+  it.each([3, 181])(
+    "rejects an out-of-range %i-minute form without changing the draft",
+    (duration) => {
+      const map = fixture(),
+        original = structuredClone(map),
+        data = form(map);
+      data.set("duration", String(duration));
+      expect(() => readWorkshopSettings(data, map)).toThrow(/4 and 180/);
+      expect(map).toEqual(original);
+    },
+  );
   it("applies a complete settings form atomically with numeric parsing and player choices", () => {
     const map = fixture(),
       data = form(map);

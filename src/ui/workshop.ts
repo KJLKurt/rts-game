@@ -188,6 +188,7 @@ export function validateWorkshopMap(
       ...validateScaleSettings({
         ...map.scenario.rules,
         slots: map.scenario.slots,
+        customMap: map,
       }),
     );
     if (map.scenario.rules.startingForces === "authored")
