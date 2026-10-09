@@ -10,6 +10,10 @@ Visible, unearned achievements at their target now explain: “Progress recorded
 
 ## Validation status
 
-Focused history tests cover inline rename across undo/redo/reload, explicit settings rename, legacy history, malformed flags, and bounded history. View tests exercise below/at/above target, earned/hidden cards, and surrender-to-ordinary-defeat behavior against the existing reward policy. Native browser and visual acceptance receipts will be recorded after execution; this document does not claim a pending test has passed.
+853 unit tests in 78 files, TypeScript, content validation, and production build passed. Focused history tests cover inline rename across undo/redo/reload, explicit settings rename, legacy history, malformed flags, and bounded history. View tests exercise below/at/above target, earned/hidden cards, and surrender-to-ordinary-defeat behavior against the existing reward policy.
+
+Browser acceptance is multipart on identical production bytes (runtime fc-550f8c0618f4). Run37887509786 on QA0c573056:25 passed and4 failed, zero retries/skips; the existing PWA project added5 checks beyond the24 editor/scale identities. The four failures were phone controls still hidden after a Tools activation. Test-only continuation added a visibility postcondition after one native activation and bounded failure event diagnostics, with no extra tap, forced action, or product change. Run37888050912 on QA f691a737: all4 affected phone identities passed cleanly, zero retries. This reconciles29 unique identities; it is not one clean full-suite run. The original failures and artifacts remain preserved; exact lower-level event cause was not captured because the instrumented continuation passed.
+
+Actual portrait/landscape screenshots of both themes show the retained name and history controls; pending achievement card screenshots show readable wrapped explanation. Native phone tests used CDP touch for painting/panning/cancellation/pinch and native taps for controls. Existing workshop/scale/PWA checks also passed. These are controlled Chromium touch-emulation tests, not physical-device evidence.
 
 Physical phones/Safari, long maximum-map matches, full current browser matrix, later campaign chapters, full expedition, and broader art/balance acceptance remain open.

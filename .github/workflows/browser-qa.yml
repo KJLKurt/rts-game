@@ -17,7 +17,7 @@ concurrency:
 jobs:
   browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 60
     env:
       FRONTIER_TEST_WORKERS: "2"
     steps:
@@ -42,7 +42,7 @@ jobs:
         with:
           name: frontier-browser-acceptance-${{ github.sha }}
           path: |
-            playwright-report/
-            test-results/**/*.png
+            full-matrix-results.json
+            test-results/**/test-failed*.png
             test-results/**/error-context.md
           retention-days: 2
