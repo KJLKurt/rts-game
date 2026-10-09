@@ -393,6 +393,11 @@ function button(
 function positionBattleGuide() {
   const guide = document.querySelector<HTMLElement>("#battle-hint");
   const objective = document.querySelector<HTMLElement>("#objective");
+  // A portrait preview's multi-line objective can outgrow the old 64px map
+  // offset. Keep the neighboring map below its real bottom, without moving
+  // ordinary-battle controls or guessing a text/paused-state height.
+  if (workshopTest.active && objective)
+    document.documentElement.style.setProperty("--workshop-objective-bottom", `${Math.ceil(objective.getBoundingClientRect().bottom)}px`);
   if (!positionShortLearningGuide(guide, objective,
     document.querySelector<HTMLElement>(".minimap-wrap"), document.querySelector<HTMLElement>(".command-deck"),
     { width: innerWidth, height: innerHeight, textScale: preferences.uiScale, learning: playing && !editing && !!state.settings.learning }))
@@ -723,16 +728,25 @@ function renderGameShell() {
   stopDeckObservation();
   hudHTML.clear();
   screen.innerHTML = `<header class="hud"><button class="brand-button" data-action="pause-menu" aria-label="Battle menu">${icon("crown")}</button><div class="resources"><button data-action="economy" data-resource="gold" title="Gold and income sources" aria-label="Gold and income sources">${icon("gold")}<b id="gold">0</b></button><button data-action="economy" data-resource="wood" title="Wood and income sources" aria-label="Wood and income sources">${icon("wood")}<b id="wood">0</b></button><button data-action="economy" data-resource="population" title="Population and maximum capacity" aria-label="Population and maximum capacity">${icon("population")}<b id="population">0</b></button></div><div class="hud-clock"><div class="hud-time" id="match-time">0:00</div><div class="paused-ribbon" id="paused-ribbon"></div></div><button class="pause-button" data-action="pause" aria-label="Tactical pause">${icon("pause")}<span>Pause</span></button></header><div class="objective-bar" id="objective"></div><div class="battle-hint" id="battle-hint"></div><div class="map-controls">${button("Focus commander", "focus", "square", "crosshair")}${button("Zoom in", "zoom-in", "square", "plus")}${button("Zoom out", "zoom-out", "square", "minus")}</div><div class="minimap-wrap"><button class="minimap-toggle" data-action="toggle-minimap" aria-label="Minimize minimap">Map −</button><canvas id="minimap" width="160" height="120" aria-label="Minimap: tap to move camera"></canvas><span id="map-seed"></span></div><div class="commander-strip" id="commander-strip"></div><div id="joystick" aria-label="Drag to move commander" role="application"><div class="joystick-ring"></div><div class="joystick-stick">${icon("crosshair")}</div></div><div class="ability-dock" id="abilities"></div><section class="command-deck"><div class="selection-row"><div class="selection-info" id="selection-info"></div><div class="selection-tools">${button("Minimize panel", "toggle-deck", "deck-toggle", "minus")}${button("Commander", "select-commander", "", "crown")}${button("Army", "select-army", "", "flag")}${button("Relic", "march-relic", "relic-command", "spark", 'aria-label="March to relic"')}</div></div><div class="primary-orders">${button("Move", "order-move", "", "arrow")}${button("Attack", "order-attack", "", "crossedSwords")}${button("Hold", "hold", "", "hold")}</div><div id="resource-actions"></div><div id="compact-production"></div><nav class="deck-tabs">${button("Details", "panel-inspect", "", "book")}${button("Recruit", "panel-army", "active", "sword")}${button("Build", "panel-build", "", "house")}${button("Research", "panel-research", "", "spark")}${button("Orders", "panel-orders", "", "flag")}</nav><div class="deck-content" id="deck-content"></div></section><div id="target-controls"></div><div id="placement-controls"></div>`;
-  if (workshopTest.active)
-    screen.insertAdjacentHTML(
-      "beforeend",
+  if (workshopTest.active) {
+    screen.querySelector(".hud")?.classList.add("workshop-preview-hud");
+    // This navigation belongs to the measured HUD, not a fixed battlefield
+    // coordinate that can cover wrapped objective text on a phone.
+    screen.querySelector(".hud-clock")?.insertAdjacentHTML(
+      "afterbegin",
       `<div class="workshop-test-return">${button("Return to workshop", "return-to-editor", "", "back")}</div>`,
     );
+  }
   measurePlayfield();
   renderDeck();
   updateHUD();
   const deck = document.querySelector(".command-deck");
-  if (deck) stopDeckObservation = observeControlDeck(deck, measurePlayfield);
+  const hud = document.querySelector(".hud");
+  const stopDeck = deck ? observeControlDeck(deck, measurePlayfield) : () => {};
+  // Preview navigation can make a new HUD row; pause copy, text scaling and
+  // viewport changes must move its dependent geometry after layout settles.
+  const stopHud = workshopTest.active && hud ? observeControlDeck(hud, measurePlayfield) : () => {};
+  stopDeckObservation = () => { stopDeck(); stopHud(); };
   setupJoystick();
   const hero = commander();
   if (hero) centerCommander(hero);

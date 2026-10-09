@@ -3729,10 +3729,9 @@ footer .build-identifier {
   gap: 8px;
 }
 .workshop-test-return {
-  position: absolute;
-  top: 118px;
-  right: 18px;
-  z-index: 12;
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  justify-self: start;
 }
 .workshop-test-return button {
   min-height: 44px;
@@ -3759,10 +3758,6 @@ footer .build-identifier {
   .in-editor .editor-map-controls button {
     width: 44px;
     min-height: 44px;
-  }
-  .workshop-test-return {
-    top: 105px;
-    right: 8px;
   }
   .workshop-test-return button {
     font-size: 11px;
@@ -4470,4 +4465,47 @@ footer .build-identifier {
     grid-template-columns: 1fr 1fr;
     margin-top: 14px;
   }
+}
+
+/* Workshop-only navigation participates in the HUD's real height. The clock
+   shares its row on phones, so Return never floats over the objective or guide.
+   Ordinary battles retain their existing shell and responsive rules. */
+.hud.workshop-preview-hud {
+  height: auto;
+  min-height: 66px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.hud.workshop-preview-hud .resources { order: 1; }
+.hud.workshop-preview-hud .pause-button { order: 2; }
+.hud.workshop-preview-hud .hud-clock {
+  order: 3;
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  column-gap: 12px;
+  row-gap: 1px;
+}
+.workshop-preview-hud #match-time { grid-column: 2; justify-self: end; }
+.workshop-preview-hud #paused-ribbon { grid-column: 2; justify-self: end; }
+.workshop-preview-hud .workshop-test-return button {
+  font-size: calc(12px * var(--ui-scale, 1));
+  white-space: nowrap;
+}
+.hud.workshop-preview-hud ~ .objective-bar {
+  top: calc(var(--hud-height, 66px) + 8px);
+}
+@media (max-width: 600px) {
+  .hud.workshop-preview-hud { column-gap: 4px; row-gap: 4px; }
+  .hud.workshop-preview-hud .hud-clock {
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 8px;
+  }
+  .hud.workshop-preview-hud ~ .minimap-wrap {
+    top: max(calc(var(--hud-height, 66px) + 64px), calc(var(--workshop-objective-bottom, 0px) + 8px));
+  }
+}
+@media (max-height: 550px) and (min-width: 601px) {
+  .hud.workshop-preview-hud { min-height: 56px; }
 }
