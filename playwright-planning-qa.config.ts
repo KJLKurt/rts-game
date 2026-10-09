@@ -1,11 +1,11 @@
 import {defineConfig} from '@playwright/test';
 import base from './playwright.config';
 
-/** Three corrected identities plus exactly five relevant existing regressions. */
+/** Continuation of the three C2 identities after preserving 20 passes and one declared skip. */
 export default defineConfig({
   ...base,
   testMatch:/\/(planning-consistency|tutorial|queued-construction|approved-mobile-ui)\.spec\.ts$/,
-  grep:/C1 fourth field-guide|C2 compact next countdown|C4 a real queued full refund|guide stage survives real save|approved building tabs, paid production|approved placement pans independently|queued footprints retain overlap rejection|save and Continue restore plans/,
+  grep:/C2 compact next countdown/,
   projects:base.projects!.filter(p=>p.name!=='pwa'),
   timeout:90_000,retries:0,maxFailures:0,workers:2,globalTimeout:12*60_000,
   use:{...base.use,trace:'retain-on-failure',screenshot:'only-on-failure',video:'off'},

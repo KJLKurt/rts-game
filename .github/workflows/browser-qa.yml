@@ -44,14 +44,14 @@ jobs:
           node .qa-verify-dist.mjs dist .qa-candidate-dist.json candidate-dist-proof.json
       - name: Install official Playwright Chromium
         run: npx playwright install --with-deps chromium
-      - name: Exercise three corrected controls and five affected regressions on desktop and phone layouts
+      - name: Continue three C2 identities using actual production event timestamps
         run: npx playwright test --config playwright-planning-qa.config.ts
       - name: Sequential exact-live update, restored queue completion and one-time construction
         run: npx playwright test --config playwright-planning-upgrade.config.ts
       - name: Verify tested candidate remained byte-exact
         if: ${{ !cancelled() }}
         run: node .qa-verify-dist.mjs dist .qa-candidate-dist.json candidate-dist-proof.json
-      - name: Preserve complete first-attempt native and update evidence
+      - name: Preserve complete C2 continuation and sequential update evidence
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:

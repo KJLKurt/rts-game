@@ -230,14 +230,31 @@ test('C2 compact next countdown agrees with the earliest rate-adjusted paid para
   await evidence(page, 'C2-restored-paid-parallel-countdown', { paid, restored, expectedSeconds });
   // Post-fix continuation: the displayed next job must actually complete first.
   await setPaused(page, false);
-  await expect.poll(() => page.evaluate(({ buildingId, queueId }) => !window.__FRONTIER__.state.entities.find(e => e.id === buildingId)!.queue.some(q => q.queueId === queueId), earliest), { timeout: 15_000, intervals: [50] }).toBe(true);
+  let firstCompletion: GameState | undefined;
+  await expect.poll(async () => {
+    const observed = await snapshot(page);
+    const done = !observed.entities.find(e => e.id === earliest.buildingId)!.queue.some(q => q.queueId === earliest.queueId);
+    if (done) firstCompletion = observed;
+    return done;
+  }, { timeout: 15_000, intervals: [50] }).toBe(true);
   await setPaused(page, true);
   const completed = await snapshot(page);
-  expect(completed.time - paid.time).toBeGreaterThanOrEqual(earliest.remaining / earliest.rate - .11);
-  expect(completed.time - paid.time).toBeLessThanOrEqual(earliest.remaining / earliest.rate + .8);
-  expect(completed.entities.find(e => e.id === heads[0].buildingId)!.queue.some(q => q.queueId === heads[0].queueId)).toBe(true);
-  expect(completed.players[0].stats.unitsCreated).toBe(paid.players[0].stats.unitsCreated + 1);
-  await evidence(page, 'C2-observed-next-completion', { earliest, elapsedGameSeconds: completed.time - paid.time, expectedGameSeconds: earliest.remaining / earliest.rate });
+  const observed = firstCompletion!;
+  const newSpawns = observed.events.filter(event => event.type === 'spawn' && event.team === 0 && event.subtype === 'swordsman'
+    && event.id >= paid.nextEventId && !paid.entities.some(entity => entity.id === event.entityId));
+  // The engine already records the actual production tick. Native Pause has
+  // input/transport latency and cannot be used as a completion timestamp.
+  // Capture evidence before assertions, retaining both times and real input.
+  await evidence(page, 'C2-observed-next-completion', { earliest, firstCompletion: observed, completed, newSpawns,
+    expectedGameSeconds: earliest.remaining / earliest.rate,
+    completionGameSeconds: newSpawns.map(event => event.time - paid.time),
+    pauseDelayGameSeconds: newSpawns.map(event => completed.time - event.time) });
+  expect(newSpawns).toHaveLength(1);
+  expect(observed.entities).toContainEqual(expect.objectContaining({ id: newSpawns[0].entityId, team: 0, kind: 'unit', type: 'swordsman' }));
+  expect(newSpawns[0].time - paid.time).toBeGreaterThanOrEqual(earliest.remaining / earliest.rate - .000001);
+  expect(newSpawns[0].time - paid.time).toBeLessThanOrEqual(earliest.remaining / earliest.rate + .11);
+  expect(observed.entities.find(e => e.id === heads[0].buildingId)!.queue.some(q => q.queueId === heads[0].queueId)).toBe(true);
+  expect(observed.players[0].stats.unitsCreated).toBe(paid.players[0].stats.unitsCreated + 1);
 });
 
 /** Select a real legal projected site using only a copied state. We intentionally
