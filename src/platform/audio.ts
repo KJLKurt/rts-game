@@ -15,6 +15,9 @@ export type SoundEffect =
   | "capture"
   | "ability"
   | "hit"
+  | "melee"
+  | "arrow"
+  | "complete"
   | "victory"
   | "defeat"
   | "click"
@@ -48,6 +51,7 @@ interface NoteVoice {
   gain: GainNode;
   end: number;
   music: boolean;
+  priority: number;
 }
 const STATES: AudioState[] = [
   "menu",
@@ -88,6 +92,7 @@ export class AudioDirector {
   private voices: MusicVoice[] = [];
   private notes: NoteVoice[] = [];
   private lastEffect = new Map<SoundEffect, number>();
+  private lastCombatEffect = -Infinity;
   private hasTrack = false;
 
   /** Call only from a user gesture. A blocked resume can be retried next gesture. */
@@ -342,6 +347,9 @@ export class AudioDirector {
     volume: number,
     wave: OscillatorType = "sine",
     music = true,
+    attack = 0.025,
+    endFrequency?: number,
+    priority = 0,
   ) {
     if (!this.context || !this.master) return;
     for (const voice of [...this.notes])
@@ -355,19 +363,37 @@ export class AudioDirector {
       gain = this.context.createGain();
     osc.type = wave;
     osc.frequency.value = freq;
+    if (endFrequency !== undefined) {
+      osc.frequency.setValueAtTime(freq, at);
+      osc.frequency.exponentialRampToValueAtTime(endFrequency, at + duration);
+    }
     gain.gain.setValueAtTime(0.0001, at);
     gain.gain.exponentialRampToValueAtTime(
       Math.max(0.0001, volume),
-      at + 0.025,
+      at + attack,
     );
     gain.gain.exponentialRampToValueAtTime(0.0001, at + duration);
     osc.connect(gain);
     gain.connect(music ? this.fallbackGain! : this.effectsGain!);
-    const voice = { source: osc, gain, end: at + duration + 0.02, music };
+    const voice = { source: osc, gain, end: at + duration + 0.02, music, priority };
     this.notes.push(voice);
     osc.onended = () => this.removeNote(voice);
     osc.start(at);
     osc.stop(voice.end);
+  }
+  /** Admit whole cues; completion may displace incidental sounds, never warnings. */
+  private reserveEffects(count: number, priority: number): boolean {
+    const at = this.context!.currentTime;
+    for (const voice of [...this.notes])
+      if (voice.end <= at) this.removeNote(voice);
+    const effects = this.notes.filter(voice => !voice.music);
+    const needed = effects.length + count - 12;
+    if (needed <= 0) return true;
+    const replaceable = effects.filter(voice => voice.priority < priority)
+      .sort((a, b) => a.priority - b.priority);
+    if (replaceable.length < needed) return false;
+    for (const voice of replaceable.slice(0, needed)) this.removeNote(voice, true);
+    return true;
   }
   private schedule() {
     if (
@@ -433,6 +459,10 @@ export class AudioDirector {
       return;
     }
     const at = this.context.currentTime;
+    // Release and damage can occur in the same simulation tick. One shared
+    // combat slot keeps the release audible without stacking its generic hit.
+    const combat = kind === "hit" || kind === "melee" || kind === "arrow";
+    if (combat && at - this.lastCombatEffect < 0.09) return;
     const cooldown =
       kind === "hit"
         ? 0.09
@@ -441,14 +471,30 @@ export class AudioDirector {
           : 0.18;
     if (at - (this.lastEffect.get(kind) ?? -Infinity) < cooldown) return;
     this.lastEffect.set(kind, at);
+    if (combat) this.lastCombatEffect = at;
+    if (kind === "melee") {
+      if (!this.reserveEffects(4, 0)) return;
+      // Original additive metal impact: inharmonic partials, short sharp attack.
+      for (const [frequency, duration, volume] of [[145, .075, .08], [1260, .13, .055], [1817, .095, .035], [2943, .055, .025]])
+        this.note(frequency, duration, at, volume, "sine", false, .003);
+      return;
+    }
+    if (kind === "arrow") {
+      if (!this.reserveEffects(2, 0)) return;
+      // Original bow-string pluck and a quiet falling air tone, unlike the clank.
+      this.note(960, .065, at, .075, "triangle", false, .003, 220);
+      this.note(2400, .14, at + .012, .025, "sine", false, .008, 650);
+      return;
+    }
     const table: Record<
-      Exclude<SoundEffect, "victory" | "defeat">,
+      Exclude<SoundEffect, "victory" | "defeat" | "melee" | "arrow">,
       number[]
     > = {
       select: [420],
       order: [330, 440],
       error: [130, 100],
       build: [220, 330, 440],
+      complete: [523, 659, 784],
       recruit: [392, 523],
       capture: [330, 440, 660],
       ability: [165, 330, 660],
@@ -461,13 +507,8 @@ export class AudioDirector {
       destroy: [147, 98],
       alert: [392, 294, 392],
     };
-    if (kind === "error" || kind === "alert") {
-      const effects = this.notes.filter(
-        (voice) => !voice.music && voice.end > at,
-      );
-      while (effects.length + table[kind].length > 12)
-        this.removeNote(effects.shift()!, true);
-    }
+    const priority = kind === "error" || kind === "alert" ? 2 : kind === "complete" ? 1 : 0;
+    if (!this.reserveEffects(table[kind].length, priority)) return;
     for (const [i, f] of table[kind].entries())
       this.note(
         f,
@@ -476,6 +517,9 @@ export class AudioDirector {
         0.14,
         kind === "hit" || kind === "destroy" ? "triangle" : "sine",
         false,
+        .025,
+        undefined,
+        priority,
       );
   }
 }

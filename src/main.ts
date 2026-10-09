@@ -106,6 +106,7 @@ import type {
 } from "./sim/types";
 import { Battlefield, renderMinimap } from "./render/Battlefield";
 import { AudioDirector } from "./platform/audio";
+import { battleSound, restoredEventCursor } from "./platform/battle-audio";
 import {
   loadRecord,
   saveRecord,
@@ -1552,7 +1553,7 @@ async function continueGame(checkpoint?: unknown) {
     playing = true;
     document.body.classList.toggle("rush-mode", !!state.rush);
     resultShown = false;
-    lastEvent = state.nextEventId;
+    lastEvent = restoredEventCursor(state);
     selection = new Set(commander() ? [commander()!.id] : []);
     commanderFocusFitted = false;
     commanderFrameCache = undefined;
@@ -3863,23 +3864,16 @@ function frame(now: number) {
       }
       for (const event of state.events) {
         if (event.id <= lastEvent) continue;
+        const sound = battleSound(event, state);
+        if (sound) audio.play(sound);
         if (event.type === "capture" && event.team === 0) {
-          audio.play("capture");
           toast(event.text || "New territory claimed.");
         }
         if (event.type === "dialogue") toast(event.text || "");
         if (event.type === "alert" && event.team === 0) {
-          audio.play("alert");
           toast(event.text || "Your frontier is under attack.", "warning");
         }
-        if (
-          event.type === "hit" &&
-          (event.team === 0 || event.targetTeam === 0)
-        )
-          audio.play("hit");
-        if (event.type === "death" && event.team === 0) audio.play("destroy");
         if (event.type === "research" && event.team === 0) {
-          audio.play("research");
           toast(event.text || "Research complete.");
           renderDeck();
         }

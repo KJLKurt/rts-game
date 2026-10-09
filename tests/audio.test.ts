@@ -619,6 +619,9 @@ describe("bounded effects and procedural voices", () => {
       "capture",
       "ability",
       "hit",
+      "melee",
+      "arrow",
+      "complete",
       "click",
       "upgrade",
       "research",
@@ -682,12 +685,93 @@ describe("bounded effects and procedural voices", () => {
       );
     expect(live().length).toBeGreaterThan(0);
     expect(live().length).toBeLessThanOrEqual(12);
-    for (const effect of ["error", "alert"] as const) {
+    for (const effect of ["error", "alert", "complete"] as const) {
       const count = context().oscillators.length;
       audio.play(effect);
       expect(context().oscillators.length).toBeGreaterThan(count);
       expect(live().length).toBeLessThanOrEqual(12);
     }
+  });
+  it("uses distinct short metal partials, bow sweeps and a completion cadence", () => {
+    const audio = director();
+    audio.unlock();
+    audio.play("melee");
+    const metal = [...context().oscillators];
+    expect(metal.map(n => n.frequency.value)).toEqual([145, 1260, 1817, 2943]);
+    expect(metal.every(n => n.type === "sine" && n.stoppedAt <= .15)).toBe(true);
+    expect(metal.every(n => n.frequency.exponentialRampToValueAtTime.mock.calls.length === 0)).toBe(true);
+    context().currentTime = 1;
+    context().finishElapsed();
+    audio.play("arrow");
+    const arrow = context().oscillators.slice(metal.length);
+    expect(arrow.map(n => n.type)).toEqual(["triangle", "sine"]);
+    expect(arrow.map(n => n.frequency.setValueAtTime.mock.calls[0][0])).toEqual([960, 2400]);
+    expect(arrow.map(n => n.frequency.exponentialRampToValueAtTime.mock.calls[0][0])).toEqual([220, 650]);
+    context().currentTime = 2;
+    context().finishElapsed();
+    audio.play("complete");
+    expect(context().oscillators.slice(-3).map(n => n.frequency.value)).toEqual([523, 659, 784]);
+    expect(context().oscillators.slice(-3).map(n => n.startedAt)).toEqual([2, 2.085, 2.17]);
+  });
+  it("shares a combat cooldown so release and same-tick damage do not stack", () => {
+    const audio = director();
+    audio.unlock();
+    audio.play("arrow");
+    expect(context().oscillators).toHaveLength(2);
+    audio.play("hit");
+    audio.play("melee");
+    expect(context().oscillators).toHaveLength(2);
+    context().currentTime = .091;
+    audio.play("melee");
+    expect(context().oscillators).toHaveLength(6);
+    audio.play("complete");
+    expect(context().oscillators).toHaveLength(9);
+    audio.play("complete");
+    expect(context().oscillators).toHaveLength(9);
+  });
+  it("drops whole combat cues at capacity and never lets completion cut warning voices", () => {
+    const audio = director();
+    audio.unlock();
+    audio.play("alert");
+    const warnings = [...context().oscillators];
+    const originalStops = warnings.map(n => n.stoppedAt);
+    audio.play("build");
+    audio.play("capture");
+    audio.play("recruit");
+    expect(context().oscillators).toHaveLength(11);
+    audio.play("melee");
+    expect(context().oscillators).toHaveLength(11);
+    audio.play("complete");
+    expect(context().oscillators).toHaveLength(14);
+    expect(warnings.map(n => n.stoppedAt)).toEqual(originalStops);
+    expect(context().oscillators.filter(n => n.stoppedAt > 0)).toHaveLength(12);
+  });
+  it.each(["melee", "arrow", "complete"] as const)("keeps %s gesture-gated, bounded, and controlled by master/mute/effects", (kind) => {
+    const audio = director();
+    audio.play(kind);
+    expect(FakeContext.instances).toHaveLength(0);
+    audio.setMaster(.4, true);
+    audio.setVolumes(.3, .2);
+    audio.unlock();
+    audio.play(kind);
+    const path = signalPath(context().oscillators[0]);
+    expect(path).toContain(masterBus());
+    expect(masterBus().gain.value).toBe(0);
+    const effects = path.find(n => n instanceof FakeGain && n.gain.value === .2) as FakeGain;
+    expect(effects).toBeDefined();
+    audio.setMaster(.4, false);
+    expect(masterBus().gain.value).toBe(.4);
+    audio.setVolumes(.3, 0);
+    expect(effects.gain.value).toBe(0);
+    for (let i = 1; i <= 100; i++) {
+      context().currentTime = i * .2;
+      context().finishElapsed();
+      audio.play(kind);
+      expect(context().oscillators.filter(n => !n.ended && n.stoppedAt > context().currentTime).length).toBeLessThanOrEqual(12);
+    }
+    context().currentTime = 30;
+    context().finishElapsed();
+    expect(context().oscillators.every(n => n.ended && n.disconnect.mock.calls.length === 1)).toBe(true);
   });
   it("disconnects finished effects and their individual envelopes", () => {
     const audio = director();
