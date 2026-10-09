@@ -53,6 +53,7 @@ import {
 } from "./ui/inspection";
 import { updateLiveHTML } from "./ui/live-html";
 import { tacticalPausePresentation } from "./ui/tactical-pause";
+import { commanderRecoveryPresentation } from "./ui/commander-recovery";
 import { expeditionOpeningGuidance, rallyDestination, recruitDestination, resourceTargetName, selectedOrderDescription, rangedSpacingDescription } from "./ui/command-guidance";
 import {
   populationBreakdown,
@@ -136,6 +137,7 @@ import {
   missionBriefingHTML,
   missionObjectivesHTML,
   expeditionHTML,
+  expeditionBattleRulesHTML,
 } from "./ui/campaigns/view";
 import {
   startUnlockedExpedition,
@@ -685,7 +687,7 @@ function launchGame(
     const battle = expeditionBattle(expedition);
     showDialog(
       battle.title,
-      `<p class="story">${esc(battle.objective)}</p>${expeditionOpeningGuidance(battle.nodeId)}<p>Your expedition bonuses apply only to your forces. A defeat ends this run.</p>${button("Begin encounter", "begin-briefing", "primary large", "play")}`,
+      `${expeditionBattleRulesHTML(battle)}<p class="story">${esc(battle.objective)}</p>${expeditionOpeningGuidance(battle.nodeId)}<p>Your expedition bonuses apply only to your forces. A defeat ends this run.</p>${button("Begin encounter", "begin-briefing", "primary large", "play")}`,
     );
   } else if (
     !state.rush &&
@@ -1098,11 +1100,15 @@ function updateHUD() {
   document.body.classList.toggle("targeting-order", !!armedOrder || uiAction === "rally");
   // Status changes can wrap the toolbar; measure only changed content, not every HUD tick.
   if (placementControlsChanged) measurePlayfield();
+  const recovery = c ? null : commanderRecoveryPresentation(state);
+  const commanderStrip = document.querySelector<HTMLElement>("#commander-strip");
+  commanderStrip?.classList.toggle("recovering", recovery?.state === "recovering");
+  commanderStrip?.classList.toggle("unavailable", recovery?.state === "unavailable");
   set(
     "commander-strip",
     c
       ? `<button data-action="focus" aria-label="Focus commander">${icon(unitIcons[c.type])}<span><b>${COMMANDERS[state.settings.commander].name}</b><i><em style="width:${(c.hp / c.maxHp) * 100}%"></em></i></span><small>${Math.ceil(c.hp)}</small></button>`
-      : `<span class="respawning">${playerOutcomeStatus(state) === "spectating" ? "Your keep fell. Watching your surviving allies." : "Commander recovering at the keep…"}</span>`,
+      : `<span class="respawning"><strong>${esc(recovery?.heading ?? "Commander unavailable")}</strong>${recovery?.seconds !== null && recovery?.seconds !== undefined ? `<span class="recovery-time" role="timer" aria-live="off" aria-label="${recovery.seconds} game seconds until commander returns">${recovery.seconds}s</span>` : ""}<small>${esc(recovery?.detail ?? "Abilities unavailable")}</small></span>`,
   );
   updateAbilities(c);
   const pause = document.querySelector<HTMLButtonElement>(".pause-button");
@@ -1159,6 +1165,7 @@ function updateAbilities(c: Entity | undefined) {
   const dock = document.querySelector<HTMLElement>("#abilities");
   if (!dock) return;
   const definitions = COMMANDERS[state.settings.commander].abilities;
+  const recovery = c ? null : commanderRecoveryPresentation(state);
   if (dock.dataset.commander !== state.settings.commander) {
     dock.innerHTML = definitions
       .map(
@@ -1184,9 +1191,10 @@ function updateAbilities(c: Entity | undefined) {
     control.disabled = !c || remaining > 0 || queued;
     control.classList.toggle("cooling", remaining > 0 || queued);
     const lacksStructure = ability.id === "breach" && !!c && !findBreachTarget(state, c);
-    control.title = ability.description + (ability.id === "breach" ? " Uses your current building Attack target, otherwise the nearest eligible structure." : "") + (lacksStructure ? " Move within 6 tiles of a visible enemy building. No cooldown is spent without a valid target." : "");
+    const disabledReason = !c ? recovery?.abilityReason ?? "Abilities require a living commander." : queued ? "This ability is queued. Resume the battle to use it." : remaining > 0 ? `Ready in ${Math.ceil(remaining)} game seconds.` : "";
+    control.title = (disabledReason ? disabledReason + " " : "") + ability.description + (ability.id === "breach" ? " Uses your current building Attack target, otherwise the nearest eligible structure." : "") + (lacksStructure ? " Move within 6 tiles of a visible enemy building. No cooldown is spent without a valid target." : "");
     control.setAttribute("aria-description", control.title);
-    const text = queued
+    const text = !c ? recovery?.buttonLabel ?? "Unavailable" : queued
       ? "Queued"
       : remaining > 0
         ? String(Math.ceil(remaining))

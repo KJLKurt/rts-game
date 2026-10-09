@@ -14,9 +14,12 @@ import {
   EXPEDITION_NODES,
   EXPEDITION_LOADOUTS,
   currentExpeditionNode,
+  expeditionBattle,
   expeditionBonusSummary,
   expeditionOptions,
   isExpeditionBattle,
+  visitExpeditionNode,
+  type ExpeditionBattle,
   type ExpeditionRun,
 } from "./expedition";
 export function campaignCardsHTML(
@@ -60,6 +63,9 @@ export function missionObjectivesHTML(
 }
 const action = (label: string, actionName: string, id = "", disabled = false) =>
   `<button class="button secondary" data-action="${actionName}" data-id="${esc(id)}" ${disabled ? "disabled" : ""}>${esc(label)}</button>`;
+export function expeditionBattleRulesHTML(battle: ExpeditionBattle): string {
+  return `<p class="mission-rules expedition-rules">${esc(tacticalPauseRule(battle.settings.difficulty ?? DEFAULT_SETTINGS.difficulty))}</p>`;
+}
 export function expeditionHTML(
   run: ExpeditionRun | null,
   profile: ProfileV2,
@@ -88,13 +94,13 @@ export function expeditionHTML(
     )
       .map(
         (item) =>
-          `<article class="route-choice"><span class="eyebrow">${esc(item.kind)}</span><h3>${esc(item.title)}</h3><p>${esc(item.description)}</p>${action(isExpeditionBattle(item) ? "Prepare for battle" : "Visit this stop", "expedition-node", item.id)}</article>`,
+          `<article class="route-choice"><span class="eyebrow">${esc(item.kind)}</span><h3>${esc(item.title)}</h3>${isExpeditionBattle(item) ? expeditionBattleRulesHTML(expeditionBattle(visitExpeditionNode(run, item.id))) : ""}<p>${esc(item.description)}</p>${action(isExpeditionBattle(item) ? "Prepare for battle" : "Visit this stop", "expedition-node", item.id)}</article>`,
       )
       .join("")}</div>`;
   if (run.phase === "choice" && node)
     content = `<h3>${esc(node.title)}</h3><p>${esc(node.description)}</p><div class="route-choices">${node.choices!.map((choice) => `<article class="route-choice"><h3>${esc(choice.title)}</h3><p>${esc(choice.description)}</p>${action((choice.cost ?? 0) > run.crowns ? `Need ${choice.cost} crowns` : "Choose", "expedition-choice", choice.id, (choice.cost ?? 0) > run.crowns)}</article>`).join("")}</div>`;
   if (run.phase === "battle" && node)
-    content = `<h3>${esc(node.title)}</h3><p>${esc(node.description)}</p>${action("Continue encounter", "expedition-resume")}`;
+    content = `<h3>${esc(node.title)}</h3>${expeditionBattleRulesHTML(expeditionBattle(run))}<p>${esc(node.description)}</p>${action("Continue encounter", "expedition-resume")}`;
   if (run.phase === "completed" || run.phase === "defeated")
     content = `<p>${run.phase === "completed" ? "The expedition is complete. Your Wayfinder title is recorded; a new run starts fresh." : "Your command record is kept. A new expedition starts with fresh supplies and resets this run’s bonuses and route."}</p>${action("Start a new expedition", "expedition-new")}${run.phase === "defeated" ? `<p>Gather a mixed army at a safe rally point, defend your supplies, then push toward a relic.</p>${action("Practice the basics", "learn")}` : ""}`;
   return `${banner}${content}<p>${action("Save route", "expedition-save")}</p><details class="expedition-route-details"><summary>Inspect the whole route</summary>${map}</details>`;
