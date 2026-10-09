@@ -13,7 +13,7 @@ import type { UnitId } from '../sim/types';
 import type { PlannedConstruction } from '../ui/queued-construction';
 import { drawPlannedConstructionMarkers, plannedConstructionMarkers, QUEUED_CONSTRUCTION_STYLE } from './queued-construction';
 import { foliageMask, foliageOpacities, foliageSilhouette, type FoliageMask, type FoliageRect } from './foliage-visibility';
-import { actorIndicators, type ActorIndicator } from './actor-indicators';
+import { actorIndicators, actorIndicatorIdentity, actorIndicatorBounds, type ActorIndicator } from './actor-indicators';
 
 export interface RenderOptions {
  time?:number; reveal?:boolean; quality?:'low'|'high'; reducedMotion?:boolean; team?:number;
@@ -213,7 +213,7 @@ export class Battlefield {
   for(const event of state.events)if(this.visible(state,event.x,event.y,false,options))this.drawEvent(c,event,state,t,options);
   this.drawActorIndicators(c,indicators,options);
   this.drawFog(c,state,options);
-  if(!options.placement)this.drawTroopSummaries(c,items,state,options);
+  if(!options.placement)this.drawTroopSummaries(c,items,state,options,indicators);
   if(state.rush)this.drawRushOverlay(c,state,t,options);
   if(options.placement)this.drawPlacement(c,options.placement,t);
   if(options.target){const p=this.worldToScreen(options.target.x,options.target.y);c.save();c.translate(p.x,p.y);c.scale(z,z);const r=options.target.radius??2;ellipse(c,0,0,r*CIRCLE_X,r*CIRCLE_Y,'#8be7ff15','#a4efff',1.5);diamond(c,0,0,10,5,'#a5f0ff55','#daffff',1);line(c,[-18,0,18,0],'#d4ffff80',1);line(c,[0,-10,0,10],'#d4ffff80',1);c.restore();}
@@ -228,7 +228,7 @@ export class Battlefield {
  }
  /** Only markers move above the scene. Bodies, opacity, and hit records retain their depth order. */
  private drawActorIndicators(c:Ctx,indicators:readonly ActorIndicator[],options:RenderOptions){
-  const z=this.camera.zoom,scale=Math.max(.8,z);
+  const z=this.camera.zoom;
   for(const marker of indicators){
    const p=palette(marker.team),color=marker.selected?p.light:p.main;
    c.save();c.translate(marker.x,marker.y);
@@ -238,10 +238,11 @@ export class Battlefield {
    if(health){
     const y=health.y-marker.y;
     this.bar(c,0,y,health.width,health.height,health.ratio,marker.team===(options.team??0)?'#85dba8':p.main);
-    if(marker.commander){
-     c.font=`bold ${10*scale}px system-ui`;c.textAlign='center';c.lineWidth=2.5;c.strokeStyle='#10242d';c.strokeText('★',0,y+health.height+9*scale);c.fillStyle='#efd990';c.fillText('★',0,y+health.height+9*scale);
-    }else if(marker.selected){
-     diamond(c,0,y+health.height+5*scale,3*scale,3*scale,p.light,'#10242d',1.3);
+    const identity=actorIndicatorIdentity(marker,z);
+    if(identity?.kind==='star'){
+     c.font=`bold ${identity.size}px system-ui`;c.textAlign='center';c.lineWidth=2.5;c.strokeStyle='#10242d';c.strokeText('★',0,identity.y-marker.y);c.fillStyle='#efd990';c.fillText('★',0,identity.y-marker.y);
+    }else if(identity){
+     diamond(c,0,identity.y-marker.y,identity.size,identity.size,p.light,'#10242d',1.3);
     }
    }
    c.restore();
@@ -259,7 +260,7 @@ export class Battlefield {
   });
   drawPlannedConstructionMarkers(c,markers);c.restore();
  }
- private drawTroopSummaries(c:Ctx,items:RenderItem[],state:GameState,options:RenderOptions){
+ private drawTroopSummaries(c:Ctx,items:RenderItem[],state:GameState,options:RenderOptions,indicators:readonly ActorIndicator[]=[]){
   const troops:VisibleTroop[]=[];
   const landmarks:{x:number;y:number;w:number;h:number}[]=[];
   for(const item of items){
@@ -274,7 +275,7 @@ export class Battlefield {
    if(p.x<0||p.x>this.width||p.y<0||p.y>this.height)continue;
    troops.push({team:e.team,type:e.type as UnitId,...p});
   }
-  const rectangles:{x:number;y:number;w:number;h:number}[]=[];
+  const rectangles:ScreenRect[]=actorIndicatorBounds(indicators,this.camera.zoom);
   for(const summary of visibleTroopSummaries(troops)){
    const header=`${(state.players[summary.team]?.name??'Troops').slice(0,14)} · ${summary.count} visible troops`;
    c.save();c.font='600 12px system-ui, sans-serif';

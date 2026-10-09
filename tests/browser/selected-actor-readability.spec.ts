@@ -9,6 +9,7 @@ import {action, clearGround, expect, launch, pause, resume, tap, test} from './h
 type Theme = 'christmas' | 'mythic';
 type Marker = ActorIndicator;
 type Actor = Point & {value: Entity};
+type PaintedRect = {x: number; y: number; w: number; h: number};
 type SpriteHit = {
   image: HTMLImageElement;
   frame: {x: number; y: number; w: number; h: number};
@@ -25,9 +26,11 @@ type RendererProbe = Omit<Battlefield, 'constructor'> & {
   combat: CombatFeedback;
   planActorIndicators(actors: readonly Actor[], selected: ReadonlySet<string>, options: RenderOptions): Marker[];
   drawActorIndicators(context: CanvasRenderingContext2D, markers: readonly Marker[], options: RenderOptions): void;
+  drawTroopSummaries(context: CanvasRenderingContext2D, items: unknown[], state: GameState, options: RenderOptions, markers?: readonly Marker[]): void;
   drawFog(context: CanvasRenderingContext2D, state: GameState, options: RenderOptions): void;
   __qaSelection: string[];
   __qaMarkers: Marker[];
+  __qaSummaryRects: PaintedRect[];
   __qaRestorePlanner?: RendererProbe['planActorIndicators'];
 };
 
@@ -91,8 +94,8 @@ async function prepare(page: Page, theme: Theme) {
     if (!await r.setVisualTheme(theme)) throw new Error(`Could not load ${theme}`);
     Object.assign(live.state, fixture.state);
     r.invalidateTerrain(); r.visualPositions.clear(); r.combat.reset();
-    const render = r.render, paintMarkers = r.drawActorIndicators;
-    r.__qaSelection = []; r.__qaMarkers = [];
+    const render = r.render, paintMarkers = r.drawActorIndicators, paintSummaries = r.drawTroopSummaries;
+    r.__qaSelection = []; r.__qaMarkers = []; r.__qaSummaryRects = [];
     r.render = function(state, selection = [], options = {}) {
       this.__qaSelection = Array.from(selection, String);
       // Freeze presentation only so the paired frames differ in marker layering.
@@ -101,6 +104,23 @@ async function prepare(page: Page, theme: Theme) {
     r.drawActorIndicators = function(context, markers, options) {
       this.__qaMarkers = structuredClone([...markers]);
       return paintMarkers.call(this, context, markers, options);
+    };
+    r.drawTroopSummaries = function(context, items, state, options, markers) {
+      const rectangles: PaintedRect[] = [], roundRect = context.roundRect, dpr = this.dpr;
+      context.roundRect = function(x, y, width, height, radii) {
+        const matrix = this.getTransform();
+        const corners = [[x, y], [x + width, y], [x, y + height], [x + width, y + height]]
+          .map(([px, py]) => new DOMPoint(px, py).matrixTransform(matrix));
+        const stroke = this.lineWidth * Math.max(Math.hypot(matrix.a, matrix.b), Math.hypot(matrix.c, matrix.d)) / (2 * dpr);
+        const left = Math.min(...corners.map(point => point.x)) / dpr - stroke;
+        const top = Math.min(...corners.map(point => point.y)) / dpr - stroke;
+        rectangles.push({x: left, y: top,
+          w: Math.max(...corners.map(point => point.x)) / dpr + stroke - left,
+          h: Math.max(...corners.map(point => point.y)) / dpr + stroke - top});
+        return roundRect.call(this, x, y, width, height, radii);
+      };
+      try { return paintSummaries.call(this, context, items, state, options, markers); }
+      finally { context.roundRect = roundRect; this.__qaSummaryRects = rectangles; }
     };
     r.centerOn(11.8, 12); r.camera.zoom = 1;
     if (innerHeight < 500) r.pan(0, 42);
@@ -200,6 +220,52 @@ async function pairedScreenshots(page: Page, theme: Theme, subject: string) {
   expect(await snapshot(page), 'Only marker layering changes across the pair').toEqual(before);
 }
 
+async function prioritySummaryClearance(page: Page, selectedId: string) {
+  const report = await page.evaluate(selectedId => {
+    const r = window.__FRONTIER__.renderer as unknown as RendererProbe, scale = Math.max(.8, r.camera.zoom);
+    // Independently include the ring's outer stroke, bar border and star/pip.
+    // Text metrics use the actual browser font, not the placement helper's boxes.
+    const priorities = r.__qaMarkers.flatMap(marker => {
+      const health = marker.health;
+      if (!health) return [];
+      let left = marker.x - health.width / 2 - 1, right = marker.x + health.width / 2 + 1;
+      let top = health.y - 1, bottom = health.y + health.height + 1;
+      const ringStroke = (marker.stroke + 2) / 2;
+      left = Math.min(left, marker.x - marker.radius - ringStroke);
+      right = Math.max(right, marker.x + marker.radius + ringStroke);
+      top = Math.min(top, marker.y + marker.ringY - marker.radiusY - ringStroke);
+      bottom = Math.max(bottom, marker.y + marker.ringY + marker.radiusY + ringStroke);
+      if (marker.commander) {
+        r.context.save(); r.context.font = `bold ${10 * scale}px system-ui`;
+        r.context.textAlign = 'center';
+        const text = r.context.measureText('★'), baseline = health.y + health.height + 9 * scale;
+        r.context.restore();
+        left = Math.min(left, marker.x - text.actualBoundingBoxLeft - 1.25);
+        right = Math.max(right, marker.x + text.actualBoundingBoxRight + 1.25);
+        top = Math.min(top, baseline - text.actualBoundingBoxAscent - 1.25);
+        bottom = Math.max(bottom, baseline + text.actualBoundingBoxDescent + 1.25);
+      } else if (marker.selected) {
+        const radius = 3 * scale + .65, center = health.y + health.height + 5 * scale;
+        left = Math.min(left, marker.x - radius); right = Math.max(right, marker.x + radius);
+        top = Math.min(top, center - radius); bottom = Math.max(bottom, center + radius);
+      }
+      return [{id: marker.id, commander: marker.commander, selected: marker.selected,
+        x: left, y: top, w: right - left, h: bottom - top}];
+    });
+    const overlaps = priorities.flatMap(priority => r.__qaSummaryRects.flatMap(summary => {
+      const width = Math.min(priority.x + priority.w, summary.x + summary.w) - Math.max(priority.x, summary.x);
+      const height = Math.min(priority.y + priority.h, summary.y + summary.h) - Math.max(priority.y, summary.y);
+      return width > 0 && height > 0 ? [{priorityId: priority.id, summary, area: width * height}] : [];
+    }));
+    return {selectedId, priorities, summaries: r.__qaSummaryRects, overlaps,
+      viewport: {width: r.width, height: r.height, dpr: r.dpr, zoom: r.camera.zoom}};
+  }, selectedId);
+  expect(report.priorities.length, 'At most two priority health/identity markers').toBeLessThanOrEqual(2);
+  expect(report.priorities.map(marker => marker.id), 'The exact selected actor retains its priority marker').toContain(selectedId);
+  expect(report.overlaps, 'Painted troop-summary badges must not cover priority rings, health, commander star or selected pip').toEqual([]);
+  return report;
+}
+
 for (const theme of ['christmas', 'mythic'] as const) {
   test(`${theme} selected readability preserves native exact actor selection and Move Attack Hold orders`, async ({page}) => {
     test.setTimeout(60_000);
@@ -240,7 +306,22 @@ for (const theme of ['christmas', 'mythic'] as const) {
     await center(page, fixture.troopId); await tap(page, await bodyContact(page, fixture.troopId));
     await expectSelection(page, [fixture.troopId]);
     await action(page, 'order-attack').click(); await center(page, fixture.enemyId);
-    const enemyContact = await bodyContact(page, fixture.enemyId); await tap(page, enemyContact);
+    await expect(page.locator('#toast')).not.toHaveClass(/\bshow\b/);
+    // Attack adds a toolbar above the landscape deck. Frame the enemy from its
+    // measured edge rather than leaving the native touch contact behind that UI.
+    const targetingFrame = await page.evaluate(id => {
+      if (innerHeight >= 500) return null;
+      const toolbar = document.querySelector('.target-toolbar')!.getBoundingClientRect();
+      const {state, renderer} = window.__FRONTIER__, r = renderer as unknown as RendererProbe;
+      const actor = state.entities.find(entity => entity.id === id)!;
+      const before = r.worldToScreen(actor.x, actor.y);
+      r.pan(0, Math.min(0, toolbar.top - 30 - before.y));
+      return {toolbarTop: toolbar.top, before, after: r.worldToScreen(actor.x, actor.y)};
+    }, fixture.enemyId);
+    await paintedFrame(page);
+    const enemyContact = await bodyContact(page, fixture.enemyId);
+    if (targetingFrame) expect(enemyContact.y + enemyContact.clearance).toBeLessThan(targetingFrame.toolbarTop);
+    await tap(page, enemyContact);
     await expect.poll(() => page.evaluate(() => window.__FRONTIER__.state.pendingCommands.at(-1)))
       .toMatchObject({type: 'attack', targetId: fixture.enemyId, entityIds: [fixture.troopId]});
     await action(page, 'hold').click();
@@ -249,7 +330,7 @@ for (const theme of ['christmas', 'mythic'] as const) {
     expect(await page.evaluate(() => JSON.stringify(window.__FRONTIER__.profile))).toBe(before.profile);
     await test.info().attach('Native exact-ID input on a controlled crowd', {contentType: 'application/json', body: JSON.stringify({
       provenance: 'Controlled injected overlap fixture; native mouse/touch input after preparation, not natural gameplay',
-      theme, project: test.info().project.name, contacts, start, destination, enemyContact,
+      theme, project: test.info().project.name, contacts, start, destination, enemyContact, targetingFrame,
       orders: await page.evaluate(() => window.__FRONTIER__.state.pendingCommands),
     }, null, 2)});
   });
@@ -258,10 +339,12 @@ for (const theme of ['christmas', 'mythic'] as const) {
     test.setTimeout(90_000);
     const fixture = await prepare(page, theme);
     const benchmarks = [benchmarkCrowd(80), benchmarkCrowd(600)];
+    const summaryClearance = [];
     for (const [subject, id] of [['troop', fixture.troopId], ['commander', fixture.commanderId]] as const) {
       await center(page, id); await tap(page, await bodyContact(page, id)); await expectSelection(page, [id]);
       await stopFollowing(page); await center(page, id);
       await pairedScreenshots(page, theme, subject);
+      summaryClearance.push(await prioritySummaryClearance(page, id));
     }
     const evidence = await page.evaluate(async ({theme, troopId, commanderId, benchmarks}) => {
       const live = window.__FRONTIER__, liveBefore = JSON.stringify({state: live.state, profile: live.profile});
@@ -358,7 +441,7 @@ for (const theme of ['christmas', 'mythic'] as const) {
         theme, results, costs, costScope: 'Controlled isolated 80- and 600-actor fixtures; main-thread Canvas2D render submission only, not a real-device frame-rate or GPU measurement'};
     }, {theme, troopId: fixture.troopId, commanderId: fixture.commanderId, benchmarks});
     await test.info().attach('Controlled marker pixels, unchanged bodies and picks, bounded render cost',
-      {contentType: 'application/json', body: JSON.stringify(evidence, null, 2)});
+      {contentType: 'application/json', body: JSON.stringify({...evidence, summaryClearance}, null, 2)});
   });
 
   test(`${theme} selected readability markers respect hidden dead respawning deselected and motion states`, async ({page}) => {

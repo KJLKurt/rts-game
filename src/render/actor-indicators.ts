@@ -1,4 +1,5 @@
 import type { Entity } from '../sim/types';
+import type { ScreenRect } from './troop-summary';
 
 export const MAX_SELECTED_INDICATORS = 12;
 export interface IndicatorActor { entity: Entity; x: number; y: number }
@@ -6,6 +7,37 @@ export interface ActorIndicator {
  id: string; team: number; x: number; y: number; selected: boolean; commander: boolean;
  radius: number; radiusY: number; ringY: number; stroke: number;
  health?: { y: number; width: number; height: number; ratio: number };
+}
+
+/** Shared by painting and summary exclusions so the identity follows any bar separation. */
+export function actorIndicatorIdentity(marker: ActorIndicator, zoom: number) {
+ if (!marker.health) return;
+ const scale = Math.max(.8, zoom), { y, height } = marker.health;
+ return marker.commander ? { kind: 'star' as const, y: y + height + 9 * scale, size: 10 * scale }
+  : marker.selected ? { kind: 'pip' as const, y: y + height + 5 * scale, size: 3 * scale } : undefined;
+}
+
+/** At most two priority rectangles. Include the ring, bar border and identity stroke;
+ * a full font em plus descent conservatively contains the platform's star glyph. */
+export function actorIndicatorBounds(indicators: readonly ActorIndicator[], zoom: number): ScreenRect[] {
+ const bounds: ScreenRect[] = [];
+ for (const marker of indicators) {
+  const health = marker.health;
+  if (!health) continue;
+  const identity = actorIndicatorIdentity(marker, zoom);
+  const ringBorder = (marker.stroke + 2) / 2;
+  let halfWidth = Math.max(health.width / 2 + 1, marker.radius + ringBorder);
+  let top = Math.min(health.y - 1, marker.y + marker.ringY - marker.radiusY - ringBorder);
+  let bottom = Math.max(health.y + health.height + 1, marker.y + marker.ringY + marker.radiusY + ringBorder);
+  if (identity) {
+   const star = identity.kind === 'star', stroke = star ? 1.25 : .65;
+   halfWidth = Math.max(halfWidth, identity.size * (star ? .5 : 1) + stroke);
+   top = Math.min(top, identity.y - identity.size - stroke);
+   bottom = Math.max(bottom, identity.y + identity.size * (star ? .3 : 1) + stroke);
+  }
+  bounds.push({ x: marker.x - halfWidth, y: top, w: halfWidth * 2, h: bottom - top });
+ }
+ return bounds;
 }
 
 /** Only visible mobile paint items enter here, already at their interpolated screen positions.
