@@ -2,7 +2,7 @@ import type { Locator, Page } from '@playwright/test';
 import type { AudioState } from '../../src/platform/audio';
 import { action, expect, home, setSlider, test } from './helpers';
 
-type Theme = 'christmas' | 'mythic' | 'halloween';
+type Theme = 'christmas' | 'mythic' | 'halloween' | 'space';
 type SourceReceipt = {
   id: number; asset: string; start: number; stop: number | null; ended: boolean; disconnected: boolean;
   loop: boolean; duration: number; route: string[]; gain: number;
@@ -279,7 +279,7 @@ async function receipt(name: string, data: unknown) {
 }
 
 // Exercise the same native signal/lifecycle contract for each authored alternate bank.
-for (const focusTheme of ['mythic', 'halloween'] as const) {
+for (const focusTheme of ['mythic', 'halloween', 'space'] as const) {
 test(`${focusTheme}: theme music follows native settings, independent buses and a paused offline save without changing progression`, async ({ page, context }) => {
   // Includes three independent bus controls, recovery and a full offline reload.
   test.setTimeout(90_000);
@@ -364,7 +364,7 @@ test(`${focusTheme}: theme music follows native settings, independent buses and 
   await press(page, settings(page).getByLabel('Mute all audio', { exact: true }));
   const muteSchedule = exactZero(await audio(page), 'master');
   await expect.poll(async () => (await audio(page)).master).toBeLessThan(.001);
-  for (const theme of ['christmas', 'mythic', 'halloween', focusTheme] as const) {
+  for (const theme of ['christmas', 'mythic', 'halloween', 'space', focusTheme] as const) {
     await choose(page, theme); await currentSource(page, theme, 'exploration');
     expect((await audio(page)).master).toBeLessThan(.001);
     expect(await page.evaluate(() => JSON.stringify(window.__FRONTIER__.state))).toBe(before);
@@ -384,7 +384,7 @@ test(`${focusTheme}: theme music follows native settings, independent buses and 
     const names = (await caches.keys()).filter(name => name.startsWith('frontier-command-rts-game-'));
     return (await Promise.all(names.map(async name => (await (await caches.open(name)).keys()).map(r => new URL(r.url).pathname)))).flat();
   });
-  for (const theme of ['christmas', 'mythic', 'halloween', focusTheme] as const) {
+  for (const theme of ['christmas', 'mythic', 'halloween', 'space', focusTheme] as const) {
     expect(cached).toContain(`/rts-game/assets/audio/${theme === 'christmas' ? '' : `${theme}/`}manifest.json`);
     for (const state of ['menu', 'exploration', 'tension', 'combat', 'victory', 'defeat']) {
       for (const codec of ['ogg', 'mp3']) expect(cached).toContain(`/rts-game/assets/audio/${theme === 'christmas' ? '' : `${theme}/`}${state}.${codec}`);
@@ -439,7 +439,7 @@ test(`${focusTheme}: controlled local state and delayed-load fixtures reject sta
   // Pausing does not pause the AudioContext's combat hold. Exercise rapid bank
   // swaps in stable exploration, before introducing any controlled pressure.
   await openSettings(page);
-  for (const theme of ['christmas', 'mythic', 'halloween', 'christmas', focusTheme] as const) {
+  for (const theme of ['christmas', 'mythic', 'halloween', 'space', 'christmas', focusTheme] as const) {
     await choose(page, theme); await currentSource(page, theme, 'exploration');
   }
   await closeSettings(page);

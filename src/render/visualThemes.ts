@@ -26,6 +26,13 @@ export const VISUAL_THEMES = {
     directionalAtlas: null,
     additionalDirectionalAtlases: [],
   },
+  space: {
+    name: 'Space · Toy 3D',
+    atlas: 'assets/render/themes/space-toon/atlas.json',
+    attackAtlas: null,
+    directionalAtlas: null,
+    additionalDirectionalAtlases: [],
+  },
 } as const;
 
 export type VisualThemeId = keyof typeof VISUAL_THEMES;

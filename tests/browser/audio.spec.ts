@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test("all six offline music states in all three theme banks decode from both replaceable codecs", async ({
+test("all six offline music states in all four theme banks decode from both replaceable codecs", async ({
   page,
 }) => {
   test.setTimeout(60_000);
@@ -8,7 +8,7 @@ test("all six offline music states in all three theme banks decode from both rep
   const decoded = await page.evaluate(async () => {
     const context = new OfflineAudioContext(2, 1, 44100);
     const results = [];
-    for (const bank of ["christmas", "mythic", "halloween"]) {
+    for (const bank of ["christmas", "mythic", "halloween", "space"]) {
       const manifest = bank === "christmas" ? "assets/audio/manifest.json" : `assets/audio/${bank}/manifest.json`;
       const response = await fetch(manifest);
       if (!response.ok) throw Error(`Missing music manifest: ${manifest}`);
@@ -49,7 +49,7 @@ test("all six offline music states in all three theme banks decode from both rep
     }
     return results;
   });
-  for (const bank of ["christmas", "mythic", "halloween"]) {
+  for (const bank of ["christmas", "mythic", "halloween", "space"]) {
     const rows = decoded.filter(row => row.bank === bank);
     expect(new Set(rows.map((row) => row.state)), bank).toEqual(
       new Set(["menu", "exploration", "tension", "combat", "victory", "defeat"]),
@@ -59,7 +59,7 @@ test("all six offline music states in all three theme banks decode from both rep
       expect(rows.filter(row => row.state === state).map(row => row.source.split('.').pop()).sort()).toEqual(['mp3', 'ogg']);
     }
   }
-  expect(decoded).toHaveLength(36);
+  expect(decoded).toHaveLength(48);
   for (const row of decoded) {
     expect(row.channels, row.source).toBe(2);
     expect(row.loop, row.source).toBe(!['victory', 'defeat'].includes(row.state));

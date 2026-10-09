@@ -98,3 +98,7 @@ The complete Halloween bank uses `public/assets/audio/halloween/manifest.json`, 
 
 The six new original scores, codec/signal evidence and listening qualifications are recorded in `HALLOWEEN_THEME_20261009.md` and `HALLOWEEN_AUDIO_VALIDATION.json`. Reproduction uses the two adjacent `scripts/audio/compose_hollow_lanterns*.py` modules; pass `--output` and `--preserve-pilots` pointing to the retained pilot package. Accepted exploration/combat assets are hash-checked and copied unchanged. Existing Christmas/Mythic files are not replaced.
 
+
+## Space bank candidate — 9 October 2026
+
+Starfall Outpost adds six independently arranged sample-free states at 100 BPM, with 12 Ogg/MP3 files. The two portable modules `scripts/audio/compose_starfall_outpost.py` and `compose_starfall_outpost_core.py` preserve exact pilot hashes. `SPACE_AUDIO_PROVENANCE.md`, `SPACE_AUDIO_VALIDATION.json` and `SPACE_SCORE_GUIDE.md` retain actual signal/model results and loop qualifications. Theme-aware routing reuses the existing global three-buffer/two-source budgets and exact-zero buses. Browser execution and subjective listening are distinct; use `SPACE_THEME_20261009.md` for the current gate status.

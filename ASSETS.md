@@ -64,3 +64,7 @@ The Halloween candidate adds 36 newly generated semantic role images in one 1200
 
 Music composition/provenance and signal evidence are in `scripts/audio/compose_hollow_lanterns.py`, its retained core module and `docs/HALLOWEEN_AUDIO_PROVENANCE.md` / `HALLOWEEN_AUDIO_VALIDATION.json`. No commercial recording, external sample library or paid art was used. Existing Christmas/Mythic assets remain unchanged. See `docs/HALLOWEEN_THEME_20261009.md` for the exact candidate gate and remaining subjective/device/rights limitations; generation alone does not establish public-domain status or redistribution clearance.
 
+
+## Space: Starfall Outpost candidate — 9 October 2026
+
+The fourth static family contains 36 separately authored role sprites with ivory/navy outpost architecture, copper fittings and teal lenses, plus six sample-free original musical arrangements. Source recovery versus new replacement provenance is explicit in `docs/SPACE_ART_PROVENANCE.json`; transforms and hashes are in `docs/SPACE_ART_PACKING.json`. Each small authored group was durably checkpointed before expansion. The 1200×1200 RGBA atlas uses 5,760,000 decoded bytes. Existing 58 art/audio files remain byte-identical. See `docs/SPACE_THEME_20261009.md` for actual acceptance status and unfinished directional/style/device/listening scope. No new rights or redistribution clearance is claimed.

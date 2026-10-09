@@ -6,6 +6,7 @@ import { AnimationAtlas } from './AnimationAtlas';
 import { DirectionalAtlas } from './DirectionalAtlas';
 import { VISUAL_THEMES, type VisualThemeId } from './visualThemes';
 import { nodeVisual } from './nodeVisual';
+import { buildingHealthY } from './building-health';
 import { drawFactionAdornment } from './factionIdentity';
 import { CombatFeedback, type Casualty } from './CombatFeedback';
 import { visibleTroopSummaries, troopSummaryPosition, type VisibleTroop, type ScreenRect } from './troop-summary';
@@ -502,6 +503,7 @@ export class Battlefield {
  }
  private drawEntity(c:Ctx,e:Entity,selected:boolean,t:number,state:GameState,options:RenderOptions,artOpacity=1,indicator?:ActorIndicator){
   const team=options.team??0,p=palette(e.team),buildingEntity=e.kind==='building',commander=e.kind==='commander';
+  let buildingBounds:SpriteBounds|undefined;
   const damaged=e.hp<e.maxHp;
   const pose=this.combat.pose(e,state.entities,state.time),hit=this.combat.hitStrength(e.id);
   const attacking=pose.age<.43;
@@ -522,7 +524,8 @@ export class Battlefield {
    const drawWidth=e.type==='keep'?132:e.type==='tower'?66:e.type==='house'?87:103;
    const drawHeight=e.type==='keep'?123:e.type==='tower'?99:e.type==='house'?78:90;
    const frameName=e.type==='turret'?'tower':e.type;
-   this.recordEntityHit(c,e,this.atlas.image,this.atlas.frames[frameName],this.atlas.bounds(frameName,drawWidth),artOpacity);
+   buildingBounds=this.atlas.bounds(frameName,drawWidth);
+   this.recordEntityHit(c,e,this.atlas.image,this.atlas.frames[frameName],buildingBounds,artOpacity);
    const drawn=this.atlas.draw(c,frameName,drawWidth);
    if(!drawn)building(c,e.type==='turret'?'tower':e.type,e.team,t);else flag(c,e.type==='keep'?34:24,-drawHeight*.49,e.team,t,e.type!=='keep');
    c.restore();
@@ -558,7 +561,7 @@ export class Battlefield {
   }
   if(hit>0){c.save();c.globalAlpha=hit*(options.reducedMotion?.38:.62);c.globalCompositeOperation='screen';ellipse(c,0,buildingEntity?-28:-24,buildingEntity?26:14,buildingEntity?20:18,'#ffe4b577');c.restore();}
   if(!indicator?.health&&(selected||commander||damaged||options.showHealth||options.hoverId===e.id)){
-   const y=buildingEntity?e.type==='keep'?-133:e.type==='tower'?-107:-98:commander?-82:-58;
+   const y=buildingEntity?buildingHealthY(this.visualTheme,e.type,buildingBounds):commander?-82:-58;
    this.bar(c,0,y,buildingEntity?57:commander?46:30,commander?4.3:3,e.hp/e.maxHp,e.team===team?'#85dba8':p.main);
    if(buildingEntity&&e.queue.length>0)this.bar(c,0,y+7,57,2.5,1-e.queue[0].remaining/e.queue[0].total,'#e7cf8a');
   }

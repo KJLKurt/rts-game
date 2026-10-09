@@ -1,0 +1,100 @@
+{
+  "menu": {
+    "src": "assets/audio/space/menu.ogg",
+    "fallback": "assets/audio/space/menu.mp3",
+    "bpm": 100,
+    "duration": 38.4,
+    "loop": true,
+    "volume": 0.8,
+    "title": "A Beacon at the Edge of Dawn",
+    "key": "D major / Lydian; spacious added-sixth and ninth colors",
+    "bars": 16,
+    "timeSignature": [
+      4,
+      4
+    ],
+    "loopStart": 0,
+    "loopEnd": 38.4
+  },
+  "exploration": {
+    "src": "assets/audio/space/exploration.ogg",
+    "fallback": "assets/audio/space/exploration.mp3",
+    "bpm": 100,
+    "duration": 57.6,
+    "loop": true,
+    "volume": 0.72,
+    "title": "Signals Beyond the Pale Ridge",
+    "key": "D major with Lydian color; B-minor middle",
+    "bars": 24,
+    "timeSignature": [
+      4,
+      4
+    ],
+    "loopStart": 0,
+    "loopEnd": 57.6
+  },
+  "tension": {
+    "src": "assets/audio/space/tension.ogg",
+    "fallback": "assets/audio/space/tension.mp3",
+    "bpm": 100,
+    "duration": 38.4,
+    "loop": true,
+    "volume": 0.71,
+    "title": "Motion Beneath the Silent Array",
+    "key": "D Dorian with an E-flat Phrygian inflection; D-pedal and suspended fifths",
+    "bars": 16,
+    "timeSignature": [
+      4,
+      4
+    ],
+    "loopStart": 0,
+    "loopEnd": 38.4
+  },
+  "combat": {
+    "src": "assets/audio/space/combat.ogg",
+    "fallback": "assets/audio/space/combat.mp3",
+    "bpm": 100,
+    "duration": 57.6,
+    "loop": true,
+    "volume": 0.68,
+    "title": "Hold the Starfall Line",
+    "key": "D Dorian with an F-sharp passing tone; open fifths and suspended extensions",
+    "bars": 24,
+    "timeSignature": [
+      4,
+      4
+    ],
+    "loopStart": 0,
+    "loopEnd": 57.6
+  },
+  "victory": {
+    "src": "assets/audio/space/victory.ogg",
+    "fallback": "assets/audio/space/victory.mp3",
+    "bpm": 100,
+    "duration": 9.6,
+    "loop": false,
+    "volume": 0.68,
+    "title": "The Outpost Answers the Stars",
+    "key": "D major / Lydian; ascending signal and open D6/9 cadence",
+    "bars": 4,
+    "timeSignature": [
+      4,
+      4
+    ]
+  },
+  "defeat": {
+    "src": "assets/audio/space/defeat.ogg",
+    "fallback": "assets/audio/space/defeat.mp3",
+    "bpm": 100,
+    "duration": 12.0,
+    "loop": false,
+    "volume": 0.73,
+    "title": "One Light Beyond the Debris",
+    "key": "D Aeolian; descending signal dissolving into an open D minor ninth",
+    "bars": 5,
+    "timeSignature": [
+      4,
+      4
+    ]
+  }
+}

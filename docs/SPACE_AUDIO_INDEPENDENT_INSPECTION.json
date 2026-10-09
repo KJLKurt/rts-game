@@ -1,0 +1,1940 @@
+{
+  "inspection": "Independent reconstructed six-state inspector; neither composer imported.",
+  "inspectionSourceSha256": "f0cbc9642518776239dfe7b6af48e99554a8ea18d95dc8224d0958380b1944f3",
+  "sourceRecovery": "Prior visible inspector logic reconstructed; MIDI count and exact-event passes combined, restored baseline paths adapted, envelope plot now includes explicit five-tau stops.",
+  "subjectiveListening": false,
+  "browserExecution": false,
+  "tracks": {
+    "menu": {
+      "midi": {
+        "format": 1,
+        "division": 480,
+        "tracks": [
+          {
+            "name": "A Beacon at the Edge of Dawn",
+            "endTick": 30720,
+            "noteOns": 0,
+            "noteOffs": 0,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": [
+              600000
+            ]
+          },
+          {
+            "name": "signal_pluck",
+            "endTick": 30720,
+            "noteOns": 36,
+            "noteOffs": 36,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "orbit_pluck",
+            "endTick": 30720,
+            "noteOns": 32,
+            "noteOffs": 32,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "horizon_pad",
+            "endTick": 30720,
+            "noteOns": 64,
+            "noteOffs": 64,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "pulse_bass",
+            "endTick": 30720,
+            "noteOns": 24,
+            "noteOffs": 24,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "beacon_sine",
+            "endTick": 30720,
+            "noteOns": 4,
+            "noteOffs": 4,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "Electronic kick, snap, tick (GM approximation)",
+            "endTick": 30720,
+            "noteOns": 12,
+            "noteOffs": 12,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          }
+        ],
+        "allEndAtLoop": true,
+        "balancedNotes": true,
+        "tempo100": true,
+        "notesMatchScore": true,
+        "exactEventsMatchScore": true
+      },
+      "scoreNoteCount": 172,
+      "signal": {
+        "wav": {
+          "decodedFrames": 1693440,
+          "spectralBalance": {
+            "energyPercent": {
+              "sub48Hz": 0.5567253677987272,
+              "bass48to200Hz": 14.383227608097036,
+              "body200to2000Hz": 82.75598078918837,
+              "presence2to7kHz": 0.47847313455847096,
+              "above7kHz": 0.0002409895102051106
+            },
+            "spectralCentroidHz": 603.89617307833
+          },
+          "rms100msMinimumDbFS": -41.60613246700937,
+          "rms100msMaximumDbFS": -17.168374595927407,
+          "no100msSilence": true,
+          "loop": true,
+          "ending100msPeakDbFS": -29.178524217612352,
+          "codecErrorRmsDbFS": null
+        },
+        "ogg": {
+          "decodedFrames": 1693440,
+          "spectralBalance": {
+            "energyPercent": {
+              "sub48Hz": 0.5589002200146906,
+              "bass48to200Hz": 14.298016091732087,
+              "body200to2000Hz": 82.85139900712937,
+              "presence2to7kHz": 0.4738078064245512,
+              "above7kHz": 0.00021800642324084133
+            },
+            "spectralCentroidHz": 604.4336771204516
+          },
+          "rms100msMinimumDbFS": -41.55243682471288,
+          "rms100msMaximumDbFS": -17.108276174038824,
+          "no100msSilence": true,
+          "loop": true,
+          "ending100msPeakDbFS": -29.244422131413646,
+          "codecErrorRmsDbFS": -58.751710692899564
+        },
+        "mp3": {
+          "decodedFrames": 1693440,
+          "spectralBalance": {
+            "energyPercent": {
+              "sub48Hz": 0.5566914927936285,
+              "bass48to200Hz": 14.381067323527535,
+              "body200to2000Hz": 82.75816159952586,
+              "presence2to7kHz": 0.4786285879097714,
+              "above7kHz": 0.00024224592909807482
+            },
+            "spectralCentroidHz": 603.9111416412154
+          },
+          "rms100msMinimumDbFS": -42.05403445274384,
+          "rms100msMaximumDbFS": -17.614481074167454,
+          "no100msSilence": true,
+          "loop": true,
+          "ending100msPeakDbFS": -29.62286221572529,
+          "codecErrorRmsDbFS": -49.20320104243629
+        }
+      }
+    },
+    "exploration": {
+      "midi": {
+        "format": 1,
+        "division": 480,
+        "tracks": [
+          {
+            "name": "Signals Beyond the Pale Ridge",
+            "endTick": 46080,
+            "noteOns": 0,
+            "noteOffs": 0,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": [
+              600000
+            ]
+          },
+          {
+            "name": "signal_pluck",
+            "endTick": 46080,
+            "noteOns": 76,
+            "noteOffs": 76,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "orbit_pluck",
+            "endTick": 46080,
+            "noteOns": 48,
+            "noteOffs": 48,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "horizon_pad",
+            "endTick": 46080,
+            "noteOns": 96,
+            "noteOffs": 96,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "pulse_bass",
+            "endTick": 46080,
+            "noteOns": 48,
+            "noteOffs": 48,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "beacon_sine",
+            "endTick": 46080,
+            "noteOns": 10,
+            "noteOffs": 10,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "Electronic kick, snap, tick (GM approximation)",
+            "endTick": 46080,
+            "noteOns": 44,
+            "noteOffs": 44,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          }
+        ],
+        "allEndAtLoop": true,
+        "balancedNotes": true,
+        "tempo100": true,
+        "notesMatchScore": true,
+        "exactEventsMatchScore": true
+      },
+      "scoreNoteCount": 322,
+      "signal": {
+        "wav": {
+          "decodedFrames": 2540160,
+          "spectralBalance": {
+            "energyPercent": {
+              "sub48Hz": 0.23399280230215302,
+              "bass48to200Hz": 17.375937609701044,
+              "body200to2000Hz": 80.85073747560695,
+              "presence2to7kHz": 0.5607360453280379,
+              "above7kHz": 0.0006007153159845458
+            },
+            "spectralCentroidHz": 613.0400750080541
+          },
+          "rms100msMinimumDbFS": -39.72564892995528,
+          "rms100msMaximumDbFS": -16.42040265006937,
+          "no100msSilence": true,
+          "loop": true,
+          "ending100msPeakDbFS": -16.95807190896403,
+          "codecErrorRmsDbFS": null
+        },
+        "ogg": {
+          "decodedFrames": 2540160,
+          "spectralBalance": {
+            "energyPercent": {
+              "sub48Hz": 0.23583882444184184,
+              "bass48to200Hz": 17.316793830561124,
+              "body200to2000Hz": 80.91597376457167,
+              "presence2to7kHz": 0.5565599122976904,
+              "above7kHz": 0.0005559234818766953
+            },
+            "spectralCentroidHz": 613.3587593157097
+          },
+          "rms100msMinimumDbFS": -39.708511290777416,
+          "rms100msMaximumDbFS": -16.353609140183213,
+          "no100msSilence": true,
+          "loop": true,
+          "ending100msPeakDbFS": -16.958475881499997,
+          "codecErrorRmsDbFS": -58.422451609874116
+        },
+        "mp3": {
+          "decodedFrames": 2540160,
+          "spectralBalance": {
+            "energyPercent": {
+              "sub48Hz": 0.23396726938035023,
+              "bass48to200Hz": 17.37510520279455,
+              "body200to2000Hz": 80.85155785178428,
+              "presence2to7kHz": 0.56086760875285,
+              "above7kHz": 0.0006022979394402541
+            },
+            "spectralCentroidHz": 613.0509248541165
+          },
+          "rms100msMinimumDbFS": -40.170355920505365,
+          "rms100msMaximumDbFS": -16.866465820936472,
+          "no100msSilence": true,
+          "loop": true,
+          "ending100msPeakDbFS": -17.401616545160465,
+          "codecErrorRmsDbFS": -48.55192231656658
+        }
+      }
+    },
+    "tension": {
+      "midi": {
+        "format": 1,
+        "division": 480,
+        "tracks": [
+          {
+            "name": "Motion Beneath the Silent Array",
+            "endTick": 30720,
+            "noteOns": 0,
+            "noteOffs": 0,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": [
+              600000
+            ]
+          },
+          {
+            "name": "signal_pluck",
+            "endTick": 30720,
+            "noteOns": 52,
+            "noteOffs": 52,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "orbit_pluck",
+            "endTick": 30720,
+            "noteOns": 64,
+            "noteOffs": 64,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "horizon_pad",
+            "endTick": 30720,
+            "noteOns": 64,
+            "noteOffs": 64,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "pulse_bass",
+            "endTick": 30720,
+            "noteOns": 64,
+            "noteOffs": 64,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "beacon_sine",
+            "endTick": 30720,
+            "noteOns": 4,
+            "noteOffs": 4,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "Electronic kick, snap, tick (GM approximation)",
+            "endTick": 30720,
+            "noteOns": 120,
+            "noteOffs": 120,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          }
+        ],
+        "allEndAtLoop": true,
+        "balancedNotes": true,
+        "tempo100": true,
+        "notesMatchScore": true,
+        "exactEventsMatchScore": true
+      },
+      "scoreNoteCount": 368,
+      "signal": {
+        "wav": {
+          "decodedFrames": 1693440,
+          "spectralBalance": {
+            "energyPercent": {
+              "sub48Hz": 0.09262173572926358,
+              "bass48to200Hz": 28.946794958217076,
+              "body200to2000Hz": 70.19626814117437,
+              "presence2to7kHz": 0.4689184414507162,
+              "above7kHz": 0.0029504427681184098
+            },
+            "spectralCentroidHz": 521.8355275346408
+          },
+          "rms100msMinimumDbFS": -41.771720518639626,
+          "rms100msMaximumDbFS": -16.762625503901386,
+          "no100msSilence": true,
+          "loop": true,
+          "ending100msPeakDbFS": -21.614427863599204,
+          "codecErrorRmsDbFS": null
+        },
+        "ogg": {
+          "decodedFrames": 1693440,
+          "spectralBalance": {
+            "energyPercent": {
+              "sub48Hz": 0.09339146050707364,
+              "bass48to200Hz": 28.864472325838282,
+              "body200to2000Hz": 70.28465604297848,
+              "presence2to7kHz": 0.4637617691484376,
+              "above7kHz": 0.0027318615116535346
+            },
+            "spectralCentroidHz": 522.191949942309
+          },
+          "rms100msMinimumDbFS": -41.66506499256449,
+          "rms100msMaximumDbFS": -16.723122696057885,
+          "no100msSilence": true,
+          "loop": true,
+          "ending100msPeakDbFS": -21.560888255034087,
+          "codecErrorRmsDbFS": -57.18357870036846
+        },
+        "mp3": {
+          "decodedFrames": 1693440,
+          "spectralBalance": {
+            "energyPercent": {
+              "sub48Hz": 0.09264022519570658,
+              "bass48to200Hz": 28.948903132876413,
+              "body200to2000Hz": 70.19392533825453,
+              "presence2to7kHz": 0.46910544597913195,
+              "above7kHz": 0.0029688776824131702
+            },
+            "spectralCentroidHz": 521.8217970401279
+          },
+          "rms100msMinimumDbFS": -42.21603725155626,
+          "rms100msMaximumDbFS": -17.207606353611116,
+          "no100msSilence": true,
+          "loop": true,
+          "ending100msPeakDbFS": -22.057929059368536,
+          "codecErrorRmsDbFS": -48.123421693125906
+        }
+      }
+    },
+    "combat": {
+      "midi": {
+        "format": 1,
+        "division": 480,
+        "tracks": [
+          {
+            "name": "Hold the Starfall Line",
+            "endTick": 46080,
+            "noteOns": 0,
+            "noteOffs": 0,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": [
+              600000
+            ]
+          },
+          {
+            "name": "signal_pluck",
+            "endTick": 46080,
+            "noteOns": 96,
+            "noteOffs": 96,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "orbit_pluck",
+            "endTick": 46080,
+            "noteOns": 104,
+            "noteOffs": 104,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "horizon_pad",
+            "endTick": 46080,
+            "noteOns": 96,
+            "noteOffs": 96,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "pulse_bass",
+            "endTick": 46080,
+            "noteOns": 120,
+            "noteOffs": 120,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "beacon_sine",
+            "endTick": 46080,
+            "noteOns": 12,
+            "noteOffs": 12,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "Electronic kick, snap, tick (GM approximation)",
+            "endTick": 46080,
+            "noteOns": 294,
+            "noteOffs": 294,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          }
+        ],
+        "allEndAtLoop": true,
+        "balancedNotes": true,
+        "tempo100": true,
+        "notesMatchScore": true,
+        "exactEventsMatchScore": true
+      },
+      "scoreNoteCount": 722,
+      "signal": {
+        "wav": {
+          "decodedFrames": 2540160,
+          "spectralBalance": {
+            "energyPercent": {
+              "sub48Hz": 1.173768917563493,
+              "bass48to200Hz": 24.465486933420664,
+              "body200to2000Hz": 71.67983155270569,
+              "presence2to7kHz": 0.7843143736738578,
+              "above7kHz": 0.0037070763400746474
+            },
+            "spectralCentroidHz": 603.0200257209585
+          },
+          "rms100msMinimumDbFS": -37.27836579937705,
+          "rms100msMaximumDbFS": -16.142453614517358,
+          "no100msSilence": true,
+          "loop": true,
+          "ending100msPeakDbFS": -23.55183011837247,
+          "codecErrorRmsDbFS": null
+        },
+        "ogg": {
+          "decodedFrames": 2540160,
+          "spectralBalance": {
+            "energyPercent": {
+              "sub48Hz": 1.1731062945035124,
+              "bass48to200Hz": 24.414104154540272,
+              "body200to2000Hz": 71.74563653238496,
+              "presence2to7kHz": 0.7751251691368106,
+              "above7kHz": 0.0034280636354859016
+            },
+            "spectralCentroidHz": 603.0907660519418
+          },
+          "rms100msMinimumDbFS": -37.24820051908929,
+          "rms100msMaximumDbFS": -16.078811131240684,
+          "no100msSilence": true,
+          "loop": true,
+          "ending100msPeakDbFS": -23.571083735168305,
+          "codecErrorRmsDbFS": -56.177338084508996
+        },
+        "mp3": {
+          "decodedFrames": 2540160,
+          "spectralBalance": {
+            "energyPercent": {
+              "sub48Hz": 1.1736766812523345,
+              "bass48to200Hz": 24.466638743266152,
+              "body200to2000Hz": 71.6787069586974,
+              "presence2to7kHz": 0.7846400656517838,
+              "above7kHz": 0.0037587008005211192
+            },
+            "spectralCentroidHz": 603.0103788925388
+          },
+          "rms100msMinimumDbFS": -37.72346024028931,
+          "rms100msMaximumDbFS": -16.58697098972866,
+          "no100msSilence": true,
+          "loop": true,
+          "ending100msPeakDbFS": -24.011761151452955,
+          "codecErrorRmsDbFS": -47.79888686271797
+        }
+      }
+    },
+    "victory": {
+      "midi": {
+        "format": 1,
+        "division": 480,
+        "tracks": [
+          {
+            "name": "The Outpost Answers the Stars",
+            "endTick": 7680,
+            "noteOns": 0,
+            "noteOffs": 0,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": [
+              600000
+            ]
+          },
+          {
+            "name": "signal_pluck",
+            "endTick": 7680,
+            "noteOns": 9,
+            "noteOffs": 9,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "orbit_pluck",
+            "endTick": 7680,
+            "noteOns": 9,
+            "noteOffs": 9,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "horizon_pad",
+            "endTick": 7680,
+            "noteOns": 12,
+            "noteOffs": 12,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "pulse_bass",
+            "endTick": 7680,
+            "noteOns": 5,
+            "noteOffs": 5,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "beacon_sine",
+            "endTick": 7680,
+            "noteOns": 1,
+            "noteOffs": 1,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "Electronic kick, snap, tick (GM approximation)",
+            "endTick": 7680,
+            "noteOns": 17,
+            "noteOffs": 17,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          }
+        ],
+        "allEndAtLoop": true,
+        "balancedNotes": true,
+        "tempo100": true,
+        "notesMatchScore": true,
+        "exactEventsMatchScore": true
+      },
+      "scoreNoteCount": 53,
+      "signal": {
+        "wav": {
+          "decodedFrames": 423360,
+          "spectralBalance": {
+            "energyPercent": {
+              "sub48Hz": 0.14205874342399746,
+              "bass48to200Hz": 16.81373491710015,
+              "body200to2000Hz": 81.13508357012067,
+              "presence2to7kHz": 1.1012190546295864,
+              "above7kHz": 0.0018068237455929827
+            },
+            "spectralCentroidHz": 795.903849147786
+          },
+          "rms100msMinimumDbFS": -96.56430015070947,
+          "rms100msMaximumDbFS": -16.91472370214532,
+          "no100msSilence": false,
+          "loop": false,
+          "ending100msPeakDbFS": -90.30899869919436,
+          "codecErrorRmsDbFS": null
+        },
+        "ogg": {
+          "decodedFrames": 423360,
+          "spectralBalance": {
+            "energyPercent": {
+              "sub48Hz": 0.14425316938293078,
+              "bass48to200Hz": 16.761293746207635,
+              "body200to2000Hz": 81.19835275725775,
+              "presence2to7kHz": 1.0921032756585867,
+              "above7kHz": 0.0016872674848929254
+            },
+            "spectralCentroidHz": 795.9703901867548
+          },
+          "rms100msMinimumDbFS": -97.97794693898653,
+          "rms100msMaximumDbFS": -16.86827959336877,
+          "no100msSilence": false,
+          "loop": false,
+          "ending100msPeakDbFS": -85.80160171048601,
+          "codecErrorRmsDbFS": -58.16830287214847
+        },
+        "mp3": {
+          "decodedFrames": 423360,
+          "spectralBalance": {
+            "energyPercent": {
+              "sub48Hz": 0.1420405339609404,
+              "bass48to200Hz": 16.808480246320403,
+              "body200to2000Hz": 81.14150247052697,
+              "presence2to7kHz": 1.1006483908947753,
+              "above7kHz": 0.0018168611792168544
+            },
+            "spectralCentroidHz": 795.9235189552772
+          },
+          "rms100msMinimumDbFS": -97.90462619157668,
+          "rms100msMaximumDbFS": -17.360213627281407,
+          "no100msSilence": false,
+          "loop": false,
+          "ending100msPeakDbFS": -85.77678397290448,
+          "codecErrorRmsDbFS": -50.29658513276637
+        }
+      }
+    },
+    "defeat": {
+      "midi": {
+        "format": 1,
+        "division": 480,
+        "tracks": [
+          {
+            "name": "One Light Beyond the Debris",
+            "endTick": 9600,
+            "noteOns": 0,
+            "noteOffs": 0,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": [
+              600000
+            ]
+          },
+          {
+            "name": "signal_pluck",
+            "endTick": 9600,
+            "noteOns": 6,
+            "noteOffs": 6,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "orbit_pluck",
+            "endTick": 9600,
+            "noteOns": 3,
+            "noteOffs": 3,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "horizon_pad",
+            "endTick": 9600,
+            "noteOns": 12,
+            "noteOffs": 12,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "pulse_bass",
+            "endTick": 9600,
+            "noteOns": 3,
+            "noteOffs": 3,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "beacon_sine",
+            "endTick": 9600,
+            "noteOns": 1,
+            "noteOffs": 1,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          },
+          {
+            "name": "Electronic kick, snap, tick (GM approximation)",
+            "endTick": 9600,
+            "noteOns": 2,
+            "noteOffs": 2,
+            "endMarker": true,
+            "tempoMicrosecondsPerQuarter": []
+          }
+        ],
+        "allEndAtLoop": true,
+        "balancedNotes": true,
+        "tempo100": true,
+        "notesMatchScore": true,
+        "exactEventsMatchScore": true
+      },
+      "scoreNoteCount": 27,
+      "signal": {
+        "wav": {
+          "decodedFrames": 529200,
+          "spectralBalance": {
+            "energyPercent": {
+              "sub48Hz": 3.6392659991778813,
+              "bass48to200Hz": 11.189479694520111,
+              "body200to2000Hz": 84.57243635751117,
+              "presence2to7kHz": 0.27616825836556136,
+              "above7kHz": 0.00019304382610191612
+            },
+            "spectralCentroidHz": 519.9928270379746
+          },
+          "rms100msMinimumDbFS": -96.47988851612517,
+          "rms100msMaximumDbFS": -17.976579137055484,
+          "no100msSilence": false,
+          "loop": false,
+          "ending100msPeakDbFS": -90.30899869919436,
+          "codecErrorRmsDbFS": null
+        },
+        "ogg": {
+          "decodedFrames": 529200,
+          "spectralBalance": {
+            "energyPercent": {
+              "sub48Hz": 3.6324258912523897,
+              "bass48to200Hz": 11.084593376986444,
+              "body200to2000Hz": 84.68516595613437,
+              "presence2to7kHz": 0.27429660594729977,
+              "above7kHz": 0.0001913006571374564
+            },
+            "spectralCentroidHz": 520.7264119378666
+          },
+          "rms100msMinimumDbFS": -97.95029982555027,
+          "rms100msMaximumDbFS": -17.931611537512154,
+          "no100msSilence": false,
+          "loop": false,
+          "ending100msPeakDbFS": -86.65092237208287,
+          "codecErrorRmsDbFS": -60.58453410709045
+        },
+        "mp3": {
+          "decodedFrames": 529200,
+          "spectralBalance": {
+            "energyPercent": {
+              "sub48Hz": 3.6389506934252593,
+              "bass48to200Hz": 11.187017472251735,
+              "body200to2000Hz": 84.575216824554,
+              "presence2to7kHz": 0.276195416516653,
+              "above7kHz": 0.00019178027505480528
+            },
+            "spectralCentroidHz": 519.9968495791968
+          },
+          "rms100msMinimumDbFS": -97.86133512516257,
+          "rms100msMaximumDbFS": -18.422914096031043,
+          "no100msSilence": false,
+          "loop": false,
+          "ending100msPeakDbFS": -86.36294681254496,
+          "codecErrorRmsDbFS": -51.857320783201615
+        }
+      }
+    }
+  },
+  "crossfades": {
+    "method": "Independent decoded-asset model. 25 ms incoming start; loop targets: .45 s retirement/attack; result targets: .18 s retirement and .07 s attack. Retiring source stops at five time constants. Every eighth-note outgoing phase, six states to six states, three codecs, same-state restart proxies included. Finite outgoing cues end naturally and never wrap.",
+    "limits": "Not Web Audio or gameplay execution, subjective listening, physical-device, loading/cache races, theme-switch acceptance, or a measured memory benchmark. Decoded FFmpeg codec samples can differ from browser decoding. Results assess sample amplitudes, not transition intersample peaks.",
+    "totalCases": 12816,
+    "results": {
+      "wav": {
+        "menu-to-menu": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -13.802257283579017,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -47.750208874814255,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "exploration-to-menu": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 24.0,
+          "largestSamplePeakDbFS": -11.044701880497133,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -47.68585932278554,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "tension-to-menu": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 34.0,
+          "largestSamplePeakDbFS": -12.004116813655202,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -46.68681173484083,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "combat-to-menu": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 40.0,
+          "largestSamplePeakDbFS": -10.912128754635614,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -47.49570723356661,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "victory-to-menu": {
+          "offsetsChecked": 32,
+          "worstOutgoingBeat": 4.0,
+          "largestSamplePeakDbFS": -11.536174036527388,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -47.48333730214874,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "defeat-to-menu": {
+          "offsetsChecked": 40,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -13.802257283579017,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -48.519746864549155,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "menu-to-exploration": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 54.0,
+          "largestSamplePeakDbFS": -13.891082860412345,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -48.55182712682751,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "exploration-to-exploration": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 24.0,
+          "largestSamplePeakDbFS": -11.044701880497133,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -48.48128129915917,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "tension-to-exploration": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 34.0,
+          "largestSamplePeakDbFS": -11.990822622380286,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -47.392197527650985,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "combat-to-exploration": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 40.0,
+          "largestSamplePeakDbFS": -10.912128754635614,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -48.27311040453648,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "victory-to-exploration": {
+          "offsetsChecked": 32,
+          "worstOutgoingBeat": 4.0,
+          "largestSamplePeakDbFS": -11.536174036527388,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -48.25958318585285,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "defeat-to-exploration": {
+          "offsetsChecked": 40,
+          "worstOutgoingBeat": 1.0,
+          "largestSamplePeakDbFS": -14.00017643006904,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -49.39951181028168,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "menu-to-tension": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 39.5,
+          "largestSamplePeakDbFS": -12.466878701239338,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -45.191139950432834,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "exploration-to-tension": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 24.0,
+          "largestSamplePeakDbFS": -11.044701880497133,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -45.14316639317843,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "tension-to-tension": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 34.0,
+          "largestSamplePeakDbFS": -12.017290802149406,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -44.38698595842151,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "combat-to-tension": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 40.0,
+          "largestSamplePeakDbFS": -10.912128754635614,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -45.00087884855119,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "victory-to-tension": {
+          "offsetsChecked": 32,
+          "worstOutgoingBeat": 4.0,
+          "largestSamplePeakDbFS": -11.536174036527388,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -44.991595534259034,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "defeat-to-tension": {
+          "offsetsChecked": 40,
+          "worstOutgoingBeat": 1.5,
+          "largestSamplePeakDbFS": -12.695572417270055,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -45.757728664712836,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "menu-to-combat": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 55.0,
+          "largestSamplePeakDbFS": -13.617082682387737,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -50.97712625331761,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "exploration-to-combat": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 24.0,
+          "largestSamplePeakDbFS": -11.044701880497133,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -50.883978933166965,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "tension-to-combat": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 34.0,
+          "largestSamplePeakDbFS": -11.66229044606335,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -49.474692441733566,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "combat-to-combat": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 40.0,
+          "largestSamplePeakDbFS": -10.912128754635614,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -50.610505723044085,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "victory-to-combat": {
+          "offsetsChecked": 32,
+          "worstOutgoingBeat": 4.0,
+          "largestSamplePeakDbFS": -11.536174036527388,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -50.592805696182886,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "defeat-to-combat": {
+          "offsetsChecked": 40,
+          "worstOutgoingBeat": 2.0,
+          "largestSamplePeakDbFS": -13.982567556065872,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -52.11646165740955,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "menu-to-victory": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -11.122560244238587,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -53.2692443419053,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "exploration-to-victory": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -11.122560244238587,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -54.913530162895185,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "tension-to-victory": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -11.122560244238587,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -54.69612202947991,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "combat-to-victory": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -11.122560244238587,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -55.014604505944114,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "victory-to-victory": {
+          "offsetsChecked": 32,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -11.122560244238587,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -56.63376062331401,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "defeat-to-victory": {
+          "offsetsChecked": 40,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -11.122560244238587,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -58.06092938332974,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "menu-to-defeat": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 32.0,
+          "largestSamplePeakDbFS": -12.655873628330996,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -45.475340663581925,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "exploration-to-defeat": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 24.0,
+          "largestSamplePeakDbFS": -11.637548316111094,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -46.17170445849345,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "tension-to-defeat": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 35.0,
+          "largestSamplePeakDbFS": -12.348568204944204,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -46.03883673944149,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "combat-to-defeat": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 40.0,
+          "largestSamplePeakDbFS": -11.545680039649424,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -46.2593911047329,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "victory-to-defeat": {
+          "offsetsChecked": 32,
+          "worstOutgoingBeat": 4.0,
+          "largestSamplePeakDbFS": -12.156594724960605,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -46.826880589553824,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "defeat-to-defeat": {
+          "offsetsChecked": 40,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -12.812835974190014,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -47.29654725584485,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": true
+        }
+      },
+      "ogg": {
+        "menu-to-menu": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -13.876250330804996,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -47.57772721149899,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "exploration-to-menu": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 24.0,
+          "largestSamplePeakDbFS": -10.996488969147402,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -47.52368565622242,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "tension-to-menu": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 34.0,
+          "largestSamplePeakDbFS": -11.852556629226694,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -46.55532435100129,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "combat-to-menu": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 40.0,
+          "largestSamplePeakDbFS": -10.860114715601014,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -47.32361913292116,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "victory-to-menu": {
+          "offsetsChecked": 32,
+          "worstOutgoingBeat": 4.0,
+          "largestSamplePeakDbFS": -11.455680815728426,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -47.328857408119134,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "defeat-to-menu": {
+          "offsetsChecked": 40,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -13.876250330804996,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -48.34522029529917,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "menu-to-exploration": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 54.0,
+          "largestSamplePeakDbFS": -13.896410544089195,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -48.78091171064669,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "exploration-to-exploration": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 24.0,
+          "largestSamplePeakDbFS": -10.996488969147402,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -48.71886956247514,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "tension-to-exploration": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 34.0,
+          "largestSamplePeakDbFS": -11.832397078731773,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -47.61637445967024,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "combat-to-exploration": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 40.0,
+          "largestSamplePeakDbFS": -10.860114715601014,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -48.48967598411293,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "victory-to-exploration": {
+          "offsetsChecked": 32,
+          "worstOutgoingBeat": 4.0,
+          "largestSamplePeakDbFS": -11.455680815728426,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -48.49566713107771,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "defeat-to-exploration": {
+          "offsetsChecked": 40,
+          "worstOutgoingBeat": 1.0,
+          "largestSamplePeakDbFS": -14.00588019513805,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -49.66845017485073,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "menu-to-tension": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 39.5,
+          "largestSamplePeakDbFS": -12.365420625589836,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -44.90550851092287,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "exploration-to-tension": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 24.0,
+          "largestSamplePeakDbFS": -10.996488969147402,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -44.86574596344851,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "tension-to-tension": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 34.0,
+          "largestSamplePeakDbFS": -11.858340446966695,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -44.142369371420436,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "combat-to-tension": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 40.0,
+          "largestSamplePeakDbFS": -10.860114715601014,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -44.71797497044126,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "victory-to-tension": {
+          "offsetsChecked": 32,
+          "worstOutgoingBeat": 4.0,
+          "largestSamplePeakDbFS": -11.455680815728426,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -44.721855331680416,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "defeat-to-tension": {
+          "offsetsChecked": 40,
+          "worstOutgoingBeat": 1.5,
+          "largestSamplePeakDbFS": -12.5934435393945,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -45.46305566649409,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "menu-to-combat": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 55.0,
+          "largestSamplePeakDbFS": -13.522830596544754,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -50.845565257380905,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "exploration-to-combat": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 24.0,
+          "largestSamplePeakDbFS": -10.996488969147402,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -50.76695040068587,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "tension-to-combat": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 34.0,
+          "largestSamplePeakDbFS": -11.508853694504717,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -49.393403487679315,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "combat-to-combat": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 40.0,
+          "largestSamplePeakDbFS": -10.860114715601014,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -50.477815509950716,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "victory-to-combat": {
+          "offsetsChecked": 32,
+          "worstOutgoingBeat": 4.0,
+          "largestSamplePeakDbFS": -11.455680815728426,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -50.48534829344675,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "defeat-to-combat": {
+          "offsetsChecked": 40,
+          "worstOutgoingBeat": 2.0,
+          "largestSamplePeakDbFS": -13.884667283488676,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -51.98754124323034,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "menu-to-victory": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -11.042067023439621,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -53.130119439716175,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "exploration-to-victory": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -11.042067023439621,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -54.68087775451614,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "tension-to-victory": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -11.042067023439621,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -54.5542349350644,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "combat-to-victory": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -11.042067023439621,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -54.97049455203508,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "victory-to-victory": {
+          "offsetsChecked": 32,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -11.042067023439621,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -56.42535820642247,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "defeat-to-victory": {
+          "offsetsChecked": 40,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -11.042067023439621,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -57.84890796218449,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "menu-to-defeat": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 32.0,
+          "largestSamplePeakDbFS": -12.646891288310583,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -45.387420370893004,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "exploration-to-defeat": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 24.0,
+          "largestSamplePeakDbFS": -11.589335404761364,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -46.05279304196116,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "tension-to-defeat": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 35.0,
+          "largestSamplePeakDbFS": -12.316069679572283,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -45.939326364608554,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "combat-to-defeat": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 40.0,
+          "largestSamplePeakDbFS": -11.493666000614828,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -46.16582642985713,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "victory-to-defeat": {
+          "offsetsChecked": 32,
+          "worstOutgoingBeat": 4.0,
+          "largestSamplePeakDbFS": -12.076101504161642,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -46.739025496961915,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "defeat-to-defeat": {
+          "offsetsChecked": 40,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -12.774783627406443,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -47.18765889718499,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": true
+        }
+      },
+      "mp3": {
+        "menu-to-menu": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -14.247766098838282,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -48.16295257451054,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "exploration-to-menu": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 24.0,
+          "largestSamplePeakDbFS": -11.488738991672315,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -48.09626194829663,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "tension-to-menu": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 34.0,
+          "largestSamplePeakDbFS": -12.450358283501577,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -47.10124190782865,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "combat-to-menu": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 40.0,
+          "largestSamplePeakDbFS": -11.36155832883743,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -47.909813591288724,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "victory-to-menu": {
+          "offsetsChecked": 32,
+          "worstOutgoingBeat": 4.0,
+          "largestSamplePeakDbFS": -11.976492532136882,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -47.89529305011293,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "defeat-to-menu": {
+          "offsetsChecked": 40,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -14.247766098838282,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -48.92943383839366,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "menu-to-exploration": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 54.0,
+          "largestSamplePeakDbFS": -14.33672763330285,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -48.914203995207444,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "exploration-to-exploration": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 24.0,
+          "largestSamplePeakDbFS": -11.488738991672315,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -48.84151357640483,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "tension-to-exploration": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 34.0,
+          "largestSamplePeakDbFS": -12.436903633888814,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -47.762673141785626,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "combat-to-exploration": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 40.0,
+          "largestSamplePeakDbFS": -11.36155832883743,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -48.63855526025248,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "victory-to-exploration": {
+          "offsetsChecked": 32,
+          "worstOutgoingBeat": 4.0,
+          "largestSamplePeakDbFS": -11.976492532136882,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -48.62276504192377,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "defeat-to-exploration": {
+          "offsetsChecked": 40,
+          "worstOutgoingBeat": 1.0,
+          "largestSamplePeakDbFS": -14.445990294840376,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -49.75338087905967,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "menu-to-tension": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 39.5,
+          "largestSamplePeakDbFS": -12.919388825206259,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -45.61117043303409,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "exploration-to-tension": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 24.0,
+          "largestSamplePeakDbFS": -11.488738991672315,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -45.56140825595029,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "tension-to-tension": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 34.0,
+          "largestSamplePeakDbFS": -12.464554284695556,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -44.807666980673446,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "combat-to-tension": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 40.0,
+          "largestSamplePeakDbFS": -11.36155832883743,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -45.42177466507452,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "victory-to-tension": {
+          "offsetsChecked": 32,
+          "worstOutgoingBeat": 4.0,
+          "largestSamplePeakDbFS": -11.976492532136882,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -45.410868520805614,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "defeat-to-tension": {
+          "offsetsChecked": 40,
+          "worstOutgoingBeat": 1.5,
+          "largestSamplePeakDbFS": -13.148142815034955,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -46.1760243310265,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "menu-to-combat": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 55.0,
+          "largestSamplePeakDbFS": -14.03954565224512,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -51.431605174478676,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "exploration-to-combat": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 24.0,
+          "largestSamplePeakDbFS": -11.488738991672315,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -51.33461255557045,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "tension-to-combat": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 34.0,
+          "largestSamplePeakDbFS": -12.10838300168529,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -49.924862938035034,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "combat-to-combat": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 40.0,
+          "largestSamplePeakDbFS": -11.36155832883743,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -51.06521521919693,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "victory-to-combat": {
+          "offsetsChecked": 32,
+          "worstOutgoingBeat": 4.0,
+          "largestSamplePeakDbFS": -11.976492532136882,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -51.04434178016718,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "defeat-to-combat": {
+          "offsetsChecked": 40,
+          "worstOutgoingBeat": 2.0,
+          "largestSamplePeakDbFS": -14.404623483279682,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -52.572156569472995,
+          "retireTimeConstantSeconds": 0.45,
+          "attackTimeConstantSeconds": 0.45,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "menu-to-victory": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -11.562878739848081,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -53.66177513179022,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "exploration-to-victory": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -11.562878739848081,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -55.297660376354685,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "tension-to-victory": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -11.562878739848081,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -55.08430788642989,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "combat-to-victory": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -11.562878739848081,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -55.44644405799228,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "victory-to-victory": {
+          "offsetsChecked": 32,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -11.562878739848081,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -56.99244312465347,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "defeat-to-victory": {
+          "offsetsChecked": 40,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -11.562878739848081,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -58.41634832525728,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "menu-to-defeat": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 32.0,
+          "largestSamplePeakDbFS": -13.102513263829183,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -45.89425803149663,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "exploration-to-defeat": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 24.0,
+          "largestSamplePeakDbFS": -12.081585427286278,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -46.58620020973543,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "tension-to-defeat": {
+          "offsetsChecked": 128,
+          "worstOutgoingBeat": 35.0,
+          "largestSamplePeakDbFS": -12.795380279948942,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -46.454289441323965,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "combat-to-defeat": {
+          "offsetsChecked": 192,
+          "worstOutgoingBeat": 40.0,
+          "largestSamplePeakDbFS": -11.995109613851245,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -46.69189557710411,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": false
+        },
+        "victory-to-defeat": {
+          "offsetsChecked": 32,
+          "worstOutgoingBeat": 4.0,
+          "largestSamplePeakDbFS": -12.596913220570102,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -47.23713707785283,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": true
+        },
+        "defeat-to-defeat": {
+          "offsetsChecked": 40,
+          "worstOutgoingBeat": 0.0,
+          "largestSamplePeakDbFS": -13.258002186864013,
+          "noClipping": true,
+          "largestStepAtRetirementDbFS": -47.70765876664311,
+          "retireTimeConstantSeconds": 0.18,
+          "attackTimeConstantSeconds": 0.07,
+          "outgoingFiniteCuePaddedWithSilence": true
+        }
+      }
+    },
+    "highestPeakCase": {
+      "old": "combat",
+      "new": "menu",
+      "codec": "ogg",
+      "outgoingBeat": 40.0,
+      "linearPeak": 0.2864140142609525
+    },
+    "twoSourceUpperBound": {
+      "description": "Two fully correlated, fully risen global decoded sample maxima after manifest gain; no assumed phase cancellation or envelope attenuation.",
+      "linearPeakBound": 0.6013712143898011,
+      "peakBoundDbFS": -4.417147278978848,
+      "noSampleClippingPossibleWithinBound": true
+    },
+    "maximumEnvelopeSum": 1.2669296239121768
+  },
+  "readOnlyInputPreservation": {
+    "filesCompared": 147,
+    "changed": [],
+    "passed": true,
+    "scope": "Restored b8029a43 source/runtime, all three existing theme render/audio assets and audio composers; recovered frozen core and wrapper. Recorded after source checkpoint and before full recovered-bank render. Not the lost original 244-file snapshot."
+  },
+  "acceptedPilotIdentity": {
+    "filesCompared": 10,
+    "changed": [],
+    "comparison": "Retained pre-loss pilot hashes"
+  },
+  "runtimeBudget": {
+    "manifestGains": {
+      "menu": 0.8,
+      "exploration": 0.72,
+      "tension": 0.71,
+      "combat": 0.68,
+      "victory": 0.68,
+      "defeat": 0.73
+    },
+    "sharedCacheSlotsIncludingPending": 3,
+    "maximumConnectedMusicSources": 2,
+    "decodedFloat32BytesPerBuffer": {
+      "menu": 13547520,
+      "exploration": 20321280,
+      "tension": 13547520,
+      "combat": 20321280,
+      "victory": 3386880,
+      "defeat": 4233600
+    },
+    "conservativeThreeCachePlusTwoSourceBuffersBytes": 101606400,
+    "existingMaximumTrackSeconds": 60,
+    "existingMaximumThreeCachePlusTwoSourceBuffersBytes": 105840000,
+    "notes": "Fixed existing budgets; no runtime edits. Allocation estimate permits two source-held evicted buffers beside three shared cache entries. Excludes decoder temporaries, collection delays, effects, process overhead. No game memory measured.",
+    "runtimeSourceSha256": "38d5eecf2b108210ff411931a5d655247728efc9a8824e0eb3739d2900327e21",
+    "encodedAssetsBytes": 5927333
+  },
+  "passed": true
+}

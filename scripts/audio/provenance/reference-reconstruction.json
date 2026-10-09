@@ -1,0 +1,13 @@
+{
+  "method": "Two retained Christmas/Mythic table records copied from the recovered Halloween archive; Halloween pilot melody literals extracted using ast.literal_eval from the exact restored b8029a43 core composer, without executing any reference composer.",
+  "retainedTwoBankTableSha256": "c4024b115ea76b2142a576bbe08a36f330c60b083794dffdcbfa51c0af5f8f99",
+  "threeBankComparisonSha256": "09d23843146f11c25e6f6d9a1135c5a3043968318447fad1df73bb54ecd70620",
+  "priorSpaceComparisonJsonHashRetained": false,
+  "sourceHashes": {
+    "Christmas": "5b5e101ce830236f2ca69da260d5cac6cb9b0f8223ba4ea7ddcde5fc5e57cfb4",
+    "Mythic": "fb14787b1758327eb209ddd6f6950d9a5a46eecd1390f01fc972e18707e80512",
+    "Halloween": "26be9497c92a73ca0ed3143a5cb2a429b9ef21968725c7fbdf34cc60d8f043c6"
+  },
+  "audioGenerationDependency": false,
+  "purpose": "Comparison-only originality check; these tables are never synthesized by the Space composer."
+}
