@@ -51,10 +51,35 @@ export async function learningClearanceGeometry(page: Page) {
     const guideActionHitPoints = b ? [b.left + 2, b.left + b.width / 2, b.right - 2]
       .flatMap(x => [b.top + 2, b.top + b.height / 2, b.bottom - 2].map(y => ({
         x, y, hitsButton: document.elementFromPoint(x, y)?.closest("button") === button,
+        hitsGuide: document.elementFromPoint(x, y) === guide,
         hit: describeHit(document.elementFromPoint(x, y)),
         stack: document.elementsFromPoint(x, y).slice(0, 5).map(describeHit),
       }))) : [];
     const buttonStyle = button ? getComputedStyle(button) : undefined;
+    // Rounded corners are intentionally outside a rectangular button's painted
+    // hit shape. Keep the near-edge midpoint and center probes, but put corner
+    // probes inside the computed curve. The entire unrounded bounding box must
+    // still fit in the clip, and native activation still enforces a 44px target.
+    const radii = buttonStyle ? [buttonStyle.borderTopLeftRadius, buttonStyle.borderTopRightRadius,
+      buttonStyle.borderBottomLeftRadius, buttonStyle.borderBottomRightRadius] : [];
+    // Current lesson buttons use circular pixel radii. Fail closed if a future
+    // style changes that contract instead of guessing percent/elliptical units.
+    const guideActionRadiusSupported = radii.length === 4 && radii.every(value => /^\d+(?:\.\d+)?px$/.test(value));
+    const radius = guideActionRadiusSupported ? Math.max(...radii.map(value => parseFloat(value))) : 0;
+    const legacyMissesAreRoundedBackground = guideActionHitPoints.every((point, index) => point.hitsButton ||
+      radius > 0 && [0, 2, 6, 8].includes(index) && point.hitsGuide);
+    const insetX = b ? Math.min(b.width / 2, Math.max(2, radius + 1)) : 0;
+    const insetY = b ? Math.min(b.height / 2, Math.max(2, radius + 1)) : 0;
+    const guideActionPaintedHitPoints = b ? [
+      ["center", b.left + b.width / 2, b.top + b.height / 2],
+      ["left-edge", b.left + 2, b.top + b.height / 2], ["right-edge", b.right - 2, b.top + b.height / 2],
+      ["top-edge", b.left + b.width / 2, b.top + 2], ["bottom-edge", b.left + b.width / 2, b.bottom - 2],
+      ["top-left", b.left + insetX, b.top + insetY], ["top-right", b.right - insetX, b.top + insetY],
+      ["bottom-left", b.left + insetX, b.bottom - insetY], ["bottom-right", b.right - insetX, b.bottom - insetY],
+    ].map(([name, x, y]) => ({ name, x: Number(x), y: Number(y),
+      hitsButton: document.elementFromPoint(Number(x), Number(y))?.closest("button") === button,
+      hit: describeHit(document.elementFromPoint(Number(x), Number(y))),
+    })) : [];
     return {
       guide: g, strip: c, overlap, suppressed: strip.classList.contains("learning-guide-overlap"),
       visibility: style.visibility, display: style.display,
@@ -62,15 +87,18 @@ export async function learningClearanceGeometry(page: Page) {
       guideActionRect: button ? rect(button) : null,
       guideActionContainment: b ? { left: b.left >= clip.left, right: b.right <= clip.right, top: b.top >= clip.top, bottom: b.bottom <= clip.bottom } : null,
       guideActionBoxContained: b ? b.left >= clip.left && b.right <= clip.right && b.top >= clip.top && b.bottom <= clip.bottom : null,
-      guideActionHitPoints,
+      guideActionHitPoints, // Retain all nine original near-corner samples as diagnostic history.
+      guideActionPaintedHitPoints, guideActionRadiusSupported, legacyMissesAreRoundedBackground,
       guideActionStyle: buttonStyle ? { borderTopLeftRadius: buttonStyle.borderTopLeftRadius,
         borderTopRightRadius: buttonStyle.borderTopRightRadius, borderBottomLeftRadius: buttonStyle.borderBottomLeftRadius,
         borderBottomRightRadius: buttonStyle.borderBottomRightRadius, fontSize: buttonStyle.fontSize,
         lineHeight: buttonStyle.lineHeight, pointerEvents: buttonStyle.pointerEvents, overflow: buttonStyle.overflow,
         transform: buttonStyle.transform, visibility: buttonStyle.visibility, display: buttonStyle.display } : null,
+      legacyGuideActionFullyVisible: b ? b.left >= clip.left && b.right <= clip.right && b.top >= clip.top && b.bottom <= clip.bottom &&
+        guideActionHitPoints.every(point => point.hitsButton) : null,
       guideActionFullyVisible: b ? b.left >= clip.left && b.right <= clip.right && b.top >= clip.top && b.bottom <= clip.bottom &&
-        [b.left + 2, b.left + b.width / 2, b.right - 2].every(x => [b.top + 2, b.top + b.height / 2, b.bottom - 2]
-          .every(y => document.elementFromPoint(x, y)?.closest("button") === button)) : null,
+        guideActionRadiusSupported && legacyMissesAreRoundedBackground && guideActionPaintedHitPoints.length === 9 &&
+        guideActionPaintedHitPoints.every(point => point.hitsButton) : null,
       guideClip: clip, minimap, objective, guideMinimapOverlap: intersects(g, minimap), guideObjectiveOverlap: intersects(g, objective),
       shortLayoutAdjusted: guide.dataset.learningMinimapAdjusted === "true",
       deck,
