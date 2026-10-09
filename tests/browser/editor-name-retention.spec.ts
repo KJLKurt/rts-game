@@ -21,6 +21,30 @@ async function openWorkshop(page: Page, theme: typeof themes[number] = 'christma
     description: 'Native controls and mouse/CDP touch gestures perform edits. The exposed game API is read only for map, camera, profile, theme, and unobscured tile geometry.',
   });
   await home(page);
+  // Read-only input diagnostics: preserve the browser's native targeting and event order.
+  await page.evaluate(() => {
+    const fixture = window as Window & { __editorInputEvents?: unknown[] };
+    fixture.__editorInputEvents = [];
+    for (const type of ['pointerdown', 'pointerup', 'pointercancel', 'gotpointercapture', 'lostpointercapture', 'click']) {
+      document.addEventListener(type, event => {
+        const pointer = event as PointerEvent;
+        const target = event.target instanceof Element ? event.target : null;
+        const record = (phase: string) => {
+          fixture.__editorInputEvents!.push({
+            type, phase, time: performance.now(), eventTime: event.timeStamp,
+            target: target?.id || target?.tagName,
+            action: target?.closest('[data-action]')?.getAttribute('data-action') ?? null,
+            x: pointer.clientX, y: pointer.clientY, trusted: event.isTrusted,
+            pointerType: pointer.pointerType, pointerId: pointer.pointerId,
+            detail: pointer.detail, panelClass: document.querySelector('.editor-tools')?.className ?? null,
+          });
+          if (fixture.__editorInputEvents!.length > 160) fixture.__editorInputEvents!.shift();
+        };
+        record('capture');
+        if (type === 'click') queueMicrotask(() => record('microtask'));
+      }, { capture: true });
+    }
+  });
   await press(page, 'settings');
   await page.getByLabel('Visual theme', { exact: true }).selectOption(theme);
   await expect.poll(() => page.evaluate(() =>
@@ -35,8 +59,25 @@ async function openWorkshop(page: Page, theme: typeof themes[number] = 'christma
 }
 
 async function toolsVisible(page: Page, visible: boolean) {
-  if (await page.locator('.editor-tools').isVisible() !== visible)
-    await press(page, 'toggle-editor-tools');
+  const panel = page.locator('.editor-tools');
+  const before = await panel.isVisible();
+  try {
+    if (before !== visible) await press(page, 'toggle-editor-tools');
+    await expect(panel, `Tools must become ${visible ? 'visible' : 'hidden'} after one native activation`).toBeVisible({ visible });
+  } catch (error) {
+    await test.info().attach('native-tools-event-trail', {
+      body: JSON.stringify({
+        requestedVisible: visible, visibleBefore: before,
+        observed: await page.evaluate(() => ({
+          panelClass: document.querySelector('.editor-tools')?.className,
+          panelDisplay: document.querySelector('.editor-tools') && getComputedStyle(document.querySelector('.editor-tools')!).display,
+          events: (window as Window & { __editorInputEvents?: unknown[] }).__editorInputEvents ?? [],
+        })),
+      }, null, 2),
+      contentType: 'application/json',
+    });
+    throw error;
+  }
 }
 
 async function prepareSnow(page: Page) {
