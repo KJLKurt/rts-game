@@ -200,7 +200,7 @@ export function productionHTML(state: GameState, selected?: string): string {
     )
     .sort((a, b) => Number(b.id === selected) - Number(a.id === selected));
   if (!buildings.length && !state.pendingCommands.length) return "";
-  return `<div class="production-list"><h4>Production queues <small>Paid jobs reserve population</small></h4>${buildings
+  return `<div class="production-list"><h4>Production queues <small>Paid jobs · Troops reserve population</small></h4>${buildings
     .map(
       (b) =>
         `<div class="producer" data-live-key="${esc(b.id)}"><button class="producer-name" data-action="inspect-building" data-id="${esc(b.id)}">${BUILDINGS[b.type as BuildingId]?.name ?? "Building"} · ${b.queue.length}/12</button>${b.queue.some((job) => job.type === "unit") ? `<p class="deck-tip producer-rally">${esc(rallyDestination(b))}</p>` : ""}<ol data-live-key="queue-${esc(b.id)}">${b.queue
