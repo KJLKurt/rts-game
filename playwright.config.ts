@@ -4,8 +4,8 @@ import {defineConfig, devices} from '@playwright/test';
 const external = process.env.FRONTIER_TEST_URL;
 export default defineConfig({
   testDir: './tests/browser',
-  testMatch: /(?:prerequisite-clarity|deck-identity|presentation|placement-layout)\.spec\.ts/,
-  grep: /prerequisite clarity|an explicitly opened panel retains card identity|a real affordability change still invalidates|Research shows construction dependencies|landscape placement keeps real touch targets/,
+  testMatch: /prerequisite-clarity\.spec\.ts/,
+  grep: /native queued Blacksmith stays pending through save reload and gates Workshop until built/,
   timeout: 35_000,
   expect: {timeout: 8_000},
   fullyParallel: true,

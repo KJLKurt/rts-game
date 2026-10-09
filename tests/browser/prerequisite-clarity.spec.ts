@@ -33,7 +33,7 @@ async function setPaused(page: Page, paused: boolean) {
   if ((await snapshot(page)).paused !== paused) await press(page, action(page, 'pause'));
   await expect.poll(() => page.evaluate(() => window.__FRONTIER__.state.paused)).toBe(paused);
 }
-async function startBattle(page: Page, theme: Theme) {
+async function startBattle(page: Page, theme: Theme, startingResources?: { gold: number; wood: number }) {
   await home(page);
   await press(page, action(page, 'settings'));
   await page.getByLabel('Visual theme', { exact: true }).selectOption(theme);
@@ -43,12 +43,18 @@ async function startBattle(page: Page, theme: Theme) {
   await page.getByLabel('Map seed', { exact: true }).fill('QA-FRONTIER-2026');
   await page.locator('select[name="mapSize"]').selectOption('small');
   await page.locator('select[name="difficulty"]').selectOption('easy');
+  if (startingResources) {
+    await press(page, page.locator('.setup-advanced > summary'));
+    await page.getByLabel('Starting gold per player', { exact: true }).fill(String(startingResources.gold));
+    await page.getByLabel('Starting wood per player', { exact: true }).fill(String(startingResources.wood));
+  }
   await press(page, action(page, 'launch'));
   const briefing = page.getByRole('button', { name: 'Start battle', exact: true });
   if (await briefing.count()) await press(page, briefing);
   await expect(page.locator('.hud')).toBeVisible();
   if (await action(page, 'dismiss-tips').isVisible()) await press(page, action(page, 'dismiss-tips'));
   await setPaused(page, true);
+  if (startingResources) expect((await snapshot(page)).settings).toMatchObject({ startingGold: startingResources.gold, startingWood: startingResources.wood });
 }
 async function fasterConstruction(page: Page) {
   await press(page, action(page, 'panel-orders'));
@@ -149,12 +155,12 @@ async function blockedWorkshopSite(page: Page): Promise<Point> {
   });
   const completedProbe = projectPendingCommands(fixture.state);
   for (const entity of completedProbe.entities) if (entity.team === 0 && entity.type === 'blacksmith') entity.buildProgress = 1;
-  // Use actual pre-payment balances for geometry discovery, matching the first
-  // canBuild check in plannedBuildResult. Projected reservation costs would
-  // otherwise mask the prerequisite that this native rejected tap isolates.
-  completedProbe.players[0].gold = fixture.state.players[0].gold;
-  completedProbe.players[0].wood = fixture.state.players[0].wood;
-  const candidate = fixture.candidates.find(({ world }) => canBuild(completedProbe, 0, 'workshop', world.x, world.y).ok);
+  // Completion can extend territory as well as unlock Workshop. Require the
+  // real state to reject specifically on the prerequisite, so the hypothetical
+  // completed building cannot make an out-of-reach site appear suitable.
+  const candidate = fixture.candidates.find(({ world }) =>
+    canBuild(completedProbe, 0, 'workshop', world.x, world.y).ok &&
+    plannedBuildResult(fixture.state, 0, 'workshop', world.x, world.y).error === 'Requires Blacksmith.');
   expect(candidate, 'A reachable site must isolate prerequisite rejection from terrain/overlap errors').toBeDefined();
   expect(plannedBuildResult(fixture.state, 0, 'workshop', candidate!.world.x, candidate!.world.y)).toEqual({ ok: false, error: 'Requires Blacksmith.' });
   return candidate!.screen;
@@ -191,17 +197,22 @@ for (const theme of ['christmas', 'mythic'] as const) {
 
     test('native queued Blacksmith stays pending through save reload and gates Workshop until built', async ({ page }) => {
       test.setTimeout(60_000);
-      await startBattle(page, theme); await fasterConstruction(page);
+      test.info().annotations.push({ type: 'scenario-setup', description: 'Native Advanced setup starts each player with 500 gold and 500 wood, so a reserved Blacksmith leaves enough to isolate Workshop prerequisite rejection. No runtime resources or construction state are edited.' });
+      await startBattle(page, theme, { gold: 500, wood: 500 }); await fasterConstruction(page);
       await press(page, action(page, 'panel-build'));
       await expectBuild(page, 'workshop', 'missing', 'Needs Blacksmith');
       const before = await snapshot(page);
       await queueBuilding(page, 'blacksmith');
       const queued = await snapshot(page);
       expect(queued.players[0].gold).toBe(before.players[0].gold); expect(queued.players[0].wood).toBe(before.players[0].wood);
+      const reserved = projectPendingCommands(queued).players[0];
+      expect(reserved.gold).toBeGreaterThanOrEqual(BUILDINGS.workshop.cost.gold);
+      expect(reserved.wood).toBeGreaterThanOrEqual(BUILDINGS.workshop.cost.wood);
       await press(page, action(page, 'panel-build'));
       await expectBuild(page, 'workshop', 'queued', 'Blacksmith queued · Resume to start');
       await phoneFrame(page, theme, 'build-queued');
       await press(page, buildCard(page, 'workshop'));
+      await expect(page.locator('.placement-toolbar')).toBeVisible();
       await tap(page, await blockedWorkshopSite(page));
       await expect(page.locator('#placement-controls [data-placement-state]')).toContainText('Requires Blacksmith.');
       await expect(action(page, 'confirm-placement')).toBeDisabled();
