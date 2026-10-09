@@ -17,9 +17,10 @@ concurrency:
 jobs:
   browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 20
     env:
       FRONTIER_TEST_WORKERS: "2"
+      FRONTIER_TOOLS_INPUT_DIAGNOSTIC: "1"
     steps:
       - name: Check out the acceptance checkpoint
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -42,7 +43,9 @@ jobs:
         with:
           name: frontier-browser-acceptance-${{ github.sha }}
           path: |
-            full-matrix-results.json
+            focused-diagnostic-results.json
             test-results/**/test-failed*.png
+            test-results/**/attachments/*failed*.png
+            test-results/**/*.json
             test-results/**/error-context.md
           retention-days: 2
