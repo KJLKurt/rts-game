@@ -1,6 +1,6 @@
 import type { Locator, Page } from '@playwright/test';
 import type { GameEvent } from '../../src/sim/types';
-import { action, clearGround, expect, home, launch, setSlider, tap, test } from './helpers';
+import { action, expect, home, launch, setSlider, test } from './helpers';
 
 type Automation = { method: 'setValueAtTime' | 'exponentialRampToValueAtTime'; value: number; at: number };
 type Voice = { frequency: number; wave: OscillatorType; start: number; stop: number; envelope: Automation[]; sweep: Automation[]; route: string[]; master: number; effects: number };
@@ -84,6 +84,11 @@ async function press(page: Page, locator: Locator) {
   if (await page.evaluate(() => navigator.maxTouchPoints > 0)) await locator.tap();
   else await locator.click();
 }
+async function closeSettings(page: Page) {
+  const dialog = page.getByRole('dialog', { name: 'Settings', exact: true });
+  await press(page, dialog.getByRole('button', { name: 'Done', exact: true }));
+  await expect(dialog).toHaveCount(0);
+}
 async function paused(page: Page, value: boolean) {
   if (await page.evaluate(() => window.__FRONTIER__.state.paused) !== value) await press(page, action(page, 'pause'));
   await expect.poll(() => page.evaluate(() => window.__FRONTIER__.state.paused)).toBe(value);
@@ -126,7 +131,7 @@ test('native trusted unlock, volume controls and interruption gate the real effe
   if (test.info().project.name === 'desktop') await test.info().attach('christmas-audio-settings', {
     body: await page.screenshot({ scale: 'css' }), contentType: 'image/png',
   });
-  await press(page, action(page, 'close-dialog'));
+  await closeSettings(page);
   await launch(page, { difficulty: 'easy' }); await paused(page, true);
   await clearAudio(page); await emit(page, [{ type: 'attack', team: 0 }]);
   const audible = await audio(page);
@@ -147,10 +152,12 @@ test('native trusted unlock, volume controls and interruption gate the real effe
   expect((await audio(page)).resumes).toHaveLength(interrupted.resumes.length);
   expect((await audio(page)).master).toBeLessThan(.001);
   await press(page, action(page, 'resume-app'));
+  await expect(page.getByRole('dialog', { name: 'Battle suspended', exact: true })).toHaveCount(0);
   await expect.poll(async () => Math.round((await audio(page)).master * 100)).toBe(40);
   expect((await audio(page)).resumes.length).toBeGreaterThan(interrupted.resumes.length);
   // Use a genuinely suspended native context to verify play() schedules no cue.
   await page.evaluate(() => window.__QA_BATTLE_AUDIO__.suspend()); await clearAudio(page);
+  expect((await audio(page)).state).toBe('suspended');
   await emit(page, [{ type: 'projectile', subtype: 'archer', team: 0 }]);
   expect((await audio(page)).voices).toEqual([]);
   await press(page, action(page, 'select-commander'));
@@ -164,12 +171,15 @@ test('the first construction completion after native save and reload plays once'
   await press(page, action(page, 'settings'));
   await page.getByLabel('Visual theme', { exact: true }).selectOption('mythic');
   await expect(page.getByLabel('Visual theme', { exact: true })).toBeEnabled();
-  await press(page, action(page, 'close-dialog'));
+  await closeSettings(page);
   await launch(page, { difficulty: 'easy' }); await paused(page, true);
   await press(page, action(page, 'panel-build'));
-  await press(page, page.locator('[data-action="build"][data-id="house"]'));
-  await tap(page, await clearGround(page, 'house'));
-  await press(page, action(page, 'confirm-placement'));
+  await press(page, page.getByRole('button', { name: 'Build House', exact: true }));
+  // Reuse the app's legal initial preview, as in first-candidate-ui.spec.ts.
+  // Canvas picking is separate acceptance; this gate exercises paid placement.
+  const confirmBuild = page.locator('#placement-controls').getByRole('button', { name: 'Confirm build', exact: true });
+  await expect(confirmBuild).toBeEnabled();
+  await press(page, confirmBuild);
   await expect.poll(() => page.evaluate(() => window.__FRONTIER__.state.pendingCommands)).toEqual([
     expect.objectContaining({ type: 'build', building: 'house', team: 0 }),
   ]);
@@ -181,12 +191,14 @@ test('the first construction completion after native save and reload plays once'
   const checkpoint = await page.evaluate(() => {
     const s = window.__FRONTIER__.state, building = s.entities.find(e => e.team === 0 && e.type === 'house' && e.buildProgress < 1)!;
     building.buildProgress = .999; building.hp = building.maxHp * .999;
-    return { id: building.id, nextEventId: s.nextEventId };
+    return { id: building.id, nextEventId: s.nextEventId, time: s.time, tick: s.tick };
   });
   await press(page, action(page, 'pause-menu')); await press(page, action(page, 'save-leave'));
   await expect(action(page, 'continue')).toBeVisible(); await page.reload();
   await press(page, action(page, 'continue')); await expect(page.locator('.hud')).toBeVisible();
   expect(await page.evaluate(id => window.__FRONTIER__.state.entities.find(e => e.id === id)!.buildProgress, checkpoint.id)).toBe(.999);
+  expect(await page.evaluate(() => ({ nextEventId: window.__FRONTIER__.state.nextEventId, paused: window.__FRONTIER__.state.paused })))
+    .toEqual({ nextEventId: checkpoint.nextEventId, paused: true });
   await clearAudio(page); await paused(page, false);
   await expect.poll(async () => (await audio(page)).voices.filter(v => [523, 659, 784].includes(v.frequency)).map(v => v.frequency)).toEqual([523, 659, 784]);
   await paused(page, true);
