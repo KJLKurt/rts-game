@@ -4,8 +4,8 @@ import {defineConfig, devices} from '@playwright/test';
 const external = process.env.FRONTIER_TEST_URL;
 export default defineConfig({
   testDir: './tests/browser',
-  testMatch: /prerequisite-clarity\.spec\.ts/,
-  grep: /native queued Blacksmith stays pending through save reload and gates Workshop until built/,
+  testMatch: /(?:selected-actor-readability|visibility-picking|troop-selection)\.spec\.ts/,
+  grep: /selected readability|native ground marker preserves selection|a native tap on exposed enemy pixels|native troop sheet selects an arbitrary subset/,
   timeout: 35_000,
   expect: {timeout: 8_000},
   fullyParallel: true,
