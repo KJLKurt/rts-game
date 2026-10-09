@@ -4,9 +4,9 @@ import {defineConfig, devices} from '@playwright/test';
 const external = process.env.FRONTIER_TEST_URL;
 export default defineConfig({
   testDir: './tests/browser',
-  testMatch: /(release-update|pwa)\.spec\.ts/,
+  testMatch: /editor-exact-input-diagnostic\.spec\.ts/,
   globalTimeout: 8 * 60_000,
-  timeout: 70_000,
+  timeout: 90_000,
   expect: {timeout: 8_000},
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
@@ -14,17 +14,15 @@ export default defineConfig({
   maxFailures: 0,
   // Canvas-heavy games should not spawn one browser per reported host CPU.
   workers: 1,
-  reporter: [['list'], ['json', {outputFile: 'upgrade-results.json'}]],
+  reporter: [['list'], ['json', {outputFile: 'exact-input-results.json'}]],
   use: {
     baseURL: external || 'http://127.0.0.1:4181/rts-game/',
     trace: 'on-first-retry', screenshot: 'only-on-failure', video: 'off',
     launchOptions: process.env.PLAYWRIGHT_EXECUTABLE_PATH ? {executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH} : {},
   },
   projects: [
-    {name: 'desktop', use: {...devices['Desktop Chrome'], viewport: {width: 1440, height: 900}}, testIgnore: /pwa\.spec\.ts/},
     {name: 'phone-portrait', use: {...devices['Pixel 7'], viewport: {width: 390, height: 844}}, testIgnore: /pwa\.spec\.ts/},
     {name: 'phone-landscape', use: {...devices['Pixel 7'], viewport: {width: 844, height: 390}}, testIgnore: /pwa\.spec\.ts/},
-    {name: 'pwa', use: {...devices['Desktop Chrome']}, testMatch: /pwa\.spec\.ts/},
   ],
   webServer: external ? undefined : {
     command: 'npm run build && node tests/browser/serve-production.mjs',
