@@ -44,10 +44,30 @@ export async function learningClearanceGeometry(page: Page) {
       g.left < c.right && g.right > c.left && g.top < c.bottom && g.bottom > c.top;
     const button = guide.querySelector<HTMLElement>('[data-action="learning-help"]');
     const b = button?.getBoundingClientRect();
+    const describeHit = (node: Element | null) => node ? {
+      tag: node.tagName, id: node.id, className: node.getAttribute("class"),
+      action: node.getAttribute("data-action"), buttonAction: node.closest("button")?.getAttribute("data-action"),
+    } : null;
+    const guideActionHitPoints = b ? [b.left + 2, b.left + b.width / 2, b.right - 2]
+      .flatMap(x => [b.top + 2, b.top + b.height / 2, b.bottom - 2].map(y => ({
+        x, y, hitsButton: document.elementFromPoint(x, y)?.closest("button") === button,
+        hit: describeHit(document.elementFromPoint(x, y)),
+        stack: document.elementsFromPoint(x, y).slice(0, 5).map(describeHit),
+      }))) : [];
+    const buttonStyle = button ? getComputedStyle(button) : undefined;
     return {
       guide: g, strip: c, overlap, suppressed: strip.classList.contains("learning-guide-overlap"),
       visibility: style.visibility, display: style.display,
       guideActionHit: b ? document.elementFromPoint(b.x + b.width / 2, b.y + b.height / 2)?.closest("button") === button : null,
+      guideActionRect: button ? rect(button) : null,
+      guideActionContainment: b ? { left: b.left >= clip.left, right: b.right <= clip.right, top: b.top >= clip.top, bottom: b.bottom <= clip.bottom } : null,
+      guideActionBoxContained: b ? b.left >= clip.left && b.right <= clip.right && b.top >= clip.top && b.bottom <= clip.bottom : null,
+      guideActionHitPoints,
+      guideActionStyle: buttonStyle ? { borderTopLeftRadius: buttonStyle.borderTopLeftRadius,
+        borderTopRightRadius: buttonStyle.borderTopRightRadius, borderBottomLeftRadius: buttonStyle.borderBottomLeftRadius,
+        borderBottomRightRadius: buttonStyle.borderBottomRightRadius, fontSize: buttonStyle.fontSize,
+        lineHeight: buttonStyle.lineHeight, pointerEvents: buttonStyle.pointerEvents, overflow: buttonStyle.overflow,
+        transform: buttonStyle.transform, visibility: buttonStyle.visibility, display: buttonStyle.display } : null,
       guideActionFullyVisible: b ? b.left >= clip.left && b.right <= clip.right && b.top >= clip.top && b.bottom <= clip.bottom &&
         [b.left + 2, b.left + b.width / 2, b.right - 2].every(x => [b.top + 2, b.top + b.height / 2, b.bottom - 2]
           .every(y => document.elementFromPoint(x, y)?.closest("button") === button)) : null,
