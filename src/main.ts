@@ -1,5 +1,5 @@
 import { observeControlDeck, battlefieldCenterY } from "./ui/deck-layout";
-import { clearLearningCommanderOverlap } from "./ui/guide-clearance";
+import { clearLearningCommanderOverlap, positionShortLearningGuide } from "./ui/guide-clearance";
 import { troopSummaryPosition, type ScreenRect } from "./render/troop-summary";
 import { aboutHTML } from "./ui/about";
 import { BUILD_ID } from "./platform/build-info";
@@ -391,7 +391,10 @@ function button(
 function positionBattleGuide() {
   const guide = document.querySelector<HTMLElement>("#battle-hint");
   const objective = document.querySelector<HTMLElement>("#objective");
-  positionGuideBelowObjective(guide, objective);
+  if (!positionShortLearningGuide(guide, objective,
+    document.querySelector<HTMLElement>(".minimap-wrap"), document.querySelector<HTMLElement>(".command-deck"),
+    { width: innerWidth, height: innerHeight, textScale: preferences.uiScale, learning: playing && !editing && !!state.settings.learning }))
+    positionGuideBelowObjective(guide, objective);
   // Run after objective clearance, including cached layouts: paid queues and
   // deck expansion can move the floating strip without changing guide content.
   clearLearningCommanderOverlap(guide, document.querySelector<HTMLElement>(".commander-strip"),

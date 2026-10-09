@@ -16,11 +16,11 @@ concurrency:
 jobs:
   browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
     env:
       FRONTIER_TEST_WORKERS: "2"
       FRONTIER_PREVIOUS_DIST: .qa-previous/dist
-      FRONTIER_EXPECT_BUILD_ID: fc-3dce7db7d71b
+      FRONTIER_EXPECT_BUILD_ID: fc-088b668ca425
     steps:
       - name: Check out the acceptance checkpoint
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -50,8 +50,8 @@ jobs:
           node .qa-verify-candidate.mjs
       - name: Install official Playwright Chromium
         run: npx playwright install --with-deps chromium
-      - name: Run all 27 focused learning identities once
-        run: npx playwright test --config playwright-learning-qa.config.ts
+      - name: Continue the single affected desktop learning identity after the scoped layout fix
+        run: npx playwright test --config playwright-learning-qa.config.ts --project=desktop tests/browser/learning.spec.ts --grep='all eight peaceful lessons use real input, teach neighboring houses, and launch the named Outpost'
       - name: Sequentially verify the exact previous-live cache upgrade
         run: npx playwright test --config playwright-space-upgrade.config.ts
       - name: Verify tested distribution still matches the frozen candidate

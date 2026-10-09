@@ -114,7 +114,10 @@ async function moveCommander(page: Page) {
 test("all eight peaceful lessons use real input, teach neighboring houses, and launch the named Outpost", async ({
   page,
 }) => {
-  test.setTimeout(240_000);
+  // Desktop now exercises two paid-queue boundary matrices with native text
+  // scrolling and >1s stability samples. Keep all assertions and zero retries;
+  // allow the added work explicitly rather than cutting off the upgrade path.
+  test.setTimeout(test.info().project.name === "desktop" ? 360_000 : 240_000);
   await home(page);
   // A previous campaign selection must not redirect the completion button.
   await action(page, "campaign").click();
@@ -222,7 +225,7 @@ test("all eight peaceful lessons use real input, teach neighboring houses, and l
   await expect(page.locator("#selection-info")).not.toContainText("production and rally");
   await action(page, "upgrade-building").click();
   await pause(page);
-  await verifyLearningQueueClearance(page, "paid-house-upgrade");
+  await verifyLearningQueueClearance(page, "paid-house-upgrade", true);
   await resume(page);
   await lesson(page, 8);
   expect(
