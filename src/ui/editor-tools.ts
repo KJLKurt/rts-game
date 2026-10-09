@@ -4,6 +4,9 @@ export interface EditorHistorySnapshot {
   version: 1;
   undo: GameMap[];
   redo: GameMap[];
+  /** Older drafts omit these flags and retain their original full-map behavior. */
+  undoNames?: boolean[];
+  redoNames?: boolean[];
 }
 
 /** Includes every crossed grid cell, even when touch events arrive far apart. */
@@ -41,20 +44,37 @@ export function strokeTiles(
 export class EditorHistory {
   private undoMaps: GameMap[] = [];
   private redoMaps: GameMap[] = [];
+  private undoNames: boolean[] = [];
+  private redoNames: boolean[] = [];
   record(before: GameMap, after: GameMap) {
     if (JSON.stringify(before) === JSON.stringify(after)) return;
     this.undoMaps.push(structuredClone(before));
-    if (this.undoMaps.length > 24) this.undoMaps.shift();
+    this.undoNames.push(before.name !== after.name);
+    if (this.undoMaps.length > 24) {
+      this.undoMaps.shift();
+      this.undoNames.shift();
+    }
     this.redoMaps = [];
+    this.redoNames = [];
   }
   undo(current: GameMap): GameMap | undefined {
     const previous = this.undoMaps.pop();
-    if (previous) this.redoMaps.push(structuredClone(current));
+    const changesName = this.undoNames.pop();
+    if (previous) {
+      this.redoMaps.push(structuredClone(current));
+      this.redoNames.push(changesName ?? true);
+      if (!changesName) previous.name = current.name;
+    }
     return previous;
   }
   redo(current: GameMap): GameMap | undefined {
     const next = this.redoMaps.pop();
-    if (next) this.undoMaps.push(structuredClone(current));
+    const changesName = this.redoNames.pop();
+    if (next) {
+      this.undoMaps.push(structuredClone(current));
+      this.undoNames.push(changesName ?? true);
+      if (!changesName) next.name = current.name;
+    }
     return next;
   }
   export(): EditorHistorySnapshot {
@@ -62,6 +82,8 @@ export class EditorHistory {
       version: 1,
       undo: structuredClone(this.undoMaps),
       redo: structuredClone(this.redoMaps),
+      undoNames: [...this.undoNames],
+      redoNames: [...this.redoNames],
     };
   }
   resume(input: unknown) {
@@ -71,6 +93,16 @@ export class EditorHistory {
       data.version !== 1 ||
       !Array.isArray(data.undo) ||
       !Array.isArray(data.redo) ||
+      ["undo", "redo"].some((side) => {
+        const maps = data[side as "undo" | "redo"];
+        const flags = data[`${side}Names` as "undoNames" | "redoNames"];
+        return (
+          flags !== undefined &&
+          (!Array.isArray(flags) ||
+            flags.length !== maps.length ||
+            flags.some((flag) => typeof flag !== "boolean"))
+        );
+      }) ||
       data.undo.length + data.redo.length > 24 ||
       [...data.undo, ...data.redo].some(
         (map) => validateWorkshopStructure(map).length,
@@ -79,6 +111,12 @@ export class EditorHistory {
       throw new Error("The workshop undo history is invalid.");
     this.undoMaps = structuredClone(data.undo);
     this.redoMaps = structuredClone(data.redo);
+    this.undoNames = data.undoNames
+      ? [...data.undoNames]
+      : data.undo.map(() => true);
+    this.redoNames = data.redoNames
+      ? [...data.redoNames]
+      : data.redo.map(() => true);
   }
   get canUndo() {
     return this.undoMaps.length > 0;
