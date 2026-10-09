@@ -1,8 +1,8 @@
 import { writeFile } from 'node:fs/promises';
 import type { Locator, Page } from '@playwright/test';
-import { getUnitCost, populationBreakdown } from '../../src/sim';
-import type { GameState } from '../../src/sim/types';
-import { action, expect, test } from './helpers';
+import { getUnitCost, populationBreakdown, UNITS } from '../../src/sim';
+import type { GameState, UnitId } from '../../src/sim/types';
+import { action, expect, test as base } from './helpers';
 
 // Bounded scripted acceptance: two themes × the three existing desktop/phone
 // projects = six identities. Fresh browser contexts, native controls only, and
@@ -20,6 +20,53 @@ const node = (page: Page, id: 'steel' | 'veterancy') =>
 const producer = (page: Page, id: string) =>
   page.locator(`#production-strip .producer[data-live-key="${id}"]`);
 const masteryPrice = { gold: 200, wood: 80 };
+type ResearchReceipt = {
+  identity: string;
+  project: string;
+  stages: { name: string; evidence: unknown }[];
+  result?: unknown;
+  finalObservation?: unknown;
+  finalObservationError?: string;
+  outcome?: unknown;
+};
+
+/** Compact evidence remains available even if a later native action/assertion fails. */
+function observation(state: GameState) {
+  const player = state.players[0];
+  return {
+    time: state.time, paused: state.paused, pace: state.settings.gameSpeed,
+    resources: { gold: player.gold, wood: player.wood },
+    research: player.research, stats: player.stats, population: populationBreakdown(state),
+    commander: state.entities.filter(e => e.team === 0 && e.kind === 'commander')
+      .map(e => ({ id: e.id, hp: e.hp, maxHp: e.maxHp, respawnAt: e.respawnAt })),
+    troops: state.entities.filter(e => e.team === 0 && e.kind === 'unit' && e.hp > 0)
+      .map(e => ({ id: e.id, type: e.type, population: UNITS[e.type as UnitId].population })),
+    producers: state.entities.filter(e => e.team === 0 && e.queue.length)
+      .map(e => ({ id: e.id, type: e.type, jobs: e.queue })),
+  };
+}
+const test = base.extend<{ researchReceipt: ResearchReceipt }>({
+  researchReceipt: [async ({ page }, use, info) => {
+    const receipt: ResearchReceipt = { identity: info.title, project: info.project.name, stages: [] };
+    try {
+      await use(receipt);
+    } finally {
+      receipt.outcome = { status: info.status, expectedStatus: info.expectedStatus, errors: info.errors.map(error => error.message) };
+      try {
+        if (!page.isClosed()) {
+          const final = await page.evaluate(() => window.__FRONTIER__?.state ? structuredClone(window.__FRONTIER__.state) : null);
+          if (final) receipt.finalObservation = observation(final);
+        }
+      } catch (error) {
+        receipt.finalObservationError = error instanceof Error ? error.message : String(error);
+      }
+      const path = info.outputPath(`research-${info.project.name}-receipt.json`);
+      await writeFile(path, JSON.stringify(receipt, null, 2));
+      await info.attach('research-guidance-receipt', { path, contentType: 'application/json' });
+    }
+  }, { auto: true }],
+});
+test.use({ actionTimeout: 8_000 });
 
 async function press(page: Page, control: Locator) {
   await control.scrollIntoViewIfNeeded();
@@ -124,8 +171,10 @@ async function startBattle(page: Page, theme: Theme) {
   await expect(page.getByRole('dialog', { name: 'Your first frontier', exact: true })).toBeVisible();
   await press(page, page.getByRole('button', { name: 'Start battle', exact: true }));
   await expect(page.locator('.hud')).toBeVisible();
-  await press(page, action(page, 'dismiss-tips'));
   await setPaused(page, true);
+  // Short landscape deliberately hides the optional field guide and its close
+  // control. Match the normal launcher: dismiss only a genuinely visible tip.
+  if (await action(page, 'dismiss-tips').isVisible()) await press(page, action(page, 'dismiss-tips'));
   const state = await snapshot(page);
   expect(state.settings).toMatchObject({ difficulty: 'easy', startingGold: 300, startingWood: 260, mapSize: 'small' });
   expect(state.settings.learning).not.toBe(true);
@@ -153,8 +202,9 @@ async function saveLeaveReload(page: Page, initialAccount: Awaited<ReturnType<ty
 }
 
 for (const theme of ['christmas', 'mythic'] as const) {
-  test(`research guidance · ${theme} · paid Keep queue completes and survives save reload`, async ({ page }) => {
+  test(`research guidance · ${theme} · paid Keep queue completes and survives save reload`, async ({ page, researchReceipt }) => {
     test.setTimeout(120_000);
+    const record = (name: string, evidence: unknown) => researchReceipt.stages.push({ name, evidence });
     test.info().annotations.push({
       type: 'scripted-native-acceptance',
       description: 'Fresh normal Easy skirmish. Visible Advanced setup sets 300 starting gold (wood stays 260) to fund one Swordsman and Commander Mastery. Ordinary 0.5× pace bounds the live queue step; 2× completes it. Read-only source-assisted state/layout assertions; no injected fixture, commands, storage, clock or camera. The fresh learning-completion flag remains false; this is not an eight-lesson replay.',
@@ -163,6 +213,13 @@ for (const theme of ['christmas', 'mythic'] as const) {
     const baseline = await snapshot(page), keep = baseline.entities.find(e => e.team === 0 && e.type === 'keep')!;
     const hero = baseline.entities.find(e => e.team === 0 && e.kind === 'commander')!;
     const population = populationBreakdown(baseline), swordPrice = getUnitCost(baseline, 0, 'swordsman');
+    record('native-setup-observed', { ...observation(baseline), account: initialAccount });
+    // In this actual starting force, every soldier costs one population. Verify
+    // that premise before using unit-only unitsLost to account for later combat.
+    const startingTroops = baseline.entities.filter(e => e.team === 0 && e.kind === 'unit' && e.hp > 0);
+    expect(startingTroops.map(e => e.type).sort()).toEqual(['archer', 'spearman', 'swordsman', 'swordsman']);
+    expect(startingTroops.every(e => UNITS[e.type as UnitId].population === 1)).toBe(true);
+    expect(UNITS.swordsman.population).toBe(1);
     expect(keep.queue).toEqual([]);
 
     await press(page, action(page, 'panel-research'));
@@ -188,6 +245,7 @@ for (const theme of ['christmas', 'mythic'] as const) {
     await expect(node(page, 'veterancy')).toHaveAccessibleName('Commander Mastery. 0 of 1 levels complete. Research level 1. +25% commander health and 20% faster ability cooldowns.');
     await exactPrice(node(page, 'veterancy'), masteryPrice.gold, masteryPrice.wood);
     expect(await snapshot(page)).toEqual(baseline);
+    record('guidance-prerequisites-prices-verified', { guidanceBox, unchangedPausedState: true });
 
     // The visible default destination is the first completed Keep. A real paid
     // recruit exposes its producer button, which explicitly selects that Keep.
@@ -199,6 +257,7 @@ for (const theme of ['christmas', 'mythic'] as const) {
     await press(page, swordsman);
     await setPaused(page, true);
     const recruited = await snapshot(page), soldier = recruited.entities.find(e => e.id === keep.id)!.queue[0];
+    record('paid-swordsman-observed', observation(recruited));
     expect(soldier).toMatchObject({ type: 'unit', id: 'swordsman', total: 10, paidCost: swordPrice });
     expect(soldier.remaining).toBeGreaterThan(0);
     expect(recruited.pendingCommands).toEqual([]);
@@ -217,6 +276,7 @@ for (const theme of ['christmas', 'mythic'] as const) {
     await setPaused(page, true);
 
     const queued = await snapshot(page), queue = queued.entities.find(e => e.id === keep.id)!.queue;
+    record('paid-research-queue-observed', { ...observation(queued), researchSpend: spend(recruited, queued) });
     expect(queue).toHaveLength(2);
     expect(queue[0]).toMatchObject({ queueId: soldier.queueId, type: 'unit', id: 'swordsman' });
     expect(queue[0].remaining).toBeGreaterThan(0);
@@ -247,6 +307,7 @@ for (const theme of ['christmas', 'mythic'] as const) {
     await expect(waiting.locator('progress')).toHaveCount(0);
     await expect(waiting.locator('.refund-amount')).toHaveText('Cancel refund: 200 gold · 80 wood');
     const waitingBox = await readable(page, waiting.locator('div > small').first());
+    record('waiting-guidance-verified', { queueHeadingBox, waitingBox, researchHasNoProgressBar: true });
 
     // Use the stable data attribute: HUD aria-label becomes "Gold: ... Income:"
     // after launch, so the initial "Gold and income sources" name is stale.
@@ -258,6 +319,7 @@ for (const theme of ['christmas', 'mythic'] as const) {
     await press(page, economy.getByRole('button', { name: 'Back to battle', exact: true }));
     expect(await snapshot(page), 'Native inspection while paused cannot advance or charge either job').toEqual(queued);
     await saveLeaveReload(page, initialAccount);
+    record('queued-save-reload-verified', { exactState: true, profileAndLearningFlagUnchanged: true });
 
     await setPace(page, 2);
     await press(page, action(page, 'panel-research'));
@@ -270,9 +332,16 @@ for (const theme of ['christmas', 'mythic'] as const) {
     await expect(page.locator('#toast')).toHaveText('Commander Mastery complete');
     await setPaused(page, true);
     const completed = await snapshot(page), upgradedHero = completed.entities.find(e => e.id === hero.id)!;
+    record('completed-research-observed', observation(completed));
     expect(completed.entities.find(e => e.id === keep.id)!.queue).toEqual([]);
-    expect(completed.players[0].stats.unitsCreated).toBe(baseline.players[0].stats.unitsCreated + 1);
-    expect(populationBreakdown(completed)).toEqual({ ...population, fielded: population.fielded + 1 });
+    const created = completed.players[0].stats.unitsCreated - baseline.players[0].stats.unitsCreated;
+    const lost = completed.players[0].stats.unitsLost - baseline.players[0].stats.unitsLost;
+    expect(created, 'The paid Swordsman really finishes training').toBe(1);
+    expect(lost).toBeGreaterThanOrEqual(0);
+    expect(lost).toBeLessThanOrEqual(startingTroops.length + created);
+    expect(populationBreakdown(completed), 'Fielded population accounts for real combat losses; only troop jobs reserve population').toEqual({
+      ...population, fielded: population.fielded + created - lost,
+    });
     expect(upgradedHero.maxHp, 'The advertised health effect starts only at real research completion').toBeCloseTo(hero.maxHp * 1.25, 6);
     expectSpend(baseline, completed, { gold: swordPrice.gold + masteryPrice.gold, wood: swordPrice.wood + masteryPrice.wood });
     await expect(node(page, 'veterancy')).toBeDisabled();
@@ -283,29 +352,45 @@ for (const theme of ['christmas', 'mythic'] as const) {
     await expect(node(page, 'veterancy').locator('.resource-price')).toHaveCount(0);
     await readable(page, node(page, 'veterancy').locator('.research-status'));
     await frame(page, theme, 'completed');
-    await press(page, action(page, 'select-commander'));
-    await press(page, action(page, 'panel-inspect'));
-    await expect(page.locator('[data-inspect-health]')).toHaveText(`${Math.ceil(upgradedHero.hp)} / ${Math.ceil(upgradedHero.maxHp)}`);
+    if (upgradedHero.hp > 0) {
+      await press(page, action(page, 'select-commander'));
+      // Focusing a commander may collapse the deck; the visible Details tab
+      // explicitly reopens it before inspecting the actual post-research HP.
+      await press(page, action(page, 'panel-inspect'));
+      await expect(page.locator('.command-deck')).not.toHaveClass(/\bcollapsed\b/);
+      await expect(page.locator('[data-inspect-health]')).toHaveText(`${Math.ceil(upgradedHero.hp)} / ${Math.ceil(upgradedHero.maxHp)}`);
+    } else {
+      // Combat may kill the commander without undoing the researched max HP.
+      // Verify the real recovery presentation instead of assuming survival or
+      // selecting a nonexistent living actor; the state effect above is strict.
+      expect(upgradedHero.respawnAt).not.toBeNull();
+      await expect(page.locator('#commander-strip .respawning strong')).toHaveText('Commander recovering');
+      await expect(page.locator('#commander-strip .respawning small')).toHaveText('Paused · abilities unavailable');
+    }
+    record('completion-effect-and-ui-verified', {
+      level: completed.players[0].research.veterancy, previousMaxHp: hero.maxHp,
+      hp: upgradedHero.hp, maxHp: upgradedHero.maxHp, respawnAt: upgradedHero.respawnAt,
+      created, lost, totalSpend: spend(baseline, completed),
+    });
     await saveLeaveReload(page, initialAccount);
     await press(page, action(page, 'panel-research'));
     await expect(node(page, 'veterancy')).toHaveAccessibleName('Commander Mastery. 1 of 1 levels complete. Complete. +25% commander health and 20% faster ability cooldowns.');
     expect((await snapshot(page)).entities.find(e => e.id === hero.id)!.maxHp).toBe(upgradedHero.maxHp);
     expect(await account(page)).toEqual(initialAccount);
+    record('completed-save-reload-verified', { exactState: true, profileAndLearningFlagUnchanged: true });
 
-    const receipt = {
+    researchReceipt.result = {
       scenario: 'Native Easy skirmish, Advanced starting gold 300, default wood 260; 0.5× queue then 2× completion',
       theme, project: test.info().project.name, input: test.info().project.use.hasTouch ? 'locator.tap' : 'locator.click',
       readOnlySourceAssisted: true, selectedKeepId: keep.id,
       queuedJobs: queue.map(job => ({ id: job.id, type: job.type, remaining: job.remaining, paidCost: job.paidCost })),
       researchSpend: spend(recruited, queued), totalSpend: spend(baseline, completed),
       population: { before: population, queued: populationBreakdown(queued), completed: populationBreakdown(completed) },
+      unitAccounting: { created, lost, allObservedTroopTypesUseOnePopulation: true },
       completion: { level: completed.players[0].research.veterancy, previousMaxHp: hero.maxHp, maxHp: upgradedHero.maxHp },
       nativePauseSaveReload: { queuedStateExact: true, completedStateExact: true },
       learningComplete: initialAccount.learningComplete, profileUnchanged: true,
       geometry: { guidanceBox, queueHeadingBox, waitingBox },
     };
-    const receiptPath = test.info().outputPath(`research-${theme}-${test.info().project.name}.json`);
-    await writeFile(receiptPath, JSON.stringify(receipt, null, 2));
-    await test.info().attach('research-guidance-receipt', { path: receiptPath, contentType: 'application/json' });
   });
 }
