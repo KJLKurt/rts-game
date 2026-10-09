@@ -5,13 +5,14 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+  actions: read
 concurrency:
   group: frontier-command-browser-qa
   cancel-in-progress: false
 jobs:
   browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
     env:
       FRONTIER_PREVIOUS_DIST: .qa-previous/dist
       FRONTIER_EXPECT_BUILD_ID: fc-f9ca19483611
@@ -20,6 +21,15 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
+      - name: Recover complete first-gate evidence without rerunning its 33 passing identities
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: frontier-rally-workshop-64431ef36b28a05b7a6743b5b8447430929318ec
+          run-id: 37996727418
+          github-token: ${{ github.token }}
+          path: .qa-original
+      - name: Verify original ledgers and preserve every file in bounded packages
+        run: python3 .qa-preserve-original.py
       - name: Use Node.js 24
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
@@ -44,15 +54,6 @@ jobs:
           node .qa-verify-dist.mjs dist .qa-candidate-dist.json candidate-dist-proof.json
       - name: Install official Playwright Chromium
         run: npx playwright install --with-deps chromium
-      - name: Preserve and verify two intended baseline native failures
-        run: |
-          set +e
-          npx playwright test --config playwright-rally-workshop-red.config.ts
-          status=$?
-          set -e
-          node .qa-assert-red.mjs "$status"
-      - name: Verify fixed boundaries and affected regressions across desktop and phone views
-        run: npx playwright test --config playwright-rally-workshop-qa.config.ts
       - name: Sequential exact-live update and one-time paid work completion
         run: npx playwright test --config playwright-rally-workshop-upgrade.config.ts
       - name: Verify both tested distributions remained byte-exact
@@ -60,22 +61,60 @@ jobs:
         run: |
           node .qa-verify-dist.mjs .qa-previous/dist .qa-previous-dist.json previous-live-dist-proof.json
           node .qa-verify-dist.mjs dist .qa-candidate-dist.json candidate-dist-proof.json
-      - name: Preserve all native failures, passes, traces and exclusions
+      - name: Preserve update continuation and original review evidence
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: frontier-rally-workshop-${{ github.sha }}
+          name: frontier-rally-workshop-update-${{ github.sha }}
           path: |
-            rally-workshop-red-ledger.json
-            rally-workshop-red-proof.json
-            rally-workshop-identity-ledger.json
+            original-review/
             rally-workshop-upgrade-ledger.json
             previous-live-dist-proof.json
             candidate-dist-proof.json
-            rally-workshop-red-report/
-            rally-workshop-report/
             rally-workshop-upgrade-report/
-            test-results-rally-workshop-red/
-            test-results-rally-workshop/
             test-results-rally-workshop-upgrade/
+          retention-days: 7
+      - name: Preserve complete original evidence part 1 of 4
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frontier-rally-workshop-original-part-0
+          path: |
+            original-evidence-parts/original-part-0.zip
+            original-evidence-parts/original-content-manifest.json
+            original-evidence-parts/restore-original.py
+          compression-level: 0
+          retention-days: 7
+      - name: Preserve complete original evidence part 2 of 4
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frontier-rally-workshop-original-part-1
+          path: |
+            original-evidence-parts/original-part-1.zip
+            original-evidence-parts/original-content-manifest.json
+            original-evidence-parts/restore-original.py
+          compression-level: 0
+          retention-days: 7
+      - name: Preserve complete original evidence part 3 of 4
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frontier-rally-workshop-original-part-2
+          path: |
+            original-evidence-parts/original-part-2.zip
+            original-evidence-parts/original-content-manifest.json
+            original-evidence-parts/restore-original.py
+          compression-level: 0
+          retention-days: 7
+      - name: Preserve complete original evidence part 4 of 4
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: frontier-rally-workshop-original-part-3
+          path: |
+            original-evidence-parts/original-part-3.zip
+            original-evidence-parts/original-content-manifest.json
+            original-evidence-parts/restore-original.py
+          compression-level: 0
           retention-days: 7
