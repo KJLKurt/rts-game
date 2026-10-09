@@ -4,8 +4,8 @@ import {defineConfig, devices} from '@playwright/test';
 const external = process.env.FRONTIER_TEST_URL;
 export default defineConfig({
   testDir: './tests/browser',
-  testMatch: /(?:pause-budget|interruption|battle-feedback-lifecycle)\.spec\.ts/,
-  grep: /pause budget|focus loss freezes until explicit recovery without spending tactical pauses|mobile visibility recovery preserves the existing dialog and tactical queue|Ironwatch retry retires prior defeat feedback and preserves fresh paused orders/,
+  testMatch: /(?:prerequisite-clarity|deck-identity|presentation|placement-layout)\.spec\.ts/,
+  grep: /prerequisite clarity|an explicitly opened panel retains card identity|a real affordability change still invalidates|Research shows construction dependencies|landscape placement keeps real touch targets/,
   timeout: 35_000,
   expect: {timeout: 8_000},
   fullyParallel: true,

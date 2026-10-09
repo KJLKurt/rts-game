@@ -3,6 +3,7 @@ import { troopSummaryPosition, type ScreenRect } from "./render/troop-summary";
 import { aboutHTML } from "./ui/about";
 import { BUILD_ID } from "./platform/build-info";
 import { renderResearchTree } from "./ui/research";
+import { buildingRequirementView, recruitRequirementView } from "./ui/prerequisites";
 import { EditorHistory, strokeTiles } from "./ui/editor-tools";
 import {
   WorkshopLibrary,
@@ -57,6 +58,7 @@ import {
   populationBreakdown,
   technologyCost,
   nextBuildingUpgrade,
+  PRODUCTION_QUEUE_LIMIT,
 } from "./sim/progression";
 import { relicSummary, nearestRelic, relicControlDescription } from "./ui/objectives";
 import { battleDefeatAdvice, battleResultReason } from "./ui/results";
@@ -733,7 +735,8 @@ function cardArt(type: string) {
   return `<span class="sprite-icon" aria-hidden="true" style="width:${frame.w * scale}px;height:${frame.h * scale}px;background-image:url('${esc(renderer.atlas.image!.src)}');background-size:${renderer.atlas.image!.naturalWidth * scale}px ${renderer.atlas.image!.naturalHeight * scale}px;background-position:${-frame.x * scale}px ${-frame.y * scale}px"></span>`;
 }
 function currentDeckSignature(): string {
-  const player = planningState().players[0];
+  const planned = planningState();
+  const player = planned.players[0];
   return JSON.stringify([
     panel,
     inspectTab,
@@ -744,7 +747,9 @@ function currentDeckSignature(): string {
     player.populationCap,
     player.maxPopulation,
     player.rangedSpacing,
-    state.pendingCommands.length,
+    state.paused,
+    state.pendingCommands,
+    Object.values(BUILDINGS).map(building => buildingRequirementView(state, building.id, 0, planned).status),
     panel === "inspect" ? inspectionAvailabilitySignature(planningState(), selection, state.paused && state.pendingCommands.length >= 60) : null,
     renderer.atlas.ready,
     renderer.atlas.image?.src,
@@ -807,6 +812,7 @@ function renderDeck() {
     return;
   }
   const learningStep = learningProgress?.step;
+  const planned = planningState();
   const lessonHint = (tab: "army" | "build" | "research") => {
     const hint = learningPanelHint(learningStep, tab);
     return hint ? `<p class="deck-tip learning-panel-hint">${hint}</p>` : "";
@@ -825,26 +831,32 @@ function renderDeck() {
           selectedBuilding()?.id,
         );
         const ready = !!producer;
+        const requirement = ready ? null : recruitRequirementView(state, u.id, selectedBuilding()?.id, 0, planned);
         const price = getUnitCost(state, 0, u.id);
         const batchCost = {
           gold: price.gold * recruitBatch,
           wood: price.wood * recruitBatch,
         };
-        return `<button class="action-card ${!ready ? "unavailable" : ""} ${affordable(batchCost) ? "" : "funds-low"}" data-action="recruit" data-id="${u.id}" title="${esc(u.description + (producer ? ` ${recruitDestination(producer)}. ${rallyDestination(producer)}` : ""))}" aria-label="Recruit ${u.name}"><span class="action-icon">${cardArt(u.id)}</span><strong>${u.name}</strong>${cost(batchCost)}<small>${ready ? `${Math.ceil(trainingSeconds(planningState(), u.id, producer!))}s each · ${u.population} pop` : `Needs ${BUILDINGS[u.building].name}`}</small>${resourceShortfall(batchCost) ? `<small class="availability-reason">⚠ ${resourceShortfall(batchCost)}</small>` : ready && planningState().players[0].population + u.population * recruitBatch > planningState().players[0].populationCap ? `<small class="availability-reason">⚠ Needs population capacity</small>` : ""}${producer ? `<small class="recruit-producer">${esc(recruitDestination(producer))}</small>` : ""}<small class="unit-counter">${{ swordsman: "Frontline", spearman: "Counters cavalry", archer: "Counters infantry", cavalry: "Counters archers", siege: "Breaks buildings", support: "Heals your army" }[u.id]}</small></button>`;
+        const queueFull = !!producer && producer.queue.length + recruitBatch > PRODUCTION_QUEUE_LIMIT;
+        const queueReason = producer && producer.queue.length < PRODUCTION_QUEUE_LIMIT ? `Not enough queue space for ${recruitBatch} troops` : "Production queue full";
+        const descriptionIds = [requirement ? `recruit-requirement-${u.id}` : "", queueFull ? `recruit-queue-${u.id}` : ""].filter(Boolean);
+        return `<button class="action-card ${!ready ? "unavailable" : ""} ${affordable(batchCost) ? "" : "funds-low"}" data-action="recruit" data-id="${u.id}" title="${esc(u.description + (producer ? ` ${recruitDestination(producer)}. ${rallyDestination(producer)}` : ""))}" aria-label="Recruit ${u.name}"${descriptionIds.length ? ` aria-describedby="${descriptionIds.join(" ")}"` : ""}><span class="action-icon">${cardArt(u.id)}</span><strong>${u.name}</strong>${cost(batchCost)}<small${requirement ? ` id="recruit-requirement-${u.id}" class="recruit-requirement" data-prerequisite-state="${requirement.status}"` : ""}>${requirement ? esc(requirement.label) : `${Math.ceil(trainingSeconds(planned, u.id, producer!))}s each · ${u.population} pop`}</small>${queueFull ? `<small id="recruit-queue-${u.id}" class="availability-reason recruit-queue-reason">${queueReason}</small>` : ""}${resourceShortfall(batchCost) ? `<small class="availability-reason">⚠ ${resourceShortfall(batchCost)}</small>` : ready && planned.players[0].population + u.population * recruitBatch > planned.players[0].populationCap ? `<small class="availability-reason">⚠ Needs population capacity</small>` : ""}${producer ? `<small class="recruit-producer">${esc(recruitDestination(producer))}</small>` : ""}<small class="unit-counter">${{ swordsman: "Frontline", spearman: "Counters cavalry", archer: "Counters infantry", cavalry: "Counters archers", siege: "Breaks buildings", support: "Heals your army" }[u.id]}</small></button>`;
       })
       .join("")}</div>`;
   else if (panel === "build")
     el.innerHTML = `${lessonHint("build")}<div class="action-cards">${Object.values(BUILDINGS)
       .filter((b) => b.id !== "keep" && learningActionAvailable(learningStep, "build", b.id))
       .map(
-        (b) =>
-          `<button class="action-card ${placement === b.id ? "selected" : ""}" data-action="build" data-id="${b.id}" title="${esc(b.description)}" aria-label="Build ${b.name}"><span class="action-icon">${cardArt(b.id)}</span><strong>${b.name}</strong>${cost(b.cost)}<small>${b.buildTime}s · ${b.population ? capacityGainText(planningState(), b.population) : b.description.split(".")[0]}</small>${resourceShortfall(b.cost) ? `<small class="availability-reason">⚠ ${resourceShortfall(b.cost)}</small>` : ""}${b.prerequisites?.length ? `<small class="build-prerequisite">Needs ${b.prerequisites.map(id => BUILDINGS[id].name).join(", ")}</small>` : ""}</button>`,
+        (b) => {
+          const requirements = b.prerequisites.map(id => buildingRequirementView(state, id, 0, planned));
+          return `<button class="action-card ${placement === b.id ? "selected" : ""}" data-action="build" data-id="${b.id}" title="${esc(b.description)}" aria-label="Build ${b.name}"${requirements.length ? ` aria-describedby="${requirements.map(view => `build-prerequisite-${b.id}-${view.id}`).join(" ")}"` : ""}><span class="action-icon">${cardArt(b.id)}</span><strong>${b.name}</strong>${cost(b.cost)}<small>${b.buildTime}s · ${b.population ? capacityGainText(planned, b.population) : b.description.split(".")[0]}</small>${resourceShortfall(b.cost) ? `<small class="availability-reason">⚠ ${resourceShortfall(b.cost)}</small>` : ""}${requirements.map(view => `<small id="build-prerequisite-${b.id}-${view.id}" class="build-prerequisite" data-prerequisite-state="${view.status}">${esc(view.label)}</small>`).join("")}</button>`;
+        },
       )
       .join("")}</div>`;
   else if (panel === "research")
     el.innerHTML = learningProgress && learningProgress.step < LESSONS.length
       ? `<p class="deck-tip">${learningPanelHint(learningProgress.step, "research")}</p>`
-      : renderResearchTree(planningState(), 0, selectedBuilding()?.id);
+      : renderResearchTree(planned, 0, selectedBuilding()?.id, state);
   else {
     const spacing = !!planningState().players[0].rangedSpacing;
     el.innerHTML = `<div class="order-cards">${button("Choose troops", "choose-troops", "", "population")}${button("Attack-move", "order-attackMove", armedOrder === "attackMove" ? "chosen" : "", "sword")}${button(`Keep distance: ${spacing ? "on" : "off"}`, "ranged-spacing", spacing ? "chosen" : "", "shield", `aria-pressed="${spacing}"`)}${button("Rally current producers here", "rally-all", "", "flag")}${button("Save battle", "save", "", "save")}${button(`${speed}× speed`, "speed", "", "clock")}</div><p class="deck-tip">Keep distance lets your current and future archers, Menders and ranged commander step back between shots when melee troops approach. Their damage, speed and range stay the same. Move, Hold and direct commander control take priority; they advance normally against buildings. Short retreats stay near the engagement. Move and Attack-move use your next valid map tap as a destination. Attack requires an enemy target. Cancel returns to selection. Ordinary taps select friendly units and buildings; empty terrain clears selection. Choose troops lets you pick types or individual troops. On desktop, Shift-click adds or removes a friendly troop; Shift-click empty ground keeps your group. Choose Attack before tapping an enemy. Select a deposit and choose Capture to send troops. Hold does not pursue. Rally current producers here sets a fixed point for existing buildings. New buildings need their own rally point; it does not follow the commander.</p>`;

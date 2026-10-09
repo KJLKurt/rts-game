@@ -3824,6 +3824,8 @@ footer .build-identifier {
 .research-path > span:not(.research-arrow) { border: 1px solid #adc7c63b; border-radius: 6px; padding: 6px 8px; flex: 1; }
 .research-path .ready { color: #c8f0db; background: #244638; }
 .research-path .missing { color: #d5c1a4; border-style: dashed !important; }
+.research-path .constructing { color: #bcdcf5; background: #203b4c; }
+.research-path .queued { color: #f1d99f; border-style: dashed !important; }
 .research-path small { display: block; font-size: calc(10px * var(--ui-scale,1)); font-weight: 400; margin-top: 3px; }
 .research-nodes { display: grid; gap: 9px; }
 .research-node { display: flex; flex-direction: column; align-items: stretch; gap: 8px; padding: 12px; text-align: left; min-width: 0; border-left: 3px solid #698489; }
@@ -4170,7 +4172,11 @@ footer .build-identifier {
 .placement-toolbar .placement-modes, .placement-toolbar .placement-actions { flex-shrink:0; }
 .targeting-order .commander-strip { visibility:hidden; }
 .command-deck .selection-info .sprite-icon { margin-right:2px; }
-.build-prerequisite { color:#e7ca8b; }
+.command-deck .action-card .build-prerequisite,
+.command-deck .action-card .recruit-requirement { color:#e7ca8b; white-space:normal; overflow:visible; text-overflow:clip; }
+.command-deck .action-card .recruit-queue-reason { white-space:normal; overflow:visible; text-overflow:clip; }
+.command-deck .action-card [data-prerequisite-state="ready"] { color:#b8e7cd; }
+.command-deck .action-card [data-prerequisite-state="constructing"] { color:#bcdcf5; }
 @media (max-height:500px) and (min-width:601px) {
  .placing-building .placement-toolbar > div:first-child { max-height:none; }
  .ability-dock { bottom:calc(var(--deck-height,110px) + 8px); }
