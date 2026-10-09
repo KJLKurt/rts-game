@@ -19,11 +19,20 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      FRONTIER_TEST_WORKERS: "2"
+      FRONTIER_TEST_WORKERS: "1"
+      FRONTIER_PREVIOUS_DIST: .qa-previous-source/dist
+      FRONTIER_EXPECT_BUILD_ID: fc-a5ca5f72d2a3
+      FRONTIER_EXPECT_PREVIOUS_BUILD_ID: fc-ee8e82a8e52b
     steps:
       - name: Check out the acceptance checkpoint
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
+          persist-credentials: false
+      - name: Check out the exact preceding deployed source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: 14ec4e60a9fa008cb216c4a513c1db473a32b696
+          path: .qa-previous-source
           persist-credentials: false
       - name: Use Node.js 24
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
@@ -32,6 +41,19 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci --no-audit --no-fund
+      - name: Rebuild the previous release and verify archived deployment bytes
+        shell: bash
+        run: |
+          npm --prefix .qa-previous-source ci --no-audit --no-fund
+          npm --prefix .qa-previous-source run build
+          python3 - <<'PYVERIFY'
+          import hashlib,json,pathlib
+          root=pathlib.Path('.qa-previous-source/dist')
+          expected=json.loads(pathlib.Path('tests/browser/previous-dist-manifest.json').read_text())
+          actual={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(root.rglob('*')) if p.is_file()}
+          assert actual==expected, 'Previous build differs from verified Pages artifact11600836414'
+          print('All',len(actual),'previous deployment files match archived SHA256 bytes')
+          PYVERIFY
       - name: Install official Playwright Chromium
         run: npx playwright install --with-deps chromium
       - name: Exercise the production PWA on desktop and touch viewports
@@ -42,8 +64,8 @@ jobs:
         with:
           name: frontier-browser-acceptance-${{ github.sha }}
           path: |
-            disclosure-results.json
-            test-results/**/*.png
+            upgrade-results.json
             test-results/**/*.json
+            test-results/**/*.png
             test-results/**/error-context.md
           retention-days: 2
