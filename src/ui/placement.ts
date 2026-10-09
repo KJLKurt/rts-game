@@ -10,8 +10,9 @@ export function plannedBuildResult(
   x: number,
   y: number,
 ): CommandResult {
-  const current = canBuild(state, team, building, x, y);
-  if (!current.ok) return current;
+  // Planning uses the same ordered projection as accepting a queued command.
+  // An earlier cancellation can fund this build, while earlier plans still
+  // reserve their budgets and footprints. Never apply that projection live.
   for (const command of state.pendingCommands) {
     if (command.type !== "build" || command.team !== team) continue;
     const other = BUILDINGS[command.building];
@@ -25,5 +26,5 @@ export function plannedBuildResult(
   }
   return state.paused && state.pendingCommands.length
     ? canBuild(projectPendingCommands(state), team, building, x, y)
-    : current;
+    : canBuild(state, team, building, x, y);
 }

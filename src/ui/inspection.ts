@@ -46,6 +46,40 @@ export function productionName(item: ProductionItem, building: Entity): string {
       : (nextBuildingUpgrade(building)?.name ?? "Building upgrade");
 }
 
+/** Remaining game seconds; building development is never production-rate boosted. */
+export function productionRemainingSeconds(
+  item: ProductionItem,
+  building: Entity,
+): number {
+  return (
+    item.remaining /
+    (item.type === "buildingUpgrade" ? 1 : productionRate(building))
+  );
+}
+
+/** Read the supplied live or projected queues without applying pending commands. */
+export function compactProductionSummary(
+  state: Pick<GameState, "entities">,
+  team = 0,
+): { queued: number; nextSeconds: number | null } {
+  let queued = 0,
+    nextSeconds: number | null = null;
+  for (const building of state.entities) {
+    if (
+      building.team !== team ||
+      building.kind !== "building" ||
+      building.hp <= 0 ||
+      !building.queue.length
+    )
+      continue;
+    queued += building.queue.length;
+    // Producers work in parallel, but only the first job in each queue is active.
+    const seconds = productionRemainingSeconds(building.queue[0], building);
+    nextSeconds = nextSeconds === null ? seconds : Math.min(nextSeconds, seconds);
+  }
+  return { queued, nextSeconds };
+}
+
 /** Mirror the engine's selected-producer / shortest-queue routing for UI estimates. */
 export function recruitProducer(
   state: GameState,
@@ -206,9 +240,7 @@ export function productionHTML(state: GameState, selected?: string): string {
         `<div class="producer" data-live-key="${esc(b.id)}"><button class="producer-name" data-action="inspect-building" data-id="${esc(b.id)}">${BUILDINGS[b.type as BuildingId]?.name ?? "Building"} · ${b.queue.length}/12</button>${b.queue.some((job) => job.type === "unit") ? `<p class="deck-tip producer-rally">${esc(rallyDestination(b))}</p>` : ""}<ol data-live-key="queue-${esc(b.id)}">${b.queue
           .map((q, i) => {
             const refund = productionRefund(state, b, q),
-              seconds =
-                q.remaining /
-                (q.type === "buildingUpgrade" ? 1 : productionRate(b));
+              seconds = productionRemainingSeconds(q, b);
             return `<li data-live-key="${esc(q.queueId ?? String(i))}"><span class="job-number">${i + 1}</span><div><b>${esc(productionName(q, b))}</b><small>${i === 0 ? `${Math.ceil(seconds)}s remaining` : `${Math.ceil(seconds)}s · waiting`}</small><small class="refund-amount">Cancel refund: ${refund.gold} gold · ${refund.wood} wood</small>${i === 0 ? `<progress max="${q.total}" value="${q.total - q.remaining}" aria-label="Production progress"></progress>` : ""}</div>${action("Cancel", "cancel-production", `${b.id}|${q.queueId}`, `aria-label="Cancel ${esc(productionName(q, b))}; refund ${refund.gold} gold and ${refund.wood} wood" title="Refund ${refund.gold} gold and ${refund.wood} wood"`)}</li>`;
           })
           .join("")}</ol></div>`,

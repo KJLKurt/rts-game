@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { createGame } from "../src/sim";
-import { relicSummary, nearestRelic, relicControlDescription, firstBattleObjectiveCopy } from "../src/ui/objectives";
+import { relicSummary, nearestRelic, relicControlDescription, firstBattleObjectiveCopy, fieldGuideObjectiveCopy } from "../src/ui/objectives";
 import { getEconomyRates } from "../src/sim/economy";
 import { STORY_CAMPAIGNS } from "../src/ui/campaigns/authored";
 
@@ -16,6 +16,35 @@ describe("first ordinary battle briefing", () => {
       title: "Take the center",
       text: "Relics earn victory points; gold and wood fund your army.",
     });
+  });
+});
+
+describe("fourth commander field-guide step", () => {
+  it("agrees with ordinary Conquest victory and income without teaching scoring", () => {
+    const state = createGame({ mode: "conquest" });
+    const before = JSON.stringify(state);
+    const copy = fieldGuideObjectiveCopy(state.settings);
+    expect(copy).toEqual({
+      title: "Destroy the enemy keeps",
+      text: "Relics pay gold and wood. Destroy the enemy keeps to win, and protect your own keep.",
+    });
+    expect(copy.text).not.toMatch(/to score|victory points/);
+    expect(firstBattleObjectiveCopy(state.settings.mode).title).toBe(copy.title);
+    expect(relicControlDescription(state)).toBe("Hold for gold and wood income");
+    expect(relicSummary(state).pointsPerSecond).toBe(0);
+    expect(JSON.stringify(state)).toBe(before);
+  });
+  it.each(["domination", "relic"] as const)("preserves the ordinary %s scoring tip exactly", mode => {
+    expect(fieldGuideObjectiveCopy({ mode })).toEqual({
+      title: "Take the center",
+      text: "Hold relics to score. Keep recruiting, capture fresh gold, and protect your keep.",
+    });
+  });
+  it.each(["domination", "relic", "conquest"] as const)("prioritizes authored objectives over generic %s victory advice", mode => {
+    const copy = fieldGuideObjectiveCopy({ mode, scriptedVictory: true });
+    expect(copy.title).toBe("Follow your mission");
+    expect(copy.text).toContain("Complete the mission objectives");
+    expect(copy.text).not.toMatch(/to score|victory points|keeps to win/);
   });
 });
 

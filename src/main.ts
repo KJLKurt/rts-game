@@ -46,6 +46,7 @@ import { VISUAL_THEMES, normalizeVisualTheme, type VisualThemeId } from "./rende
 import {
   inspectionHTML,
   productionHTML,
+  compactProductionSummary,
   economyHTML,
   refreshInspection,
   recruitProducer,
@@ -64,7 +65,7 @@ import {
   nextBuildingUpgrade,
   PRODUCTION_QUEUE_LIMIT,
 } from "./sim/progression";
-import { relicSummary, nearestRelic, relicControlDescription, firstBattleObjectiveCopy } from "./ui/objectives";
+import { relicSummary, nearestRelic, relicControlDescription, firstBattleObjectiveCopy, fieldGuideObjectiveCopy } from "./ui/objectives";
 import { battleDefeatAdvice, battleResultReason } from "./ui/results";
 import { buildingUnderAttack } from "./ui/battle-guidance";
 import { advanceTutorial, restoreTutorial } from "./ui/tutorial";
@@ -1094,9 +1095,8 @@ function updateHUD() {
   set("resource-actions", resource ? `<div class="resource-context"><span><b>${esc(resourceTargetName(resource))}</b><small>${resource.kind === "relic" ? relicControlDescription(state) : "Captured deposits gather automatically"}</small></span>${button("Capture", "capture-resource", "primary", "flag")}</div>` : "");
   const targetInstruction = uiAction === "rally" && rallyBuildingId ? "Rally · tap clear terrain" : armedOrder === "attack" ? "Attack · tap an enemy" : armedOrder === "attackMove" ? "Attack-move · tap a destination" : armedOrder ? "Move · tap a destination" : "";
   const targetControlsChanged = set("target-controls", targetInstruction ? `<div class="target-toolbar"><span role="status" aria-live="polite" aria-atomic="true"><b>${icon(armedOrder === "attack" ? "sword" : "arrow")}${targetInstruction}</b><small>${esc(targetError || "Drag to pan · pinch to zoom")}</small></span>${button("Cancel", "cancel-order", "", "close", 'aria-label="Cancel destination order"')}</div>` : "");
-  const queuedBuildings = planningState().entities.filter(e => e.team === 0 && e.kind === "building" && e.hp > 0 && e.queue.length);
-  const firstJob = queuedBuildings[0]?.queue[0];
-  set("compact-production", firstJob ? `${icon("clock")}<span>${queuedBuildings.reduce((n,b) => n + b.queue.length, 0)} queued · ${Math.ceil(firstJob.remaining)}s next</span>` : "");
+  const production = compactProductionSummary(planningState());
+  set("compact-production", production.nextSeconds !== null ? `${icon("clock")}<span>${production.queued} queued · ${Math.ceil(production.nextSeconds)}s next</span>` : "");
   if (targetControlsChanged) measurePlayfield();
   const site =
     placement && targetPoint
@@ -1318,6 +1318,7 @@ function updateTutorial() {
     hudHTML.delete("battle-hint");
     return;
   }
+  const finalTip = fieldGuideObjectiveCopy(state.settings);
   const tips = [
     [
       "Step into the frontier",
@@ -1332,8 +1333,8 @@ function updateTutorial() {
       "Tap Recruit, then Swordsman. New troops move to your commander’s position when training finishes; set a safe rally point in building Details.",
     ],
     [
-      "Take the center",
-      "Hold relics to score. Keep recruiting, capture fresh gold, and protect your keep.",
+      finalTip.title,
+      finalTip.text,
     ],
   ];
   const tipHTML = `<button data-action="dismiss-tips" aria-label="Dismiss tips">${icon("close")}</button><span>COMMANDER’S FIELD GUIDE · ${tutorialStep + 1}/4</span><b>${tips[tutorialStep][0]}</b><p>${tips[tutorialStep][1]}</p>`;
